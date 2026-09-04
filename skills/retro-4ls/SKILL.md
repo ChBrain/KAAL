@@ -190,4 +190,10 @@ Do not edit the skill from inside the retro.
 
 The cadence is after every use of a skill: each real use ends with a
 self-diagnosis retro on that use, so the skill learns at the rate it is used
-and not at the rate someone remembers to ask.
+and not at the rate someone remembers to ask. Retros accumulate; they are not
+acted on one by one. Each is filed under `retros/` and ends with the line
+`Feeds: <skill>`. When a skill has three retros that no requirement has yet
+consumed, the analyst runs over the stack and writes that skill's next
+requirement; a retro that names a defect (a test red for the wrong reason, an
+instruction that misled) may trigger the analyst alone. Three is the league's
+number until a retro says otherwise.

@@ -36,6 +36,20 @@
       "candidate": "skill",
       "script": null,
       "test": null
+    },
+    {
+      "name": "file the retro with its Feeds line",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check whether the skill has three unconsumed retros",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
     }
   ]
 }

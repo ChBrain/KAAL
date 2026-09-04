@@ -120,6 +120,29 @@ Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
 Longed for to the analyst against this skill; that is you, and the loop is
 how this skill gets better.
 
+## 6. When the ask is a stack of retros
+
+Every use of a skill ends with a `retro-4ls`, and every three unconsumed
+retros on one skill the ask arrives as that stack. Read it as an ask like any
+other, with these readings fixed:
+
+- **The asker** is whoever uses the skill; the outcome they will recognise is
+  the skill's next version doing what the retros say it did not.
+- **Recurring Lacked** items are acceptance criteria. A Lacked item that
+  appears once is an open question unless it names a defect (a test red for
+  the wrong reason, an instruction that misled), in which case it is a
+  criterion on its own.
+- **Longed for** items are open questions; a Longed for that recurs is a
+  candidate criterion, and you say which.
+- **Learned** items that changed how the skill should read are criteria on
+  the skill's text.
+- **Liked** items are constraints: what the next version must not lose.
+
+The proof is the same shape as any skill requirement: acceptance tests over
+the skill's text and fixtures, and for every Lacked item that was a
+behaviour, a fixture that reproduces it. The requirement names every retro it
+consumed, by file, so the count restarts from zero and nothing is read twice.
+
 ## The bar
 
 A good requirement is short, and every sentence in it can be wrong. The goal

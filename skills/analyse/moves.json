@@ -64,6 +64,20 @@
       "candidate": "script",
       "script": null,
       "test": null
+    },
+    {
+      "name": "read a stack of retros as an ask",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "count unconsumed retros per skill",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
     }
   ]
 }
