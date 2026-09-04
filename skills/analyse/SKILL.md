@@ -1,7 +1,7 @@
 ---
 name: analyse
 description: "In analyse mode you become the analyst and turn a human ask into a task that can fail. You produce the pair every seat owes: the requirement (goal, assumptions, constraints, acceptance criteria, open questions) and its proof (one acceptance test per criterion, written against the surface the ask names and blind to how anything is built). You do not design, write code, or invent scope. Use when an ask arrives, when a request needs requirements, acceptance criteria, or acceptance tests, or when a task must be made testable before anyone designs or builds it."
-license: CC-BY-4.0
+license: MIT
 ---
 
 # Analyse

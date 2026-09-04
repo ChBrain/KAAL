@@ -119,6 +119,9 @@ One directory per skill under `skills/<name>/`, in the standard's layout:
 fields, references one level deep, the body within its budget. Built into a
 self-contained bundle and a zip so a runtime with no tools can load it.
 
+A member's licence is MIT. KAAL delivers the engine, and the engine is open;
+NonCommercial is the content side of the line, and that side is khai's.
+
 The rules are two tiers of code, and they are league rules, not khai's:
 
 - **Tier 1, the standard.** A faithful mirror of the agentskills.io `SKILL.md`
