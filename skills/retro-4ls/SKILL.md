@@ -187,3 +187,7 @@ for that skill's next version, every **Longed for** item is a candidate open
 question, and **Learned** items that changed how the skill should read are
 edits to its text. The retro says what was; the analyst decides what can fail.
 Do not edit the skill from inside the retro.
+
+The cadence is after every use of a skill: each real use ends with a
+self-diagnosis retro on that use, so the skill learns at the rate it is used
+and not at the rate someone remembers to ask.

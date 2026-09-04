@@ -1,0 +1,69 @@
+{
+  "skill": "architect",
+  "note": "Every move sits at the NLP rung until fixture evals have run on at least two models.",
+  "moves": [
+    {
+      "name": "refuse a requirement with an untested criterion",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "draw structure and seams",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "say what is fixed and what is free",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write one decision record per closed door",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write the test strategy per criterion",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write one contract test per seam",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check seams and tests count equal",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check contract tests are blind to the code",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "see red, then green on a stand-in",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    }
+  ]
+}

@@ -116,6 +116,10 @@ The receiving seat reads it against a checklist that is theirs, not yours; you
 do not argue with the checklist, you meet it or hand back with what you could
 not meet and why.
 
+Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
+Longed for to the analyst against this skill; that is you, and the loop is
+how this skill gets better.
+
 ## The bar
 
 A good requirement is short, and every sentence in it can be wrong. The goal

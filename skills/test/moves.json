@@ -1,0 +1,55 @@
+{
+  "skill": "test",
+  "note": "Every move sits at the NLP rung until fixture evals have run on at least two models.",
+  "moves": [
+    {
+      "name": "name the layer and its blindness",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "restate one want as one test that can fail",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "declare the kind (deterministic, harnessed, manual)",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "see red for the stated reason",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "see green on a stand-in",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check the test is blind below its layer",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check counts equal",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    }
+  ]
+}

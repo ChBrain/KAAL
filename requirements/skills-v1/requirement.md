@@ -66,11 +66,13 @@ checks and the loop has been run on a real use.
 
 ## Open questions
 
-- Are the five names right, or should they be the ask's (analyst, architect,
-  code, test, operation)?
-- How far does "limited" reach for operate: release and smoke and rollback,
-  or also the observability layer the design gives it?
-- Does the retro run after every use of a skill, or after every task?
+Resolved by the asker on 4 September 2026, each in one line:
+
+- The five names stand: `analyse`, `architect`, `code`, `test`, `operate`.
+- Operate's limit is release, smoke, and rollback; observability is a later
+  version of that skill.
+- The retro runs after every use of a skill and feeds that skill's next
+  requirement.
 
 ## Handoff
 
@@ -80,4 +82,4 @@ checks and the loop has been run on a real use.
   repository root; see the handoff note in the pull request for the count,
   the run is not filed
 - Tests: `acceptance.test.mjs`, beside this file
-- Open questions: 3, listed above
+- Open questions: 3, all resolved, listed above

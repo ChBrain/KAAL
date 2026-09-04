@@ -1,0 +1,55 @@
+{
+  "skill": "operate",
+  "note": "Every move sits at the NLP rung until fixture evals have run on at least two models. Observability is not in this version.",
+  "moves": [
+    {
+      "name": "refuse production without the human's key for this release",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write the release plan before running anything",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write the deploy script's unit tests first",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "rehearse the rollback on a non-production target",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "ship, then smoke, then read the result",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "roll back on a failed smoke and hand back",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write the release record as a run just made",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    }
+  ]
+}
