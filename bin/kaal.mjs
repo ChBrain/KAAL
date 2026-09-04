@@ -13,8 +13,10 @@ import { checkLedgers } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
 import { countRetros } from "./lib/retros.mjs";
 import { runGates } from "./lib/gates.mjs";
+import { runAcceptance } from "./lib/acceptance.mjs";
 
-const USAGE = "usage: kaal ledger [root] | check [dir] | retros | gates";
+const USAGE =
+  "usage: kaal ledger [root] | check [dir] | retros | gates | acceptance <files...>";
 const [cmd, arg] = process.argv.slice(2);
 const cwd = process.cwd();
 let findings = [];
@@ -32,6 +34,11 @@ if (cmd === "ledger") {
 } else if (cmd === "retros") {
   for (const r of countRetros(cwd))
     console.log(`${r.skill}: ${r.count} unconsumed`);
+} else if (cmd === "acceptance") {
+  const a = runAcceptance(process.argv.slice(3));
+  for (const l of a.lines) console.log(l);
+  console.log(a.summary);
+  process.exit(a.ok ? 0 : 1);
 } else if (cmd === "gates") {
   const g = runGates(cwd);
   for (const l of g.lines) console.log(l);

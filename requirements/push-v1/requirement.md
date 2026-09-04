@@ -99,3 +99,4 @@ stands on each rung above human for a reason on disk.
 - Tests: `acceptance.test.mjs`, beside this file; bad inputs under
   `fixtures/`
 - Open questions: 3, listed above
+- Status: open

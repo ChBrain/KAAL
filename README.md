@@ -113,7 +113,8 @@ npm test      # node bin/kaal.mjs gates
 ```
 
 The walls are data, a `gates` list in `kaal.config.json`: every
-requirement's acceptance tests, every drawing's contract tests, the unit
+requirement's acceptance tests (a closed requirement's red is a failure, an
+open one's red is its analyst's red run and is reported), every drawing's contract tests, the unit
 tests, the skill rules (`kaal check`), the ledgers' evidence and freshness
 (`kaal ledger`), and the format check. The runner prints one line per wall
 with its count and a summary, runs every wall even after one fails, and

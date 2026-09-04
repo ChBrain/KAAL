@@ -12,8 +12,8 @@
   "gates": [
     {
       "name": "acceptance",
-      "command": "node --test requirements/*/acceptance.test.mjs",
-      "fix": "make the criterion true, or hand it back to its owner"
+      "command": "node bin/kaal.mjs acceptance requirements/*/acceptance.test.mjs",
+      "fix": "make the criterion true or hand it back; close a green requirement; give every requirement a status"
     },
     {
       "name": "contracts",
