@@ -17,8 +17,8 @@
     },
     {
       "name": "contracts",
-      "command": "node --test architecture/*/contracts.test.mjs",
-      "fix": "keep the seam's promise, or hand it back to the architect"
+      "command": "node bin/kaal.mjs contracts architecture/*/contracts.test.mjs",
+      "fix": "keep the seam's promise or hand it back; a drawing reads its task's status from its requirement"
     },
     {
       "name": "units",

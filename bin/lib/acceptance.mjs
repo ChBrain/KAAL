@@ -18,7 +18,7 @@ export function readStatus(testFile) {
 }
 
 /** @returns {{ ok: boolean, label: string }} */
-export function judge(status, pass, fail) {
+export function judge(status, pass, fail, mustClose = true) {
   if (status === null)
     return {
       ok: false,
@@ -29,13 +29,29 @@ export function judge(status, pass, fail) {
     return fail > 0
       ? { ok: false, label: "FAIL closed" }
       : { ok: true, label: "ok   closed" };
-  return fail > 0
-    ? { ok: true, label: "open" }
-    : { ok: false, label: "FAIL open and all green: close it" };
+  if (fail > 0 || !mustClose) return { ok: true, label: "open" };
+  return { ok: false, label: "FAIL open and all green: close it" };
+}
+
+/** A drawing's status is its task's: architecture/<task>/ reads requirements/<task>/requirement.md. */
+export function statusForDrawing(testFile) {
+  const task = basename(dirname(testFile));
+  const root = join(dirname(testFile), "..", "..");
+  return readStatus(join(root, "requirements", task, "acceptance.test.mjs"));
 }
 
 /** @param {string[]} files */
 export function runAcceptance(files) {
+  return runJudged(files, readStatus);
+}
+
+/** @param {string[]} files */
+export function runContracts(files) {
+  return runJudged(files, statusForDrawing, false);
+}
+
+/** One judged runner for both walls: the verdict table lives once. */
+export function runJudged(files, statusFor, mustClose = true) {
   const results = [];
   for (const file of files) {
     const r = spawnSync("node", ["--test", file], {
@@ -47,8 +63,8 @@ export function runAcceptance(files) {
     const fail = Number(
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),
     );
-    const status = readStatus(file);
-    const v = judge(status, pass, fail);
+    const status = statusFor(file);
+    const v = judge(status, pass, fail, mustClose);
     results.push({ name: basename(dirname(file)), status, pass, fail, ...v });
   }
   const ok = results.length > 0 && results.every((x) => x.ok);
