@@ -39,10 +39,10 @@
     },
     {
       "name": "check criteria and tests count equal",
-      "rung": "nlp",
-      "candidate": "script",
-      "script": null,
-      "test": null
+      "rung": "script",
+      "candidate": null,
+      "script": "scripts/count.mjs",
+      "test": "scripts/count.test.mjs"
     },
     {
       "name": "check the tests are blind (no import from inside the system)",
@@ -76,6 +76,13 @@
       "name": "count unconsumed retros per skill",
       "rung": "nlp",
       "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "take the ask from the human",
+      "rung": "human",
+      "candidate": null,
       "script": null,
       "test": null
     }

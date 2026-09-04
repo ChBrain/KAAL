@@ -64,6 +64,13 @@
       "candidate": "script",
       "script": null,
       "test": null
+    },
+    {
+      "name": "the human approves the drawing",
+      "rung": "human",
+      "candidate": null,
+      "script": null,
+      "test": null
     }
   ]
 }

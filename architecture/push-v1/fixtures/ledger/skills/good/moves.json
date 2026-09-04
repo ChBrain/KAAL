@@ -1,0 +1,26 @@
+{
+  "skill": "good",
+  "moves": [
+    {
+      "name": "a scripted move",
+      "rung": "script",
+      "candidate": null,
+      "script": "scripts/ok.mjs",
+      "test": "scripts/ok.test.mjs"
+    },
+    {
+      "name": "a skilled move",
+      "rung": "skill",
+      "candidate": "script",
+      "script": null,
+      "test": "evals/good/f"
+    },
+    {
+      "name": "a human move",
+      "rung": "human",
+      "candidate": null,
+      "script": null,
+      "test": null
+    }
+  ]
+}

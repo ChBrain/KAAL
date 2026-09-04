@@ -83,7 +83,8 @@ One acceptance test per criterion, numbered to match. Rules:
   `retros/2026-09-04-analyse-first-use.md`).
 - **One criterion, one test.** A criterion with no test is not a criterion; a
   test with no criterion is scope you invented. The count on both sides is
-  equal, and you check it.
+  equal, and you check it by running `scripts/count.mjs <criteria> <tests>`,
+  which exits 1 when they differ.
 
 ## 4. Scope
 

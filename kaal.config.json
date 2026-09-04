@@ -1,0 +1,12 @@
+{
+  "standard": {
+    "name": "agentskills",
+    "homepage": "https://agentskills.io",
+    "spec": {
+      "url": "https://raw.githubusercontent.com/agentskills/agentskills/main/docs/specification.mdx",
+      "sha256": "b9079c0c10b7930e8c6a20ff2bc10cda2a3343c55185120e3f1116a1a529b220"
+    },
+    "pinned": "2026-08-28",
+    "note": "The rules in bin/lib/rules.mjs mirror the spec at this hash. Re-pinning is a deliberate act after reconciling the mirror rule by rule."
+  }
+}
