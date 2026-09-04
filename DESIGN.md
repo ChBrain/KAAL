@@ -366,22 +366,23 @@ may not know.
 Blindness is the part that can be computed. An acceptance test that imports a
 module of the system under test has looked past its layer, and so has a contract
 test that reaches behind a seam; both are import boundaries, and import
-boundaries are a wall. Ownership is the part that is a rule, and it is one rule: everyone writes
-their own tests. A seat's proof is written by the seat that has the want, so
-the acceptance test is the analyst's because the behaviour is what the analyst
-asked for, and the unit test is the developer's because the code is what the
-developer built. A proof written by another seat proves that seat's want, not
-yours. The tester is the shared discipline of writing that proof, loaded by
-every seat, and owns no layer. Observability is the layer that never finishes: it is the
-acceptance and contract questions asked again of the live system, continuously,
-with the answers kept. It is not exempt from the pair. The operator's want is
-what the run must show, and the proof is that the showing works: a seeded
-fault is seen to fire its alert, a synthetic probe is seen to reach its signal,
-a budget is seen to burn on a known load. The same law that governs every wall
-governs it, watch it fail before you trust it to pass; a dashboard nobody has
-seen go red is decoration, and an alert that has never fired is a claim. Its findings are the retrospective's raw material, and
-the league's own observability is the eval records and the standings table,
-which is the pipeline watching itself.
+boundaries are a wall. Ownership is the part that is a rule, and it is one rule:
+everyone writes their own tests. A seat's proof is written by the seat that has
+the want, so the acceptance test is the analyst's because the behaviour is what
+the analyst asked for, and the unit test is the developer's because the code is
+what the developer built. A proof written by another seat proves that seat's
+want, not yours. The tester is the shared discipline of writing that proof,
+loaded by every seat, and owns no layer. Observability is the layer that never
+finishes: it is the acceptance and contract questions asked again of the live
+system, continuously, with the answers kept. It is not exempt from the pair. The
+operator's want is what the run must show, and the proof is that the showing
+works: a seeded fault is seen to fire its alert, a synthetic probe is seen to
+reach its signal, a budget is seen to burn on a known load. The same law that
+governs every wall governs it, watch it fail before you trust it to pass; a
+dashboard nobody has seen go red is decoration, and an alert that has never
+fired is a claim. Its findings are the retrospective's raw material, and the
+league's own observability is the eval records and the standings table, which is
+the pipeline watching itself.
 
 **The kinds** cut across the layers. Any layer's test is one of two kinds, and
 every seat runs the two kinds as two lanes that never trade places: a deterministic test
