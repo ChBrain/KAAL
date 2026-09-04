@@ -1,0 +1,22 @@
+name: ci
+# Every wall the league has, on every pull request and every push to main,
+# under the one command the hook runs locally. Local green and CI green are
+# the same command by construction.
+# not run: the model evals under evals/; those come from a person's runtime and from evals.yml on an /eval comment.
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  walls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test

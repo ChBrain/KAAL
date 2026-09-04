@@ -162,7 +162,7 @@ test("8. the evals workflow runs only on /eval or dispatch, reads models, writes
   assert.ok(existsSync(dir), "no workflows");
   const w = readdirSync(dir)
     .map((f) => readFileSync(join(dir, f), "utf8"))
-    .find((t) => /\/eval/.test(t) && /evals\//.test(t));
+    .find((t) => /startsWith\([^)]*['"]\/eval/.test(t));
   assert.ok(w, "no evals workflow");
   assert.ok(
     /issue_comment/.test(w) && /workflow_dispatch/.test(w),

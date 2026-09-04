@@ -8,5 +8,37 @@
     },
     "pinned": "2026-08-28",
     "note": "The rules in bin/lib/rules.mjs mirror the spec at this hash. Re-pinning is a deliberate act after reconciling the mirror rule by rule."
-  }
+  },
+  "gates": [
+    {
+      "name": "acceptance",
+      "command": "node --test requirements/*/acceptance.test.mjs",
+      "fix": "make the criterion true, or hand it back to its owner"
+    },
+    {
+      "name": "contracts",
+      "command": "node --test architecture/*/contracts.test.mjs",
+      "fix": "keep the seam's promise, or hand it back to the architect"
+    },
+    {
+      "name": "units",
+      "command": "node --test tests/*.test.mjs skills/*/scripts/*.test.mjs",
+      "fix": "fix the unit; never edit the test to pass"
+    },
+    {
+      "name": "rules",
+      "command": "node bin/kaal.mjs check",
+      "fix": "obey the skill rules (name, description, MIT, budget, depth, no vendor, no dash)"
+    },
+    {
+      "name": "ledger",
+      "command": "node bin/kaal.mjs ledger",
+      "fix": "evidence the rung or lower it"
+    },
+    {
+      "name": "format",
+      "command": "npx prettier --check .",
+      "fix": "npx prettier --write . (npm install first if the formatter is missing)"
+    }
+  ]
 }

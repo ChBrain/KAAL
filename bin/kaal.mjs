@@ -7,12 +7,14 @@
 //   node bin/kaal.mjs ledger [root]   every rung has its evidence
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
 //   node bin/kaal.mjs retros          unconsumed retros per skill
+//   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 import { join } from "node:path";
 import { checkLedgers } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
 import { countRetros } from "./lib/retros.mjs";
+import { runGates } from "./lib/gates.mjs";
 
-const USAGE = "usage: kaal ledger [root] | check [dir] | retros";
+const USAGE = "usage: kaal ledger [root] | check [dir] | retros | gates";
 const [cmd, arg] = process.argv.slice(2);
 const cwd = process.cwd();
 let findings = [];
@@ -30,6 +32,11 @@ if (cmd === "ledger") {
 } else if (cmd === "retros") {
   for (const r of countRetros(cwd))
     console.log(`${r.skill}: ${r.count} unconsumed`);
+} else if (cmd === "gates") {
+  const g = runGates(cwd);
+  for (const l of g.lines) console.log(l);
+  console.log(g.summary);
+  process.exit(g.ok ? 0 : 1);
 } else {
   console.error(USAGE);
   process.exit(1);
