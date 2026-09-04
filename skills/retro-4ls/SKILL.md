@@ -11,7 +11,10 @@ different quality of experience: what energised (**Liked**), what expanded
 capability (**Learned**), what constrained delivery (**Lacked**), and what
 the team or person would benefit from in the future (**Longed for**).
 
-Attributed to Mary Gorman and Ellen Gottesdiener, _Discover to Deliver_ (2012).
+Method adapted from the 4 L's retrospective by Mary Gorman and Ellen
+Gottesdiener (EBG Consulting, 2010), published in _Discover to Deliver_ (2012).
+The method is theirs and is credited; this skill is one adaptation among
+several and is not branded as the method.
 
 ## Mode selection
 
