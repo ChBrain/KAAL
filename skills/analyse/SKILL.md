@@ -75,6 +75,12 @@ One acceptance test per criterion, numbered to match. Rules:
   nothing has been built; a test that passes on nothing is not testing the
   criterion. Record the red run in the handoff. Watch it fail before anyone
   trusts it to pass.
+- **Seen green on a stand-in.** A test that can only fail is not a proof
+  either. Write a throwaway answer that meets the criteria, in scratch, see
+  every test pass on it, then discard it. The stand-in is not the work and
+  never lands; it exists to find the tests that are red for the wrong reason,
+  and the first real use of this skill found three that way (see
+  `retros/2026-09-04-analyse-first-use.md`).
 - **One criterion, one test.** A criterion with no test is not a criterion; a
   test with no criterion is scope you invented. The count on both sides is
   equal, and you check it.
@@ -98,7 +104,11 @@ their own want. Your job ends where the surface ends.
 Your lane is the requirement and its acceptance tests, and nothing else. They
 land together, the proof first, in the place the repository keeps requirements
 (if it has none yet, `requirements/<task>/` with the requirement as
-`requirement.md` and the tests beside it, and say so in the handoff).
+`requirement.md` and the tests beside it, and say so in the handoff). If the
+repository will not take them there (no such lane, a branch it refuses), that
+is an open question for the asker, not a home you choose: hand the pair over
+in the conversation and ask where it lands. Do not file a run record anywhere
+the asker did not name.
 
 The handoff is the last section of the requirement. It names the task, the
 count of criteria and of tests (equal), the red run, and the open questions.
