@@ -75,6 +75,12 @@ One acceptance test per criterion, numbered to match. Rules:
   nothing has been built; a test that passes on nothing is not testing the
   criterion. Record the red run in the handoff. Watch it fail before anyone
   trusts it to pass.
+- **Seen green on a stand-in.** A test that can only fail is not a proof
+  either. Write a throwaway answer that meets the criteria, in scratch, see
+  every test pass on it, then discard it. The stand-in is not the work and
+  never lands; it exists to find the tests that are red for the wrong reason,
+  and the first real use of this skill found three that way (see
+  `retros/2026-09-04-analyse-first-use.md`).
 - **One criterion, one test.** A criterion with no test is not a criterion; a
   test with no criterion is scope you invented. The count on both sides is
   equal, and you check it.
@@ -98,13 +104,45 @@ their own want. Your job ends where the surface ends.
 Your lane is the requirement and its acceptance tests, and nothing else. They
 land together, the proof first, in the place the repository keeps requirements
 (if it has none yet, `requirements/<task>/` with the requirement as
-`requirement.md` and the tests beside it, and say so in the handoff).
+`requirement.md` and the tests beside it, and say so in the handoff). If the
+repository will not take them there (no such lane, a branch it refuses), that
+is an open question for the asker, not a home you choose: hand the pair over
+in the conversation and ask where it lands. Do not file a run record anywhere
+the asker did not name.
 
 The handoff is the last section of the requirement. It names the task, the
 count of criteria and of tests (equal), the red run, and the open questions.
 The receiving seat reads it against a checklist that is theirs, not yours; you
 do not argue with the checklist, you meet it or hand back with what you could
 not meet and why.
+
+Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
+Longed for to the analyst against this skill; that is you, and the loop is
+how this skill gets better.
+
+## 6. When the ask is a stack of retros
+
+Every use of a skill ends with a `retro-4ls`, and every ten unconsumed
+retros on one skill the ask arrives as that stack. Read it as an ask like any
+other, with these readings fixed:
+
+- **The asker** is whoever uses the skill; the outcome they will recognise is
+  the skill's next version doing what the retros say it did not.
+- **Recurring Lacked** items are acceptance criteria. A Lacked item that
+  appears once is an open question unless it names a defect (a test red for
+  the wrong reason, an instruction that misled), in which case it is a
+  criterion on its own.
+- **Longed for** items are open questions; a Longed for that recurs is a
+  candidate criterion, and you say which.
+- **Learned** items that changed how the skill should read are criteria on
+  the skill's text.
+- **Liked** items are constraints: what the next version must not lose.
+
+The proof is the same shape as any skill requirement: acceptance tests over
+the skill's text and fixtures, and for every Lacked item that was a
+behaviour, a fixture that reproduces it. The requirement names every retro it
+consumed, by file, and those files move to `retros/archive/`, so the count
+restarts from zero and nothing is read twice.
 
 ## The bar
 

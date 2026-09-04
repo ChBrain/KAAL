@@ -1,0 +1,62 @@
+{
+  "skill": "retro-4ls",
+  "note": "Carried over from khai, where the author wrote it; every move sits at the NLP rung until fixture evals have run.",
+  "moves": [
+    {
+      "name": "pick the mode",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "pin the period",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "run the four lenses",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "compile in the output format",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "hand lacked and longed for to the analyst",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "file the retro with its Feeds line",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check whether the skill has ten unconsumed retros",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "archive the retros a requirement consumed",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    }
+  ]
+}

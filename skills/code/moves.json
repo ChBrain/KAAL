@@ -1,0 +1,55 @@
+{
+  "skill": "code",
+  "note": "Every move sits at the NLP rung until fixture evals have run on at least two models.",
+  "moves": [
+    {
+      "name": "confirm every suite is red for the stated reason",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "write the unit test before the unit",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "build the least code that turns it green",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "run unit, contract, acceptance and the repository checks",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "check nothing in the diff is untested",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "hand back a test that is wrong instead of editing it",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "compute the change class with the repository's tooling",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    }
+  ]
+}
