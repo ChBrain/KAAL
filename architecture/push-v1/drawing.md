@@ -43,6 +43,15 @@ What changes: `skills/analyse/moves.json` (one move to `script`, one to
 
 ## Seams
 
+```mermaid
+flowchart LR
+  SH[shell: hook, workflow, npm test] -- "1 command, exit code" --> T[bin/kaal.mjs]
+  L[skills/*/moves.json] -- "2 moves, rung-relative paths" --> T
+  E[evals/*/*/*.md] -- "3 model, verdict, skill_sha" --> T
+  S[skills/*/SKILL.md, references/] -- "4 the skill rules" --> T
+  R[retros/, requirements/] -- "5 unconsumed count" --> T
+```
+
 1. **shell to tool**: in, `node bin/kaal.mjs <command> [root]`; out, exit 0
    with a summary on stdout, or exit 1 with one finding per line on stderr;
    an unknown command exits 1 and prints usage. Owned by the tool on one

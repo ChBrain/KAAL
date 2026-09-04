@@ -7,6 +7,15 @@ named by what it is for.>
 
 ## Seams
 
+```mermaid
+flowchart LR
+  A[<part>] -- "1 <seam>" --> B[<part>]
+```
+
+One labelled edge per seam, numbered to match the list below; the parts are
+the structure's parts. The list is the contract; the picture is the reading,
+and it carries nothing the list does not.
+
 1. <name>: in <what goes in>, out <what comes out>, owned by <side / side>.
 2. <...>
 
