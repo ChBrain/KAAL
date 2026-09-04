@@ -122,7 +122,7 @@ how this skill gets better.
 
 ## 6. When the ask is a stack of retros
 
-Every use of a skill ends with a `retro-4ls`, and every three unconsumed
+Every use of a skill ends with a `retro-4ls`, and every ten unconsumed
 retros on one skill the ask arrives as that stack. Read it as an ask like any
 other, with these readings fixed:
 
@@ -141,7 +141,8 @@ other, with these readings fixed:
 The proof is the same shape as any skill requirement: acceptance tests over
 the skill's text and fixtures, and for every Lacked item that was a
 behaviour, a fixture that reproduces it. The requirement names every retro it
-consumed, by file, so the count restarts from zero and nothing is read twice.
+consumed, by file, and those files move to `retros/archive/`, so the count
+restarts from zero and nothing is read twice.
 
 ## The bar
 

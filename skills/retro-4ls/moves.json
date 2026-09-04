@@ -45,7 +45,14 @@
       "test": null
     },
     {
-      "name": "check whether the skill has three unconsumed retros",
+      "name": "check whether the skill has ten unconsumed retros",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "archive the retros a requirement consumed",
       "rung": "nlp",
       "candidate": "script",
       "script": null,
