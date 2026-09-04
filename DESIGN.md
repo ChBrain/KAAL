@@ -148,13 +148,14 @@ checklist where they cannot.
 
 **Admission.** An agent or skill enters KAAL only if it is:
 
-- **engine, not content**: it improves software. A skill that authors content
-  (a khai play, an engine's prose, a persona) belongs to the house whose content
-  it is, however good it is; so does an agent whose scope is one repository's
+- **engine, not content**: it improves software. A skill that authors content (a
+  khai play, an engine's prose, a persona) belongs to the house whose content it
+  is, however good it is; so does an agent whose scope is one repository's
   rituals. KAAL's members deliver the engine, and khai's licence split (code
-  open, content NonCommercial) is the same line drawn inside one repository. This is the criterion behind "not all skills and agent
-  definitions deserve to end up in KAAL", and it is the one that needs judgement,
-  so it is Kaal's checklist item and not a wall.
+  open, content NonCommercial) is the same line drawn inside one repository.
+  This is the criterion behind "not all skills and agent definitions deserve to
+  end up in KAAL", and it is the one that needs judgement, so it is Kaal's
+  checklist item and not a wall.
 - **conformant**: passes the agent rules or the skill rules, which are walls.
 - **evidenced**: has fixtures, and has been run on them by at least two models
   with the result recorded. A definition with no evidence is a draft, and drafts
