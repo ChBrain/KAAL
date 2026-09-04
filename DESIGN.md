@@ -264,9 +264,10 @@ members out. Kaal cannot see past the checklist; that is his Shadow, and it is
 why the checklists are the receiving side's and are reviewed in the
 retrospective, not by him. Where a checklist item is decidable it is a wall;
 where it needs meaning it is a harness rubric and the stamp reports the
-consensus; nothing on a checklist is Kaal's own opinion. A developer who finds a test wrong hands back to the seat that wrote it (the
-analyst for an acceptance test, the architect for a contract test), and that is
-a handoff like any other, not a shortcut.
+consensus; nothing on a checklist is Kaal's own opinion. A developer who finds a
+test wrong hands back to the seat that wrote it (the analyst for an acceptance
+test, the architect for a contract test), and that is a handoff like any other,
+not a shortcut.
 
 **The five, in one line each.**
 
@@ -476,21 +477,19 @@ the operator's retrospective at the end of each job feeds it.
 
 Stated once so it is not re-argued.
 
-- **khai uses KAAL.** khai takes the five skills and the agents that carry them (and any later general member)
-  for working on itself, through an adapter khai owns. Nothing in KAAL imports
-  khai.
-- **khai keeps its theatre.** Plays, plots, the house company, the play skills,
-  the canon and its conformance kit are khai's and stay there. KAAL never
-  mentions a play.
-- **The skill rules move down.** The generic tiers (the standard mirror, vendor
-  neutrality) become KAAL's; khai keeps provenance against its own canon and
-  consumes the rest. Until that lands, KAAL carries its own copy.
-- **The persona shape is borrowed and credited.** Four chapters, checked by
-  KAAL's own wall, credited to khai in the file. A convention, not a dependency.
-- **Mechanisms may be lifted, not linked.** The eval harness and the branch guard
-  are generic in khai; KAAL may lift their generic halves or reuse them as tools,
-  and the rule is only that KAAL's definition of an agent or a skill never
-  depends on either.
+- **khai uses KAAL.** khai takes the five skills and the agents that carry them
+  (and any later general member) for working on itself, through an adapter khai
+  owns. Nothing in KAAL imports khai. - **khai keeps its theatre.** Plays,
+  plots, the house company, the play skills, the canon and its conformance kit
+  are khai's and stay there. KAAL never mentions a play. - **The skill rules
+  move down.** The generic tiers (the standard mirror, vendor neutrality) become
+  KAAL's; khai keeps provenance against its own canon and consumes the rest.
+  Until that lands, KAAL carries its own copy. - **The persona shape is borrowed
+  and credited.** Four chapters, checked by KAAL's own wall, credited to khai in
+  the file. A convention, not a dependency. - **Mechanisms may be lifted, not
+  linked.** The eval harness and the branch guard are generic in khai; KAAL may
+  lift their generic halves or reuse them as tools, and the rule is only that
+  KAAL's definition of an agent or a skill never depends on either.
 
 ## 12. Decisions taken, and the ones left open
 
