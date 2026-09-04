@@ -152,7 +152,8 @@ checklist where they cannot.
   khai play, an engine's prose, a persona) belongs to the house whose content it
   is, however good it is; so does an agent whose scope is one repository's
   rituals. KAAL's members deliver the engine, and khai's licence split (code
-  open, content NonCommercial) is the same line drawn inside one repository.
+  open, content NonCommercial) is the same line drawn inside one repository, by
+  design.
   This is the criterion behind "not all skills and agent definitions deserve to
   end up in KAAL", and it is the one that needs judgement, so it is Kaal's
   checklist item and not a wall.
