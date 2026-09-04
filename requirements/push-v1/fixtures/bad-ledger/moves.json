@@ -1,0 +1,12 @@
+{
+  "skill": "bad-ledger",
+  "moves": [
+    {
+      "name": "claims a rung with no evidence",
+      "rung": "skill",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    }
+  ]
+}
