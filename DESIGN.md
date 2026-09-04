@@ -145,6 +145,33 @@ provenance against its own canon. The interim is that KAAL carries its own copy 
 that small rule set from day one, so that no version of KAAL ever depends on khai;
 the copy is the price of the dependency pointing the right way.
 
+### Scripts: inside, outside, shared
+
+A skill is NLP and scripts, and skills travel: what is inside a skill's
+directory reaches the consumer, what is outside does not. That settles where
+a script lives, and when it moves.
+
+- **Inside the skill** is every script the skill needs to do its job. It
+  ships in the bundle, its test sits beside it, and the skill calls it by its
+  own relative path. A skill never calls a script outside itself, because in
+  the consumer's repository there is nothing outside itself.
+- **Outside, in `bin/`,** is the league's own tooling: the scripts that judge
+  members rather than help one do its work (the rules check, the ledger
+  check, the retro count, the table). These are Kaal's moves; they read the
+  whole league, and no consumer needs them.
+- **Shared** is the case that decides the "when". A script moves out of a
+  skill the moment a second skill needs it, and it moves to `lib/`, not to
+  `bin/`: it lives there once and is stamped into each skill's `scripts/` at
+  build time, with a provenance check that fails the build if a stamped copy
+  differs from its source. The copy travels; the source does not drift. This
+  is the same mechanism khai's skill builder already uses for canon templates.
+
+So the two triggers are: a script reads beyond its skill's own inputs, and it
+is Kaal's, in `bin/`; a script is needed by a second skill, and it is shared,
+in `lib/` and stamped. Until either fires, it stays inside. How scripts inside
+and outside are held to quality is a separate ruling, not made here; for now
+both carry a test beside them that was seen red.
+
 ## 5. The league: admission and standings
 
 A league has a door and a table. Both are written down and both are checked by
