@@ -23,9 +23,18 @@ stands on each rung above human for a reason on disk.
 - The human rung is a seat's own moves that a person makes on purpose (the
   ask, the approval, the key), and they are recorded in the ledger so the
   ladder shows the whole move set, not only the model's part.
-- An eval record is a file: one model's output on one fixture, read against
-  the fixture's `expect.md`, with the model named and a verdict written in the
-  file's frontmatter.
+- An eval record is a file under `evals/<skill>/<fixture>/`: one model's
+  output on one fixture, read against the fixture's `expect.md`, with
+  `model`, `verdict`, and `skill_sha` (the SHA-256 of the skill's `SKILL.md`
+  at the time of the run) in its frontmatter. A record whose `skill_sha` no
+  longer matches is stale and counts for nothing: editing a skill relegates
+  its moves until they are re-evaluated, and no one has to remember it.
+- The second model runs in CI, through the hosted models a workflow can
+  read with a `models: read` permission; the first is whatever runtime a
+  person used. The eval workflow is expensive, so it fires only on an
+  `/eval <skill>` comment or a manual dispatch, never on a push; it writes
+  the records and commits them. The model advises; the `skill_sha` gates.
+  This is khai's audit lane, learned, not linked.
 - A skill is NLP and scripts: a move that reaches the Script rung lives in
   that skill's own `scripts/` directory (the standard's, discovered with
   `references/` and `assets/`), is called from its `SKILL.md`, and ships in
@@ -50,8 +59,10 @@ stands on each rung above human for a reason on disk.
 
 1. The ledgers of `analyse`, `architect` and `operate` each list at least one
    move at rung `human` (the ask, the approval, the key).
-2. `node bin/kaal.mjs ledger` exits 0 on the league's own ledgers and exits 1
-   on `fixtures/bad-ledger/moves.json`, which claims `skill` with no test.
+2. `node bin/kaal.mjs ledger [root]` exits 0 on the league's own tree, exits
+   1 on `fixtures/bad-ledger` (a ledger claiming `skill` with no test), and
+   exits 1 on `fixtures/stale-ledger` (a ledger claiming `skill` on records
+   whose `skill_sha` does not match the skill's `SKILL.md`).
 3. `node bin/kaal.mjs check` exits 0 on `skills/` and exits 1 on
    `fixtures/bad-skill/`, whose one skill names a vendor.
 4. `node bin/kaal.mjs retros` exits 0 and prints one line per skill with its
@@ -64,12 +75,16 @@ stands on each rung above human for a reason on disk.
    that exists and passes.
 7. At least one ledger move stands at rung `skill`, naming an eval directory
    holding records from at least two distinct models, each with the verdict
-   `pass`.
+   `pass` and a `skill_sha` equal to the SHA-256 of that skill's `SKILL.md`.
+8. A workflow under `.github/workflows/` runs the evals only on an
+   `issue_comment` beginning `/eval` or on `workflow_dispatch`, never on
+   `push` or `pull_request`, holds the `models: read` permission, and writes
+   under `evals/`.
 
 ## Open questions
 
-- Who runs the second model for the eval records, and where: the same
-  runtime with a different model, or a second runtime?
+- Resolved: the second model is the hosted one a workflow can read; the
+  first is a person's runtime.
 - Does the ledger check also refuse a `candidate` that has sat unchanged for
   more than ten retros, or is staleness the retro's business?
 - Should `kaal retros` also archive, or is archiving a separate command with
@@ -78,8 +93,8 @@ stands on each rung above human for a reason on disk.
 ## Handoff
 
 - Task: push-v1
-- Criteria: 7; tests: 7 (equal)
-- Red run: `node --test requirements/push-v1/acceptance.test.mjs`, all seven
+- Criteria: 8; tests: 8 (equal)
+- Red run: `node --test requirements/push-v1/acceptance.test.mjs`, all eight
   failing, no script and no record exists; green on a stand-in in scratch
 - Tests: `acceptance.test.mjs`, beside this file; bad inputs under
   `fixtures/`

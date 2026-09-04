@@ -7,6 +7,7 @@ import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..");
@@ -20,6 +21,7 @@ const ledger = (n) =>
   JSON.parse(readFileSync(join(ROOT, "skills", n, "moves.json"), "utf8")).moves;
 const allMoves = () =>
   skills().flatMap((n) => ledger(n).map((m) => ({ ...m, skill: n })));
+const sha = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
 const frontmatter = (text) =>
   Object.fromEntries(
     [
@@ -37,18 +39,24 @@ test("1. analyse, architect and operate each record a human move", () => {
     );
 });
 
-test("2. kaal ledger passes the league and refuses the bad ledger", () => {
+test("2. kaal ledger passes the league, refuses the bad ledger and the stale ledger", () => {
   assert.equal(
     run(["bin/kaal.mjs", "ledger"]).status,
     0,
     "league ledgers refused",
   );
-  const bad = run([
-    "bin/kaal.mjs",
-    "ledger",
-    join(HERE, "fixtures", "bad-ledger", "moves.json"),
-  ]);
-  assert.equal(bad.status, 1, "bad ledger not refused");
+  assert.equal(
+    run(["bin/kaal.mjs", "ledger", join(HERE, "fixtures", "bad-ledger")])
+      .status,
+    1,
+    "bad ledger not refused",
+  );
+  assert.equal(
+    run(["bin/kaal.mjs", "ledger", join(HERE, "fixtures", "stale-ledger")])
+      .status,
+    1,
+    "stale ledger not refused",
+  );
 });
 
 test("3. kaal check passes skills/ and refuses the vendor-named skill", () => {
@@ -126,7 +134,7 @@ test("6. a move stands at script with a script inside its skill, called from SKI
   }
 });
 
-test("7. a move stands at skill with pass records from two models", () => {
+test("7. a move stands at skill with fresh pass records from two models", () => {
   const moves = allMoves().filter((m) => m.rung === "skill");
   assert.ok(moves.length >= 1, "no move at skill");
   for (const m of moves) {
@@ -135,15 +143,34 @@ test("7. a move stands at skill with pass records from two models", () => {
       dir && existsSync(dir) && statSync(dir).isDirectory(),
       `${m.skill}/${m.name}: no eval directory`,
     );
+    const current = sha(join(ROOT, "skills", m.skill, "SKILL.md"));
     const records = readdirSync(dir)
       .filter((f) => f.endsWith(".md"))
       .map((f) => frontmatter(readFileSync(join(dir, f), "utf8")));
-    const passing = new Set(
-      records.filter((r) => r.verdict === "pass").map((r) => r.model),
+    const fresh = records.filter(
+      (r) => r.verdict === "pass" && r.skill_sha === current,
     );
     assert.ok(
-      passing.size >= 2,
-      `${m.skill}/${m.name}: ${passing.size} passing model(s)`,
+      new Set(fresh.map((r) => r.model)).size >= 2,
+      `${m.skill}/${m.name}: fewer than two fresh passing models`,
     );
   }
+});
+
+test("8. the evals workflow runs only on /eval or dispatch, reads models, writes evals/", () => {
+  const dir = join(ROOT, ".github", "workflows");
+  assert.ok(existsSync(dir), "no workflows");
+  const w = readdirSync(dir)
+    .map((f) => readFileSync(join(dir, f), "utf8"))
+    .find((t) => /\/eval/.test(t) && /evals\//.test(t));
+  assert.ok(w, "no evals workflow");
+  assert.ok(
+    /issue_comment/.test(w) && /workflow_dispatch/.test(w),
+    "not triggered by /eval comment and dispatch",
+  );
+  assert.ok(
+    !/^\s*push:/m.test(w) && !/^\s*pull_request:/m.test(w),
+    "runs on push or pull_request",
+  );
+  assert.ok(/models:\s*read/.test(w), "no models: read permission");
 });

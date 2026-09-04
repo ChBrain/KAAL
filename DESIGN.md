@@ -455,6 +455,18 @@ equality does.
 - **Stability as the signal.** A rubric whose verdict has not changed across the
   last N runs on the same fixture is tabled for the Script rung. That is the
   consolidation direction of the ladder made into a measurement.
+- **Freshness as the relegation.** Every eval record carries the SHA of the
+  skill it evaluated. Editing the skill makes its records stale, the ledger
+  check drops the move back to NLP until it is re-evaluated, and nobody has
+  to remember to do it. The model advises; the SHA gates.
+
+The two kinds are two CI lanes, learned from khai's audit lane. The walls are
+data, a `gates` list one runner reads in the hook and in CI, printing measured
+counts for the pull request. The model job is expensive and fires only on a
+comment or a dispatch, never on a push; it writes eval records and commits
+them, with the second model read from the hosted models a workflow may use.
+Every push runs the model-free checks instead: the ledger's freshness and the
+rules, which is what a branch protection requires.
 
 The harness is a KAAL script. Its mechanism (rubric as data, N of K, a skeptic,
 source anchoring) is the same mechanism khai's review lane already runs, and

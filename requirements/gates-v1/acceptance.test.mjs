@@ -24,16 +24,33 @@ const workflows = () =>
 
 const INSIDE = process.env.npm_lifecycle_event === "test";
 
-test("1. package.json has a test script and npm test passes", () => {
-  const p = join(ROOT, "package.json");
-  assert.ok(existsSync(p), "no package.json");
+test("1. walls are data in kaal.config.json, one runner runs them, npm test is that runner", () => {
+  const c = join(ROOT, "kaal.config.json");
+  assert.ok(existsSync(c), "no kaal.config.json");
+  const gates = JSON.parse(readFileSync(c, "utf8")).gates;
   assert.ok(
-    JSON.parse(readFileSync(p, "utf8")).scripts?.test,
-    "no test script",
+    Array.isArray(gates) && gates.length >= 2,
+    "fewer than two walls declared",
   );
-  // Inside npm test this run is itself the evidence; outside, run it.
-  if (!INSIDE)
-    assert.equal(sh("npm", ["test", "--silent"]).status, 0, "npm test fails");
+  for (const g of gates)
+    assert.ok(g.name && g.command, "a wall without name or command");
+  const script = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"))
+    .scripts?.test;
+  assert.equal(
+    script,
+    "node bin/kaal.mjs gates",
+    "npm test is not the gates runner",
+  );
+  // Inside npm test this run is itself the evidence; outside, run the runner.
+  if (!INSIDE) {
+    const r = sh("node", ["bin/kaal.mjs", "gates"]);
+    assert.equal(r.status, 0, "gates runner fails");
+    for (const g of gates)
+      assert.ok(
+        r.stdout.includes(g.name),
+        `runner did not print wall ${g.name}`,
+      );
+  }
 });
 
 test("2. the pre-push hook exists, is executable, runs npm test, and fails with it", () => {
@@ -67,9 +84,10 @@ test("4. the workflow declares what it does not run", () => {
   );
 });
 
-test("5. the test command reaches every acceptance test and every script test", () => {
-  const script = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"))
-    .scripts.test;
+test("5. the walls' commands reach every acceptance test and every script test", () => {
+  const gates = JSON.parse(
+    readFileSync(join(ROOT, "kaal.config.json"), "utf8"),
+  ).gates;
   const walk = (d) =>
     readdirSync(d, { withFileTypes: true }).flatMap((e) =>
       e.name === "node_modules" || e.name.startsWith(".")
@@ -79,8 +97,8 @@ test("5. the test command reaches every acceptance test and every script test", 
           : [join(d, e.name).slice(ROOT.length + 1)],
     );
   const files = walk(ROOT);
-  const patterns = script
-    .split(/\s+/)
+  const patterns = gates
+    .flatMap((g) => g.command.split(/\s+/))
     .filter((t) => t.includes("/") || t.endsWith(".mjs"));
   const reached = new Set(
     patterns.flatMap((g) => {
@@ -104,5 +122,5 @@ test("5. the test command reaches every acceptance test and every script test", 
   );
   assert.ok(must.length > 0, "nothing to reach");
   for (const f of must)
-    assert.ok(reached.has(f), `not reached by the test command: ${f}`);
+    assert.ok(reached.has(f), `not reached by any wall: ${f}`);
 });

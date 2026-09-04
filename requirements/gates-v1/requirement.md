@@ -14,9 +14,14 @@ workflow is the required check, and the runner says what it does not run.
 
 ## Assumptions
 
-- The one command is `npm test`, so a `package.json` exists and is the only
-  place the wall list lives; the hook and the workflow call it and never
-  list walls themselves.
+- The walls are declared as data: a `gates` list in `kaal.config.json`,
+  each with a `name`, a `command`, and a `fix` hint. One runner, `node
+bin/kaal.mjs gates`, reads the list, runs every wall under one exit code,
+  prints one line per wall and a summary with measured counts to paste into
+  a pull request, and never types a number a run did not make. `npm test` is
+  that runner and nothing else, so the hook and the workflow call one
+  command and never list walls themselves. This is khai's gates runner,
+  learned, not linked.
 - The walls today are the acceptance tests of every requirement under
   `requirements/`, the script tests under `tests/`, and the format check.
 - The pre-push hook is the repository's own script under `.githooks/`, wired
@@ -39,17 +44,19 @@ workflow is the required check, and the runner says what it does not run.
 
 ## Acceptance criteria
 
-1. `package.json` exists with a `test` script, and `npm test` exits 0 on the
-   league's own tree.
+1. `kaal.config.json` declares at least two walls in its `gates` list, each
+   with a `name` and a `command`; `node bin/kaal.mjs gates` exits 0 on the
+   league's own tree and prints every wall's name; `package.json` has a
+   `test` script that is exactly that runner.
 2. A pre-push hook exists under `.githooks/pre-push`, is executable, runs
    `npm test`, and exits non-zero when `npm test` does.
 3. A workflow under `.github/workflows/` runs on `pull_request` and on `push`
    to `main`, and has a step whose run line is exactly `npm test`.
 4. The workflow file declares, in a line beginning `# not run:`, the walls it
    does not run.
-5. The test command reaches every `acceptance.test.mjs` under
-   `requirements/`, every `*.test.mjs` under `tests/`, and every test beside
-   a script in a skill's `scripts/`.
+5. The commands in the `gates` list, between them, reach every
+   `acceptance.test.mjs` under `requirements/`, every `*.test.mjs` under
+   `tests/`, and every test beside a script in a skill's `scripts/`.
 
 ## Open questions
 
