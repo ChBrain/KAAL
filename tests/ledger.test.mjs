@@ -1,0 +1,38 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { checkLedgers } from "../bin/lib/ledger.mjs";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(HERE, "..");
+const A = join(ROOT, "architecture", "push-v1", "fixtures");
+const R = join(ROOT, "requirements", "push-v1", "fixtures");
+
+test("the league's own ledgers carry no findings", () => {
+  assert.deepEqual(checkLedgers(ROOT), []);
+});
+
+test("a good root: script rung resolves relative to the skill, skill rung to fresh records", () => {
+  assert.deepEqual(checkLedgers(join(A, "ledger")), []);
+});
+
+test("a rung claimed with no test is a finding", () => {
+  const f = checkLedgers(join(R, "bad-ledger"));
+  assert.equal(f.length, 1);
+  assert.match(f[0].message, /no test/);
+});
+
+test("stale records count for nothing", () => {
+  const f = checkLedgers(join(R, "stale-ledger"));
+  assert.equal(f.length, 1);
+  assert.match(f[0].message, /fresh/);
+});
+
+test("an unknown rung is a finding", () => {
+  const f = checkLedgers(join(A, "ledger"), {
+    moves: [{ name: "odd", rung: "magic" }],
+    skill: "good",
+  });
+  assert.ok(f.some((x) => /rung/.test(x.message)));
+});

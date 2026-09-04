@@ -50,6 +50,13 @@
       "candidate": "script",
       "script": null,
       "test": null
+    },
+    {
+      "name": "the human gives the key for this release",
+      "rung": "human",
+      "candidate": null,
+      "script": null,
+      "test": null
     }
   ]
 }

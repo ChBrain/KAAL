@@ -1,0 +1,105 @@
+name: evals
+# The model job. It is expensive, so it fires only on an `/eval <skill>` comment
+# on a pull request or on a manual dispatch, never on a push or a pull request
+# by itself. It runs the named skill on each of its fixtures with the hosted
+# model, writes one record per fixture under evals/<skill>/<fixture>/, and
+# commits it. The record's verdict is the model's reading of the fixture's
+# expect.md; the ledger check on every push is what gates, by skill_sha.
+# not run: nothing; the walls run in ci.yml on every push.
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      skill:
+        description: the skill to evaluate
+        required: true
+      model:
+        description: the hosted model id
+        default: openai/gpt-4.1
+permissions:
+  contents: write
+  models: read
+  pull-requests: read
+jobs:
+  eval:
+    if: github.event_name == 'workflow_dispatch' || (github.event.issue.pull_request != null && startsWith(github.event.comment.body, '/eval '))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve the branch and the skill
+        id: ctx
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let ref = context.ref;
+            let skill = context.payload.inputs?.skill;
+            let model = context.payload.inputs?.model ?? "openai/gpt-4.1";
+            if (context.payload.comment) {
+              const { data } = await github.rest.pulls.get({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.issue.number });
+              ref = data.head.ref;
+              const words = context.payload.comment.body.trim().split(/\s+/);
+              skill = words[1];
+              if (words[2]) model = words[2];
+            }
+            if (!skill) core.setFailed("no skill named");
+            core.setOutput("ref", ref);
+            core.setOutput("skill", skill);
+            core.setOutput("model", model);
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.ctx.outputs.ref }}
+          # A push made with the workflow token starts no other workflow, so the
+          # walls would not run on the commit that carries the records. Commit
+          # with EVALS_TOKEN when the repository has one; fall back and say so.
+          token: ${{ secrets.EVALS_TOKEN || github.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run the skill on each fixture with the hosted model
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SKILL: ${{ steps.ctx.outputs.skill }}
+          MODEL: ${{ steps.ctx.outputs.model }}
+        run: |
+          [ -n "${{ secrets.EVALS_TOKEN }}" ] || echo "::warning::no EVALS_TOKEN; the commit below will not start the walls, push once by hand"
+          node --input-type=module <<'EOF'
+          import { readFileSync, readdirSync, mkdirSync, writeFileSync } from "node:fs";
+          import { join } from "node:path";
+          import { fileSha } from "./bin/lib/sha.mjs";
+          const skill = process.env.SKILL, model = process.env.MODEL;
+          const dir = join("skills", skill);
+          const skillMd = readFileSync(join(dir, "SKILL.md"), "utf8");
+          const sha = fileSha(join(dir, "SKILL.md"));
+          const ask = async (messages) => {
+            const r = await fetch("https://models.github.ai/inference/chat/completions", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, "Content-Type": "application/json", Accept: "application/vnd.github+json" },
+              body: JSON.stringify({ model, messages, temperature: 0 }),
+            });
+            if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+            return (await r.json()).choices[0].message.content;
+          };
+          for (const fixture of readdirSync(join(dir, "fixtures"))) {
+            const f = join(dir, "fixtures", fixture);
+            const askMd = readFileSync(join(f, "ask.md"), "utf8");
+            const expect = readFileSync(join(f, "expect.md"), "utf8");
+            const output = await ask([{ role: "system", content: skillMd }, { role: "user", content: askMd }]);
+            const reading = await ask([
+              { role: "system", content: "You read an output against a checklist. Answer with one word on the first line, pass or flag, then one line per checklist item saying met or not met and why." },
+              { role: "user", content: `Checklist:\n${expect}\n\nOutput:\n${output}` },
+            ]);
+            const verdict = /^\s*pass\b/i.test(reading) ? "pass" : "flag";
+            const out = join("evals", skill, fixture);
+            mkdirSync(out, { recursive: true });
+            const file = join(out, model.replace(/[^a-z0-9.-]/gi, "-") + ".md");
+            writeFileSync(file, `---\nmodel: ${model}\nverdict: ${verdict}\nskill_sha: ${sha}\nfixture: ${fixture}\ndate: ${new Date().toISOString().slice(0, 10)}\n---\n\n# Output\n\n${output}\n\n# Reading\n\n${reading}\n`);
+            console.log(`${file}: ${verdict}`);
+          }
+          EOF
+      - name: Commit the records
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add evals/
+          git diff --cached --quiet || git commit -m "evals: ${{ steps.ctx.outputs.skill }} on ${{ steps.ctx.outputs.model }}"
+          git push
