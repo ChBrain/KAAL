@@ -1,0 +1,6 @@
+{
+  "gates": [
+    { "name": "one", "command": "true", "fix": "nothing" },
+    { "name": "two", "command": "printf '# pass 2\\n'", "fix": "nothing" }
+  ]
+}

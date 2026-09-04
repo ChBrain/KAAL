@@ -1,0 +1,12 @@
+{
+  "gates": [
+    { "name": "passes", "command": "true", "fix": "nothing" },
+    { "name": "fails", "command": "false", "fix": "make it pass" },
+    { "name": "counts", "command": "printf '# pass 3\\n'", "fix": "nothing" },
+    {
+      "name": "missing",
+      "command": "kaal-no-such-binary-xyz",
+      "fix": "npm install"
+    }
+  ]
+}
