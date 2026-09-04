@@ -22,7 +22,9 @@ const workflows = () =>
         .map((f) => readFileSync(join(ROOT, ".github", "workflows", f), "utf8"))
     : [];
 
-const INSIDE = process.env.npm_lifecycle_event === "test";
+// Inside the runner (which marks every wall with KAAL_GATES=1) this run is
+// itself the evidence; spawning the runner again from here would recurse.
+const INSIDE = process.env.KAAL_GATES === "1";
 
 test("1. walls are data in kaal.config.json, one runner runs them, npm test is that runner", () => {
   const c = join(ROOT, "kaal.config.json");

@@ -76,3 +76,4 @@ bin/kaal.mjs gates`, reads the list, runs every wall under one exit code,
   scratch
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 3, listed above
+- Status: closed

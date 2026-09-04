@@ -1,0 +1,10 @@
+#!/bin/sh
+# pre-push: every wall the league has, under the one command, before a push
+# leaves this machine. Wired by `npm install` through package.json's prepare
+# script (git config core.hooksPath .githooks). A push that skips this hook
+# is not done: the ci workflow runs the same command on the pull request.
+#
+# KAAL_TEST_COMMAND exists so a test can prove the hook fails when its command
+# fails; it is a recorded decision in architecture/gates-v1 with a reopen
+# condition, and it is not for skipping the walls.
+${KAAL_TEST_COMMAND:-npm test}

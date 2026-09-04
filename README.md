@@ -104,17 +104,23 @@ job; until then, the copy is by hand and so is the drift.
 
 ## Running the walls
 
-Every requirement's acceptance tests and every drawing's contract tests run
-with node's own test runner, no install needed:
+One command runs every wall the league has, in the pre-push hook and in CI
+alike:
 
 ```
-node --test requirements/*/acceptance.test.mjs architecture/*/contracts.test.mjs
+npm install   # once per clone; also wires the pre-push hook
+npm test      # node bin/kaal.mjs gates
 ```
 
-The league's tool, `node bin/kaal.mjs`, checks the skill rules (`check`),
-the ledgers' evidence and freshness (`ledger`), and the retro count
-(`retros`). A hook and a CI workflow that run every wall under one command
-are the `gates-v1` requirement, and land when it is built.
+The walls are data, a `gates` list in `kaal.config.json`: every
+requirement's acceptance tests (a closed requirement's red is a failure, an
+open one's red is its analyst's red run and is reported), every drawing's contract tests, the unit
+tests, the skill rules (`kaal check`), the ledgers' evidence and freshness
+(`kaal ledger`), and the format check. The runner prints one line per wall
+with its count and a summary, runs every wall even after one fails, and
+treats a wall it cannot run as a failure. The `ci` workflow runs the same
+command on every pull request and push to main; making it a required check
+is a repository setting.
 
 ## Layout
 
