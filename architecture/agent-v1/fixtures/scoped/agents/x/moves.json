@@ -1,0 +1,12 @@
+{
+  "agent": "x",
+  "moves": [
+    {
+      "name": "m",
+      "rung": "nlp",
+      "candidate": null,
+      "script": null,
+      "test": null
+    }
+  ]
+}
