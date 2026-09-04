@@ -206,20 +206,36 @@ a consumer may seat the same skill in an agent of its own.
 flowchart LR
   H([Human]) --> R
   R[analyse: requirements] --> A[architect: architecture]
-  R --> T[tester: tests]
-  A --> T
-  T --> C[developer: code]
+  R --> TA[tester: acceptance tests]
+  A --> TC[tester: contract tests]
+  A --> C[developer: code]
+  TA --> C
+  TC --> C
+  C --> U[developer: unit tests]
   C --> D[operator: deployment]
-  D --> H
+  D --> DU[operator: unit tests]
+  D --> O[operator: observability]
+  O --> H
 ```
 
-Requirements drive architecture. Requirements drive tests. Architecture drives
-tests. Tests drive code, which is TDD said in one edge: the tests exist before
-the code they hold to account, and the developer's job is to turn them green
-within the drawing. Code drives deployment. It is a chain with one fork and one
-join, and the human sits at both ends and one gate between: sets the
-requirements, approves the architecture before code, holds the key to
-deployment. Every other appearance of a person is an escalation, not a step.
+Requirements drive architecture, and requirements drive **architecture-agnostic
+testing**: acceptance tests that say what the system must do for whoever asked,
+and know nothing about how it is built. Architecture drives **code-agnostic
+testing**: contract tests on the seams the architect drew, and know nothing
+about what is behind them. Those two layers drive code, which is TDD said in
+two edges: the tests exist before the code they hold to account, and the
+developer's job is to turn them green within the drawing. Code drives **unit
+testing**, and the rule there is protect yourself: whoever writes code writes
+the tests that guard it, and nobody else does. Deployment is code, so it has its
+own unit tests under the same rule. And deployment drives **observability**,
+which is testing carried on into the run: assertions about the live system that
+never stop being checked. Each layer is driven by the stage above it and is
+blind to the stages below it, which is what agnostic means here and what section
+8 turns into a wall.
+
+The human sits at both ends and one gate between: sets the requirements,
+approves the architecture before code, holds the key to deployment. Every other
+appearance of a person is an escalation, not a step.
 
 **The seams.** A handoff is an artefact leaving one skill's Output for the next
 skill's Input, and every handoff is stamped against the **checklist declared for
@@ -232,9 +248,9 @@ members out. Kaal cannot see past the checklist; that is his Shadow, and it is
 why the checklists are the receiving side's and are reviewed in the
 retrospective, not by him. Where a checklist item is decidable it is a wall;
 where it needs meaning it is a harness rubric and the stamp reports the
-consensus; nothing on a checklist is Kaal's own opinion. A developer who finds
-the drawing wrong hands back to the architect, and that is a handoff like any
-other, not a shortcut.
+consensus; nothing on a checklist is Kaal's own opinion. A developer who finds a test wrong hands back to the owner of the layer it
+sits in (the tester for an acceptance or a contract test, the architect if the
+seam itself is wrong), and that is a handoff like any other, not a shortcut.
 
 **The five, in one line each.**
 
@@ -246,15 +262,21 @@ other, not a shortcut.
   what is fixed and what is free, a decision record per door closed, and a test
   strategy naming per criterion the kind of test that will hold it
   (deterministic, harnessed, or manual, and why). The human approves here.
-- **tester**: holds the criteria. Output: a suite in which every criterion has
-  a test, every test has been seen red, and the tests that need a model to judge
-  are declared as harness rubrics with thresholds, never as walls. Owns both
-  testing lanes (section 8).
-- **developer**: builds within the drawing until the suite is green. Output:
-  green, and a diff in which nothing exists that no test holds.
-- **operator**: runs the release as called, with the human's key. Output: the
-  deployment, the smoke run, the rollback path, and the retrospective whose
-  findings become the next task's requirements or a promotion on the ladder.
+- **tester**: holds the two agnostic layers. Output: acceptance tests in
+  which every criterion has a test that knows nothing of the architecture, and
+  contract tests in which every seam has a test that knows nothing of the code;
+  every test has been seen red; and the tests that need a model to judge are
+  declared as harness rubrics with thresholds, never as walls. The tester does
+  not write unit tests; that is the rule of section 8.
+- **developer**: builds within the drawing until the acceptance and contract
+  suites are green, and protects the code with unit tests of their own. Output:
+  green on all three layers, and a diff in which nothing exists that no test
+  holds.
+- **operator**: runs the release as called, with the human's key, and treats
+  deployment as code: it has its own unit tests. Output: the deployment, its
+  tests, the observability that keeps testing it in the run (the assertions,
+  what they alert on, what they trace), and the retrospective whose findings
+  become the next task's requirements or a promotion on the ladder.
 
 ### When a skill gets too big
 
@@ -304,9 +326,34 @@ its own ledger, fixtures, and standing, and the parent's standing is the lowest
 of its children's. And the evidence carries over: a child inherits the parent's
 fixtures that apply to it, so a split never resets the table to zero.
 
-## 8. Testing, both kinds
+## 8. Testing: five layers, two kinds
 
-The tester runs two lanes and they never trade places: a deterministic test
+**The layers** follow the stages, and the rule of each is who owns it and what it
+may not know.
+
+| Layer         | Driven by    | Owned by  | Blind to                   |
+| ------------- | ------------ | --------- | -------------------------- |
+| acceptance    | requirements | tester    | the architecture, the code |
+| contract      | architecture | tester    | the code                   |
+| unit          | code         | developer | nothing; protect yourself  |
+| unit (deploy) | deployment   | operator  | nothing; protect yourself  |
+| observability | the run      | operator  | nothing; it watches it all |
+
+Blindness is the part that can be computed. An acceptance test that imports a
+module of the system under test has looked past its layer, and so has a contract
+test that reaches behind a seam; both are import boundaries, and import
+boundaries are a wall. Ownership is the part that is a rule: the tester never
+writes a unit test, because a unit test written by someone who did not write the
+code protects nobody, and the developer never writes an acceptance test, because
+a test written by the person it holds to account is a test of what was built,
+not of what was asked. Observability is the layer that never finishes: it is the
+acceptance and contract questions asked again of the live system, continuously,
+with the answers kept. Its findings are the retrospective's raw material, and
+the league's own observability is the eval records and the standings table,
+which is the pipeline watching itself.
+
+**The kinds** cut across the layers. Any layer's test is one of two kinds, and
+the tester runs the two kinds as two lanes and they never trade places: a deterministic test
 gates, a non-deterministic test reports. Forcing a judgement into a wall is worse
 than leaving it out, because a rule that reads as computed and is not stops
 everyone looking; turning a wall into a rubric is paying a model to do what
