@@ -503,7 +503,12 @@ ledger says so honestly rather than dressing it up.
    only worked because its first consumer was its author's.
 
 After job 5 the backlog is whatever `kaal table` says is still on the left, and
-the operator's retrospective at the end of each job feeds it.
+the retros are what feed it. The loop has three speeds: every use of a skill
+ends with a self-diagnosis retro; every three unconsumed retros on one skill,
+the analyst reads the stack as an ask and writes that skill's next
+requirement, naming the retros it consumed; and a retro that names a defect
+can call the analyst alone. The retro says what was, the analyst decides what
+can fail, and the skill is never edited from inside the retro.
 
 ## 11. The boundary with khai
 
