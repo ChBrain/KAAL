@@ -1,407 +1,395 @@
-# KAAL: the job, designed
+# KAAL: Kai's Artificial Agent League
 
-_A design, not a build. Nothing here is implemented; this document is the
-requirements plot of KAAL's first job, which is KAAL itself. It depends on khai
-and is written in khai's vocabulary on purpose, because the point of depending on
-khai is to use it rather than to reinvent it. House rule already in force: no
-en-dash or em-dash in content; use `,` `;` `:` `()` or `--`._
+_A design, not a build. Nothing here is implemented. It is the requirements
+stage of KAAL's first job, which is KAAL itself, and it is written to be sliced
+into execution briefs later. House rule in force from the start: no en-dash or
+em-dash in content; use `,` `;` `:` `()` or `--`._
 
-## 1. The job in one paragraph
+## 1. What KAAL is
 
-KAAL runs software work as a production. A job enters as requirements, becomes an
-architecture and a test suite, becomes code, and leaves as a deployment. Five
-positions hold the five stages, each voiced by a skill any model can load, and
-each skill is on a ladder: what a human did by hand becomes a conversation, a
-conversation becomes a skill, a skill becomes a script. KAAL's own pipeline is the
-first thing the pipeline builds, so every script it writes is a script it runs on
-itself the next time round. That is the whole job. The rest of this document is
-the shape.
+KAAL is a league of agents and the skills they carry. An agent is a traditional
+agent definition: a persona that sets voice and stance, a binding that sets scope,
+and a loadout of skills it may use. A skill is a skill in the agentskills.io
+sense: a directory with a `SKILL.md` and its references, portable to any runtime
+that reads the standard. Runtime config (which model, which tools, which sandbox)
+stays outside both; KAAL defines what an agent is and what it may do, never where
+it happens to run.
 
-## 2. The graph
+Three things follow from the name and they are the design's spine. It is Kai's,
+so it is one league with one set of rules, not a marketplace. It is a league, so
+membership is earned and can be lost: not every agent definition or skill
+deserves to end up here, and the ones that do have standings. And it is
+artificial agents, not plays: khai is a consumer of KAAL, one among possible
+others, and khai's theatre stays in khai. KAAL is written so that a project with
+no idea what a play is can adopt it whole.
 
-The five stages and their dependencies, as given:
+The league already has its persona, on the `kaal-first-agent` branch: Kaal, who
+drives KAAL. Whoever works in this repository works as Kaal; that is what PR #1's
+AGENTS.md means by loading the persona first. He reads the measure against the
+declared standard and either turns the wheel or sends the artefact back, and the
+league grows by what he lets through. His shape (a persona file for voice, an
+AGENTS.md for scope, everything else external) is the pattern this design
+generalises for the members, and his growth rule (do the small thing well before
+expanding) is the design's pace.
+
+## 2. Three nouns, and the sentences between them
+
+**Agent needs Skills.** An agent is defined by its persona, its scope, and its
+loadout: the skills it is allowed to carry. An agent with no loadout is a voice
+with no hands; a skill nobody carries is a document.
+
+**Skills follow skill rules.** A skill is admitted to the league only if it passes
+the rules, which are code: the standard's own constraints mirrored as a wall, plus
+league policy on top. A skill that fails the rules does not exist in KAAL,
+whatever it does elsewhere.
+
+**Agents follow agent rules.** The same shape one level up: an agent definition
+has a standard layout and a wall that checks it, plus league policy on what an
+agent may claim about itself.
+
+**Kaal drives.** Kaal is not a member of the league; he is the league's own
+voice, the persona the repository works through. Every candidate for admission
+passes him, and when KAAL runs its pipeline on itself, so does every artefact
+that moves between agents. He reads each against the checklist declared for that
+seam; he does not repair, and he does not explain what passes. His own Shadow,
+that he cannot see past the checklist, is the reason the checklists are written
+by the members and not by him (section 7).
+
+## 3. The agent definition
+
+One directory per agent under `agents/<name>/`:
+
+```
+agents/<name>/
+  AGENT.md        the binding: frontmatter + scope, the file a runtime loads first
+  persona.md      voice, stance, presence; four chapters
+  moves.json      the ladder ledger (section 6)
+  fixtures/       the small known tasks the agent is evaluated on
+```
+
+`AGENT.md` carries a closed frontmatter: `name` (matches the directory, same rule
+as a skill), `description`, `division` (section 5), `skills` (the loadout: a list
+of skill names that must resolve in `skills/`), `hands_to` (the agents this one
+may hand an artefact to), and `license`. Its body has fixed sections in fixed
+order: **Purpose**, **Allowed**, **Not allowed**, **Input**, **Output**,
+**Handoff**. Allowed and Not allowed are the scope, and they are the part of the
+definition Kaal reads on every stamp: an output that does something Not allowed is
+sent back regardless of quality.
+
+`persona.md` keeps the four-chapter persona shape PR #1 already used, Projection,
+Action, Shadow, Tell, because it is a good small contract for a voice and it is
+already proven on Kaal. The shape is borrowed from khai's canon and credited to
+it in the file's own frontmatter; it is not a package dependency. KAAL's wall
+checks the four chapters itself. A persona defines voice and stance only; scope
+lives in `AGENT.md`, and a persona that starts issuing operational rules fails the
+agent rules.
+
+Runtime config is external by design. A consumer (khai, or anyone) maps an
+`AGENT.md` onto its runtime's own agent format (a subagent definition, a custom
+instruction set, a system prompt) with a small adapter it owns. KAAL ships the
+definition and, where it is cheap, an adapter or two as examples; it never makes
+one runtime's format the definition.
+
+## 4. The skill and the skill rules
+
+One directory per skill under `skills/<name>/`, in the standard's layout:
+`SKILL.md` with `name`, `description`, `license` and the permitted optional
+fields, references one level deep, the body within its budget. Built into a
+self-contained bundle and a zip so a runtime with no tools can load it.
+
+The rules are two tiers of code, and they are league rules, not khai's:
+
+- **Tier 1, the standard.** A faithful mirror of the agentskills.io `SKILL.md`
+  constraints: name shape and directory match, description bounds, permitted
+  fields, reference depth, body budget. Pinned to the spec's content hash and the
+  official validator's version, with a drift advisory on the next touch and a
+  deliberate human re-pin, never an automatic one.
+- **Tier 2, league policy.** Vendor neutrality: a skill names a role, never a
+  runtime or a product. Project neutrality: a skill in KAAL does not hard-code one
+  consumer's vocabulary; a skill that only makes sense inside khai's plays is
+  khai's skill and stays there (section 5). Provenance: where a skill bundles
+  material from a source (a template, a standard), the copy equals the source at
+  build time or the build fails.
+
+khai's `khai-skills` package already implements tier 1 and the neutrality half of
+tier 2, and it does so in a way that is generic. The end state this design names
+is that the generic rules live in KAAL and khai consumes them, keeping only its own
+provenance against its own canon. The interim is that KAAL carries its own copy of
+that small rule set from day one, so that no version of KAAL ever depends on khai;
+the copy is the price of the dependency pointing the right way.
+
+## 5. The league: admission and standings
+
+A league has a door and a table. Both are written down and both are checked by
+Kaal, with the door's criteria as code where they can be and as a declared
+checklist where they cannot.
+
+**Admission.** An agent or skill enters KAAL only if it is:
+
+- **general**: useful to more than one consumer. A skill that exists to author a
+  khai play, or an agent whose scope is one repository's rituals, fails this and
+  belongs to its consumer. This is the criterion behind "not all skills and agent
+  definitions deserve to end up in KAAL", and it is the one that needs judgement,
+  so it is Kaal's checklist item and not a wall.
+- **conformant**: passes the agent rules or the skill rules, which are walls.
+- **evidenced**: has fixtures, and has been run on them by at least two models
+  with the result recorded. A definition with no evidence is a draft, and drafts
+  do not have standings.
+- **ledgered**: declares its moves and their rungs (section 6) so the table can
+  place it.
+
+**Standings.** The table is the ladder read across the whole league: each member
+sits in a division by how much of what it does is scripted, skilled, or still
+conversation, and by whether its evidence holds across models. Members move up
+by promotion (section 6) and down by relegation: a skill whose evals stop
+agreeing across models, or whose scripted moves stop passing, drops a division at
+the next stamp and stays there until it earns its way back. `kaal table` prints
+the standings from the ledgers and the eval records; nothing in the table is
+typed by hand, because a standing that is typed is a claim.
+
+**What stays out.** Named so it is not re-argued: khai's play skills (the
+playwright, the director, the engineer, the impresario, the theatre manager, the
+roadie) are khai's and stay in khai. They may be built with KAAL's rules and they
+may carry KAAL agents in their loadouts; they are not members.
+
+## 6. The ladder
+
+Every move an agent makes sits on one rung of **Human < NLP < Skill < Script**,
+least deterministic to most, and the league's one standing rule is to push each
+move as far right as it will go, one rung at a time, never further than a test at
+the target rung can hold it.
+
+| Rung   | What it means                                                                   |
+| ------ | ------------------------------------------------------------------------------- |
+| Human  | a person does it, or decides it                                                 |
+| NLP    | a model does it in open conversation, prompted for the occasion                 |
+| Skill  | a model does it under a loaded skill; repeatable, portable, still judged        |
+| Script | code does it; no model in the verdict                                           |
+
+A harness (code that runs a rubric through a model N times with a skeptic and a
+consensus rule) sits on the Script rung, because the rung is decided by who owns
+the verdict and the verdict rule is code. It is honest about what it is: it
+advises and never gates, since what it judges is meaning. So the ladder nests, and
+a skill that needs a judgement calls a harness the way it calls any script.
+
+**The ledger.** `moves.json` beside each agent and each skill: one entry per move
+with its name, its rung, the script it calls if any, and the test that holds it
+at that rung. A move claiming a rung with no test at that rung is flagged as a
+claim by the wall.
+
+**Promotion, one rung at a time.**
+
+- Human to NLP: a person stops doing it and asks; the move exists once it has
+  been done in conversation on two tasks and the transcript says how.
+- NLP to Skill: the how is written into the skill, and the skill is run on the
+  fixtures by at least two models with the eval harness reading the output. It is
+  promoted when the consensus holds across models; a skill that only works on one
+  model is a prompt.
+- Skill to Script: the move becomes code under `bin/` with a unit test and a red
+  fixture the wall was watched to fail on, and the skill step that used to judge
+  it is cut to a call. A skill stays fat only where it judges, thin where it
+  computes.
+- Demotion is expected and is relegation's local form. A script whose real cases
+  stop settling goes back to a harness rubric; a rubric that keeps needing a
+  person goes back to guidance.
+
+## 7. The first job: five agents and the wheel
+
+The job that founds the league is a software delivery pipeline of five agents,
+the first members, with Kaal driving. The plain names are the names; a persona
+name for each is Kai's to give, and Kaal's own Projection already opens a vein
+(the measures of a cycle: nimish, kshan, kashtha, kaal) if the five are to belong
+to the same system as the persona that drives them.
 
 ```mermaid
 flowchart LR
   H([Human]) --> R
-  R[Requirements] --> A[Architecture]
-  R --> T[Test]
+  R[analyst: requirements] --> A[architect: architecture]
+  R --> T[tester: test]
   A --> T
-  A --> C[Code]
+  A --> C[coder: code]
   T --> C
   C --> T
-  C --> D[Deployment]
+  C --> D[operator: deployment]
   D --> H
 ```
 
-Four of the edges are forward. One is a back edge, code to test, and it is the
-only cycle in the graph. That is not an accident to smooth over: test leads code
-(the tests exist before the code they hold to account) and code leads test (the
-code, once it exists, is run against them and tells the tester what the suite did
-not yet say). The loop between the two is where a job spends most of its time, and
-a design that flattens it into a straight line has lost the thing that makes the
-pipeline honest. Everything else is a chain: one stage's close is the next one's
-cue.
+Four edges are forward and one is a back edge, code to test, the only cycle in
+the graph. It is kept on purpose: test leads code (the tests exist before the
+code they hold to account) and code leads test (the code, once run, tells the
+tester what the suite did not yet say). A design that straightens it has lost the
+thing that makes the pipeline honest.
 
-The human sits at both ends and at one gate in between. The human sets the
-requirements (that is the cue for the whole run), approves the plan before code is
-written (the close of architecture), and holds the key to deployment (the
-operator executes, the human authorises). Those are the three places a person is
-in the loop by design; every other appearance of a person is an escalation, not a
-step.
+The human sits at both ends and one gate between: sets the requirements, approves
+the architecture before code, holds the key to deployment. Every other appearance
+of a person is an escalation, not a step.
 
-## 3. A job is a play
+**The seams.** A handoff is an artefact leaving one agent's Output for the next
+agent's Input, and every handoff is stamped against the **checklist declared for
+that seam**, written by the receiving agent (the consumer sets the bar for the
+producer: the architect's checklist is what the analyst's requirements must
+satisfy, the coder's is what the tester's suite must satisfy). Inside KAAL the
+stamp is Kaal's; in a consumer's repository the checklists travel with the agents
+and the consumer's own runtime applies them, because Kaal drives KAAL and does not
+follow its members out. Kaal cannot see past the checklist; that is his Shadow,
+and it is why the checklists are the receiving agent's and are reviewed in the
+retrospective, not by him. Where a checklist item is decidable it is a wall;
+where it needs meaning it is a harness rubric and the stamp reports the
+consensus; nothing on a checklist is Kaal's own opinion.
 
-khai's claim is that nothing is a ticket, a prompt, or a pipeline; everything is a
-production. KAAL takes that at its word. A **job is a play** (ENACTS: Estate,
-Name, Arc, Company, Triggers, Stakes) and its five stages are five **plots** (TO
-CAST: Cue, Action, Stage, Tension), chained by the Triggers chapter exactly as the
-graph above draws them. The company is the five positions. The Stakes are what the
-job is fighting over; a plot that leaves the stakes where it found them has not
-earned its place, which is a stricter rule than "the stage ran".
+**The five, in one line each, with the skill each carries.**
 
-That gives KAAL three things for free that a pipeline written from scratch would
-have to invent:
+- **analyst** (`skill-requirements`): turns a human ask into a task that can
+  fail. Output: a goal, assumptions, constraints, and acceptance criteria phrased
+  so the tester can write a test and the operator can tick a box. This is PR #1's
+  plan agent with a name, and its output shape is PR #1's output shape.
+- **architect** (`skill-architecture`): draws the space the task runs in.
+  Output: structure, seams, what is fixed and what is free, a decision record per
+  door closed, and a test strategy naming per criterion the kind of test that
+  will hold it (deterministic, harnessed, or manual, and why). The human approves
+  here.
+- **tester** (`skill-test`): holds the criteria. Output: a suite in which every
+  criterion has a test, every test has been seen red, and the tests that need a
+  model to judge are declared as harness rubrics with thresholds, never as walls.
+  Owns both testing lanes (section 8).
+- **coder** (`skill-code`): builds within the drawing until the suite is green.
+  Output: green, and a diff in which nothing exists that no test holds. A coder
+  who wants to change the drawing hands back to the architect, which is a
+  handoff and passes Kaal like any other.
+- **operator** (`skill-deploy`): runs the release as called, with the human's
+  key. Output: the deployment, the smoke run, the rollback path, and the
+  retrospective whose findings become the next task's requirements or a
+  promotion on the ladder.
 
-- **The conformance walls.** Every play, plot, position, persona, and plan in
-  KAAL validates against the canon through `@chbrain/khai-tests`, in the pre-push
-  hook and in CI. Chapter names, ordering, frontmatter, links, the cast: computed,
-  not judged.
-- **The review harness.** `@chbrain/khai-review` resolves one rubric per position
-  the house casts. Five positions, five lenses; the harness runs each as N
-  independent readings with a skeptic and confirms only on consensus. It never
-  gates; it escalates.
-- **The voice layer.** The house speaks through named personas holding
-  positions, hands off in role, and stages its debates as a discussion play. The
-  Choregos (Nicias and Pericles, in tension) and the Roadie (Agatharchus) come
-  with the blueprint; KAAL adds its five.
+## 8. Testing, both kinds
 
-### The house kind
+The tester runs two lanes and they never trade places: a deterministic test
+gates, a non-deterministic test reports. Forcing a judgement into a wall is worse
+than leaving it out, because a rule that reads as computed and is not stops
+everyone looking; turning a wall into a rubric is paying a model to do what
+equality does.
 
-khai's bill knows three kinds of house: a **stage** (a source staged as plays), a
-**work** (khai's own canon given a voice), a **canon** (reusable material other
-productions draw on). KAAL is none of these. It builds. In a theatre that is the
-**shop**: the scene shop, the prop shop, where what the designer drew gets made and
-loaded onto the stage. KAAL registers as a `shop` house, its collection is `jobs`,
-its anchor is `play_` like every other house, and the kind is the first seam KAAL
-needs from khai (section 9), because the kind set is closed on purpose and a new
-one is an architectural decision that lands in khai, not here.
+**The deterministic lane** (walls, in the pre-push hook and in CI):
 
-### The layout
+- the agent rules and the skill rules on every member;
+- every loadout resolves, every `hands_to` resolves, every persona has four
+  chapters and no operational rule;
+- every script under `bin/` has a unit test and a red fixture, and the test that
+  proves the fixture goes red is itself in the suite;
+- every ledger entry claiming Script names a script that exists and a test that
+  passes; every entry claiming Skill names an eval that has run;
+- the standings table on disk equals a fresh build from the ledgers and eval
+  records (a drift gate, so the table cannot be edited by hand).
 
-Raised by `khai-stage` from the blueprint, then given its own rooms:
+**The non-deterministic lane** (the eval harness, advisory, escalates):
+
+- **Member evals.** Each agent and skill is run on its fixtures by at least two
+  models; the output is read through the receiving agent's checklist as N
+  independent readings with a skeptic told to refute; a finding is confirmed on K
+  of N; a claim of fact anchors to the fixture's own files, never to a model's
+  memory. The thresholds are league config and are written down once.
+- **Task reviews.** The same harness on a real task's artefacts at each seam,
+  with the checklist of that seam. It comments; it never blocks.
+- **Stability as the signal.** A rubric whose verdict has not changed across the
+  last N runs on the same fixture is tabled for the Script rung. That is the
+  consolidation direction of the ladder made into a measurement.
+
+The harness is a KAAL script. Its mechanism (rubric as data, N of K, a skeptic,
+source anchoring) is the same mechanism khai's review lane already runs, and
+whether KAAL writes it fresh or lifts the generic half is a build decision; the
+design's rule is only that KAAL does not depend on khai to run it.
+
+What neither lane can do is make a weak model write like a strong one. Walls
+guarantee correctness where it is decidable and the harness guarantees that
+errors surface across models; that is the honest bound and the design claims
+nothing past it.
+
+## 9. The repository
 
 ```
 KAAL/
-  README.md                 the Estate: the house voice, the pointer to AGENTS.md
-  AGENTS.md                 the coding contract, stamped, vendor agnostic
-  management/               the voice layer: instructions, positions, personas,
-                            standing plans, orders, discussions
-  skills/                   the five skills, SKILL.md + references, built and
-                            guarded through @chbrain/khai-skills
-  bin/                      the Script rung: what the skills call instead of judging
-  jobs/<job>/               one directory per job: the play, its plan, its five
-                            plots, and a work/ directory or a pointer to the target
-  tests/                    the walls: house conformance, script unit tests, the
-                            red fixtures every wall must be seen to fail on
-  audit/                    the harness manifests: one rubric set per position
-  fixtures/                 the small known jobs the skill evals run on
-  khai-guard.config.json    lanes: job/*, skill/*, script/*, governance/*
+  README.md               the definition (section 1, in fewer words), the pointer to AGENTS.md
+  AGENTS.md               how an agent works in this repository (the coding contract)
+  rules/                  the agent rules and the skill rules, as code, with the pin
+  agents/<name>/          AGENT.md, persona.md, moves.json, fixtures/
+  skills/<name>/          SKILL.md, references/, moves.json, fixtures/
+  bin/                    the Script rung: kaal check, kaal build, kaal eval,
+                          kaal table, kaal stamp, and whatever gets promoted
+  adapters/               example mappings from AGENT.md to a runtime's own format
+  tests/                  the walls, and the red fixtures every wall must fail on
+  evals/                  the eval records the table is built from
+  TABLE.md                the standings, generated, drift-gated
 ```
 
-The lanes follow the blueprint's rule: the guard computes the branch from the
-diff. `job/*` owns `jobs/**`, `skill/*` owns `skills/**`, `script/*` owns `bin/**`
-and their tests ride separately as the source and test rule requires, and
-`governance/*` owns the rest.
+Branches are lanes computed from the diff, the way khai's guard does it, and that
+guard is generic enough to reuse as a tool without making KAAL a khai house:
+`agent/*` owns `agents/**`, `skill/*` owns `skills/**`, `script/*` owns `bin/**`
+with tests riding separately, `rules/*` owns `rules/**` and the pin, and
+`governance/*` the rest. Whether KAAL uses khai's guard package or its own small
+one is a build decision; the lane discipline is the design.
 
-## 4. The company
+## 10. Eat your own dogfood
 
-Five positions, and the names are theatre names because the house is a theatre.
-The plain name stays beside each so nobody has to translate. Every position is a
-file (TO HOLD: Has, Orders, Loses, Drives) and speaks only through a named persona.
+KAAL's pipeline is built by running KAAL's pipeline on KAAL, and job N is run by
+the pipeline as job N-1 left it. The early stages are mostly conversation; the
+ledger says so honestly rather than dressing it up.
 
-| Plain     | Position          | Holds the stage | Has                                                         | Loses                                                        |
-| --------- | ----------------- | --------------- | ----------------------------------------------------------- | ------------------------------------------------------------ |
-| analyst   | the Dramaturg     | Requirements    | the source and the question: what is this job actually for  | the right to decide how; the Dramaturg frames, never designs |
-| architect | the Scenographer  | Architecture    | the space the play will run in: structure, seams, constraint | the right to build it; the drawing is not the set            |
-| tester    | the Prompter      | Test            | the whole text, and the duty to catch every deviation       | the right to be kind; a missed line is a missed line         |
-| coder     | the Carpenter     | Code            | the shop: the tools and the drawing to build from            | the right to redesign; the Carpenter builds what was drawn   |
-| operator  | the Stage Manager | Deployment      | the book and the cue light: the run, night after night      | the right to improvise; the show runs as called              |
+0. **The rules.** Agent rules, skill rules, the pin, the walls, a red fixture for
+   each. Merge PR #1's Kaal into the new layout; he is the first member and
+   passes his own door.
+1. **The five, version zero.** Five `AGENT.md` and `persona.md` files, five
+   `SKILL.md` files written from section 7, fixtures for each, ledgers marking
+   every move NLP or Skill. This document is the analyst's output for this job;
+   the human does the other four seats by conversation and Kaal stamps by hand
+   against the first checklists.
+2. **The scripts.** `kaal check`, `kaal build`, `kaal stamp`, `kaal table`, each
+   a move job 1 ledgered as Skill and this job promotes, with its red fixture.
+3. **The evals.** The harness, the fixtures run under two models, the thresholds,
+   the first real standings table. From here a member is promoted on evidence.
+4. **The first consumer.** khai adopts the five agents for its own software work,
+   through an adapter it owns, and khai's play skills stay where they are. This
+   is the job that proves the dependency points the right way.
+5. **The second consumer.** A project that is not khai, to find out where KAAL
+   only worked because its first consumer was its author's.
 
-Two positions KAAL inherits rather than adds, and one seam to keep clean:
+After job 5 the backlog is whatever `kaal table` says is still on the left, and
+the operator's retrospective at the end of each job feeds it.
 
-- **The Choregos** (Nicias and Pericles) stays off-stage and issues orders. A
-  job's plan is approved in their voice before the human signs it.
-- **The Roadie** (Agatharchus) stocks the house: installs and updates khai, keeps
-  the board green, tours what KAAL publishes. The Stage Manager is not the
-  Roadie. The Roadie moves the house; the Stage Manager runs one job's show. Where
-  a deployment is "publish this package to the registry", the two touch, and the
-  rule is: the Roadie owns the venue, the Stage Manager owns the cue.
+## 11. The boundary with khai
 
-Personas are the first naming job in this house and they are Kai's. The pattern
-khai uses is a real figure with a source, so two candidates to show the shape and
-not to close it: **Lessing** for the Dramaturg (the first dramaturg by title,
-Hamburg 1767, the man who wrote down what a play was for while it was running),
-and **Appia** for the Scenographer (the stage as space and light, designed before
-a set was built). The Prompter's persona is the interesting gap: prompters are
-anonymous by trade, and a house that names one has said something about what
-testing is.
+Stated once so it is not re-argued.
 
-Each position carries a **standing plan** (TO DOIT), its Drives written as a
-checklist that never closes: the Dramaturg's is that no job starts without a
-question it can fail; the Prompter's is that no code lands without a test that was
-seen to fail first. Those standing plans conflict by design (the Carpenter wants
-to build, the Prompter wants to hold), and the debate between them is the
-discussion play, not a bug in the process.
+- **khai uses KAAL.** khai takes the five agents (and any later general member)
+  for working on itself, through an adapter khai owns. Nothing in KAAL imports
+  khai.
+- **khai keeps its theatre.** Plays, plots, the house company, the play skills,
+  the canon and its conformance kit are khai's and stay there. KAAL never
+  mentions a play.
+- **The skill rules move down.** The generic tiers (the standard mirror, vendor
+  neutrality) become KAAL's; khai keeps provenance against its own canon and
+  consumes the rest. Until that lands, KAAL carries its own copy.
+- **The persona shape is borrowed and credited.** Four chapters, checked by
+  KAAL's own wall, credited to khai in the file. A convention, not a dependency.
+- **Mechanisms may be lifted, not linked.** The eval harness and the branch guard
+  are generic in khai; KAAL may lift their generic halves or reuse them as tools,
+  and the rule is only that KAAL's definition of an agent or a skill never
+  depends on either.
 
-## 5. The ladder
+## 12. Decisions taken, and the ones left open
 
-The concept: **Human < NLP < Skill < Script**, from least deterministic to most.
-Every move a job makes sits on one rung of that ladder, and the design's one
-standing rule is to push each move as far right as it will go, one rung at a
-time, and never further than a test at the target rung can hold it.
-
-khai already carries this ladder under other names, and the two need reconciling
-once so the house does not keep two vocabularies. khai's boundary ruling
-(`docs/BOUNDARY.md`) reads `human -> ai -> code` downward as consolidation over
-time and `code -> ai -> human` upward as escalation per case; its order
-"Computed, Harnessed, Instructed" names the three tiers a check can land in. Laid
-side by side:
-
-| KAAL rung | What it means here                                                              | khai tier                          |
-| --------- | ------------------------------------------------------------------------------- | ---------------------------------- |
-| Human     | a person does it, or decides it                                                 | the human rung; taste              |
-| NLP       | a model does it in open conversation, prompted for the occasion                 | not a tier: the raw material       |
-| Skill     | a model does it under a loaded skill or method; repeatable, portable, judged    | Instructed                         |
-| Script    | code does it; a wall, a build, a deploy; no model in it                         | Computed                           |
-
-khai's fourth thing, the **Harnessed** judge, is where KAAL's four rungs and
-khai's three tiers looked like they disagreed, and the resolution is that the
-ladder nests. A harness is a Script whose one step is an NLP call: the rubric, the
-N-of-K consensus, the skeptic, and the verdict rule are code, and only the reading
-inside is a model. It sits on the Script rung by the rule that decides rungs (who
-owns the verdict), while being honest that the verdict is about meaning and so
-advises rather than gates. So KAAL's ladder stays four rungs, and a skill that
-needs a judgement calls a harness the way it would call any other script.
-
-### The rung is recorded, not remembered
-
-Every skill declares its **moves** in a small ledger beside the SKILL.md (a
-`moves.json`, one entry per move: name, rung, the script it calls if any, the
-test that holds it there). A script, `kaal ladder`, reads every ledger and prints
-the frontier: per stage, which moves are still conversation, which are skilled,
-which are scripted, and which have a test at their rung. That report is the
-house's backlog. A move with no test at its rung is flagged as a claim, because a
-rung is a measurement and not a self-report (conduct law 2).
-
-### Promotion, one rung at a time
-
-- **Human to NLP**: a person stops doing it and asks; the move exists once it has
-  been done in conversation on two jobs and the transcript says how.
-- **NLP to Skill**: the how is written into the stage's SKILL.md (or a method in
-  `khai-methods` shape when it is a checklist rather than a role), and the skill
-  is run on the fixture jobs by at least two models with the harness reading the
-  output through the next position's lens. It is promoted when the consensus
-  holds across models; a skill that only works on one model is a prompt, not a
-  skill.
-- **Skill to Script**: the move is written as code under `bin/`, gets a unit test
-  and a red fixture the wall was watched to fail on (conduct law 3), and the
-  SKILL.md step that used to judge it is cut to a call. The skill stays fat only
-  where it judges, thin where it computes: the Roadie's own rule, borrowed whole.
-- **Demotion** is allowed and expected. A script whose real cases stop settling
-  at its rung goes back to a harness rubric; a rubric that keeps needing a person
-  goes back to guidance. The frontier moves both ways.
-
-## 6. The five skills
-
-Each skill is one `SKILL.md` under `skills/<name>/`, built and guarded through
-`@chbrain/khai-skills` (the agentskills.io standard, vendor neutrality, provenance
-against the canon), so the same bundle loads in whatever model is driving, the
-execution tool included. That is the practical reason the Skill rung matters here:
-the strategy is thought through in one place and executed in another, and a skill
-is the one artefact both can hold.
-
-Every skill has the same skeleton: its position (the accountability it holds),
-its cue (what it takes in and refuses to start without), its echo (what it hands
-off and in what shape), what it scripts, what it judges, and its lens (the rubric
-the harness runs on its output). The handoff between two stages is the Echo of one
-plot written as the Cue of the next, in a fixed shape the pipeline stamps; that is
-the structured handover, and it is computed so the shape never drifts while the
-content stays the skill's.
-
-### kaal-dramaturg (Requirements)
-
-The Dramaturg turns a human ask into a job that can fail. Cue: a request from the
-human, in any form. Echo: `jobs/<job>/play_<job>.md` with Stakes written, and
-`plan_<job>.md` with Direction and Targets, where every target is an acceptance
-criterion phrased so that the Prompter can write a test for it and the Stage
-Manager can tick it. Scripts: `kaal stamp-job` (the play, the plan, and the five
-plots from the canon templates, filled with the job's name and cast; nothing
-written from memory of chapters). Judges: whether the ask is one job or three,
-whether a target is testable, what is out of scope. Lens: _is every target a
-thing the run can fail on, and is nothing in the Stakes undecidable?_
-
-### kaal-scenographer (Architecture)
-
-The Scenographer draws the space the job runs in. Cue: a plan whose Targets the
-human has read. Echo: the plan's Implementation chapter (language, layout,
-seams, engines, what is fixed and what is free), a decision record per choice that
-closes a door, and a test strategy that names, per target, the kind of test that
-will hold it (deterministic, harnessed, or manual, and why). Scripts: `kaal
-scaffold` (the directory shape, the package manifest, the lane config for the
-target). Judges: the seams, the tradeoffs, what not to build. Lens: _can the
-Prompter and the Carpenter each start from this without asking the Scenographer a
-question?_ The human approves the plan at this close; it is the second of the
-three human gates.
-
-### kaal-prompter (Test)
-
-The Prompter holds the text. Cue: the plan's Targets and Implementation. Echo: a
-test suite in which every target has a test, every test has been seen red, and
-the tests that need a model to judge are declared as harness rubrics in `audit/`
-with their thresholds, never as walls. Scripts: `kaal red` (runs the suite and
-refuses a test that has never failed), the harness invocation, coverage of
-targets against tests (a target with no test is a wall, computed). Judges: what a
-target means when two tests could both claim it. Lens: _does the suite fail for
-the right reason, and would it pass on a wrong answer?_ The Prompter is also the
-position that owns section 7 of this design, both testing lanes.
-
-### kaal-carpenter (Code)
-
-The Carpenter builds what was drawn until the text is satisfied. Cue: a red
-suite and an approved plan. Echo: green, and a changeset that names the bump
-class the guard computes. Scripts: everything the house already has (the guard,
-the gates, format, the suite) plus `kaal build`. Judges: how, within the drawing;
-never whether. A Carpenter who wants to change the drawing hands back to the
-Scenographer in voice, which is a step off the plot and is staged as one. Lens:
-_does the code do only what a target asked, and does anything in the diff exist
-that no test holds?_ The code to test back edge fires here: a green run that
-revealed a gap goes back to the Prompter as a new target, and the loop turns.
-
-### kaal-stage-manager (Deployment)
-
-The Stage Manager calls the show. Cue: a green suite, a plan with no open target
-but deployment, and the human's key. Echo: the deployment, its record in the
-plan's Targets with a verdict, and the retrospective (khai's `retro-4ls` method
-loads here) whose findings become the next job's requirements or a promotion on
-the ladder. Scripts: `kaal deploy` (the venue-specific release: a package
-publish, a tag, a container push), the smoke run, the rollback. Judges: whether
-what shipped is what was called. Lens: _did the run match the book, and what does
-the next run inherit?_ The retrospective is the pipeline's own Act step, and it is
-the mechanism by which the dogfood spiral in section 8 turns at all.
-
-## 7. Testing, both kinds
-
-The Prompter runs two lanes, and the design's most important rule about them is
-that they never trade places. A deterministic test gates. A non-deterministic
-test reports. Forcing a judgement into a wall is worse than leaving it out
-(conduct law 5), and turning a wall into a rubric is paying a model to do what
-`===` does.
-
-**The deterministic lane** (walls, in the hook and in CI):
-
-- the house conformance: every khai file in `management/` and `jobs/` validates
-  against the canon; every position has a persona; every job's Company matches
-  the files on disk;
-- the skill guard: every `SKILL.md` passes both khai-skills tiers, and every
-  canon reference in a bundle equals its source;
-- the script suite: every `bin/` script has unit tests and a red fixture, and the
-  test that proves the fixture goes red is itself in the suite;
-- the ladder ledger: every move claiming Script names a script that exists and a
-  test that passes; every move claiming Skill names a fixture eval that has run;
-- the job walls: a target with no test, a test with no target, a plan with an
-  open target at deployment.
-
-**The non-deterministic lane** (harness, advisory, escalates):
-
-- **Skill evals.** Each skill is run on the fixture jobs under `fixtures/` by at
-  least two models. The output is read by the harness through the _next_
-  position's lens (the consumer judges the producer: the Scenographer's rubric
-  reads the Dramaturg's plan, the Carpenter's reads the Prompter's suite), as N
-  independent readings with a skeptic told to refute. A finding is confirmed on
-  K of N, and a claim of fact anchors to the fixture's own files, never to the
-  model's memory. The thresholds are the house's local config, as the boundary
-  ruling prescribes.
-- **Job reviews.** The same harness runs on a real job's artefacts at each plot
-  close, with the five lenses resolved from the five positions. It comments; it
-  never blocks a merge.
-- **Stability as the promotion signal.** A rubric whose verdict has not changed
-  across the last N runs on the same fixture is a candidate for the Script rung,
-  and the Prompter tables it as such. That is the consolidation direction of the
-  ladder made into a measurement rather than a hunch.
-
-What neither lane can do is make a weak model write like a strong one. The walls
-guarantee correctness where correctness is decidable and the harness guarantees
-that errors get surfaced across models; that is the honest bound, and the design
-claims nothing past it.
-
-## 8. Eat your own dogfood: the first jobs
-
-KAAL's pipeline is built by running KAAL's pipeline on KAAL, and the way that
-avoids being a paradox is that job N is run by the pipeline as job N-1 left it.
-Each job below is a play in `jobs/` from the day the house can hold one, with its
-plots filled at whatever rung the moves have reached; the early plots are mostly
-conversation, and that is recorded honestly in the ledger rather than dressed up.
-
-0. **Raise the house.** `khai-stage kaal --kind shop --collection jobs`, the
-   Roadie's job, mostly scripted already. Register the five positions and the
-   personas the human names. Green on an empty house.
-1. **The five skills, version zero.** Written as `SKILL.md` files from this
-   design, no scripts yet, moves ledgered as NLP or Skill. This is the job where
-   this document is the Dramaturg's echo and the human is doing the other four
-   plots by conversation. The eval fixtures are written here too, because a
-   skill without a fixture cannot be promoted.
-2. **The first scripts.** `kaal stamp-job`, `kaal ladder`, `kaal red`. Each one
-   is a move that job 1 declared as Skill and that this job promotes, with the
-   red fixture the Prompter demands. From here the house can stamp its own jobs.
-3. **The harness.** The five `audit/` manifests, the fixture evals under two
-   models, the consensus thresholds. From here a skill can be promoted on
-   evidence rather than on the author's say-so.
-4. **The first foreign job.** Something small that is not KAAL, run end to end,
-   to find out where the pipeline only worked because it was building itself.
-
-After job 4 the backlog is whatever `kaal ladder` prints, and the retrospective at
-the end of each job is what feeds it.
-
-## 9. What KAAL needs from khai
-
-KAAL depends on khai and should change it as little as possible, but a few seams
-are real and are better named now than discovered in job 0. Each would be one
-order in khai's own shape (DOIT) and its own lane there; none is done here.
-
-- **A fourth house kind.** The bill's kinds are closed (`stage`, `work`, `canon`;
-  `chain` for the website) and a new one is an architectural decision by design.
-  KAAL asks for `shop`, and for `khai-stage --kind shop` to stamp a `jobs`
-  collection with the five positions available to cast.
-- **Building skills from a house.** `@chbrain/khai-skills` exports its builder
-  with a `root` option, so KAAL can compose and guard its own `skills/` through
-  khai's tiers with a one-line script. What is missing is only that the CLI
-  assumes its own package root; a `--root` flag closes it. No change to the
-  guard.
-- **Rubrics from positions.** `resolvePositionRubrics` already reads a house's
-  team, so five positions yield five lenses with no new mechanism. What KAAL adds
-  is the _consumer judges producer_ pairing in its own audit manifests, which is
-  local config and needs nothing from khai.
-- **Methods.** Where a KAAL move is a checklist rather than a role (the handover
-  shape, the promotion protocol), it is a method in `khai-methods` frontmatter
-  shape, credited to KAAL, and khai may take it upstream or not. KAAL loads
-  `khai-authoring`, `khai-review`, `khai-fix`, and `retro-4ls` as they are.
-
-## 10. Decisions taken here, and the ones left open
-
-Taken, and stated so they are not re-argued in a pull request body (conduct law
-6): a job is a play; the stages are plots chained by the graph in section 2 with
-the code to test back edge kept as the one loop; the five positions carry theatre
-names with plain names beside them; the ladder is four rungs and a harness is a
-Script that calls NLP; deterministic tests gate and non-deterministic tests
-report; the house's first job is itself.
+Taken here: KAAL is agent definitions and skills in the traditional sense, not
+plays; Kaal is the persona that drives KAAL, the voice the repository works
+through, at the door and at every seam inside it, and never a member; the
+receiving agent writes the checklist Kaal reads; admission
+has four criteria and only the first needs judgement; the ladder is four rungs
+and a harness is a script that calls a model; deterministic tests gate,
+non-deterministic tests report; the dependency points from khai to KAAL and never
+back; the first job is KAAL itself.
 
 Open, and Kai's:
 
-- **The personas.** Five names, five sources. The Prompter's is the one that
-  says the most.
-- **What KAAL stands for.** The design does not depend on the expansion, and the
-  house README's Estate line is where it will live.
-- **Where a job's target lives.** Inside `jobs/<job>/work/` for the house's own
-  jobs, or a pointer to a foreign repository for job 4 and after. The design
-  allows both; the first foreign job will say which is the default.
+- **The five persona names**, and whether they share Kaal's system of measures.
+- **The division names.** The table needs them and the ladder suggests four; a
+  league with a good name deserves better than "Division 1".
+- **Where the rules live in code.** A copy in KAAL from day one is the design's
+  answer; when the generic half moves out of `khai-skills` is khai's call.
