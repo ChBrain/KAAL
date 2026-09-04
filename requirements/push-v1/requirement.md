@@ -26,11 +26,14 @@ stands on each rung above human for a reason on disk.
 - An eval record is a file: one model's output on one fixture, read against
   the fixture's `expect.md`, with the model named and a verdict written in the
   file's frontmatter.
-- The league's first scripts are the moves already marked `candidate:
-script` in the ledgers: the skill rules check, the ledger check, and the
-  retro count.
-- Scripts are plain node with no dependency, run as `node bin/kaal.mjs
-<command>`, so a consumer needs nothing installed to run a wall.
+- A skill is NLP and scripts: a move that reaches the Script rung lives in
+  that skill's own `scripts/` directory (the standard's, discovered with
+  `references/` and `assets/`), is called from its `SKILL.md`, and ships in
+  the bundle. A skill's scripted move never lives outside the skill.
+- `bin/kaal.mjs` is the league's own tooling, Kaal's moves (the skill rules
+  check, the ledger check, the retro count), not a member's.
+- Scripts are plain node with no dependency, so a consumer needs nothing
+  installed to run one.
 
 ## Constraints
 
@@ -53,10 +56,12 @@ script` in the ledgers: the skill rules check, the ledger check, and the
    `fixtures/bad-skill/`, whose one skill names a vendor.
 4. `node bin/kaal.mjs retros` exits 0 and prints one line per skill with its
    count of unconsumed retros.
-5. Every script under `bin/` has a test file under `tests/` that asserts a
-   failure on bad input.
-6. At least one ledger move stands at rung `script`, naming a script that
-   exists and a test that exists and passes.
+5. Every script under `bin/` has a test under `tests/`, and every script
+   under a skill's `scripts/` has a test beside it, each asserting a failure
+   on bad input.
+6. At least one ledger move stands at rung `script`, naming a script under
+   its own skill's `scripts/` directory that its `SKILL.md` calls, and a test
+   that exists and passes.
 7. At least one ledger move stands at rung `skill`, naming an eval directory
    holding records from at least two distinct models, each with the verdict
    `pass`.

@@ -47,9 +47,9 @@ workflow is the required check, and the runner says what it does not run.
    to `main`, and has a step whose run line is exactly `npm test`.
 4. The workflow file declares, in a line beginning `# not run:`, the walls it
    does not run.
-5. `npm test` runs every `acceptance.test.mjs` under `requirements/` and
-   every `*.test.mjs` under `tests/`: removing any one of them from the
-   command's reach is visible as a changed count in its output.
+5. The test command reaches every `acceptance.test.mjs` under
+   `requirements/`, every `*.test.mjs` under `tests/`, and every test beside
+   a script in a skill's `scripts/`.
 
 ## Open questions
 

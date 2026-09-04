@@ -99,7 +99,8 @@ test("5. the test command reaches every acceptance test and every script test", 
   const must = files.filter(
     (f) =>
       /^requirements\/[^/]+\/acceptance\.test\.mjs$/.test(f) ||
-      /^tests\/[^/]+\.test\.mjs$/.test(f),
+      /^tests\/[^/]+\.test\.mjs$/.test(f) ||
+      /^skills\/[^/]+\/scripts\/[^/]+\.test\.mjs$/.test(f),
   );
   assert.ok(must.length > 0, "nothing to reach");
   for (const f of must)

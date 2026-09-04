@@ -216,9 +216,11 @@ claim by the wall.
   fixtures by at least two models with the eval harness reading the output. It is
   promoted when the consensus holds across models; a skill that only works on one
   model is a prompt.
-- Skill to Script: the move becomes code under `bin/` with a unit test and a red
-  fixture the wall was watched to fail on, and the skill step that used to judge
-  it is cut to a call. A skill stays fat only where it judges, thin where it
+- Skill to Script: the move becomes code in the skill's own `scripts/`
+  directory (the standard's, so it ships in the bundle and a runtime can run
+  it), with a unit test beside it and a red fixture the wall was watched to
+  fail on, and the skill step that used to judge it is cut to a call. A skill
+  is NLP and scripts; `bin/` holds only the league's own tooling, Kaal's moves. A skill stays fat only where it judges, thin where it
   computes.
 - Demotion is expected and is relegation's local form. A script whose real cases
   stop settling goes back to a harness rubric; a rubric that keeps needing a
@@ -445,9 +447,10 @@ KAAL/
   AGENTS.md               how an agent works in this repository (the coding contract)
   rules/                  the agent rules and the skill rules, as code, with the pin
   agents/<name>/          AGENT.md, persona.md, moves.json, fixtures/
-  skills/<name>/          SKILL.md, references/, moves.json, fixtures/
-  bin/                    the Script rung: kaal check, kaal build, kaal eval,
-                          kaal table, kaal stamp, and whatever gets promoted
+  skills/<name>/          SKILL.md, references/, scripts/ (the skill's own
+                          Script rung, tests beside), moves.json, fixtures/
+  bin/                    the league's own tooling, Kaal's moves: kaal check,
+                          kaal ledger, kaal retros, kaal table
   adapters/               example mappings from AGENT.md to a runtime's own format
   tests/                  the walls, and the red fixtures every wall must fail on
   evals/                  the eval records the table is built from

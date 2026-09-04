@@ -72,36 +72,54 @@ test("4. kaal retros prints one line per skill with a count", () => {
     );
 });
 
-test("5. every script under bin/ has a test that asserts a failure on bad input", () => {
+test("5. every script, in bin/ or in a skill's scripts/, has a test asserting a failure on bad input", () => {
+  const failing = /status,?\s*1|\.throws|rejects|toBe\(1\)|equal\(.*1\)/;
+  const pairs = [];
   const bin = join(ROOT, "bin");
-  assert.ok(existsSync(bin), "no bin/");
-  const scripts = readdirSync(bin).filter((f) => f.endsWith(".mjs"));
-  assert.ok(scripts.length >= 1, "no scripts");
-  for (const s of scripts) {
-    const t = join(ROOT, "tests", basename(s, ".mjs") + ".test.mjs");
+  if (existsSync(bin))
+    for (const s of readdirSync(bin).filter((f) => f.endsWith(".mjs")))
+      pairs.push([
+        join(bin, s),
+        join(ROOT, "tests", basename(s, ".mjs") + ".test.mjs"),
+      ]);
+  for (const n of skills()) {
+    const dir = join(ROOT, "skills", n, "scripts");
+    if (!existsSync(dir)) continue;
+    for (const s of readdirSync(dir).filter(
+      (f) => f.endsWith(".mjs") && !f.endsWith(".test.mjs"),
+    ))
+      pairs.push([join(dir, s), join(dir, basename(s, ".mjs") + ".test.mjs")]);
+  }
+  assert.ok(pairs.length >= 1, "no scripts anywhere");
+  for (const [s, t] of pairs) {
     assert.ok(existsSync(t), `${s}: no test`);
-    const text = readFileSync(t, "utf8");
     assert.ok(
-      /status,?\s*1|\.throws|rejects|toBe\(1\)|equal\(.*1\)/.test(text),
+      failing.test(readFileSync(t, "utf8")),
       `${s}: test asserts no failure`,
     );
   }
 });
 
-test("6. a move stands at script with a script and a passing test on disk", () => {
+test("6. a move stands at script with a script inside its skill, called from SKILL.md, and a passing test", () => {
   const moves = allMoves().filter((m) => m.rung === "script");
   assert.ok(moves.length >= 1, "no move at script");
   for (const m of moves) {
     assert.ok(
-      m.script && existsSync(join(ROOT, m.script)),
-      `${m.skill}/${m.name}: script missing`,
+      m.script && m.script.startsWith("scripts/"),
+      `${m.skill}/${m.name}: script not under the skill's scripts/`,
     );
+    const script = join(ROOT, "skills", m.skill, m.script);
+    assert.ok(existsSync(script), `${m.skill}/${m.name}: script missing`);
     assert.ok(
-      m.test && existsSync(join(ROOT, m.test)),
-      `${m.skill}/${m.name}: test missing`,
+      readFileSync(join(ROOT, "skills", m.skill, "SKILL.md"), "utf8").includes(
+        m.script,
+      ),
+      `${m.skill}/${m.name}: SKILL.md does not call ${m.script}`,
     );
+    const t = join(ROOT, "skills", m.skill, m.test ?? "");
+    assert.ok(m.test && existsSync(t), `${m.skill}/${m.name}: test missing`);
     assert.equal(
-      run(["--test", m.test]).status,
+      run(["--test", t], join(ROOT, "skills", m.skill)).status,
       0,
       `${m.skill}/${m.name}: test fails`,
     );
