@@ -57,8 +57,12 @@ tests and observability. Nobody proves another seat's want, and a want with no
 proof is not yet an output.
 
 **Everyone stays in lane.** Each seat declares the paths it may touch, the lane
-is computed from the diff, and a change that crosses two lanes is refused and
-told how to split. This is khai-guard's concept carried over whole, because it
+is computed from the diff, and a pull request is one lane: a change that
+crosses two lanes is refused and told how to split, in the pre-push hook and
+again in the required CI check, so no pull request operates all over the place.
+A handoff between seats is therefore never a commit that spans them; it is the
+producing seat's pull request landing and the receiving seat starting from
+what landed. This is khai-guard's concept carried over whole, because it
 is the one that removes the guesswork: a branch name typed by hand is a claim,
 a lane read off the diff is a measurement.
 
@@ -288,10 +292,13 @@ not a shortcut.
   suites are green, and proves the code with unit tests of their own. Output:
   green on all three layers, and a diff in which nothing exists that no test
   holds.
-- **operator**: runs the release as called, with the human's key, and treats
-  deployment as code: it has its own unit tests. Output: the deployment, its
-  tests, the observability that keeps testing it in the run (the assertions,
-  what they alert on, what they trace), and the retrospective whose findings
+- **operator**: runs the release as called, with the human's key, and holds
+  two wants with two proofs. The first: deployment is code, so it has its own
+  unit tests. The second: observability, where the want is what the run must
+  show (the assertions, the budgets, the traces) and the proof is that it
+  shows it, a fault seeded and seen to fire the alert, a probe seen to reach
+  the signal; an alert that has never fired is a claim. Output: the deployment,
+  its tests, the observability with its proof, and the retrospective whose findings
   become the next task's requirements or a promotion on the ladder.
 
 ### When a skill gets too big
@@ -348,13 +355,13 @@ fixtures that apply to it, so a split never resets the table to zero.
 **The layers** follow the stages, and the rule of each is who owns it and what it
 may not know.
 
-| Layer         | Driven by    | Owned by  | Blind to                   |
-| ------------- | ------------ | --------- | -------------------------- |
-| acceptance    | requirements | analyst   | the architecture, the code |
-| contract      | architecture | architect | the code                   |
-| unit          | code         | developer | nothing; protect yourself  |
-| unit (deploy) | deployment   | operator  | nothing; protect yourself  |
-| observability | the run      | operator  | nothing; it watches it all |
+| Layer         | Driven by    | Owned by  | Blind to                                         |
+| ------------- | ------------ | --------- | ------------------------------------------------ |
+| acceptance    | requirements | analyst   | the architecture, the code                       |
+| contract      | architecture | architect | the code                                         |
+| unit          | code         | developer | nothing; protect yourself                        |
+| unit (deploy) | deployment   | operator  | nothing; protect yourself                        |
+| observability | the run      | operator  | nothing; it watches it all, and is itself proven |
 
 Blindness is the part that can be computed. An acceptance test that imports a
 module of the system under test has looked past its layer, and so has a contract
@@ -367,7 +374,12 @@ developer built. A proof written by another seat proves that seat's want, not
 yours. The tester is the shared discipline of writing that proof, loaded by
 every seat, and owns no layer. Observability is the layer that never finishes: it is the
 acceptance and contract questions asked again of the live system, continuously,
-with the answers kept. Its findings are the retrospective's raw material, and
+with the answers kept. It is not exempt from the pair. The operator's want is
+what the run must show, and the proof is that the showing works: a seeded
+fault is seen to fire its alert, a synthetic probe is seen to reach its signal,
+a budget is seen to burn on a known load. The same law that governs every wall
+governs it, watch it fail before you trust it to pass; a dashboard nobody has
+seen go red is decoration, and an alert that has never fired is a claim. Its findings are the retrospective's raw material, and
 the league's own observability is the eval records and the standings table,
 which is the pipeline watching itself.
 
@@ -440,7 +452,14 @@ lane is the requirements and the acceptance tests, the developer's the source
 and its unit tests, the operator's the deployment, its tests, and the
 observability), and the guard config is generated from those declarations, so a
 lane is never typed twice. A diff that crosses two seats is refused and told how
-to split, which is stay-in-lane as a wall. Whether KAAL uses khai's guard
+to split, which is stay-in-lane as a wall, and it is enforced twice: in the
+pre-push hook, so the author hears it first, and in a required CI check, so a
+push that skipped the hook is not done. One pull request, one lane, one seat.
+The few paths every lane may touch (the lockfile, the changelog, a changeset)
+are declared shared once, and a rider (a management order, a changeset) may
+travel with the lane it rides. Everything else a pull request touches must be
+its own lane's, so the lane name on the branch is a true statement about the
+diff and a reviewer can read scope off the title. Whether KAAL uses khai's guard
 package or its own small one is a build decision; the lane discipline is the
 design. khai's own source-and-tests-in-separate-PRs rule is a consumer's
 policy, not a league rule: here a want and its proof share a lane, and the proof
