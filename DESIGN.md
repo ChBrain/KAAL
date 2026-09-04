@@ -20,8 +20,10 @@ Three things follow from the name and they are the design's spine. It is Kai's
 with one set of rules, not a marketplace. It is a league, so
 membership is earned and can be lost: not every agent definition or skill
 deserves to end up here, and the ones that do have standings. And it is
-artificial agents, not plays: KAAL is code oriented and delivers the engine,
-while khai is content work. khai's skills author plays, engines, and personas;
+artificial agents, not plays. KAAL and khai are two distinct propositions:
+KAAL is software delivery, engine oriented, how to use LLMs to build software;
+khai is a product, everything is a play. KAAL is code oriented and delivers the
+engine, while khai is content work. khai's skills author plays, engines, and personas;
 KAAL's skills improve the software those run on. So khai is a consumer of KAAL,
 one among possible others, and khai's theatre stays in khai. KAAL is written so that a project with
 no idea what a play is can adopt it whole.
