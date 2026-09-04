@@ -20,8 +20,10 @@ Three things follow from the name and they are the design's spine. It is Kai's
 with one set of rules, not a marketplace. It is a league, so
 membership is earned and can be lost: not every agent definition or skill
 deserves to end up here, and the ones that do have standings. And it is
-artificial agents, not plays: khai is a consumer of KAAL, one among possible
-others, and khai's theatre stays in khai. KAAL is written so that a project with
+artificial agents, not plays: KAAL is code oriented and delivers the engine,
+while khai is content work. khai's skills author plays, engines, and personas;
+KAAL's skills improve the software those run on. So khai is a consumer of KAAL,
+one among possible others, and khai's theatre stays in khai. KAAL is written so that a project with
 no idea what a play is can adopt it whole.
 
 The league already has its persona, on the `kaal-first-agent` branch: Kaal, who
@@ -146,9 +148,11 @@ checklist where they cannot.
 
 **Admission.** An agent or skill enters KAAL only if it is:
 
-- **general**: useful to more than one consumer. A skill that exists to author a
-  khai play, or an agent whose scope is one repository's rituals, fails this and
-  belongs to its consumer. This is the criterion behind "not all skills and agent
+- **engine, not content**: it improves software. A skill that authors content
+  (a khai play, an engine's prose, a persona) belongs to the house whose content
+  it is, however good it is; so does an agent whose scope is one repository's
+  rituals. KAAL's members deliver the engine, and khai's licence split (code
+  open, content NonCommercial) is the same line drawn inside one repository. This is the criterion behind "not all skills and agent
   definitions deserve to end up in KAAL", and it is the one that needs judgement,
   so it is Kaal's checklist item and not a wall.
 - **conformant**: passes the agent rules or the skill rules, which are walls.
@@ -484,8 +488,9 @@ ledger says so honestly rather than dressing it up.
    a move job 1 ledgered as Skill and this job promotes, with its red fixture.
 3. **The evals.** The harness, the fixtures run under two models, the thresholds,
    the first real standings table. From here a member is promoted on evidence.
-4. **The first consumer.** khai adopts the five skills for its own software work,
-   through an adapter it owns, and khai's play skills stay where they are. This
+4. **The first consumer.** khai adopts the five skills to improve its own
+   software (its packages and mechanism), through an adapter it owns, while its
+   content skills stay where they are and keep authoring plays. This
    is the job that proves the dependency points the right way.
 5. **The second consumer.** A project that is not khai, to find out where KAAL
    only worked because its first consumer was its author's.
@@ -495,21 +500,27 @@ the operator's retrospective at the end of each job feeds it.
 
 ## 11. The boundary with khai
 
-Stated once so it is not re-argued.
+Stated once so it is not re-argued. The line is engine versus content: KAAL
+improves software, khai makes content, and each keeps the skills of its own
+kind.
 
 - **khai uses KAAL.** khai takes the five skills and the agents that carry them
-  (and any later general member) for working on itself, through an adapter khai
-  owns. Nothing in KAAL imports khai. - **khai keeps its theatre.** Plays,
-  plots, the house company, the play skills, the canon and its conformance kit
-  are khai's and stay there. KAAL never mentions a play. - **The skill rules
-  move down.** The generic tiers (the standard mirror, vendor neutrality) become
-  KAAL's; khai keeps provenance against its own canon and consumes the rest.
-  Until that lands, KAAL carries its own copy. - **The persona shape is borrowed
-  and credited.** Four chapters, checked by KAAL's own wall, credited to khai in
-  the file. A convention, not a dependency. - **Mechanisms may be lifted, not
-  linked.** The eval harness and the branch guard are generic in khai; KAAL may
-  lift their generic halves or reuse them as tools, and the rule is only that
-  KAAL's definition of an agent or a skill never depends on either.
+  for its software: the packages, the guard, the conformance kit, the review
+  harness, the builders. That is engine work, and it is what the five are for.
+  It does so through an adapter khai owns. Nothing in KAAL imports khai.
+- **khai keeps its content.** Plays, plots, the house company, the content
+  skills (the playwright, the director, the engineer, the impresario, the
+  theatre manager, the roadie), the canon and its conformance kit are khai's
+  and stay there. KAAL never mentions a play.
+- **The skill rules move down.** The generic tiers (the standard mirror, vendor
+  neutrality) become KAAL's; khai keeps provenance against its own canon and
+  consumes the rest. Until that lands, KAAL carries its own copy.
+- **The persona shape is borrowed and credited.** Four chapters, checked by
+  KAAL's own wall, credited to khai in the file. A convention, not a dependency.
+- **Mechanisms may be lifted, not linked.** The eval harness and the branch
+  guard are generic in khai; KAAL may lift their generic halves or reuse them as
+  tools, and the rule is only that KAAL's definition of an agent or a skill
+  never depends on either.
 
 ## 12. Decisions taken, and the ones left open
 
