@@ -159,12 +159,12 @@ least deterministic to most, and the league's one standing rule is to push each
 move as far right as it will go, one rung at a time, never further than a test at
 the target rung can hold it.
 
-| Rung   | What it means                                                                   |
-| ------ | ------------------------------------------------------------------------------- |
-| Human  | a person does it, or decides it                                                 |
-| NLP    | a model does it in open conversation, prompted for the occasion                 |
-| Skill  | a model does it under a loaded skill; repeatable, portable, still judged        |
-| Script | code does it; no model in the verdict                                           |
+| Rung   | What it means                                                            |
+| ------ | ------------------------------------------------------------------------ |
+| Human  | a person does it, or decides it                                          |
+| NLP    | a model does it in open conversation, prompted for the occasion          |
+| Skill  | a model does it under a loaded skill; repeatable, portable, still judged |
+| Script | code does it; no model in the verdict                                    |
 
 A harness (code that runs a rubric through a model N times with a skeptic and a
 consensus rule) sits on the Script rung, because the rung is decided by who owns
@@ -193,73 +193,116 @@ claim by the wall.
   stop settling goes back to a harness rubric; a rubric that keeps needing a
   person goes back to guidance.
 
-## 7. The first job: five agents and the wheel
+## 7. The first job: five overarching skills
 
-The job that founds the league is a software delivery pipeline of five agents,
-the first members, with Kaal driving. The plain names are the names; a persona
-name for each is Kai's to give, and Kaal's own Projection already opens a vein
-(the measures of a cycle: nimish, kshan, kashtha, kaal) if the five are to belong
-to the same system as the persona that drives them.
+The job that founds the league is a software delivery pipeline. Its spine is
+five **overarching skills**, and the agents that carry them are thin: each agent
+is a persona and a scope wrapped around one of the five, and the skill is where
+the craft lives. That order matters for the league's economics. A skill is the
+portable, evaluated, ledgered thing; an agent is the seat it is carried in, and
+a consumer may seat the same skill in an agent of its own.
 
 ```mermaid
 flowchart LR
   H([Human]) --> R
-  R[analyst: requirements] --> A[architect: architecture]
-  R --> T[tester: test]
+  R[analyse: requirements] --> A[architect: architecture]
+  R --> T[tester: tests]
   A --> T
-  A --> C[coder: code]
-  T --> C
-  C --> T
+  T --> C[developer: code]
   C --> D[operator: deployment]
   D --> H
 ```
 
-Four edges are forward and one is a back edge, code to test, the only cycle in
-the graph. It is kept on purpose: test leads code (the tests exist before the
-code they hold to account) and code leads test (the code, once run, tells the
-tester what the suite did not yet say). A design that straightens it has lost the
-thing that makes the pipeline honest.
+Requirements drive architecture. Requirements drive tests. Architecture drives
+tests. Tests drive code, which is TDD said in one edge: the tests exist before
+the code they hold to account, and the developer's job is to turn them green
+within the drawing. Code drives deployment. It is a chain with one fork and one
+join, and the human sits at both ends and one gate between: sets the
+requirements, approves the architecture before code, holds the key to
+deployment. Every other appearance of a person is an escalation, not a step.
 
-The human sits at both ends and one gate between: sets the requirements, approves
-the architecture before code, holds the key to deployment. Every other appearance
-of a person is an escalation, not a step.
-
-**The seams.** A handoff is an artefact leaving one agent's Output for the next
-agent's Input, and every handoff is stamped against the **checklist declared for
-that seam**, written by the receiving agent (the consumer sets the bar for the
-producer: the architect's checklist is what the analyst's requirements must
-satisfy, the coder's is what the tester's suite must satisfy). Inside KAAL the
-stamp is Kaal's; in a consumer's repository the checklists travel with the agents
-and the consumer's own runtime applies them, because Kaal drives KAAL and does not
-follow its members out. Kaal cannot see past the checklist; that is his Shadow,
-and it is why the checklists are the receiving agent's and are reviewed in the
+**The seams.** A handoff is an artefact leaving one skill's Output for the next
+skill's Input, and every handoff is stamped against the **checklist declared for
+that seam**, written by the receiving side (the consumer sets the bar for the
+producer: the architect's checklist is what the requirements must satisfy, the
+developer's is what the tests must satisfy). Inside KAAL the stamp is Kaal's; in
+a consumer's repository the checklists travel with the skills and the consumer's
+own runtime applies them, because Kaal drives KAAL and does not follow its
+members out. Kaal cannot see past the checklist; that is his Shadow, and it is
+why the checklists are the receiving side's and are reviewed in the
 retrospective, not by him. Where a checklist item is decidable it is a wall;
 where it needs meaning it is a harness rubric and the stamp reports the
-consensus; nothing on a checklist is Kaal's own opinion.
+consensus; nothing on a checklist is Kaal's own opinion. A developer who finds
+the drawing wrong hands back to the architect, and that is a handoff like any
+other, not a shortcut.
 
-**The five, in one line each, with the skill each carries.**
+**The five, in one line each.**
 
-- **analyst** (`skill-requirements`): turns a human ask into a task that can
-  fail. Output: a goal, assumptions, constraints, and acceptance criteria phrased
-  so the tester can write a test and the operator can tick a box. This is PR #1's
-  plan agent with a name, and its output shape is PR #1's output shape.
-- **architect** (`skill-architecture`): draws the space the task runs in.
-  Output: structure, seams, what is fixed and what is free, a decision record per
-  door closed, and a test strategy naming per criterion the kind of test that
-  will hold it (deterministic, harnessed, or manual, and why). The human approves
-  here.
-- **tester** (`skill-test`): holds the criteria. Output: a suite in which every
-  criterion has a test, every test has been seen red, and the tests that need a
-  model to judge are declared as harness rubrics with thresholds, never as walls.
-  Owns both testing lanes (section 8).
-- **coder** (`skill-code`): builds within the drawing until the suite is green.
-  Output: green, and a diff in which nothing exists that no test holds. A coder
-  who wants to change the drawing hands back to the architect, which is a
-  handoff and passes Kaal like any other.
-- **operator** (`skill-deploy`): runs the release as called, with the human's
-  key. Output: the deployment, the smoke run, the rollback path, and the
-  retrospective whose findings become the next task's requirements or a
-  promotion on the ladder.
+- **analyse**: turns a human ask into a task that can fail. Output: a goal,
+  assumptions, constraints, and acceptance criteria phrased so the tester can
+  write a test and the operator can tick a box. This is PR #1's plan agent with
+  a name, and its output shape is PR #1's output shape.
+- **architect**: draws the space the task runs in. Output: structure, seams,
+  what is fixed and what is free, a decision record per door closed, and a test
+  strategy naming per criterion the kind of test that will hold it
+  (deterministic, harnessed, or manual, and why). The human approves here.
+- **tester**: holds the criteria. Output: a suite in which every criterion has
+  a test, every test has been seen red, and the tests that need a model to judge
+  are declared as harness rubrics with thresholds, never as walls. Owns both
+  testing lanes (section 8).
+- **developer**: builds within the drawing until the suite is green. Output:
+  green, and a diff in which nothing exists that no test holds.
+- **operator**: runs the release as called, with the human's key. Output: the
+  deployment, the smoke run, the rollback path, and the retrospective whose
+  findings become the next task's requirements or a promotion on the ladder.
+
+### When a skill gets too big
+
+Five overarching skills is the right number to start with and almost certainly
+the wrong number to end with. The design does not decide the splits in advance;
+it decides how the league finds out that one is due, and what the candidate cuts
+are, so that a split is made on a measurement and along a seam rather than on a
+feeling and down the middle.
+
+**The signals, all computed.** The standard's body budget is the first and it is
+already a wall: a `SKILL.md` past its line budget is over. The ledger is the
+second: a skill whose `moves.json` carries more moves at the NLP rung than at
+Skill or Script has grown faster than it has crisped. The evals are the third: a
+skill whose fixtures fail on different items for different models is doing too
+many things for any one model to hold in its head, and that is what "too big"
+means in practice. `kaal table` reports all three per skill, and a skill over on
+any of them is tabled for a split at the next retrospective. It is not split
+automatically; it is put on the table.
+
+**The cuts, in the order to try them.**
+
+1. **Script first.** Before splitting a skill, promote its scripted moves out of
+   its body. A skill stays fat only where it judges, and a great deal of "too
+   big" is judgement that has already crisped and is still written as prose.
+   This is a split along the ladder, not across the skill, and it is the cheap
+   one.
+2. **By mode.** A skill that does the same craft in several situations (create,
+   audit, repair) keeps one `SKILL.md` and moves each mode's detail into a
+   reference one level deep, which the standard allows and the wall checks. The
+   skill stays one member with one ledger; only its body thins.
+3. **By seam.** A skill whose output has two consumers with two checklists
+   (the analyse skill hands to both the architect and the tester) is a
+   candidate to split along that fork, one child per receiving checklist, if the
+   two halves share little. The checklists already exist, so the seam is
+   already drawn; the question is only whether the halves are independent.
+4. **By stage, last.** Cutting a stage into sub-stages (requirements into
+   elicitation and acceptance criteria, deployment into release and
+   observation) adds a seam and a checklist to the pipeline itself. It is the
+   most expensive cut because it changes the graph every consumer adopted, so
+   it is taken only when the first three have been tried and the signals still
+   fire.
+
+**What a split must preserve.** The parent's name and its place in the graph: a
+consumer that loaded `analyse` still loads `analyse`, and finds a skill whose
+body now routes to its children. Each child is a member in its own right, with
+its own ledger, fixtures, and standing, and the parent's standing is the lowest
+of its children's. And the evidence carries over: a child inherits the parent's
+fixtures that apply to it, so a split never resets the table to zero.
 
 ## 8. Testing, both kinds
 
@@ -346,7 +389,7 @@ ledger says so honestly rather than dressing it up.
    a move job 1 ledgered as Skill and this job promotes, with its red fixture.
 3. **The evals.** The harness, the fixtures run under two models, the thresholds,
    the first real standings table. From here a member is promoted on evidence.
-4. **The first consumer.** khai adopts the five agents for its own software work,
+4. **The first consumer.** khai adopts the five skills for its own software work,
    through an adapter it owns, and khai's play skills stay where they are. This
    is the job that proves the dependency points the right way.
 5. **The second consumer.** A project that is not khai, to find out where KAAL
@@ -359,7 +402,7 @@ the operator's retrospective at the end of each job feeds it.
 
 Stated once so it is not re-argued.
 
-- **khai uses KAAL.** khai takes the five agents (and any later general member)
+- **khai uses KAAL.** khai takes the five skills and the agents that carry them (and any later general member)
   for working on itself, through an adapter khai owns. Nothing in KAAL imports
   khai.
 - **khai keeps its theatre.** Plays, plots, the house company, the play skills,
@@ -379,8 +422,7 @@ Stated once so it is not re-argued.
 
 Taken here: KAAL is agent definitions and skills in the traditional sense, not
 plays; Kaal is the persona that drives KAAL, the voice the repository works
-through, at the door and at every seam inside it, and never a member; the
-receiving agent writes the checklist Kaal reads; admission
+through, at the door and at every seam inside it, and never a member; the five stages are overarching skills carried by thin agents, chained as requirements to architecture and tests, architecture to tests, tests to code, code to deployment; the receiving side writes the checklist Kaal reads; a skill is split on a computed signal and along a seam, script first, by mode, by seam, by stage last; admission
 has four criteria and only the first needs judgement; the ladder is four rungs
 and a harness is a script that calls a model; deterministic tests gate,
 non-deterministic tests report; the dependency points from khai to KAAL and never
