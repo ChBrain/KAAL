@@ -15,8 +15,9 @@ that reads the standard. Runtime config (which model, which tools, which sandbox
 stays outside both; KAAL defines what an agent is and what it may do, never where
 it happens to run.
 
-Three things follow from the name and they are the design's spine. It is Kai's,
-so it is one league with one set of rules, not a marketplace. It is a league, so
+Three things follow from the name and they are the design's spine. It is Kai's
+(one could argue Khai's, and section 12 leaves that to him), so it is one league
+with one set of rules, not a marketplace. It is a league, so
 membership is earned and can be lost: not every agent definition or skill
 deserves to end up here, and the ones that do have standings. And it is
 artificial agents, not plays: khai is a consumer of KAAL, one among possible
@@ -47,6 +48,20 @@ whatever it does elsewhere.
 has a standard layout and a wall that checks it, plus league policy on what an
 agent may claim about itself.
 
+**Everyone writes their own tests.** Every seat's output is a pair: _I want
+this_, and _this is how I test that it is true_. The analyst wants a behaviour
+and proves it with acceptance tests; the architect wants a seam and proves it
+with contract tests; the developer wants the code to do a thing and proves it
+with unit tests; the operator wants a release to hold and proves it with deploy
+tests and observability. Nobody proves another seat's want, and a want with no
+proof is not yet an output.
+
+**Everyone stays in lane.** Each seat declares the paths it may touch, the lane
+is computed from the diff, and a change that crosses two lanes is refused and
+told how to split. This is khai-guard's concept carried over whole, because it
+is the one that removes the guesswork: a branch name typed by hand is a claim,
+a lane read off the diff is a measurement.
+
 **Kaal drives.** Kaal is not a member of the league; he is the league's own
 voice, the persona the repository works through. Every candidate for admission
 passes him, and when KAAL runs its pipeline on itself, so does every artefact
@@ -70,7 +85,8 @@ agents/<name>/
 `AGENT.md` carries a closed frontmatter: `name` (matches the directory, same rule
 as a skill), `description`, `division` (section 5), `skills` (the loadout: a list
 of skill names that must resolve in `skills/`), `hands_to` (the agents this one
-may hand an artefact to), and `license`. Its body has fixed sections in fixed
+may hand an artefact to), `lane` (the path globs this agent may change, from
+which the guard config is generated), and `license`. Its body has fixed sections in fixed
 order: **Purpose**, **Allowed**, **Not allowed**, **Input**, **Output**,
 **Handoff**. Allowed and Not allowed are the scope, and they are the part of the
 definition Kaal reads on every stamp: an output that does something Not allowed is
@@ -206,8 +222,8 @@ a consumer may seat the same skill in an agent of its own.
 flowchart LR
   H([Human]) --> R
   R[analyse: requirements] --> A[architect: architecture]
-  R --> TA[tester: acceptance tests]
-  A --> TC[tester: contract tests]
+  R --> TA[analyse: acceptance tests]
+  A --> TC[architect: contract tests]
   A --> C[developer: code]
   TA --> C
   TC --> C
@@ -248,28 +264,27 @@ members out. Kaal cannot see past the checklist; that is his Shadow, and it is
 why the checklists are the receiving side's and are reviewed in the
 retrospective, not by him. Where a checklist item is decidable it is a wall;
 where it needs meaning it is a harness rubric and the stamp reports the
-consensus; nothing on a checklist is Kaal's own opinion. A developer who finds a test wrong hands back to the owner of the layer it
-sits in (the tester for an acceptance or a contract test, the architect if the
-seam itself is wrong), and that is a handoff like any other, not a shortcut.
+consensus; nothing on a checklist is Kaal's own opinion. A developer who finds a test wrong hands back to the seat that wrote it (the
+analyst for an acceptance test, the architect for a contract test), and that is
+a handoff like any other, not a shortcut.
 
 **The five, in one line each.**
 
 - **analyse**: turns a human ask into a task that can fail. Output: a goal,
-  assumptions, constraints, and acceptance criteria phrased so the tester can
-  write a test and the operator can tick a box. This is PR #1's plan agent with
+  assumptions, constraints, acceptance criteria, and the acceptance tests that
+  prove them, blind to the architecture and the code. This is PR #1's plan agent with
   a name, and its output shape is PR #1's output shape.
 - **architect**: draws the space the task runs in. Output: structure, seams,
-  what is fixed and what is free, a decision record per door closed, and a test
-  strategy naming per criterion the kind of test that will hold it
-  (deterministic, harnessed, or manual, and why). The human approves here.
-- **tester**: holds the two agnostic layers. Output: acceptance tests in
-  which every criterion has a test that knows nothing of the architecture, and
-  contract tests in which every seam has a test that knows nothing of the code;
-  every test has been seen red; and the tests that need a model to judge are
-  declared as harness rubrics with thresholds, never as walls. The tester does
-  not write unit tests; that is the rule of section 8.
+  what is fixed and what is free, a decision record per door closed, and the
+  contract tests that prove each seam, blind to the code. The human approves
+  here.
+- **tester**: the one skill every seat loads, not a seat of its own. It is the
+  discipline of the proof: how to write the test for your own want so that it
+  is seen red before it is trusted green, stays blind to the layers below it,
+  declares as a harness rubric what needs a model to judge and as a wall what
+  does not, and is ledgered on the ladder. Section 8 is its content.
 - **developer**: builds within the drawing until the acceptance and contract
-  suites are green, and protects the code with unit tests of their own. Output:
+  suites are green, and proves the code with unit tests of their own. Output:
   green on all three layers, and a diff in which nothing exists that no test
   holds.
 - **operator**: runs the release as called, with the human's key, and treats
@@ -308,7 +323,8 @@ automatically; it is put on the table.
    reference one level deep, which the standard allows and the wall checks. The
    skill stays one member with one ledger; only its body thins.
 3. **By seam.** A skill whose output has two consumers with two checklists
-   (the analyse skill hands to both the architect and the tester) is a
+   (the analyse skill hands its requirements to the architect and its acceptance
+   tests to the developer) is a
    candidate to split along that fork, one child per receiving checklist, if the
    two halves share little. The checklists already exist, so the seam is
    already drawn; the question is only whether the halves are independent.
@@ -333,8 +349,8 @@ may not know.
 
 | Layer         | Driven by    | Owned by  | Blind to                   |
 | ------------- | ------------ | --------- | -------------------------- |
-| acceptance    | requirements | tester    | the architecture, the code |
-| contract      | architecture | tester    | the code                   |
+| acceptance    | requirements | analyst   | the architecture, the code |
+| contract      | architecture | architect | the code                   |
 | unit          | code         | developer | nothing; protect yourself  |
 | unit (deploy) | deployment   | operator  | nothing; protect yourself  |
 | observability | the run      | operator  | nothing; it watches it all |
@@ -342,18 +358,20 @@ may not know.
 Blindness is the part that can be computed. An acceptance test that imports a
 module of the system under test has looked past its layer, and so has a contract
 test that reaches behind a seam; both are import boundaries, and import
-boundaries are a wall. Ownership is the part that is a rule: the tester never
-writes a unit test, because a unit test written by someone who did not write the
-code protects nobody, and the developer never writes an acceptance test, because
-a test written by the person it holds to account is a test of what was built,
-not of what was asked. Observability is the layer that never finishes: it is the
+boundaries are a wall. Ownership is the part that is a rule, and it is one rule: everyone writes
+their own tests. A seat's proof is written by the seat that has the want, so
+the acceptance test is the analyst's because the behaviour is what the analyst
+asked for, and the unit test is the developer's because the code is what the
+developer built. A proof written by another seat proves that seat's want, not
+yours. The tester is the shared discipline of writing that proof, loaded by
+every seat, and owns no layer. Observability is the layer that never finishes: it is the
 acceptance and contract questions asked again of the live system, continuously,
 with the answers kept. Its findings are the retrospective's raw material, and
 the league's own observability is the eval records and the standings table,
 which is the pipeline watching itself.
 
 **The kinds** cut across the layers. Any layer's test is one of two kinds, and
-the tester runs the two kinds as two lanes and they never trade places: a deterministic test
+every seat runs the two kinds as two lanes that never trade places: a deterministic test
 gates, a non-deterministic test reports. Forcing a judgement into a wall is worse
 than leaving it out, because a rule that reads as computed and is not stops
 everyone looking; turning a wall into a rubric is paying a model to do what
@@ -411,12 +429,21 @@ KAAL/
   TABLE.md                the standings, generated, drift-gated
 ```
 
-Branches are lanes computed from the diff, the way khai's guard does it, and that
-guard is generic enough to reuse as a tool without making KAAL a khai house:
-`agent/*` owns `agents/**`, `skill/*` owns `skills/**`, `script/*` owns `bin/**`
-with tests riding separately, `rules/*` owns `rules/**` and the pin, and
-`governance/*` the rest. Whether KAAL uses khai's guard package or its own small
-one is a build decision; the lane discipline is the design.
+Branches are lanes computed from the diff, khai-guard's concept carried over
+whole, and that guard is generic enough to reuse as a tool without making KAAL
+a khai house. The league's own lanes: `agent/*` owns `agents/**`, `skill/*`
+owns `skills/**`, `script/*` owns `bin/**`, `rules/*` owns `rules/**` and the
+pin, and `governance/*` the rest. In a consumer's repository the lanes are the
+seats': each `AGENT.md` declares the paths its seat may change (the analyst's
+lane is the requirements and the acceptance tests, the developer's the source
+and its unit tests, the operator's the deployment, its tests, and the
+observability), and the guard config is generated from those declarations, so a
+lane is never typed twice. A diff that crosses two seats is refused and told how
+to split, which is stay-in-lane as a wall. Whether KAAL uses khai's guard
+package or its own small one is a build decision; the lane discipline is the
+design. khai's own source-and-tests-in-separate-PRs rule is a consumer's
+policy, not a league rule: here a want and its proof share a lane, and the proof
+lands first.
 
 ## 10. Eat your own dogfood
 
@@ -469,14 +496,22 @@ Stated once so it is not re-argued.
 
 Taken here: KAAL is agent definitions and skills in the traditional sense, not
 plays; Kaal is the persona that drives KAAL, the voice the repository works
-through, at the door and at every seam inside it, and never a member; the five stages are overarching skills carried by thin agents, chained as requirements to architecture and tests, architecture to tests, tests to code, code to deployment; the receiving side writes the checklist Kaal reads; a skill is split on a computed signal and along a seam, script first, by mode, by seam, by stage last; admission
-has four criteria and only the first needs judgement; the ladder is four rungs
-and a harness is a script that calls a model; deterministic tests gate,
-non-deterministic tests report; the dependency points from khai to KAAL and never
-back; the first job is KAAL itself.
+through, at the door and at every seam inside it, and never a member; the five
+stages are overarching skills carried by thin agents, chained as requirements to
+architecture and tests, architecture to tests, tests to code, code to
+deployment; the receiving side writes the checklist Kaal reads; everyone writes
+their own tests and the tester is the discipline every seat loads, not a seat;
+everyone stays in lane and the lane is computed from the diff; a skill is split
+on a computed signal and along a seam, script first, by mode, by seam, by stage
+last; admission has four criteria and only the first needs judgement; the ladder
+is four rungs and a harness is a script that calls a model; deterministic tests
+gate, non-deterministic tests report; the dependency points from khai to KAAL
+and never back; the first job is KAAL itself.
 
 Open, and Kai's:
 
+- **The expansion.** Kai's Artificial Agent League, or Khai's: the second
+  reading says who the league is for, and the design holds under both.
 - **The five persona names**, and whether they share Kaal's system of measures.
 - **The division names.** The table needs them and the ladder suggests four; a
   league with a good name deserves better than "Division 1".
