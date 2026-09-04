@@ -71,6 +71,13 @@
       "candidate": null,
       "script": null,
       "test": null
+    },
+    {
+      "name": "check the seam diagram's edges equal the seam list",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
     }
   ]
 }

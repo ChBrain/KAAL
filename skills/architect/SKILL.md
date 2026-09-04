@@ -41,7 +41,10 @@ are fixed and in this order.
   changes. Name each part by what it is for, not by how it will be coded.
 - **Seams.** Every boundary another part or the outside world crosses: its
   name, what goes in, what comes out, who owns each side. A seam is a promise;
-  list only promises you are willing to test.
+  list only promises you are willing to test. Draw them too: one diagram, the
+  parts as nodes, one labelled edge per seam numbered to match the list, so a
+  reader sees the mechanism and a wall can count that edges and seams agree.
+  The list is the contract; the picture carries nothing the list does not.
 - **Fixed and free.** What the developer may not change (a seam, a format, a
   constraint from the requirement) and what is theirs to decide. Say both;
   silence reads as fixed and slows the developer, or reads as free and breaks

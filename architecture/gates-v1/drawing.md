@@ -44,6 +44,13 @@ sentence that says otherwise).
 
 ## Seams
 
+```mermaid
+flowchart LR
+  C[kaal.config.json: gates] -- "1 name, command, fix" --> G[kaal gates]
+  G -- "2 lines, summary, exit code" --> SH[npm test: hook, workflow]
+  P[package.json: prepare] -- "3 core.hooksPath" --> H[.githooks/pre-push]
+```
+
 1. **config to runner**: in, `kaal.config.json` with `gates: [{name,
 command, fix}]` read from the working directory; out, every wall run in
    order, one line each, a summary, exit 0 or 1; a missing or unrunnable
