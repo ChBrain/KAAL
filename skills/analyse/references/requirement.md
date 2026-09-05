@@ -23,7 +23,7 @@
 
 ## Handoff
 
-- Task: <task>
+- Task: <the task, named for the change it makes, not numbered>
 - Criteria: <n>; tests: <n> (equal)
 - Red run: <runner, date, all <n> failing, or the manual steps walked and not
   met>

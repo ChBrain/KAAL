@@ -74,8 +74,10 @@ export function checkLedgers(root, only = null) {
  * as many fresh passing models as its eval directory holds, out of the two
  * the rung needs; a candidate that names no test is read over every fixture
  * under evals/<skill>/, so the first record shows before a move claims it.
+ * A stale record (pass, then a sha moved) is listed under the standing with
+ * the reason, so the board keeps what was measured.
  * @param {string} root
- * @returns {{ skill: string, move: string, fresh: number, need: number }[]}
+ * @returns {{ skill: string, move: string, fresh: number, need: number, stale: { file: string, why: string }[] }[]}
  */
 export function standings(root) {
   const out = [];
@@ -90,13 +92,19 @@ export function standings(root) {
         ? [m.test]
         : dirs(join(root, "evals", skill)).map((d) => `evals/${skill}/${d}`);
       const models = new Set();
-      for (const d of where)
-        for (const x of freshModels(root, d, skill).models) models.add(x);
+      const stale = [];
+      for (const d of where) {
+        const r = freshModels(root, d, skill);
+        for (const x of r.models) models.add(x);
+        for (const x of r.stale)
+          stale.push({ file: `${d}/${x.file}`, why: x.why });
+      }
       out.push({
         skill,
         move: m.name,
         fresh: Math.min(models.size, 2),
         need: 2,
+        stale,
       });
     }
   }

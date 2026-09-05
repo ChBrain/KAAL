@@ -1,0 +1,12 @@
+{
+  "skill": "x",
+  "moves": [
+    {
+      "name": "a candidate",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": "evals/x/f"
+    }
+  ]
+}
