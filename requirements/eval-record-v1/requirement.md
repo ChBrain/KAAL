@@ -69,4 +69,4 @@ it or that names a fixture or skill that has since changed.
 - Tests: `acceptance.test.mjs`, beside this file; fixture roots under
   `fixtures/`
 - Open questions: 2, listed above
-- Status: open
+- Status: closed

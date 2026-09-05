@@ -1,0 +1,48 @@
+{
+  "agent": "kaal",
+  "note": "Kaal's own moves. Every move sits at the NLP rung until fixture evals have run on at least two models.",
+  "moves": [
+    {
+      "name": "read the artefact against the seam's checklist",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "run the walls and read the result",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "turn the wheel or send it back with the line",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "archive the retros a requirement consumed",
+      "rung": "nlp",
+      "candidate": "script",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "run retro-4ls on a stack of stamps",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "the human sets the standard he reads against",
+      "rung": "human",
+      "candidate": null,
+      "script": null,
+      "test": null
+    }
+  ]
+}

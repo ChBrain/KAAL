@@ -24,7 +24,10 @@ export const RULES = [
   "depth",
   "vendor",
   "dash",
+  "reach",
 ];
+export const REACH =
+  /from ["']node:(child_process|net|http|https|dns|tls)["']|\bfetch\(/;
 
 const dirs = (d) =>
   existsSync(d)
@@ -117,6 +120,36 @@ export function checkSkills(skillsDir) {
           `${f.slice(skillsDir.length + 1)} carries an en-dash or em-dash`,
         );
     }
+  }
+  // reach: a script that reaches the shell or the network must be declared in
+  // a Reach section of the skill's SKILL.md, and a declaration must have a
+  // reaching script behind it, so neither can go stale. Read from text; a
+  // script is never executed to find out what it does.
+  for (const skill of dirs(skillsDir)) {
+    const sd = join(skillsDir, skill, "scripts");
+    const scripts = existsSync(sd)
+      ? readdirSync(sd).filter(
+          (f) => f.endsWith(".mjs") && !f.endsWith(".test.mjs"),
+        )
+      : [];
+    const reaching = scripts.filter((f) =>
+      REACH.test(readFileSync(join(sd, f), "utf8")),
+    );
+    const md = join(skillsDir, skill, "SKILL.md");
+    const declared =
+      existsSync(md) && /^## Reach/m.test(readFileSync(md, "utf8"));
+    if (reaching.length && !declared)
+      find(
+        skill,
+        "reach",
+        `${reaching.join(", ")} reaches the shell or the network and SKILL.md has no Reach section`,
+      );
+    if (!reaching.length && declared)
+      find(
+        skill,
+        "reach",
+        "SKILL.md declares a Reach section and no script reaches",
+      );
   }
   return findings;
 }

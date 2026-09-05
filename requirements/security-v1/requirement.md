@@ -69,4 +69,4 @@ without saying so is refused.
 - Tests: `acceptance.test.mjs`, beside this file;
   `fixtures/undeclared-reach`
 - Open questions: 2, listed above
-- Status: open
+- Status: closed

@@ -74,7 +74,7 @@ jobs:
             const r = await fetch("https://models.github.ai/inference/chat/completions", {
               method: "POST",
               headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, "Content-Type": "application/json", Accept: "application/vnd.github+json" },
-              body: JSON.stringify({ model, messages, temperature: 0 }),
+              body: JSON.stringify({ model, messages, temperature: 0 }), // temperature: 0 is what the record says
             });
             if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
             return (await r.json()).choices[0].message.content;
@@ -92,7 +92,7 @@ jobs:
             const out = join("evals", skill, fixture);
             mkdirSync(out, { recursive: true });
             const file = join(out, model.replace(/[^a-z0-9.-]/gi, "-") + ".md");
-            writeFileSync(file, `---\nmodel: ${model}\nverdict: ${verdict}\nskill_sha: ${sha}\nfixture: ${fixture}\ndate: ${new Date().toISOString().slice(0, 10)}\n---\n\n# Output\n\n${output}\n\n# Reading\n\n${reading}\n`);
+            writeFileSync(file, `---\nmodel: ${model}\nreader: ${model}\ntemperature: 0\ndate: ${new Date().toISOString().slice(0, 10)}\nfixture: ${fixture}\nask_sha: ${fileSha(join(f, "ask.md"))}\nexpect_sha: ${fileSha(join(f, "expect.md"))}\nskill_sha: ${sha}\nverdict: ${verdict}\n---\n\n# Output\n\n${output}\n\n# Reading\n\n${reading}\n`);
             console.log(`${file}: ${verdict}`);
           }
           EOF
