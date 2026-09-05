@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
@@ -101,7 +101,12 @@ test("5. the walls' commands reach every acceptance test and every script test",
         ? []
         : e.isDirectory()
           ? walk(join(d, e.name))
-          : [join(d, e.name).slice(ROOT.length + 1)],
+          : [
+              join(d, e.name)
+                .slice(ROOT.length + 1)
+                .split(sep)
+                .join("/"),
+            ],
     );
   const files = walk(ROOT);
   const patterns = gates
