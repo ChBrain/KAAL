@@ -29,12 +29,14 @@ stands on each rung above human for a reason on disk.
   at the time of the run) in its frontmatter. A record whose `skill_sha` no
   longer matches is stale and counts for nothing: editing a skill relegates
   its moves until they are re-evaluated, and no one has to remember it.
-- The second model runs in CI, through the hosted models a workflow can
-  read with a `models: read` permission; the first is whatever runtime a
-  person used. The eval workflow is expensive, so it fires only on an
-  `/eval <skill>` comment or a manual dispatch, never on a push; it writes
-  the records and commits them. The model advises; the `skill_sha` gates.
-  This is khai's audit lane, learned, not linked.
+- The second model runs in CI, through a chat completions endpoint the
+  repository is configured with (superseded by evals-v2: it was the hosted
+  models a workflow could read with a `models: read` permission, retired on
+  30 July 2026); the first is whatever runtime a person used. The eval
+  workflow is expensive, so it fires only on an `/eval <skill>` comment or a
+  manual dispatch, never on a push; it writes the records and commits them.
+  The model advises; the `skill_sha` gates. This is khai's audit lane,
+  learned, not linked.
 - A skill is NLP and scripts: a move that reaches the Script rung lives in
   that skill's own `scripts/` directory (the standard's, discovered with
   `references/` and `assets/`), is called from its `SKILL.md`, and ships in
@@ -77,9 +79,10 @@ stands on each rung above human for a reason on disk.
    holding records from at least two distinct models, each with the verdict
    `pass` and a `skill_sha` equal to the SHA-256 of that skill's `SKILL.md`.
 8. A workflow under `.github/workflows/` runs the evals only on an
-   `issue_comment` beginning `/eval` or on `workflow_dispatch`, never on
-   `push` or `pull_request`, holds the `models: read` permission, and writes
-   under `evals/`.
+   `/eval <skill>` comment or a manual dispatch, never on `push` or
+   `pull_request`, reads its endpoint from repository configuration
+   (superseded by evals-v2; it held the `models: read` permission), and
+   writes records under `evals/`.
 
 ## Open questions
 
