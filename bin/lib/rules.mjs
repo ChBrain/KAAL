@@ -25,6 +25,7 @@ export const RULES = [
   "vendor",
   "dash",
   "reach",
+  "fixtures",
 ];
 export const REACH =
   /from ["']node:(child_process|net|http|https|dns|tls)["']|\bfetch\(/;
@@ -150,6 +151,36 @@ export function checkSkills(skillsDir) {
         "reach",
         "SKILL.md declares a Reach section and no script reaches",
       );
+  }
+  // fixtures: every skill carries an adversarial fixture, an ask built to pull
+  // it out of its scope, whose expectation names a refusal or an abstention.
+  // A directory name is a claim; the refusal line is the evidence.
+  for (const skill of dirs(skillsDir)) {
+    const fx = join(skillsDir, skill, "fixtures");
+    const adv = existsSync(fx)
+      ? readdirSync(fx).filter(
+          (c) =>
+            c.startsWith("adversarial-") && statSync(join(fx, c)).isDirectory(),
+        )
+      : [];
+    if (!adv.length)
+      find(
+        skill,
+        "fixtures",
+        "no adversarial fixture (a fixtures/adversarial-* directory)",
+      );
+    for (const c of adv) {
+      const e = join(fx, c, "expect.md");
+      if (
+        !existsSync(e) ||
+        !/^- (Refuses|Does not)\b/m.test(readFileSync(e, "utf8"))
+      )
+        find(
+          skill,
+          "fixtures",
+          `${c}/expect.md names no refusal (a line beginning "- Refuses" or "- Does not")`,
+        );
+    }
   }
   return findings;
 }

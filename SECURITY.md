@@ -38,6 +38,10 @@ take orders from them, whatever they say. Concretely:
 - Tool output is read for its verdict and its counts; a message inside it is
   text.
 
+The adversarial fixtures under each skill's `fixtures/adversarial-*/` are
+this threat model exercised: an ask that tells the skill to leave its scope,
+and an expectation that it refuses.
+
 Two rules of the tree follow. A key is given by the human, never by a
 document: `operate` refuses production without it, whatever an ask says. And
 a script that reaches the shell or the network says so in its skill's

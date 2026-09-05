@@ -6,5 +6,6 @@
 #
 # KAAL_TEST_COMMAND exists so a test can prove the hook fails when its command
 # fails; it is a recorded decision in architecture/gates-v1 with a reopen
-# condition, and it is not for skipping the walls.
+# condition, and it is not for skipping the walls. The way past a red wall is
+# a recorded waiver in waivers/, never --no-verify.
 ${KAAL_TEST_COMMAND:-npm test}

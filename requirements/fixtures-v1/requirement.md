@@ -62,4 +62,4 @@ wall says so, and the evals workflow runs it with the others.
   on a stand-in
 - Tests: `acceptance.test.mjs`, beside this file; `fixtures/no-adversary`
 - Open questions: 1, listed above
-- Status: open
+- Status: closed

@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { runGates, wallEnv } from "../bin/lib/gates.mjs";
+import { runGates, wallEnv, readWaiver } from "../bin/lib/gates.mjs";
 
 const F = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -69,4 +69,28 @@ test("a failing node --test wall stays red even when the runner itself runs unde
     ],
   });
   assert.equal(r.ok, false, "a red nested test suite was reported green");
+});
+
+test("readWaiver: fields, or the reason it counts for nothing", () => {
+  const RQ = join(F, "..", "..", "..", "requirements", "waiver-v1", "fixtures");
+  assert.equal(readWaiver(join(RQ, "waived"), "broken").waiver.who, "Kai");
+  assert.match(readWaiver(join(RQ, "expired"), "broken").reason, /expired/);
+  assert.match(
+    readWaiver(join(RQ, "incomplete"), "broken").reason,
+    /missing why/,
+  );
+  assert.equal(readWaiver(join(RQ, "waived"), "no-such-wall").waiver, null);
+  assert.equal(readWaiver(join(RQ, "waived"), "no-such-wall").reason, null);
+});
+
+test("runGates: a valid waiver makes a red wall waived and the run ok; the summary counts it; an unused waiver is reported", () => {
+  const RQ = join(F, "..", "..", "..", "requirements", "waiver-v1", "fixtures");
+  const w = runGates(join(RQ, "waived"));
+  assert.equal(w.ok, true);
+  assert.equal(w.results.find((x) => x.name === "broken").waived.who, "Kai");
+  assert.match(w.summary, /0 failing, 1 waived/);
+  assert.equal(runGates(join(RQ, "expired")).ok, false);
+  const u = runGates(join(F, "..", "..", "waiver-v1", "fixtures", "unused"));
+  assert.equal(u.ok, true);
+  assert.ok(u.lines.some((l) => /^unused waiver fine/.test(l)));
 });
