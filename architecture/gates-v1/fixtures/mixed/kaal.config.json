@@ -1,8 +1,20 @@
 {
   "gates": [
-    { "name": "passes", "command": "true", "fix": "nothing" },
-    { "name": "fails", "command": "false", "fix": "make it pass" },
-    { "name": "counts", "command": "printf '# pass 3\\n'", "fix": "nothing" },
+    {
+      "name": "passes",
+      "command": "node -e \"process.exit(0)\"",
+      "fix": "nothing"
+    },
+    {
+      "name": "fails",
+      "command": "node -e \"process.exit(1)\"",
+      "fix": "make it pass"
+    },
+    {
+      "name": "counts",
+      "command": "node -e \"console.log('# pass 3')\"",
+      "fix": "nothing"
+    },
     {
       "name": "missing",
       "command": "kaal-no-such-binary-xyz",

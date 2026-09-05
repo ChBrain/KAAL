@@ -9,6 +9,8 @@
 //   node bin/kaal.mjs retros          unconsumed retros per skill
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
+//   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
+//   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
 import { join } from "node:path";
 import { checkLedgers } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
@@ -18,7 +20,7 @@ import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | retros | gates | acceptance <files...> | contracts <files...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
 const cwd = process.cwd();
 let findings = [];
