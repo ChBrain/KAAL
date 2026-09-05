@@ -41,6 +41,18 @@ architect a drawing and contract tests under `architecture/<task>/`, the
 developer code and unit tests. Every test is seen red before it is trusted
 green. A closed task's red is a failure; an open task's red is reported.
 
+## How a change lands
+
+Branch from main, never from a branch that already carries something
+else, and name the branch by the lane of the diff. Make the change, run
+`npm test`, and push: the hook runs every wall before the push leaves the
+machine, and a push it refuses is not done. Open the pull request from that
+branch against main; the merge is the human's approval. Paste the board's
+lines in the pull request, and when you report a red, paste the `FAIL`
+line and the lines under it, never a count alone: a red nobody can see is
+a claim, not a finding. A pull request whose body describes commits that
+are not on its branch describes nothing.
+
 ## House rules
 
 - Skills under `skills/` follow the skill rules `kaal check` reads: the
