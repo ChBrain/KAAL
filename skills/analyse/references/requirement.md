@@ -37,8 +37,10 @@
 
 # Acceptance test shape
 
-One test per criterion, numbered to match. In the repository's own runner where
-one reaches the surface; otherwise a manual test in this shape:
+One test per criterion, numbered to match. A test's name begins with its
+criterion's number (`test("1. ...")`), so the pairing is read, not inferred.
+In the repository's own runner where one reaches the surface; otherwise a
+manual test in this shape:
 
 ```
 Test <n> (manual): <criterion n, restated>
