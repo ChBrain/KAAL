@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { checkSkills } from "../bin/lib/rules.mjs";
+import { checkSkills, RULES } from "../bin/lib/rules.mjs";
 
 const F = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -29,5 +29,34 @@ test("one finding per broken rule, naming skill and rule", () => {
     f.filter((x) => x.skill === "broken-name").length,
     1,
     "broken-name has exactly one finding",
+  );
+});
+
+test("reach: undeclared shell or network is a finding, declared network passes, a stale declaration is a finding", () => {
+  const S = join(ROOT, "architecture", "security-v1", "fixtures");
+  const R = join(
+    ROOT,
+    "requirements",
+    "security-v1",
+    "fixtures",
+    "undeclared-reach",
+    "skills",
+  );
+  assert.ok(RULES.includes("reach"));
+  assert.ok(
+    checkSkills(join(S, "shell-reach")).some((x) => x.rule === "reach"),
+    "shell",
+  );
+  assert.ok(
+    checkSkills(R).some((x) => x.rule === "reach"),
+    "network undeclared",
+  );
+  assert.deepEqual(checkSkills(join(S, "declared-reach")), [], "declared");
+  const stale = checkSkills(join(S, "stale-declaration"));
+  assert.ok(
+    stale.some(
+      (x) => x.rule === "reach" && /no script reaches/.test(x.message),
+    ),
+    "stale declaration",
   );
 });

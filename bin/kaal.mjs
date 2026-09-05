@@ -7,6 +7,7 @@
 //   node bin/kaal.mjs ledger [root]   every rung has its evidence
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
 //   node bin/kaal.mjs retros          unconsumed retros per skill
+//   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 import { join } from "node:path";
 import { checkLedgers } from "./lib/ledger.mjs";
@@ -14,9 +15,10 @@ import { checkSkills } from "./lib/rules.mjs";
 import { countRetros } from "./lib/retros.mjs";
 import { runGates } from "./lib/gates.mjs";
 import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
+import { checkAgents } from "./lib/agents.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | retros | gates | acceptance <files...> | contracts <files...>";
+  "usage: kaal ledger [root] | check [dir] | retros | gates | acceptance <files...> | contracts <files...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
 const cwd = process.cwd();
 let findings = [];
@@ -31,6 +33,11 @@ if (cmd === "ledger") {
     (f) => `${f.skill}: ${f.rule}: ${f.message}`,
   );
   if (!findings.length) console.log("check: every skill obeys the rules");
+} else if (cmd === "agents") {
+  findings = checkAgents(arg ?? cwd).map(
+    (f) => `${f.agent}: ${f.rule}: ${f.message}`,
+  );
+  if (!findings.length) console.log("agents: every agent obeys the rules");
 } else if (cmd === "retros") {
   for (const r of countRetros(cwd))
     console.log(`${r.skill}: ${r.count} unconsumed`);

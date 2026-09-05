@@ -74,4 +74,4 @@ agent and accepts Kaal, and #1 can close as superseded.
 - Tests: `acceptance.test.mjs`, beside this file; `fixtures/bad-agent`
 - Open questions: 2, listed above
 - Supersedes: PR #1, which closes when this lands
-- Status: open
+- Status: closed

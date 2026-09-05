@@ -115,7 +115,8 @@ npm test      # node bin/kaal.mjs gates
 The walls are data, a `gates` list in `kaal.config.json`: every
 requirement's acceptance tests (a closed requirement's red is a failure, an
 open one's red is its analyst's red run and is reported), every drawing's contract tests, the unit
-tests, the skill rules (`kaal check`), the ledgers' evidence and freshness
+tests, the skill rules (`kaal check`, which also refuses a script that reaches the
+shell or the network without a Reach section in its skill), the ledgers' evidence and freshness
 (`kaal ledger`), and the format check. The runner prints one line per wall
 with its count and a summary, runs every wall even after one fails, and
 treats a wall it cannot run as a failure. The `ci` workflow runs the same
@@ -127,7 +128,7 @@ is a repository setting.
 ```
 DESIGN.md        the design: the rulings, and why
 skills/          the members
-agents/          the seats, when defined
+agents/          the agents; Kaal first, the persona that drives KAAL
 requirements/    the analyst's wants and proofs, one task each
 architecture/    the architect's drawings and contracts, one task each
 retros/          the loop; archive/ holds what a requirement consumed
