@@ -121,7 +121,12 @@ with no adversarial fixture), the ledgers' evidence and freshness
 (`kaal ledger`, which also prints the standing of every candidate move:
 fresh models out of the two the Skill rung needs), every drawing's shape (`kaal drawings`: the six sections
 in order, one edge and one contract test per seam, every criterion in the
-strategy table), and the format check. The runner prints one line per wall
+strategy table), and the format check. The skill rules are a mirror of the
+Agent Skills specification pinned by hash in `kaal.config.json`; the mirror
+runs on every push, and the `ci` workflow's `standard` job runs the
+standard's own reference validator (`skills-ref`) over every skill and
+`kaal standard`, which compares the pinned hash with the live text and says
+drift, on every pull request and once a week. The runner prints one line per wall
 with its count and a summary, runs every wall even after one fails, and
 treats a wall it cannot run as a failure. Every wall is a program and its
 arguments, started by the platform's own shell, and `kaal acceptance` and
