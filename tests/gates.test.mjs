@@ -118,3 +118,29 @@ test("a wall runs through the platform's own shell: no sh on the PATH, still ok"
     rmSync(bin, { recursive: true, force: true });
   }
 });
+
+test("a failing wall's own lines follow its FAIL line, indented; a green wall's do not", () => {
+  const r = runGates(join(F, "mixed"));
+  const i = r.lines.findIndex((l) => l.startsWith("FAIL fails"));
+  assert.ok(i >= 0, "no FAIL line for the failing wall");
+  assert.ok(
+    r.lines.every(
+      (l, j) => !(l.startsWith("ok  ") && r.lines[j + 1]?.startsWith("  ")),
+    ),
+    "a green wall printed its lines",
+  );
+  const shown = runGates(join(F, "clean"), {
+    gates: [
+      {
+        name: "loud",
+        command:
+          "node -e \"console.log('what the wall saw'); process.exit(1)\"",
+        fix: "read it",
+      },
+    ],
+  });
+  assert.deepEqual(shown.lines, [
+    "FAIL loud  fix: read it",
+    "  what the wall saw",
+  ]);
+});

@@ -59,3 +59,11 @@ test("expand: a glob becomes its sorted matches, a plain path passes through, no
   assert.deepEqual(expand(["a/plain/path.mjs"]), ["a/plain/path.mjs"]);
   assert.deepEqual(expand([join(G, "nowhere", "*", "x.mjs")]), []);
 });
+
+test("a red file's failing tests follow its line by name, indented; a green file's line stands alone", () => {
+  const red = runAcceptance([f("open-red")]);
+  assert.ok(red.results[0].red.length >= 1, "no red test named");
+  assert.match(red.lines[1], /^ {2}not ok \d+ - /);
+  const green = runAcceptance([f("closed-green")]);
+  assert.equal(green.lines.length, 1);
+});
