@@ -96,4 +96,4 @@ the ten retros are archived.
 - Open questions: 5, listed above
 - Blocked on: nothing
 - Supersedes: nothing
-- Status: open
+- Status: closed

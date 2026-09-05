@@ -85,6 +85,19 @@ One acceptance test per criterion, numbered to match. Rules:
   test with no criterion is scope you invented. The count on both sides is
   equal, and you check it by running `scripts/count.mjs <criteria> <tests>`,
   which exits 1 when they differ.
+- **Count first.** A test that iterates over anything (files, agents,
+  entries) asserts there is something to iterate before the loop; a loop
+  over nothing is green, and the fifth use of this skill found one.
+- **With a timeout.** The red run's command carries one
+  (`node --test --test-timeout=60000 <file>`); a test that hangs is red for
+  the wrong reason and says nothing about the criterion.
+- **Off the league's own tree.** A test that drives the league's own
+  commands (the runner, the judged walls) runs them on a fixture root, or
+  guards on the runner's marker `KAAL_GATES`; `node --test` expands a glob
+  it is handed, and a test that names its own file re-enters it forever.
+- **A partial red is honest.** When a criterion is already met before any
+  build, or needs a person's step to close, the handoff says which, so the
+  board can tell waiting on a person from waiting on a developer.
 
 ## 4. Scope
 
@@ -113,7 +126,11 @@ the asker did not name.
 
 The handoff is the last section of the requirement. It names the task, the
 count of criteria and of tests (equal), the red run, and the open questions.
-The receiving seat reads it against a checklist that is theirs, not yours; you
+It also carries the task's status, and you own both ends of it. The task is
+open at handoff (`- Status: open`) and closed when every test is green
+(`- Status: closed`); the acceptance wall reads that line. `- Blocked on:`
+names the person or the setting the task waits for, or nothing;
+`- Supersedes:` names an earlier task and what of it, or nothing. The receiving seat reads it against a checklist that is theirs, not yours; you
 do not argue with the checklist, you meet it or hand back with what you could
 not meet and why.
 

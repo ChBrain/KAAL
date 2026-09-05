@@ -95,5 +95,8 @@ export function runJudged(files, statusFor, mustClose = true) {
     results.length === 0
       ? "red: no requirement files given"
       : `${ok ? "green" : "red"}: ${results.length} requirement(s), ${results.filter((x) => !x.ok).length} failing`;
-  return { ok, results, lines, summary };
+  // The count the board reads: the runner's own convention, `# pass N`, N the
+  // tests that passed across every file run, printed last by the commands.
+  const passed = results.reduce((n, x) => n + x.pass, 0);
+  return { ok, results, lines, summary, passed };
 }

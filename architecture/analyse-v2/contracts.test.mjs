@@ -14,7 +14,10 @@ const SKILL = join(ROOT, "skills", "analyse");
 const read = (...p) => readFileSync(join(SKILL, ...p), "utf8");
 const section = (t, title) =>
   t.match(
-    new RegExp(`^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |\\s*$)`, "m"),
+    new RegExp(
+      `^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+      "m",
+    ),
   )?.[1] ?? "";
 
 test("1. template to requirements: the three lines in order, and a stamped requirement reads as closed", () => {
@@ -53,8 +56,8 @@ test("2. skill text to the proof: four bold leads in section 3", () => {
   );
   assert.ok(leads.length >= 9, `section 3 has ${leads.length} bullets`);
   const bullet = (re) =>
-    [...p.matchAll(/^- \*\*[^*]+\*\*[\s\S]*?(?=^- \*\*|\s*$)/gm)].find((m) =>
-      re.test(m[0]),
+    [...p.matchAll(/^- \*\*[^*]+\*\*[\s\S]*?(?=^- \*\*|(?![\s\S]))/gm)].find(
+      (m) => re.test(m[0]),
     );
   assert.ok(bullet(/iterat/i), "no bullet on iterating");
   assert.ok(bullet(/timeout/i), "no bullet on a timeout");

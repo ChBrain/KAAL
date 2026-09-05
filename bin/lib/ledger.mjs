@@ -68,3 +68,37 @@ export function checkLedgers(root, only = null) {
   }
   return findings;
 }
+
+/**
+ * The standing of every candidate: a move whose `candidate` is `skill` has
+ * as many fresh passing models as its eval directory holds, out of the two
+ * the rung needs; a candidate that names no test is read over every fixture
+ * under evals/<skill>/, so the first record shows before a move claims it.
+ * @param {string} root
+ * @returns {{ skill: string, move: string, fresh: number, need: number }[]}
+ */
+export function standings(root) {
+  const out = [];
+  for (const skill of dirs(join(root, "skills"))) {
+    const p = join(root, "skills", skill, "moves.json");
+    if (!existsSync(p)) continue;
+    const { moves } = JSON.parse(readFileSync(p, "utf8"));
+    if (!Array.isArray(moves)) continue;
+    for (const m of moves) {
+      if (m.candidate !== "skill") continue;
+      const where = m.test
+        ? [m.test]
+        : dirs(join(root, "evals", skill)).map((d) => `evals/${skill}/${d}`);
+      const models = new Set();
+      for (const d of where)
+        for (const x of freshModels(root, d, skill).models) models.add(x);
+      out.push({
+        skill,
+        move: m.name,
+        fresh: Math.min(models.size, 2),
+        need: 2,
+      });
+    }
+  }
+  return out;
+}
