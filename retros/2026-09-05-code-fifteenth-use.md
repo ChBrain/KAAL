@@ -10,8 +10,12 @@ Period: the fifteenth use of the code skill, on `architecture/code-v2`,
 - The board shows counts on every wall now: `acceptance (84 passing)`,
   `contracts (44 passing)`. A number that was asked for twice in the
   retros cost one line in the runner and one in each command.
-- The standings line shows the league where its evidence stands: the
-  analyse candidates read `1 of 2` from the one hand-made record.
+- The standings line shows the league where its evidence stands, and the
+  first reading was a lesson: every analyse candidate reads `0 of 2`,
+  because this very build edited the analyse skill and the one hand-made
+  record went stale on its `skill_sha`. The freshness rule relegated the
+  evidence the moment the skill moved, as designed, and the standings
+  said so before anyone asked.
 
 ## Learned
 
