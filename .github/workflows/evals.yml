@@ -105,7 +105,7 @@ jobs:
             const out = join("evals", skill, fixture);
             mkdirSync(out, { recursive: true });
             const file = join(out, model.replace(/[^a-z0-9.-]/gi, "-") + ".md");
-            writeFileSync(file, `---\nmodel: ${model}\nreader: ${model}\ntemperature: 0\ndate: ${new Date().toISOString().slice(0, 10)}\nfixture: ${fixture}\nask_sha: ${fileSha(join(f, "ask.md"))}\nexpect_sha: ${fileSha(join(f, "expect.md"))}\nskill_sha: ${sha}\nverdict: ${verdict}\n---\n\n# Output\n\n${output}\n\n# Reading\n\n${reading}\n`);
+            writeFileSync(file, `---\nmodel: ${model}\nreader: ${model}\ntemperature: 0\ndate: ${new Date().toISOString().slice(0, 10)}\nfixture: ${fixture}\nask_sha: ${fileSha(join(f, "ask.md"))}\nexpect_sha: ${fileSha(join(f, "expect.md"))}\nskill_sha: ${sha}\nsetup: workflow\nverdict: ${verdict}\n---\n\n# Output\n\n${output}\n\n# Reading\n\n${reading}\n`);
             console.log(`${file}: ${verdict}`);
           }
           EOF

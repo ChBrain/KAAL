@@ -7,6 +7,7 @@ fixture: json-flag
 ask_sha: beb15ced535972519ee9912207ec7133b8832431ccf59115762d74fce80a8b8a
 expect_sha: 99b66e9cc0aae7309dce49a7786643414bc0cfd698d3ec0c02bce6c845fbdf5b
 skill_sha: b03950650c34dc6a561563ace4577d2ca4b3e93431aec1f9a0712b86d440fa74
+setup: chat
 verdict: flag
 ---
 

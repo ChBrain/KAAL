@@ -79,9 +79,11 @@ boundary, so it is a wall.
 - **fixture**: a small known ask under a skill's `fixtures/<name>/`, with the
   `expect.md` the receiving seat reads the output against.
 - **eval record**: one model's run on one fixture, under
-  `evals/<skill>/<fixture>/`, carrying `model`, `verdict`, and `skill_sha`,
-  the SHA-256 of the `SKILL.md` it evaluated. When the skill changes, the
-  record is stale and counts for nothing: editing a skill relegates its moves.
+  `evals/<skill>/<fixture>/`, carrying `model`, `setup` (how the skill was
+  given to the model), `verdict`, and `skill_sha`, the SHA-256 of the
+  `SKILL.md` it evaluated. When the skill changes, the record is stale and
+  counts for nothing: editing a skill relegates its moves, and the board
+  lists the stale record under the candidate with what moved.
 - **retro**: a 4 L's self-diagnosis filed under `retros/` after every use of
   a skill, ending with `Feeds: <skill>`. Every ten unconsumed retros on a
   skill, the analyst reads the stack as an ask and writes the skill's next
@@ -102,6 +104,12 @@ inside the directory; nothing in KAAL is required at the consumer's side. A
 wiring script that keeps consumers' copies equal to the league's is a later
 job; until then, the copy is by hand and so is the drift.
 
+To run a skill on one of its fixtures by hand, `kaal runner <skill>
+<fixture>` prints the two prompts and the record's frontmatter from the tree,
+and each fixture carries them as `RUNNER.md`, three blocks with a copy
+button each on the repository page; `evals/README.md` says how the record is
+filed.
+
 ## Running the walls
 
 One command runs every wall the league has, in the pre-push hook and in CI
@@ -119,7 +127,8 @@ tests, the skill rules (`kaal check`, which also refuses a script that reaches t
 shell or the network without a Reach section in its skill, and a skill
 with no adversarial fixture), the ledgers' evidence and freshness
 (`kaal ledger`, which also prints the standing of every candidate move:
-fresh models out of the two the Skill rung needs), every drawing's shape (`kaal drawings`: the six sections
+fresh models out of the two the Skill rung needs, and its stale records
+under it), every drawing's shape (`kaal drawings`: the six sections
 in order, one edge and one contract test per seam, every criterion in the
 strategy table), and the format check. The skill rules are a mirror of the
 Agent Skills specification pinned by hash in `kaal.config.json`; the mirror

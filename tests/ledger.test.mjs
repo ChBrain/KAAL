@@ -49,6 +49,23 @@ test("standings: one line per candidate, fresh models out of two, read over eval
   );
   const s = standings(F);
   assert.deepEqual(s, [
-    { skill: "good", move: "a candidate move", fresh: 2, need: 2 },
+    { skill: "good", move: "a candidate move", fresh: 2, need: 2, stale: [] },
+  ]);
+  const S = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "architecture",
+    "honest-records",
+    "fixtures",
+    "stale-standing",
+  );
+  assert.deepEqual(standings(S), [
+    {
+      skill: "x",
+      move: "a candidate",
+      fresh: 0,
+      need: 2,
+      stale: [{ file: "evals/x/f/alpha.md", why: "skill moved" }],
+    },
   ]);
 });

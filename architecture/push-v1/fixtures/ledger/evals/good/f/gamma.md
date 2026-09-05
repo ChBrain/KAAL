@@ -1,5 +1,6 @@
 ---
 model: gamma
+setup: chat
 verdict: pass
 fixture: f
 ---
