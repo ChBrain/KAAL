@@ -40,6 +40,8 @@ Copy [the requirement template](references/requirement.md) and fill it. The
 sections are fixed and in this order.
 
 - **Goal.** One sentence: who wants what, and how they will know. Not how.
+  The output's format (a flag, a file type, a serialisation) is a how: it
+  belongs in an assumption or an open question and never in the goal.
 - **Assumptions.** What you took as given because the ask did not say. Each
   one is a thing the asker could deny; if they could not, it is not an
   assumption, it is a fact and belongs nowhere.
@@ -74,7 +76,9 @@ One acceptance test per criterion, numbered to match. Rules:
 - **Seen red.** Run every test before you hand off. It must fail now, because
   nothing has been built; a test that passes on nothing is not testing the
   criterion. Record the red run in the handoff. Watch it fail before anyone
-  trusts it to pass.
+  trusts it to pass. A red run reported as "not yet recorded" is not a red
+  run; the handoff carries the run's own result, and a proof that has not
+  been run is not handed off.
 - **Seen green on a stand-in.** A test that can only fail is not a proof
   either. Write a throwaway answer that meets the criteria, in scratch, see
   every test pass on it, then discard it. The stand-in is not the work and
@@ -84,7 +88,8 @@ One acceptance test per criterion, numbered to match. Rules:
 - **One criterion, one test.** A criterion with no test is not a criterion; a
   test with no criterion is scope you invented. The count on both sides is
   equal, and you check it by running `scripts/count.mjs <criteria> <tests>`,
-  which exits 1 when they differ.
+  which exits 1 when they differ. A test's name begins with its criterion's
+  number (`test("1. ...")`), so the pairing is read, not inferred.
 - **Count first.** A test that iterates over anything (files, agents,
   entries) asserts there is something to iterate before the loop; a loop
   over nothing is green, and the fifth use of this skill found one.
