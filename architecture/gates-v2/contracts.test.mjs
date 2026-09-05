@@ -1,7 +1,13 @@
 // Contract tests for the drawing gates-v2. One per seam. Blind to the code.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, mkdtempSync, symlinkSync, rmSync } from "node:fs";
+import {
+  readFileSync,
+  mkdtempSync,
+  symlinkSync,
+  copyFileSync,
+  rmSync,
+} from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -17,13 +23,33 @@ const kaal = (args, opts = {}) =>
     ...opts,
   });
 
-test("1. runner to platform shell: a node wall runs with no sh on the PATH, at the root, in the wall environment", () => {
-  const bin = mkdtempSync(join(tmpdir(), "kaal-shell-"));
+// A PATH with node and nothing else. On Windows the file must be node.exe
+// and a symlink may need a privilege, so a copy is the fallback.
+const nodeOnly = () => {
+  const bin = mkdtempSync(join(tmpdir(), "kaal-node-"));
+  const name = process.platform === "win32" ? "node.exe" : "node";
   try {
-    symlinkSync(process.execPath, join(bin, "node"));
+    symlinkSync(process.execPath, join(bin, name), "file");
+  } catch {
+    copyFileSync(process.execPath, join(bin, name));
+  }
+  return bin;
+};
+const pathEnv = (bin) => {
+  const env = { ...process.env };
+  for (const k of Object.keys(env))
+    if (k.toUpperCase() === "PATH") delete env[k];
+  env.PATH = bin;
+  delete env.KAAL_GATES;
+  return env;
+};
+
+test("1. runner to platform shell: a node wall runs with no sh on the PATH, at the root, in the wall environment", () => {
+  const bin = nodeOnly();
+  try {
     const r = kaal(["gates"], {
       cwd: join(HERE, "fixtures", "env"),
-      env: { ...process.env, PATH: bin, KAAL_GATES: undefined },
+      env: pathEnv(bin),
     });
     assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.match(r.stdout, /^ok {3}where/m);

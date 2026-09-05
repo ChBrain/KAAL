@@ -7,6 +7,7 @@ import {
   existsSync,
   mkdtempSync,
   symlinkSync,
+  copyFileSync,
   rmSync,
 } from "node:fs";
 import { join, dirname } from "node:path";
@@ -24,13 +25,33 @@ const kaal = (args, opts = {}) =>
     ...opts,
   });
 
-test("1. the runner passes plain node commands on a PATH with node and no sh", () => {
-  const bin = mkdtempSync(join(tmpdir(), "kaal-path-"));
+// A PATH with node and nothing else. On Windows the file must be node.exe
+// and a symlink may need a privilege, so a copy is the fallback.
+const nodeOnly = () => {
+  const bin = mkdtempSync(join(tmpdir(), "kaal-node-"));
+  const name = process.platform === "win32" ? "node.exe" : "node";
   try {
-    symlinkSync(process.execPath, join(bin, "node"));
+    symlinkSync(process.execPath, join(bin, name), "file");
+  } catch {
+    copyFileSync(process.execPath, join(bin, name));
+  }
+  return bin;
+};
+const pathEnv = (bin) => {
+  const env = { ...process.env };
+  for (const k of Object.keys(env))
+    if (k.toUpperCase() === "PATH") delete env[k];
+  env.PATH = bin;
+  delete env.KAAL_GATES;
+  return env;
+};
+
+test("1. the runner passes plain node commands on a PATH with node and no sh", () => {
+  const bin = nodeOnly();
+  try {
     const r = kaal(["gates"], {
       cwd: join(HERE, "fixtures", "plain"),
-      env: { ...process.env, PATH: bin, KAAL_GATES: undefined },
+      env: pathEnv(bin),
     });
     assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.match(r.stdout, /counted \(2 passing\)/);
