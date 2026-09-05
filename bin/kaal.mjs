@@ -10,6 +10,7 @@
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
+//   node bin/kaal.mjs standard [file] the pinned spec against the live text (network)
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
@@ -22,9 +23,10 @@ import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
 import { checkDrawings } from "./lib/drawings.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
+import { compareSpec } from "./lib/standard.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
 const cwd = process.cwd();
 let findings = [];
@@ -43,6 +45,14 @@ if (cmd === "ledger") {
     (f) => `${f.task}: ${f.rule}: ${f.message}`,
   );
   if (!findings.length) console.log("drawings: every drawing holds its shape");
+} else if (cmd === "standard") {
+  const r = await compareSpec(cwd, arg ?? null);
+  if (r.same) console.log(`standard: the pinned spec is unchanged (${r.live})`);
+  else
+    console.error(
+      `standard: the spec drifted from the pin: live ${r.live}, pinned ${r.pinned} (${r.from}); reconcile the mirror rule by rule, then re-pin`,
+    );
+  process.exit(r.same ? 0 : 1);
 } else if (cmd === "fixtures") {
   const found = listFixtures(arg ?? cwd);
   for (const x of found) console.log(`${x.shape} ${x.path}`);

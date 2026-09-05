@@ -20,6 +20,9 @@ export const RULES = [
   "name",
   "description",
   "license",
+  "compatibility",
+  "allowed-tools",
+  "metadata",
   "budget",
   "depth",
   "vendor",
@@ -95,6 +98,37 @@ export function checkSkills(skillsDir) {
         "license",
         `license must be MIT, got "${data.license ?? ""}"`,
       );
+    // The standard's optional fields, each constrained when present.
+    if ("compatibility" in data) {
+      const c = data.compatibility;
+      if (typeof c !== "string" || c.length < 1 || c.length > 500)
+        find(
+          skill,
+          "compatibility",
+          "compatibility must be 1 to 500 characters",
+        );
+    }
+    if ("allowed-tools" in data) {
+      const t = data["allowed-tools"];
+      if (typeof t !== "string" || !t.trim())
+        find(
+          skill,
+          "allowed-tools",
+          "allowed-tools must be a non-empty space-separated string",
+        );
+    }
+    if ("metadata" in data) {
+      const md = data.metadata;
+      if (
+        typeof md !== "object" ||
+        Object.values(md).some((v) => typeof v !== "string")
+      )
+        find(
+          skill,
+          "metadata",
+          "metadata must be a map of string keys to string values",
+        );
+    }
     if (text.split("\n").length >= 500)
       find(skill, "budget", "SKILL.md must be under 500 lines");
     for (const m of body.matchAll(/\]\(([^)]+)\)/g)) {

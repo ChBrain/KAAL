@@ -95,3 +95,15 @@ test("fixtures: no adversary is a finding, an adversary with no refusal line is 
     "the league has a fixtures finding",
   );
 });
+
+test("the standard's optional fields: refused when malformed, accepted when well formed", () => {
+  const FX = join(ROOT, "requirements", "standard-v1", "fixtures", "fields");
+  const f = checkSkills(FX);
+  assert.deepEqual(f.map((x) => `${x.skill}:${x.rule}`).sort(), [
+    "compat-long:compatibility",
+    "metadata-flat:metadata",
+    "tools-empty:allowed-tools",
+  ]);
+  for (const r of ["compatibility", "allowed-tools", "metadata"])
+    assert.ok(RULES.includes(r));
+});

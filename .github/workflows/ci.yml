@@ -3,11 +3,17 @@ name: ci
 # under the one command the hook runs locally. Local green and CI green are
 # the same command by construction. Two platforms: `walls` is the required
 # check and keeps its name; `walls-windows` is the proof gates-v2 lacked.
+# The standard job runs the Agent Skills reference validator over every skill
+# and compares the pinned specification with the live text, on every pull
+# request, every push to main and once a week, so divergence in either
+# direction is red here without anyone remembering to look.
 # not run: the model evals under evals/; those come from a person's runtime and from evals.yml on an /eval comment.
 on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
 permissions:
   contents: read
 jobs:
@@ -31,3 +37,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+  standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install "git+https://github.com/agentskills/agentskills@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref"
+      - run: for d in skills/*/; do skills-ref validate "$d"; done
+      - run: node bin/kaal.mjs standard

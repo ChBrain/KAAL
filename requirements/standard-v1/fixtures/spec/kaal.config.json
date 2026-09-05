@@ -1,0 +1,11 @@
+{
+  "standard": {
+    "name": "agentskills",
+    "spec": {
+      "url": "https://example.invalid/spec",
+      "sha256": "3595d324e47028a9b149c600e784455ead56429fd4a58650ee4c67e5f872815f"
+    },
+    "pinned": "2026-09-05"
+  },
+  "gates": []
+}

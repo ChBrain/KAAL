@@ -13,3 +13,12 @@ test("parses key: value lines, unquoted and double quoted, and returns the body"
 test("throws on text with no frontmatter fences", () => {
   assert.throws(() => parseFrontmatter("# no fences\n"), /frontmatter/);
 });
+
+test("reads one level of map under a key with no value, and keeps an empty value empty", () => {
+  const { data } = parseFrontmatter(
+    '---\nname: x\nmetadata:\n  author: k\n  version: "1"\nwhy:\nlicense: MIT\n---\n',
+  );
+  assert.deepEqual(data.metadata, { author: "k", version: "1" });
+  assert.equal(data.why, "");
+  assert.equal(data.license, "MIT");
+});
