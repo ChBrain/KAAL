@@ -30,6 +30,12 @@ testing what you are about to build; say so to its owner.
 Work one criterion at a time, and inside it one seam at a time, in the order
 the contract tests fall.
 
+Fixtures obey the rules they are not testing: a new contract reaches into
+every fixture written for an older one, and a fixture that breaks it owes the
+fix. A fixture command is a program and its arguments that parses the same
+under every platform's shell (double quotes outside, single quotes inside,
+nothing escaped), never a shell builtin.
+
 ## 2. State the want
 
 For each unit you are about to write, write its unit test first: one
@@ -61,7 +67,10 @@ is checked by running, not by reading. Rules:
   within the drawing; every test stays green through it, and a refactor that
   needs a new test was a change.
 - **Run the repository's own checks** (format, lint, type, its full suite)
-  before you call it done; green in your head is not green.
+  on the whole tree, not only the directories you touched (format
+  everything, every time), before you call it done; green in your head is
+  not green. The house rules apply to code as well: a rule about a banned
+  character is written as its escape, never as the character.
 
 ## 4. Scope
 

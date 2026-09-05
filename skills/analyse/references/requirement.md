@@ -29,6 +29,9 @@
   met>
 - Tests: <path or paths, beside this file>
 - Open questions: <count>, listed above
+- Status: <open at handoff; closed when every test is green>
+- Blocked on: <a person, a setting, or nothing>
+- Supersedes: <an earlier task and what of it, or nothing>
 
 ---
 

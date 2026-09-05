@@ -17,7 +17,10 @@ const kaal = (...args) =>
   });
 const section = (t, title) =>
   t.match(
-    new RegExp(`^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |\\s*$)`, "m"),
+    new RegExp(
+      `^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+      "m",
+    ),
   )?.[1] ?? "";
 
 test("1. drawing to check: exactly one finding per fixture root, its rule the fixture's name; none on clean", () => {
@@ -55,7 +58,7 @@ test("3. skill text to the architect: formats first in section 2, the human gate
   const t = readFileSync(join(ROOT, "skills", "architect", "SKILL.md"), "utf8");
   const fixed =
     section(t, "Draw the want").match(
-      /^- \*\*Fixed and free\.\*\*[\s\S]*?(?=^- \*\*|\s*$)/m,
+      /^- \*\*Fixed and free\.\*\*[\s\S]*?(?=^- \*\*|(?![\s\S]))/m,
     )?.[0] ?? "";
   assert.match(fixed, /format/i);
   assert.match(fixed, /first/i);

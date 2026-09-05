@@ -31,6 +31,11 @@
       "fix": "obey the skill rules (name, description, MIT, budget, depth, no vendor, no dash)"
     },
     {
+      "name": "drawings",
+      "command": "node bin/kaal.mjs drawings",
+      "fix": "give the drawing the template's six sections in order, one labelled edge and one contract test per seam, every criterion in the strategy table, and a requirement of the same task"
+    },
+    {
       "name": "ledger",
       "command": "node bin/kaal.mjs ledger",
       "fix": "evidence the rung or lower it"

@@ -8,28 +8,49 @@
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
 //   node bin/kaal.mjs retros          unconsumed retros per skill
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
+//   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
+//   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
 import { join } from "node:path";
-import { checkLedgers } from "./lib/ledger.mjs";
+import { checkLedgers, standings } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
 import { countRetros } from "./lib/retros.mjs";
 import { runGates } from "./lib/gates.mjs";
 import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
+import { checkDrawings } from "./lib/drawings.mjs";
+import { listFixtures } from "./lib/fixtures.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
 const cwd = process.cwd();
 let findings = [];
 
 if (cmd === "ledger") {
+  for (const s of standings(arg ?? cwd))
+    console.log(
+      `${s.skill}: ${s.move}: candidate skill, ${s.fresh} of ${s.need} fresh models`,
+    );
   findings = checkLedgers(arg ?? cwd).map(
     (f) => `${f.skill}: ${f.move} ${f.message}`,
   );
   if (!findings.length) console.log("ledger: every rung evidenced");
+} else if (cmd === "drawings") {
+  findings = checkDrawings(arg ?? cwd).map(
+    (f) => `${f.task}: ${f.rule}: ${f.message}`,
+  );
+  if (!findings.length) console.log("drawings: every drawing holds its shape");
+} else if (cmd === "fixtures") {
+  const found = listFixtures(arg ?? cwd);
+  for (const x of found) console.log(`${x.shape} ${x.path}`);
+  if (!found.length) {
+    console.error(`fixtures: none found under ${arg ?? cwd}`);
+    process.exit(1);
+  }
+  process.exit(0);
 } else if (cmd === "check") {
   findings = checkSkills(arg ?? join(cwd, "skills")).map(
     (f) => `${f.skill}: ${f.rule}: ${f.message}`,
@@ -43,15 +64,12 @@ if (cmd === "ledger") {
 } else if (cmd === "retros") {
   for (const r of countRetros(cwd))
     console.log(`${r.skill}: ${r.count} unconsumed`);
-} else if (cmd === "acceptance") {
-  const a = runAcceptance(process.argv.slice(3));
+} else if (cmd === "acceptance" || cmd === "contracts") {
+  const run = cmd === "acceptance" ? runAcceptance : runContracts;
+  const a = run(process.argv.slice(3));
   for (const l of a.lines) console.log(l);
   console.log(a.summary);
-  process.exit(a.ok ? 0 : 1);
-} else if (cmd === "contracts") {
-  const a = runContracts(process.argv.slice(3));
-  for (const l of a.lines) console.log(l);
-  console.log(a.summary);
+  console.log(`# pass ${a.passed}`);
   process.exit(a.ok ? 0 : 1);
 } else if (cmd === "gates") {
   const g = runGates(cwd);

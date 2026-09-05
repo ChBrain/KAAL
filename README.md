@@ -118,7 +118,10 @@ open one's red is its analyst's red run and is reported), every drawing's contra
 tests, the skill rules (`kaal check`, which also refuses a script that reaches the
 shell or the network without a Reach section in its skill, and a skill
 with no adversarial fixture), the ledgers' evidence and freshness
-(`kaal ledger`), and the format check. The runner prints one line per wall
+(`kaal ledger`, which also prints the standing of every candidate move:
+fresh models out of the two the Skill rung needs), every drawing's shape (`kaal drawings`: the six sections
+in order, one edge and one contract test per seam, every criterion in the
+strategy table), and the format check. The runner prints one line per wall
 with its count and a summary, runs every wall even after one fails, and
 treats a wall it cannot run as a failure. Every wall is a program and its
 arguments, started by the platform's own shell, and `kaal acceptance` and

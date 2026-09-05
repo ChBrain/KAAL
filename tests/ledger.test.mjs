@@ -36,3 +36,19 @@ test("an unknown rung is a finding", () => {
   });
   assert.ok(f.some((x) => /rung/.test(x.message)));
 });
+
+test("standings: one line per candidate, fresh models out of two, read over evals/<skill>/* when no test is named", async () => {
+  const { standings } = await import("../bin/lib/ledger.mjs");
+  const F = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "architecture",
+    "push-v1",
+    "fixtures",
+    "ledger",
+  );
+  const s = standings(F);
+  assert.deepEqual(s, [
+    { skill: "good", move: "a candidate move", fresh: 2, need: 2 },
+  ]);
+});

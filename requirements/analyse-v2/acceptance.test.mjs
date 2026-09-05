@@ -11,7 +11,10 @@ const SKILL = join(ROOT, "skills", "analyse");
 const text = () => readFileSync(join(SKILL, "SKILL.md"), "utf8");
 const section = (t, title) => {
   const m = t.match(
-    new RegExp(`^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |\\s*$)`, "m"),
+    new RegExp(
+      `^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+      "m",
+    ),
   );
   return m ? m[1] : "";
 };

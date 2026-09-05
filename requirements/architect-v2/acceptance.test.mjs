@@ -17,7 +17,10 @@ const kaal = (...args) =>
   });
 const section = (t, title) => {
   const m = t.match(
-    new RegExp(`^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |\\s*$)`, "m"),
+    new RegExp(
+      `^## [^\\n]*${title}[^\\n]*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+      "m",
+    ),
   );
   return m ? m[1] : "";
 };

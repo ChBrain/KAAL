@@ -67,3 +67,11 @@ test("a red file's failing tests follow its line by name, indented; a green file
   const green = runAcceptance([f("closed-green")]);
   assert.equal(green.lines.length, 1);
 });
+
+test("runAcceptance sums the passing tests across files for the board's count", () => {
+  assert.equal(
+    runAcceptance([f("closed-green"), f("open-red")]).passed >= 1,
+    true,
+  );
+  assert.equal(typeof runAcceptance([f("closed-green")]).passed, "number");
+});

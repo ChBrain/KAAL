@@ -103,4 +103,4 @@ candidate skill, <n> of 2 fresh models`, on the root
 - Open questions: 6, listed above
 - Blocked on: nothing
 - Supersedes: nothing
-- Status: open
+- Status: closed

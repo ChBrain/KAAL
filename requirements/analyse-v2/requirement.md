@@ -94,4 +94,4 @@ retros are archived.
 - Open questions: 6, listed above
 - Blocked on: nothing
 - Supersedes: nothing
-- Status: open
+- Status: closed

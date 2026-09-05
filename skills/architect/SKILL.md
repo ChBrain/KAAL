@@ -48,7 +48,9 @@ are fixed and in this order.
 - **Fixed and free.** What the developer may not change (a seam, a format, a
   constraint from the requirement) and what is theirs to decide. Say both;
   silence reads as fixed and slows the developer, or reads as free and breaks
-  a promise.
+  a promise. The formats the developer's tests will name (a finding's line,
+  a summary, an exit code) are fixed first, because the contract tests name
+  them before any code exists.
 - **Decisions.** One record per door you closed: the choice, the options you
   did not take, why, and what would reopen it. A decision with no options was
   not a decision.
@@ -99,6 +101,10 @@ repository will not take them there, that is a question for the asker, not a
 home you choose.
 
 The human approves the drawing at this close; nothing is built before that.
+The approval is the `architecture` entry of `human.gates` in
+`kaal.config.json`, recorded by the merge of the drawing's pull request;
+when the hook forces a drawing and its build into one pull request, that
+one merge approves both, and the pull request says so.
 The handoff is the last section of the drawing: the task, the count of seams
 and of contract tests (equal), the red run, the stand-in green, the criteria
 each seam serves, and what is fixed for the developer. The developer reads it
