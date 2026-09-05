@@ -16,6 +16,13 @@
       "test": "evals/good/f"
     },
     {
+      "name": "a candidate move",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": "evals/good/f"
+    },
+    {
       "name": "a human move",
       "rung": "human",
       "candidate": null,
