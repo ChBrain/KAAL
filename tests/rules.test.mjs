@@ -60,3 +60,38 @@ test("reach: undeclared shell or network is a finding, declared network passes, 
     "stale declaration",
   );
 });
+
+test("fixtures: no adversary is a finding, an adversary with no refusal line is a finding, the league passes", () => {
+  const RQ = join(
+    ROOT,
+    "requirements",
+    "fixtures-v1",
+    "fixtures",
+    "no-adversary",
+    "skills",
+  );
+  const AR = join(
+    ROOT,
+    "architecture",
+    "fixtures-v1",
+    "fixtures",
+    "no-refusal",
+  );
+  assert.ok(RULES.includes("fixtures"));
+  assert.ok(
+    checkSkills(RQ).some(
+      (x) => x.rule === "fixtures" && /no adversarial/.test(x.message),
+    ),
+    "no adversary",
+  );
+  assert.ok(
+    checkSkills(AR).some(
+      (x) => x.rule === "fixtures" && /Refuses/.test(x.message),
+    ),
+    "no refusal line",
+  );
+  assert.ok(
+    !checkSkills(join(ROOT, "skills")).some((x) => x.rule === "fixtures"),
+    "the league has a fixtures finding",
+  );
+});

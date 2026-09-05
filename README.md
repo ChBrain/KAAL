@@ -116,10 +116,13 @@ The walls are data, a `gates` list in `kaal.config.json`: every
 requirement's acceptance tests (a closed requirement's red is a failure, an
 open one's red is its analyst's red run and is reported), every drawing's contract tests, the unit
 tests, the skill rules (`kaal check`, which also refuses a script that reaches the
-shell or the network without a Reach section in its skill), the ledgers' evidence and freshness
+shell or the network without a Reach section in its skill, and a skill
+with no adversarial fixture), the ledgers' evidence and freshness
 (`kaal ledger`), and the format check. The runner prints one line per wall
 with its count and a summary, runs every wall even after one fails, and
-treats a wall it cannot run as a failure. The `ci` workflow runs the same
+treats a wall it cannot run as a failure. A human may waive a red wall with
+a file in `waivers/` naming the wall, who, why and until; the board then says
+waived, never ok, and an expired waiver counts for nothing. The `ci` workflow runs the same
 command on every pull request and push to main; making it a required check
 is a repository setting.
 

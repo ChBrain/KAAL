@@ -40,5 +40,27 @@
       "command": "npx prettier --check .",
       "fix": "npx prettier --write . (npm install first if the formatter is missing)"
     }
-  ]
+  ],
+  "human": {
+    "gates": [
+      {
+        "seam": "requirements",
+        "act": "sets the ask",
+        "evidence": "the ask itself, in the requirement's opening line",
+        "recorded": "requirements/<task>/requirement.md"
+      },
+      {
+        "seam": "architecture",
+        "act": "approves the drawing before code is written",
+        "evidence": "the drawing with its seams, decisions and red contract tests",
+        "recorded": "the merge of the drawing's pull request"
+      },
+      {
+        "seam": "deployment",
+        "act": "gives the key for one release to one target",
+        "evidence": "a green board and the release plan",
+        "recorded": "the release record under deploy/releases/"
+      }
+    ]
+  }
 }
