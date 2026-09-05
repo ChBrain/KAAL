@@ -1,6 +1,14 @@
 {
   "gates": [
-    { "name": "broken", "command": "false", "fix": "fix it" },
-    { "name": "fine", "command": "true", "fix": "nothing" }
+    {
+      "name": "broken",
+      "command": "node -e \"process.exit(1)\"",
+      "fix": "fix it"
+    },
+    {
+      "name": "fine",
+      "command": "node -e \"process.exit(0)\"",
+      "fix": "nothing"
+    }
   ]
 }

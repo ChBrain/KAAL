@@ -3,7 +3,7 @@
 // of the one command.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync, statSync, readdirSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -58,13 +58,18 @@ test("1. walls are data in kaal.config.json, one runner runs them, npm test is t
 test("2. the pre-push hook exists, is executable, runs npm test, and fails with it", () => {
   const h = join(ROOT, ".githooks", "pre-push");
   assert.ok(existsSync(h), "no hook");
-  assert.ok(statSync(h).mode & 0o111, "hook not executable");
+  // Executable as git records it (100755), which holds on a checkout whose
+  // filesystem keeps no mode bits.
+  const mode = sh("git", ["ls-files", "-s", ".githooks/pre-push"]).stdout;
+  assert.match(mode, /^100755 /, "hook not executable in the index: " + mode);
   assert.ok(
     /npm test/.test(readFileSync(h, "utf8")),
     "hook does not run npm test",
   );
   // The hook honours a failing test command: point it at one that fails.
-  const r = sh("sh", [h], { KAAL_TEST_COMMAND: "false" });
+  // Git runs hooks through its own sh on every platform, so sh is there.
+  const r = sh("sh", [h], { KAAL_TEST_COMMAND: "exit 1" });
+  assert.equal(r.error, undefined, "no sh to run the hook with");
   assert.notEqual(r.status, 0, "hook passed a failing test command");
 });
 
