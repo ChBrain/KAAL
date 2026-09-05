@@ -157,7 +157,7 @@ test("7. a move stands at skill with fresh pass records from two models", () => 
   }
 });
 
-test("8. the evals workflow runs only on /eval or dispatch, reads models, writes evals/", () => {
+test("8. the evals workflow runs only on /eval or dispatch, reads its endpoint from configuration, writes evals/", () => {
   const dir = join(ROOT, ".github", "workflows");
   assert.ok(existsSync(dir), "no workflows");
   const w = readdirSync(dir)
@@ -172,5 +172,7 @@ test("8. the evals workflow runs only on /eval or dispatch, reads models, writes
     !/^\s*push:/m.test(w) && !/^\s*pull_request:/m.test(w),
     "runs on push or pull_request",
   );
-  assert.ok(/models:\s*read/.test(w), "no models: read permission");
+  // Superseded by evals-v2: the hosted models and their permission are gone.
+  assert.ok(/vars\.EVALS_API_URL/.test(w), "no configured endpoint");
+  assert.ok(/evals\//.test(w), "does not write evals/");
 });
