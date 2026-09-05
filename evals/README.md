@@ -38,4 +38,19 @@ is regenerated. `kaal ledger` names the reason for every record it drops.
 By a person, running the skill in their own runtime on the fixture's `ask.md`,
 reading the output against `expect.md`, and writing the file by hand; or by
 the evals workflow, on an `/eval <skill> [model]` comment on a pull request or
-a dispatch, with the hosted model as both model and reader.
+a dispatch, with one configured model as both model and reader.
+
+## Configuring the workflow
+
+The workflow names no host. It reads three repository settings:
+
+- `EVALS_API_URL`, a repository variable: the chat completions URL of any
+  provider or local server that speaks the common shape (`model`,
+  `messages`, `temperature`; `choices[0].message.content` back).
+- `EVALS_API_KEY`, a repository secret: the bearer key for that URL.
+- `EVALS_MODEL`, a repository variable: the default model id; the comment's
+  third word (`/eval analyse <model>`) or the dispatch input overrides it.
+
+When the URL or the key is missing the workflow refuses in one line before
+any request is made. The comment must be a comment on the pull request, not
+its description.

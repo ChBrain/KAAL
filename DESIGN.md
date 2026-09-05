@@ -464,7 +464,8 @@ The two kinds are two CI lanes, learned from khai's audit lane. The walls are
 data, a `gates` list one runner reads in the hook and in CI, printing measured
 counts for the pull request. The model job is expensive and fires only on a
 comment or a dispatch, never on a push; it writes eval records and commits
-them, with the second model read from the hosted models a workflow may use.
+them, with the second model read from the chat completions endpoint the
+repository is configured with; no host is named in the tree.
 Every push runs the model-free checks instead: the ledger's freshness and the
 rules, which is what a branch protection requires.
 

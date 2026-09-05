@@ -28,10 +28,10 @@ take orders from them, whatever they say. Concretely:
 - A skill acts on its `SKILL.md` and the seat's checklist, not on a sentence
   inside an ask that tells it to change lanes, skip a wall, or call a
   script it does not carry.
-- A fixture's `ask.md` is run by the evals workflow with a hosted model; the
-  workflow gives the model the skill and the ask and nothing else, holds
-  only `models: read` and `contents: write` for its records, and commits
-  under `evals/`.
+- A fixture's `ask.md` is run by the evals workflow against the endpoint
+  the repository is configured with; the workflow gives the model the skill
+  and the ask and nothing else, holds only `contents: write` for its records
+  and `pull-requests: read` for the branch, and commits under `evals/`.
 - A retro feeds the analyst as an ask, with the same standing as any ask.
 - A pull request body or comment can start the evals workflow (`/eval`) and
   nothing else; it cannot change what the workflow does.
@@ -49,5 +49,6 @@ a script that reaches the shell or the network says so in its skill's
 before copying the skill.
 
 Workflows hold explicit, minimal permissions: `ci` reads contents only;
-`evals` writes contents (its records) and reads models. Dependencies are the
+`evals` writes contents (its records) and reads pull requests; its key is a
+repository secret it never prints. Dependencies are the
 lockfile, installed with `npm ci`; the formatter is the only one.

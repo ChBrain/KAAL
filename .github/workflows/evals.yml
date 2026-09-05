@@ -1,9 +1,11 @@
 name: evals
 # The model job. It is expensive, so it fires only on an `/eval <skill>` comment
 # on a pull request or on a manual dispatch, never on a push or a pull request
-# by itself. It runs the named skill on each of its fixtures with the hosted
-# model, writes one record per fixture under evals/<skill>/<fixture>/, and
-# commits it. The record's verdict is the model's reading of the fixture's
+# by itself. It runs the named skill on each of its fixtures against the chat
+# completions endpoint the repository is configured with (EVALS_API_URL and
+# EVALS_MODEL as repository variables, EVALS_API_KEY as a secret; no host is
+# named here), writes one record per fixture under evals/<skill>/<fixture>/,
+# and commits it. The record's verdict is the model's reading of the fixture's
 # expect.md; the ledger check on every push is what gates, by skill_sha.
 # not run: nothing; the walls run in ci.yml on every push.
 on:
@@ -15,11 +17,10 @@ on:
         description: the skill to evaluate
         required: true
       model:
-        description: the hosted model id
-        default: openai/gpt-4.1
+        description: the model id; empty means the EVALS_MODEL variable
+        required: false
 permissions:
   contents: write
-  models: read
   pull-requests: read
 jobs:
   eval:
@@ -29,11 +30,13 @@ jobs:
       - name: Resolve the branch and the skill
         id: ctx
         uses: actions/github-script@v7
+        env:
+          EVALS_MODEL: ${{ vars.EVALS_MODEL }}
         with:
           script: |
             let ref = context.ref;
             let skill = context.payload.inputs?.skill;
-            let model = context.payload.inputs?.model ?? "openai/gpt-4.1";
+            let model = context.payload.inputs?.model || process.env.EVALS_MODEL;
             if (context.payload.comment) {
               const { data } = await github.rest.pulls.get({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.issue.number });
               ref = data.head.ref;
@@ -42,6 +45,7 @@ jobs:
               if (words[2]) model = words[2];
             }
             if (!skill) core.setFailed("no skill named");
+            if (!model) core.setFailed("no model named and no EVALS_MODEL variable");
             core.setOutput("ref", ref);
             core.setOutput("skill", skill);
             core.setOutput("model", model);
@@ -55,9 +59,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run the skill on each fixture with the hosted model
+      - name: Refuse before any request when the endpoint is not configured
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          EVALS_API_URL: ${{ vars.EVALS_API_URL }}
+          EVALS_API_KEY: ${{ secrets.EVALS_API_KEY }}
+        run: |
+          [ -n "$EVALS_API_URL" ] && [ -n "$EVALS_API_KEY" ] && exit 0
+          echo "::error::the evals workflow needs the repository variable EVALS_API_URL (a chat completions URL) and the secret EVALS_API_KEY; neither request was made"
+          exit 1
+      - name: Run the skill on each fixture against the configured endpoint
+        env:
+          EVALS_API_URL: ${{ vars.EVALS_API_URL }}
+          EVALS_API_KEY: ${{ secrets.EVALS_API_KEY }}
           SKILL: ${{ steps.ctx.outputs.skill }}
           MODEL: ${{ steps.ctx.outputs.model }}
         run: |
@@ -71,9 +84,9 @@ jobs:
           const skillMd = readFileSync(join(dir, "SKILL.md"), "utf8");
           const sha = fileSha(join(dir, "SKILL.md"));
           const ask = async (messages) => {
-            const r = await fetch("https://models.github.ai/inference/chat/completions", {
+            const r = await fetch(process.env.EVALS_API_URL, {
               method: "POST",
-              headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, "Content-Type": "application/json", Accept: "application/vnd.github+json" },
+              headers: { Authorization: `Bearer ${process.env.EVALS_API_KEY}`, "Content-Type": "application/json" },
               body: JSON.stringify({ model, messages, temperature: 0 }), // temperature: 0 is what the record says
             });
             if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
