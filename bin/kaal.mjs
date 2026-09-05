@@ -52,7 +52,9 @@ if (cmd === "ledger") {
     console.error(
       `standard: the spec drifted from the pin: live ${r.live}, pinned ${r.pinned} (${r.from}); reconcile the mirror rule by rule, then re-pin`,
     );
-  process.exit(r.same ? 0 : 1);
+  // No exit call after a fetch: the process ends when the fetch's handles
+  // have closed. An exit call here dies on Windows with a libuv assertion.
+  process.exitCode = r.same ? 0 : 1;
 } else if (cmd === "fixtures") {
   const found = listFixtures(arg ?? cwd);
   for (const x of found) console.log(`${x.shape} ${x.path}`);
@@ -90,5 +92,7 @@ if (cmd === "ledger") {
   console.error(USAGE);
   process.exit(1);
 }
-for (const f of findings) console.error(f);
-process.exit(findings.length ? 1 : 0);
+if (cmd !== "standard") {
+  for (const f of findings) console.error(f);
+  process.exit(findings.length ? 1 : 0);
+}
