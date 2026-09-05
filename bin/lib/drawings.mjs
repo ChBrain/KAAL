@@ -59,7 +59,14 @@ export function checkDrawing(root, task) {
   const seamsText = section(text, "Seams");
   const seams = numbered(seamsText.replace(/```[\s\S]*?```/g, ""));
   const mermaid = seamsText.match(/```mermaid\n([\s\S]*?)```/);
-  const edges = mermaid ? (mermaid[1].match(/-->/g) ?? []).length : 0;
+  // One labelled edge per line: a line that carries a quoted label and an
+  // arrow. Counted by reading lines, not by a regex over the block, so no
+  // reader mistakes the arrow for a comment delimiter.
+  const edges = mermaid
+    ? mermaid[1]
+        .split("\n")
+        .filter((l) => l.includes('-- "') && l.includes("-->")).length
+    : 0;
   if (!mermaid)
     find("edges", `no mermaid block under Seams for ${seams} seam(s)`);
   else if (edges !== seams)
