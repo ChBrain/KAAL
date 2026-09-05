@@ -1,0 +1,6 @@
+{
+  "gates": [
+    { "name": "broken", "command": "false", "fix": "fix it" },
+    { "name": "fine", "command": "true", "fix": "nothing" }
+  ]
+}
