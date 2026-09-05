@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Resolve the branch and the skill
         id: ctx
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           EVALS_MODEL: ${{ vars.EVALS_MODEL }}
         with:
@@ -49,14 +49,14 @@ jobs:
             core.setOutput("ref", ref);
             core.setOutput("skill", skill);
             core.setOutput("model", model);
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ steps.ctx.outputs.ref }}
           # A push made with the workflow token starts no other workflow, so the
           # walls would not run on the commit that carries the records. Commit
           # with EVALS_TOKEN when the repository has one; fall back and say so.
           token: ${{ secrets.EVALS_TOKEN || github.token }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: Refuse before any request when the endpoint is not configured

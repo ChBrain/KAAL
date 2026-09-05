@@ -73,6 +73,7 @@ export function runGates(root, config = null) {
       count: count === undefined ? null : Number(count),
       fix: g.fix ?? null,
       status: r.status,
+      output: (r.stdout ?? "").split(/\r?\n/).filter((l) => l.trim()),
     });
   }
   let waived = 0;
@@ -90,12 +91,20 @@ export function runGates(root, config = null) {
   }
   const failed = results.filter((x) => !x.ok && !x.waived).length;
   const ok = gates.length > 0 && failed === 0;
-  const lines = results.map((x) =>
+  // A failing wall's own lines follow its FAIL line, indented: a reader of
+  // the board elsewhere (a log, a pull request) must see what the wall saw,
+  // or six FAILs read as six defects.
+  const lines = results.flatMap((x) =>
     x.unused
-      ? `unused waiver ${x.name}: the wall is green`
+      ? [`unused waiver ${x.name}: the wall is green`]
       : x.waived
-        ? `waived ${x.name} by ${x.waived.who}: ${x.waived.why} (until ${x.waived.until})`
-        : `${x.ok ? "ok  " : "FAIL"} ${x.name}${x.count !== null ? ` (${x.count} passing)` : ""}${x.ok || !x.fix ? "" : `  fix: ${x.fix}`}${x.waiverNote ? `  [${x.waiverNote}]` : ""}`,
+        ? [
+            `waived ${x.name} by ${x.waived.who}: ${x.waived.why} (until ${x.waived.until})`,
+          ]
+        : [
+            `${x.ok ? "ok  " : "FAIL"} ${x.name}${x.count !== null ? ` (${x.count} passing)` : ""}${x.ok || !x.fix ? "" : `  fix: ${x.fix}`}${x.waiverNote ? `  [${x.waiverNote}]` : ""}`,
+            ...(x.ok ? [] : x.output.map((l) => `  ${l}`)),
+          ],
   );
   const summary =
     gates.length === 0

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
-import { mkdtempSync, symlinkSync, rmSync } from "node:fs";
+import { mkdtempSync, symlinkSync, copyFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { runGates, wallEnv, readWaiver } from "../bin/lib/gates.mjs";
@@ -98,10 +98,17 @@ test("runGates: a valid waiver makes a red wall waived and the run ok; the summa
 });
 
 test("a wall runs through the platform's own shell: no sh on the PATH, still ok", () => {
+  // On Windows the file must be node.exe, and a symlink may need a
+  // privilege, so a copy is the fallback.
   const bin = mkdtempSync(join(tmpdir(), "kaal-nosh-"));
+  const name = process.platform === "win32" ? "node.exe" : "node";
   const path = process.env.PATH;
   try {
-    symlinkSync(process.execPath, join(bin, "node"));
+    try {
+      symlinkSync(process.execPath, join(bin, name), "file");
+    } catch {
+      copyFileSync(process.execPath, join(bin, name));
+    }
     process.env.PATH = bin;
     const r = runGates(join(F, "clean"));
     assert.equal(r.ok, true, r.lines.join("\n"));
@@ -110,4 +117,30 @@ test("a wall runs through the platform's own shell: no sh on the PATH, still ok"
     process.env.PATH = path;
     rmSync(bin, { recursive: true, force: true });
   }
+});
+
+test("a failing wall's own lines follow its FAIL line, indented; a green wall's do not", () => {
+  const r = runGates(join(F, "mixed"));
+  const i = r.lines.findIndex((l) => l.startsWith("FAIL fails"));
+  assert.ok(i >= 0, "no FAIL line for the failing wall");
+  assert.ok(
+    r.lines.every(
+      (l, j) => !(l.startsWith("ok  ") && r.lines[j + 1]?.startsWith("  ")),
+    ),
+    "a green wall printed its lines",
+  );
+  const shown = runGates(join(F, "clean"), {
+    gates: [
+      {
+        name: "loud",
+        command:
+          "node -e \"console.log('what the wall saw'); process.exit(1)\"",
+        fix: "read it",
+      },
+    ],
+  });
+  assert.deepEqual(shown.lines, [
+    "FAIL loud  fix: read it",
+    "  what the wall saw",
+  ]);
 });

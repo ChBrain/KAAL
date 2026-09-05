@@ -1,1 +1,9 @@
-{ "gates": [{ "name": "fine", "command": "true", "fix": "nothing" }] }
+{
+  "gates": [
+    {
+      "name": "fine",
+      "command": "node -e \"process.exit(0)\"",
+      "fix": "nothing"
+    }
+  ]
+}

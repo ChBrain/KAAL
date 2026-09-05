@@ -58,7 +58,8 @@ test("3. install to hook: prepare sets core.hooksPath to .githooks in a fresh cl
       if (existsSync(join(ROOT, f)))
         cpSync(join(ROOT, f), join(d, f), { recursive: true });
     assert.equal(spawnSync("git", ["init", "-q"], { cwd: d }).status, 0);
-    const p = spawnSync("npm", ["run", "prepare", "--silent"], {
+    const p = spawnSync("npm run prepare --silent", {
+      shell: true, // npm is a script on Windows; the platform's shell finds it
       cwd: d,
       encoding: "utf8",
     });

@@ -74,13 +74,23 @@ export function runJudged(files, statusFor, mustClose = true) {
     );
     const status = statusFor(file);
     const v = judge(status, pass, fail, mustClose);
-    results.push({ name: basename(dirname(file)), status, pass, fail, ...v });
+    // The red tests by name, so a reader of the board elsewhere sees which
+    // criterion failed and not only that one did.
+    const red = r.stdout.match(/^not ok .*$/gm) ?? [];
+    results.push({
+      name: basename(dirname(file)),
+      status,
+      pass,
+      fail,
+      red,
+      ...v,
+    });
   }
   const ok = results.length > 0 && results.every((x) => x.ok);
-  const lines = results.map(
-    (x) =>
-      `${x.label.padEnd(12)} ${x.name} (${x.pass} passing, ${x.fail} failing)`,
-  );
+  const lines = results.flatMap((x) => [
+    `${x.label.padEnd(12)} ${x.name} (${x.pass} passing, ${x.fail} failing)`,
+    ...(x.ok && !x.fail ? [] : x.red.map((l) => `  ${l}`)),
+  ]);
   const summary =
     results.length === 0
       ? "red: no requirement files given"
