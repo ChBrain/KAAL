@@ -6,6 +6,8 @@ import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { cpSync, rmSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..");
@@ -15,6 +17,18 @@ const kaal = (...args) =>
     cwd: ROOT,
     encoding: "utf8",
   });
+
+/** A copy of a fixture root with one file removed, run through kaal ledger. */
+const without = (root, file) => {
+  const copy = mkdtempSync(join(tmpdir(), "kaal-without-"));
+  try {
+    cpSync(root, copy, { recursive: true });
+    rmSync(join(copy, file));
+    return kaal("ledger", copy);
+  } finally {
+    rmSync(copy, { recursive: true, force: true });
+  }
+};
 
 test("1. shell to tool: exit codes, findings on stderr, usage on an unknown command", () => {
   const bad = kaal("no-such-command");
@@ -31,17 +45,7 @@ test("2. ledger to tool: rung-relative paths resolve, a human move needs nothing
   assert.equal(r.status, 0, r.stderr);
   // The same root with the script test removed must be refused: the script
   // rung's paths are read relative to the skill.
-  const broken = spawnSync(
-    "sh",
-    [
-      "-c",
-      `cp -r "${join(F, "ledger")}" "$TMPDIR/l" && rm "$TMPDIR/l/skills/good/scripts/ok.test.mjs" && node "${join(ROOT, "bin", "kaal.mjs")}" ledger "$TMPDIR/l"; s=$?; rm -rf "$TMPDIR/l"; exit $s`,
-    ],
-    {
-      encoding: "utf8",
-      env: { ...process.env, TMPDIR: process.env.TMPDIR ?? "/tmp" },
-    },
-  );
+  const broken = without(join(F, "ledger"), "skills/good/scripts/ok.test.mjs");
   assert.equal(broken.status, 1, "missing script test not refused");
   assert.ok(
     /a scripted move/.test(broken.stderr),
@@ -53,17 +57,7 @@ test("3. eval record to tool: only pass with the current sha counts, a record wi
   // gamma.md has no skill_sha; the root still passes because alpha and beta are fresh.
   assert.equal(kaal("ledger", join(F, "ledger")).status, 0);
   // Remove beta: gamma must not stand in for it.
-  const r = spawnSync(
-    "sh",
-    [
-      "-c",
-      `cp -r "${join(F, "ledger")}" "$TMPDIR/e" && rm "$TMPDIR/e/evals/good/f/beta.md" && node "${join(ROOT, "bin", "kaal.mjs")}" ledger "$TMPDIR/e"; s=$?; rm -rf "$TMPDIR/e"; exit $s`,
-    ],
-    {
-      encoding: "utf8",
-      env: { ...process.env, TMPDIR: process.env.TMPDIR ?? "/tmp" },
-    },
-  );
+  const r = without(join(F, "ledger"), "evals/good/f/beta.md");
   assert.equal(r.status, 1, "a record without skill_sha was counted");
   assert.ok(/a skilled move/.test(r.stderr), "finding does not name the move");
 });

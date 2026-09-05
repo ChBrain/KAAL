@@ -120,7 +120,10 @@ shell or the network without a Reach section in its skill, and a skill
 with no adversarial fixture), the ledgers' evidence and freshness
 (`kaal ledger`), and the format check. The runner prints one line per wall
 with its count and a summary, runs every wall even after one fails, and
-treats a wall it cannot run as a failure. A human may waive a red wall with
+treats a wall it cannot run as a failure. Every wall is a program and its
+arguments, started by the platform's own shell, and `kaal acceptance` and
+`kaal contracts` expand their own globs, so the board reads the same on a
+machine with no `sh`. A human may waive a red wall with
 a file in `waivers/` naming the wall, who, why and until; the board then says
 waived, never ok, and an expired waiver counts for nothing. The `ci` workflow runs the same
 command on every pull request and push to main; making it a required check

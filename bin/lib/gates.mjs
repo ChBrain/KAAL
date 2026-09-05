@@ -57,7 +57,10 @@ export function runGates(root, config = null) {
       .gates ?? [];
   const results = [];
   for (const g of gates) {
-    const r = spawnSync("sh", ["-c", g.command], {
+    // Node's own shell mode: /bin/sh by path on POSIX, cmd.exe on Windows.
+    // The runner names no shell, so the board reads the same on both.
+    const r = spawnSync(g.command, {
+      shell: true,
       cwd: root,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "inherit"],

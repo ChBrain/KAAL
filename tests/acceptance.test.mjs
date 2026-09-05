@@ -2,7 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { readStatus, judge, runAcceptance } from "../bin/lib/acceptance.mjs";
+import {
+  readStatus,
+  judge,
+  runAcceptance,
+  expand,
+} from "../bin/lib/acceptance.mjs";
 
 const F = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -42,4 +47,15 @@ test("runAcceptance runs the files, reads counts, and fails on any FAIL", () => 
   );
   assert.equal(runAcceptance([f("closed-red")]).ok, false);
   assert.equal(runAcceptance([]).ok, false, "no files is not a pass");
+});
+
+test("expand: a glob becomes its sorted matches, a plain path passes through, nothing matched is nothing", () => {
+  const G = join(F, "..", "..", "gates-v2", "fixtures", "globs");
+  const got = expand([join(G, "requirements", "*", "acceptance.test.mjs")]);
+  assert.deepEqual(
+    got.map((p) => p.split(/[\\/]/).at(-2)),
+    ["alpha", "beta"],
+  );
+  assert.deepEqual(expand(["a/plain/path.mjs"]), ["a/plain/path.mjs"]);
+  assert.deepEqual(expand([join(G, "nowhere", "*", "x.mjs")]), []);
 });

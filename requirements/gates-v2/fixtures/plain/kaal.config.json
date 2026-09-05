@@ -1,12 +1,12 @@
 {
   "gates": [
     {
-      "name": "one",
+      "name": "plain",
       "command": "node -e \"process.exit(0)\"",
       "fix": "nothing"
     },
     {
-      "name": "two",
+      "name": "counted",
       "command": "node -e \"console.log('# pass 2')\"",
       "fix": "nothing"
     }

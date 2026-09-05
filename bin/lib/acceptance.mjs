@@ -4,7 +4,7 @@
 // failed. An open requirement with no red test is done and must be closed,
 // so that is a failure too. A requirement with no status is a failure. Each
 // test file runs under wallEnv, so the verdict does not depend on the caller.
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, globSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { spawnSync } from "node:child_process";
 import { wallEnv } from "./gates.mjs";
@@ -40,6 +40,15 @@ export function statusForDrawing(testFile) {
   return readStatus(join(root, "requirements", task, "acceptance.test.mjs"));
 }
 
+/**
+ * The commands expand their own globs: a shell may hand them over expanded
+ * (sh) or not (cmd.exe), and the files must be the same, in the same order.
+ * @param {string[]} patterns @returns {string[]}
+ */
+export function expand(patterns) {
+  return patterns.flatMap((p) => (/[*?[]/.test(p) ? globSync(p).sort() : [p]));
+}
+
 /** @param {string[]} files */
 export function runAcceptance(files) {
   return runJudged(files, readStatus);
@@ -53,8 +62,8 @@ export function runContracts(files) {
 /** One judged runner for both walls: the verdict table lives once. */
 export function runJudged(files, statusFor, mustClose = true) {
   const results = [];
-  for (const file of files) {
-    const r = spawnSync("node", ["--test", file], {
+  for (const file of expand(files)) {
+    const r = spawnSync(process.execPath, ["--test", file], {
       encoding: "utf8",
       env: wallEnv(),
       stdio: ["ignore", "pipe", "inherit"],

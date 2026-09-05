@@ -1,0 +1,9 @@
+{
+  "gates": [
+    {
+      "name": "where",
+      "command": "node -e \"process.exit(require('fs').existsSync('kaal.config.json') && process.env.KAAL_GATES === '1' && !process.env.NODE_TEST_CONTEXT ? 0 : 1)\"",
+      "fix": "nothing"
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
+import { mkdtempSync, symlinkSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { runGates, wallEnv, readWaiver } from "../bin/lib/gates.mjs";
 
@@ -93,4 +95,19 @@ test("runGates: a valid waiver makes a red wall waived and the run ok; the summa
   const u = runGates(join(F, "..", "..", "waiver-v1", "fixtures", "unused"));
   assert.equal(u.ok, true);
   assert.ok(u.lines.some((l) => /^unused waiver fine/.test(l)));
+});
+
+test("a wall runs through the platform's own shell: no sh on the PATH, still ok", () => {
+  const bin = mkdtempSync(join(tmpdir(), "kaal-nosh-"));
+  const path = process.env.PATH;
+  try {
+    symlinkSync(process.execPath, join(bin, "node"));
+    process.env.PATH = bin;
+    const r = runGates(join(F, "clean"));
+    assert.equal(r.ok, true, r.lines.join("\n"));
+    assert.equal(r.results[1].count, 2);
+  } finally {
+    process.env.PATH = path;
+    rmSync(bin, { recursive: true, force: true });
+  }
 });
