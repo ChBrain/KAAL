@@ -144,7 +144,11 @@ with its count and a summary, runs every wall even after one fails, and
 treats a wall it cannot run as a failure. Every wall is a program and its
 arguments, started by the platform's own shell, and `kaal acceptance` and
 `kaal contracts` expand their own globs, so the board reads the same on a
-machine with no `sh`. A human may waive a red wall with
+machine with no `sh`. Pointed at a tree that holds none of what it reads, a command says so and
+ends on a code of its own (`ledger: not applicable here: no
+skills/<name>/moves.json under <root>`, exit 2): a repository that never
+adopted the league is not a repository with findings, and it is not a
+repository that passed. A human may waive a red wall with
 a file in `waivers/` naming the wall, who, why and until; the board then says
 waived, never ok, and an expired waiver counts for nothing. The `ci` workflow runs the same
 command on every pull request and push to main; making it a required check

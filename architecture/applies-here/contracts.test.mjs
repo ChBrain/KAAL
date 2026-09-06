@@ -21,17 +21,19 @@ const kaal = (args, cwd = ROOT) =>
     cwd,
     encoding: "utf8",
   });
-const FIVE = ["ledger", "drawings", "check", "agents", "fixtures"];
+const FOUR = ["ledger", "drawings", "check", "agents"];
 
 test("1. the path to applicability: none on a foreign tree, all on the league, and per command on a half adopted one", () => {
-  assert.equal(FIVE.length, 5);
-  for (const cmd of FIVE)
+  // fixtures is not guarded: code-v2 fixed its answer on an empty root.
+  assert.equal(FOUR.length, 4);
+  for (const cmd of FOUR)
     assert.equal(
       kaal([cmd, FOREIGN]).status,
       2,
       `${cmd} answered a foreign tree`,
     );
-  for (const cmd of FIVE)
+  assert.equal(kaal(["fixtures", FOREIGN]).status, 1, "fixtures was guarded");
+  for (const cmd of [...FOUR, "fixtures"])
     assert.equal(kaal([cmd]).status, 0, `${cmd} refused the league`);
   // A tree that adopted the ledger and nothing else: one question is its own.
   const ledger = kaal(["ledger", HALF]);

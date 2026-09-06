@@ -1,7 +1,9 @@
 # Drawing: applies-here
 
 _Written in architect mode from `requirements/applies-here`, three
-criteria, two red tests and one green before the build. The closed
+criteria, two red tests and one green before the build, and amended during
+that build when the acceptance wall found the criterion contradicted a
+closed task; the decision below records it. The closed
 requirements that touch these paths were read first, and one of them
 decided a seam: skills-v1 and fixtures-v1 point `kaal check` at a skills
 directory, not at a root, so the table below must ask each command about
@@ -50,7 +52,7 @@ for>`, and nothing at all on stdout. The contract: the code and the
 ## Fixed and free
 
 - Fixed: the line's shape and stream, the exit code 2, the empty stdout,
-  and the five command names. The decision is made before the command
+  and the four command names. The decision is made before the command
   reads anything else, so a tree that would make a module throw is
   refused rather than crashed into.
 - Free: the wording of each reason; whether the table is a map or a list;
@@ -73,6 +75,21 @@ for>`, and nothing at all on stdout. The contract: the code and the
   ledger that exists but does not parse); then that entry names a
   function and the table keeps the shape.
 
+### `kaal fixtures` is not guarded
+
+- Chosen: four commands, the ones that judge a tree against a league
+  artefact; `fixtures` keeps its own refusal on a root with none.
+- Not taken: five, with `fixtures` answering "not applicable" like the
+  rest, which is what this drawing said before the build.
+- Because: code-v2 fixes `kaal fixtures` on an empty root as exit 1, so
+  an empty list is never taken for a run against the right root, and that
+  is the same honesty by another means, decided first. A listing that
+  finds nothing has an answer; a judgement about a tree that holds
+  nothing does not.
+- Reopens if: `fixtures` grows a judgement of its own (every fixture
+  carries an adversary, say); then it joins the four and code-v2's
+  criterion is superseded on purpose, not by accident.
+
 ### Each command is asked about the thing it was given
 
 - Chosen: `check` is asked about the directory it was handed, and looks
@@ -90,7 +107,7 @@ for>`, and nothing at all on stdout. The contract: the code and the
 
 | criterion | layer      | kind          | why                                        |
 | --------- | ---------- | ------------- | ------------------------------------------ |
-| 1         | contract 1 | deterministic | the five on a tree with no artefact        |
+| 1         | contract 1 | deterministic | the four on a tree with no artefact        |
 | 1         | contract 2 | deterministic | the code, the line, the empty stdout       |
 | 2         | contract 1 | deterministic | check never reads a tree it does not fit   |
 | 3         | contract 1 | deterministic | the league answers, and so does half of it |
