@@ -32,3 +32,34 @@ test("a clean run exits 0 with a summary on stdout and nothing on stderr", () =>
   assert.ok(r.stdout.trim());
   assert.equal(r.stderr.trim(), "");
 });
+
+test("runner --check with no fixture sweeps the tree: every runner current, exit 0, one line each", () => {
+  const r = kaal("runner", "--check");
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(
+    r.stdout,
+    /^runner: skills\/analyse\/fixtures\/json-flag\/RUNNER\.md is current$/m,
+  );
+  assert.equal(r.stderr.trim(), "");
+});
+
+test("runner --check on a root whose runner moved exits 1 and names it on stderr, once", () => {
+  const root = join(
+    ROOT,
+    "architecture",
+    "nothing-stale",
+    "fixtures",
+    "tree-stale",
+  );
+  const r = spawnSync(
+    "node",
+    [join(ROOT, "bin", "kaal.mjs"), "runner", "--check"],
+    {
+      cwd: root,
+      encoding: "utf8",
+    },
+  );
+  assert.equal(r.status, 1, r.stdout);
+  const named = r.stderr.match(/^runner: .* is stale$/gm) ?? [];
+  assert.deepEqual(named, ["runner: skills/x/fixtures/f/RUNNER.md is stale"]);
+});

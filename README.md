@@ -130,7 +130,8 @@ with no adversarial fixture), the ledgers' evidence and freshness
 fresh models out of the two the Skill rung needs, and its stale records
 under it), every drawing's shape (`kaal drawings`: the six sections
 in order, one edge and one contract test per seam, every criterion in the
-strategy table), and the format check. The skill rules are a mirror of the
+strategy table), every fixture's runner against the tree that renders it
+(`kaal runner --check`), and the format check. The skill rules are a mirror of the
 Agent Skills specification pinned by hash in `kaal.config.json`; the mirror
 runs on every push, and the `ci` workflow's `standard` job runs the
 standard's own reference validator (`skills-ref`) over every skill and
