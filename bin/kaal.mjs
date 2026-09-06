@@ -30,6 +30,7 @@ import { checkAgents } from "./lib/agents.mjs";
 import { checkDrawings } from "./lib/drawings.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
+import { appliesHere } from "./lib/applies.mjs";
 import { renderTarget } from "./lib/assess/target.mjs";
 import { refuseOutput } from "./lib/assess/paths.mjs";
 import { writeDocument } from "./lib/assess/output.mjs";
@@ -42,6 +43,17 @@ const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
 let findings = [];
+
+// Before anything is read: is this tree's question the one the command asks?
+// A tree that holds none of the artefact a command reads has not adopted the
+// league for that question, and the honest answer is that it does not apply,
+// on its own exit code, so a caller reading only the code never takes a non
+// answer for a pass.
+const notApplicable = appliesHere(cmd, arg ?? null, cwd);
+if (notApplicable) {
+  console.error(`${cmd}: not applicable here: ${notApplicable}`);
+  process.exit(2);
+}
 
 if (cmd === "ledger") {
   for (const s of standings(arg ?? cwd)) {
@@ -149,6 +161,9 @@ if (cmd === "ledger") {
   if (!found.length) console.log("boundary: the assess tree only reads");
   process.exit(found.length ? 1 : 0);
 } else if (cmd === "fixtures") {
+  // Not guarded by applicability: a listing that finds nothing has an answer,
+  // and code-v2 fixed it as a refusal, so an empty list is never mistaken for
+  // a run against the right root.
   const found = listFixtures(arg ?? cwd);
   for (const x of found) console.log(`${x.shape} ${x.path}`);
   if (!found.length) {

@@ -35,17 +35,23 @@ the league's own answers are unchanged.
   returns not applicable when they are absent), and the league's fixture
   roots are trees that hold `skills/` or `architecture/` without being
   adopted repositories and must keep answering as they do.
-- The five commands are the ones that take a root and read a league
-  artefact from it: `ledger`, `drawings`, `check`, `agents`, `fixtures`.
-  The rest read `kaal.config.json` or an explicit list of files, and
-  already fail in the open when there is nothing to read.
+- The commands this applies to are the ones that judge a tree against a
+  league artefact: `ledger`, `drawings`, `check`, `agents`. `kaal
+fixtures` is not among them, though it takes a root too: it lists what
+  is there rather than judging it, and a listing that finds nothing has
+  an answer. code-v2 fixed that answer as a refusal, exit 1, so an empty
+  list is never mistaken for a run against the right root, and that
+  decision was taken first and stands. The rest read `kaal.config.json`
+  or an explicit list of files, and already fail in the open.
 
 ## Constraints
 
 - The league's own answers do not change, and the board's nine walls stay
   green (criterion 3).
-- The closed requirements that fix these commands on their fixture roots
-  stay met: push-v1 and code-v2 on the ledger and its standings,
+- The closed requirements that fix these commands stay met, and one of
+  them decides the list above: code-v2 fixes `kaal fixtures` on a root
+  with none. The others hold as well: push-v1 and code-v2 on the ledger
+  and its standings,
   architect-v2 on drawings, skills-v1 and fixtures-v1 on check, agent-v1
   on agents. Each points its command at a root that does hold what the
   command reads, so applicability holds there and their tests are
@@ -86,10 +92,13 @@ looked for>`.
 - Criteria: 3; tests: 3 (equal)
 - Red run: `node --test --test-timeout=60000 requirements/applies-here/acceptance.test.mjs`;
   criteria 1 and 2 red, criterion 3 green before the build and to be kept
-  green after, since it is the promise that nothing else moved
+  green after, since it is the promise that nothing else moved. Criterion
+  1 was amended during the build, when the acceptance wall found that it
+  contradicted code-v2 on `kaal fixtures`; the closed task stands and the
+  criterion gave way
 - Tests: `acceptance.test.mjs`, beside this file; fixture root
   `fixtures/foreign`
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing

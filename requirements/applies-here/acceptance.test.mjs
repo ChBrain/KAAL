@@ -14,12 +14,13 @@ const kaal = (args, cwd = ROOT) =>
     cwd,
     encoding: "utf8",
   });
-// The five commands that take a root and read a league artefact from it.
-const FIVE = ["ledger", "drawings", "check", "agents", "fixtures"];
+// The four commands that judge a tree against a league artefact. `fixtures`
+// lists rather than judges, and code-v2 fixed its answer on an empty root.
+const FOUR = ["ledger", "drawings", "check", "agents"];
 
-test("1. each of the five says the question does not apply on a tree that holds no league artefact", () => {
-  assert.equal(FIVE.length, 5);
-  for (const cmd of FIVE) {
+test("1. each of the four says the question does not apply on a tree that holds no league artefact", () => {
+  assert.equal(FOUR.length, 4);
+  for (const cmd of FOUR) {
     const r = kaal([cmd, FOREIGN]);
     assert.equal(r.status, 2, `${cmd}: expected exit 2, got ${r.status}`);
     assert.equal(r.stdout.trim(), "", `${cmd}: answered on stdout anyway`);
@@ -29,6 +30,8 @@ test("1. each of the five says the question does not apply on a tree that holds 
       `${cmd}: no not-applicable line`,
     );
   }
+  // fixtures keeps the refusal code-v2 fixed for it.
+  assert.equal(kaal(["fixtures", FOREIGN]).status, 1);
 });
 
 test("2. check names no finding against a plain source directory", () => {
@@ -46,7 +49,7 @@ test("3. the league's own answers are unchanged", () => {
     agents: /^agents: every agent obeys the rules$/m,
     fixtures: /^requirement architecture\/analyse-v2\/fixtures\//m,
   };
-  for (const cmd of FIVE) {
+  for (const cmd of [...FOUR, "fixtures"]) {
     const r = kaal([cmd]);
     assert.equal(r.status, 0, `${cmd}: ${r.stderr}`);
     assert.match(r.stdout, answers[cmd], `${cmd}: the summary moved`);
