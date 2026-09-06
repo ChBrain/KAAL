@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { describeTarget, renderTarget } from "../bin/lib/assess/target.mjs";
@@ -76,14 +76,20 @@ test("renderTarget ends with one newline, parses, and is the same on two calls",
 });
 
 test("refuseOutput names the league, names the target, and permits a third place", () => {
-  const target = "/somewhere/target";
+  // Both sides come from resolve() in use, so the test builds its paths the
+  // platform's own way: a literal posix path joined with path.join mixes
+  // separators, and the rule then rightly says the two are unrelated.
+  const target = resolve(join(tmpdir(), "kaal-target-example"));
   const inside = (p) => refuseOutput(p, { league: ROOT, target });
   assert.match(inside(join(ROOT, "evals", "x.json")), /league's own tree/);
   assert.match(inside(ROOT), /league's own tree/);
   assert.match(inside(join(target, "x.json")), /inside the target/);
   assert.match(inside(target), /inside the target/);
-  assert.equal(inside("/tmp/elsewhere/x.json"), null);
+  assert.equal(
+    inside(resolve(join(tmpdir(), "kaal-elsewhere", "x.json"))),
+    null,
+  );
   assert.equal(refuseOutput(null, { league: ROOT, target }), null);
-  // A sibling whose name merely begins with the same letters is not inside.
-  assert.equal(inside("/somewhere/target-notes/x.json"), null);
+  // A sibling whose name merely begins with the target's is not inside it.
+  assert.equal(inside(join(target + "-notes", "x.json")), null);
 });
