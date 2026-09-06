@@ -12,14 +12,21 @@
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
 //   node bin/kaal.mjs standard [file] the pinned spec against the live text (network)
 //   node bin/kaal.mjs assess <target> [--output <path>]  a target descriptor, read only
-//   node bin/kaal.mjs boundary        nothing under bin/lib/assess writes, executes or reaches
+//   node bin/kaal.mjs boundary        nothing under a guarded place writes, executes or reaches
+//   node bin/kaal.mjs witness <dir> [--against <manifest>]  what a directory holds, or what moved
 //   node bin/kaal.mjs runner <skill> <fixture> [--write | --check]   the two prompts and the frontmatter, from the tree
 //   node bin/kaal.mjs runner --check   every RUNNER.md in the tree, current or stale
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
 import { join, relative, sep, resolve, dirname } from "node:path";
-import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  readdirSync,
+  statSync,
+} from "node:fs";
 import { fileURLToPath } from "node:url";
 import { checkLedgers, standings } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
@@ -35,10 +42,12 @@ import { renderTarget } from "./lib/assess/target.mjs";
 import { refuseOutput } from "./lib/assess/paths.mjs";
 import { writeDocument } from "./lib/assess/output.mjs";
 import { checkBoundary } from "./lib/boundary.mjs";
+import { render } from "./lib/witness/manifest.mjs";
+import { compare } from "./lib/witness/compare.mjs";
 import { renderRunner, runnerPath } from "./lib/runner.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary | witness <dir> [--against <manifest>] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -157,9 +166,49 @@ if (cmd === "ledger") {
   process.exit(0);
 } else if (cmd === "boundary") {
   const found = checkBoundary(cwd);
-  for (const f of found) console.error(`boundary: ${f.file} ${f.verb}`);
-  if (!found.length) console.log("boundary: the assess tree only reads");
+  for (const f of found)
+    console.error(`boundary: ${f.where}/${f.file} ${f.verb}`);
+  if (!found.length) console.log("boundary: the guarded trees only read");
   process.exit(found.length ? 1 : 0);
+} else if (cmd === "witness") {
+  // Reads only, in both forms, and the boundary wall holds the modules to
+  // that: the whole point of the command is that the tree it was pointed at
+  // is the same afterwards. Not in the applicability table, because a tree
+  // holding nothing of the league can still be witnessed.
+  const rest = process.argv.slice(3);
+  const flag = rest.indexOf("--against");
+  if (!rest[0] || (flag >= 0 && !rest[flag + 1])) {
+    console.error(USAGE);
+    process.exit(1);
+  }
+  const dir = resolve(rest[0]);
+  if (!existsSync(dir) || !statSync(dir).isDirectory()) {
+    console.error(`witness: ${rest[0]} is not a directory`);
+    process.exit(1);
+  }
+  if (flag < 0) {
+    const doc = render(dir);
+    if (doc) console.log(doc);
+    process.exit(0);
+  }
+  const manifest = rest[flag + 1];
+  let text;
+  try {
+    text = readFileSync(manifest, "utf8");
+  } catch {
+    console.error(`witness: ${manifest} cannot be read`);
+    process.exit(1);
+  }
+  let moved;
+  try {
+    moved = compare(dir, text);
+  } catch (e) {
+    console.error(`witness: ${manifest} is not a manifest: ${e.message}`);
+    process.exit(1);
+  }
+  for (const m of moved) console.log(`${m.verb}: ${m.path}`);
+  if (!moved.length) console.log("witness: nothing moved");
+  process.exit(moved.length ? 1 : 0);
 } else if (cmd === "fixtures") {
   // Not guarded by applicability: a listing that finds nothing has an answer,
   // and code-v2 fixed it as a refusal, so an empty list is never mistaken for

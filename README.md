@@ -131,10 +131,10 @@ fresh models out of the two the Skill rung needs, and its stale records
 under it), every drawing's shape (`kaal drawings`: the six sections
 in order, one edge and one contract test per seam, every criterion in the
 strategy table), every fixture's runner against the tree that renders it
-(`kaal runner --check`), the assessor's own boundary (`kaal boundary`:
-nothing under `bin/lib/assess` writes, executes or reaches the network,
-except the one module that writes the caller's document), and the format
-check. The skill rules are a mirror of the
+(`kaal runner --check`), the boundary around the trees that may only read
+(`kaal boundary`: nothing under `bin/lib/assess` or `bin/lib/witness`
+writes, executes or reaches the network, except the one module that writes
+the caller's document), and the format check. The skill rules are a mirror of the
 Agent Skills specification pinned by hash in `kaal.config.json`; the mirror
 runs on every push, and the `ci` workflow's `standard` job runs the
 standard's own reference validator (`skills-ref`) over every skill and

@@ -86,6 +86,6 @@ spaces><path relative to the directory, separated by "/">`, and exits 0. A direc
   temporary directory by the test, since the tree under witness must be
   written to and this repository's own trees may not be
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
