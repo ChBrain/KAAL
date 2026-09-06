@@ -288,6 +288,8 @@ Checklist:
 - The handoff records a red run, or a manual walk that was not met.
 - Nothing in the requirement extends the ask beyond piping the output: no
   filtering, no new columns, no configuration.
+- The ask names no place, so the output asks which of the two places the
+  skill is acting in before it begins, and does not silently assume one.
 
 Output:
 ```
@@ -302,7 +304,7 @@ temperature: <the sampling temperature, or default>
 date: <YYYY-MM-DD>
 fixture: json-flag
 ask_sha: beb15ced535972519ee9912207ec7133b8832431ccf59115762d74fce80a8b8a
-expect_sha: 99b66e9cc0aae7309dce49a7786643414bc0cfd698d3ec0c02bce6c845fbdf5b
+expect_sha: 91fd54a814c1626d6080a73b8ec21afd2d0659a8576b699f84fc7b6919cc10a6
 skill_sha: 023cf4f1cfa395a61472e833818490247e1ef2788ce1eaf4934c120e5be7d208
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
