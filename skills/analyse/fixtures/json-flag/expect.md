@@ -18,3 +18,5 @@ each fail.
 - The handoff records a red run, or a manual walk that was not met.
 - Nothing in the requirement extends the ask beyond piping the output: no
   filtering, no new columns, no configuration.
+- The ask names no place, so the output asks which of the two places the
+  skill is acting in before it begins, and does not silently assume one.
