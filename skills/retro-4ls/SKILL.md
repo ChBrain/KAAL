@@ -144,6 +144,7 @@ would have changed the shape of the session?
 ```
 # Retrospective: 4 L's
 Period: [the period assessed]
+Place: [this repository, or a directory the skill was pointed at]
 
 ## Liked
 [one bullet per item]
@@ -190,6 +191,15 @@ for that skill's next version, every **Longed for** item is a candidate open
 question, and **Learned** items that changed how the skill should read are
 edits to its text. The retro says what was; the analyst decides what can fail.
 Do not edit the skill from inside the retro.
+
+The retro is filed in the league either way. When the period assessed is a use
+of a skill on a directory the skill was pointed at, the retro still lands in
+the league, because it is about the application of the skill and not about the
+tree it was applied to: what the skill lacked belongs to the skill, and the
+tree does not. Name the kind of place in the `Place:` line, this repository or
+a directory the skill was pointed at, and never the tree itself; a retro that
+names someone else's repository has carried their content into the league by
+the back door.
 
 The cadence is after every use of a skill: each real use ends with a
 self-diagnosis retro on that use, so the skill learns at the rate it is used

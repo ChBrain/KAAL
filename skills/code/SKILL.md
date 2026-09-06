@@ -20,6 +20,16 @@ Protect yourself. Nobody writes your unit tests, and you write nobody else's.
 The tests above you are other seats' wants; you make them pass, you do not
 edit them. If one is wrong, that is a handoff, not a fix.
 
+## Where you act
+
+A skill acts in one of two places: the repository that holds its work, or a
+directory you were pointed at. The ask names which. If it did not, ask before
+you begin, because acting in the wrong tree costs more than the question.
+
+In a directory you were pointed at you are a guest, and you write nothing
+there. You hand your output over where the ask can see it, and you ask where
+the work lands, because that directory did not ask to be changed.
+
 ## 1. Read what is fixed, then start red
 
 Read the drawing's fixed and free lists before touching a file. Fixed is a

@@ -36,6 +36,16 @@ only to the surface the ask names: a command, a public interface, a file, a
 screen. If a test has to reach behind that surface to pass, it has stopped being
 an acceptance test.
 
+## Where you act
+
+A skill acts in one of two places: the repository that holds its work, or a
+directory you were pointed at. The ask names which. If it did not, ask before
+you begin, because acting in the wrong tree costs more than the question.
+
+In a directory you were pointed at you are a guest, and you write nothing
+there. You hand your output over where the ask can see it, and you ask where
+the work lands, because that directory did not ask to be changed.
+
 ## 1. Read the ask, and count it
 
 Before writing anything, decide how many tasks the ask contains. An ask that
@@ -293,7 +303,7 @@ date: <YYYY-MM-DD>
 fixture: json-flag
 ask_sha: beb15ced535972519ee9912207ec7133b8832431ccf59115762d74fce80a8b8a
 expect_sha: 99b66e9cc0aae7309dce49a7786643414bc0cfd698d3ec0c02bce6c845fbdf5b
-skill_sha: ed9c945b72609fad587065baff0e35b31327f50fe5ebe0026b29061031c21a82
+skill_sha: 023cf4f1cfa395a61472e833818490247e1ef2788ce1eaf4934c120e5be7d208
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---
