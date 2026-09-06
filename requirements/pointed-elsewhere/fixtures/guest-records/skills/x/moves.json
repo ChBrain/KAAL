@@ -1,0 +1,12 @@
+{
+  "skill": "x",
+  "moves": [
+    {
+      "name": "a move measured on a tree",
+      "rung": "skill",
+      "candidate": "script",
+      "script": null,
+      "test": "evals/x/g"
+    }
+  ]
+}
