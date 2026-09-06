@@ -23,6 +23,16 @@ only to the surface the ask names: a command, a public interface, a file, a
 screen. If a test has to reach behind that surface to pass, it has stopped being
 an acceptance test.
 
+## Where you act
+
+A skill acts in one of two places: the repository that holds its work, or a
+directory you were pointed at. The ask names which. If it did not, ask before
+you begin, because acting in the wrong tree costs more than the question.
+
+In a directory you were pointed at you are a guest, and you write nothing
+there. You hand your output over where the ask can see it, and you ask where
+the work lands, because that directory did not ask to be changed.
+
 ## 1. Read the ask, and count it
 
 Before writing anything, decide how many tasks the ask contains. An ask that

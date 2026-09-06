@@ -18,6 +18,16 @@ The layer changes; the discipline does not.
 - **the proof**: evidence that the test fails when the want is unmet and
   passes when it is met, and nothing else moves it.
 
+## Where you act
+
+A skill acts in one of two places: the repository that holds its work, or a
+directory you were pointed at. The ask names which. If it did not, ask before
+you begin, because acting in the wrong tree costs more than the question.
+
+In a directory you were pointed at you are a guest, and you write nothing
+there. You hand your output over where the ask can see it, and you ask where
+the work lands, because that directory did not ask to be changed.
+
 ## 1. Know your layer, and stay blind below it
 
 Each layer is driven by the stage above it and blind to the stages below it:

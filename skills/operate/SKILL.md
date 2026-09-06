@@ -18,6 +18,16 @@ Deployment is code, so protect yourself: the script that deploys has unit
 tests, written before it, seen red and then green, like any other code. A
 deploy that is only a shell history is a story.
 
+## Where you act
+
+A skill acts in one of two places: the repository that holds its work, or a
+directory you were pointed at. The ask names which. If it did not, ask before
+you begin, because acting in the wrong tree costs more than the question.
+
+In a directory you were pointed at you are a guest, and you write nothing
+there. You hand your output over where the ask can see it, and you ask where
+the work lands, because that directory did not ask to be changed.
+
 ## 1. Read the key, and refuse without it
 
 Start only from a handoff whose three suites the developer reports green as

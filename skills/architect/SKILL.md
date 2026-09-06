@@ -20,6 +20,16 @@ decide the seams; you do not know, and your tests must not know, what is
 behind any seam. A contract test that reaches into an implementation has
 become a unit test, and unit tests are the developer's.
 
+## Where you act
+
+A skill acts in one of two places: the repository that holds its work, or a
+directory you were pointed at. The ask names which. If it did not, ask before
+you begin, because acting in the wrong tree costs more than the question.
+
+In a directory you were pointed at you are a guest, and you write nothing
+there. You hand your output over where the ask can see it, and you ask where
+the work lands, because that directory did not ask to be changed.
+
 ## 1. Read the requirement, and refuse what is not ready
 
 Start only from a requirement whose criteria each have a red test. A
