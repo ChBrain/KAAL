@@ -1,0 +1,9 @@
+{
+  "gates": [
+    {
+      "name": "runners",
+      "command": "node ../../../../bin/kaal.mjs runner --check",
+      "fix": "regenerate the fixture's runner"
+    }
+  ]
+}
