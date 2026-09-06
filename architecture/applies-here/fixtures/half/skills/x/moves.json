@@ -1,0 +1,13 @@
+{
+  "skill": "x",
+  "note": "A tree that adopted the ledger and nothing else.",
+  "moves": [
+    {
+      "name": "a move that needs no evidence",
+      "rung": "nlp",
+      "candidate": null,
+      "script": null,
+      "test": null
+    }
+  ]
+}
