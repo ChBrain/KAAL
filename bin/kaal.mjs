@@ -12,11 +12,12 @@
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
 //   node bin/kaal.mjs standard [file] the pinned spec against the live text (network)
 //   node bin/kaal.mjs runner <skill> <fixture> [--write | --check]   the two prompts and the frontmatter, from the tree
+//   node bin/kaal.mjs runner --check   every RUNNER.md in the tree, current or stale
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
 import { join, relative, sep } from "node:path";
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { checkLedgers, standings } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
 import { countRetros } from "./lib/retros.mjs";
@@ -62,6 +63,28 @@ if (cmd === "ledger") {
   process.exitCode = r.same ? 0 : 1;
 } else if (cmd === "runner") {
   const [skill, fixture, flag] = process.argv.slice(3);
+  // The sweep: the same act over every fixture that carries a runner. A
+  // fixture with none is not stale and is not named; a runner is opt-in
+  // until a fixture has earned one.
+  if (skill === "--check" && !fixture) {
+    let stale = 0;
+    for (const sk of readdirSync(join(cwd, "skills"))) {
+      const fixtures = join(cwd, "skills", sk, "fixtures");
+      if (!existsSync(fixtures)) continue;
+      for (const fx of readdirSync(fixtures)) {
+        const file = join(fixtures, fx, "RUNNER.md");
+        if (!existsSync(file)) continue;
+        const shown = `skills/${sk}/fixtures/${fx}/RUNNER.md`;
+        if (readFileSync(file, "utf8") === renderRunner(cwd, sk, fx))
+          console.log(`runner: ${shown} is current`);
+        else {
+          console.error(`runner: ${shown} is stale`);
+          stale++;
+        }
+      }
+    }
+    process.exit(stale ? 1 : 0);
+  }
   if (
     !skill ||
     !fixture ||

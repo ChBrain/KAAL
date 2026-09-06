@@ -26,7 +26,9 @@ Start only from a requirement whose criteria each have a red test. A
 criterion with no test is the analyst's unfinished work: hand it back, do not
 draw around it. Read the constraints as walls, not suggestions; a constraint
 you cannot meet is a question for the asker, raised through the analyst, not
-a constraint you quietly drop.
+a constraint you quietly drop. Read the closed requirements whose criteria
+touch the path as constraints too, before drawing: the acceptance wall reads
+them whether the drawing did or not.
 
 Then decide what the ask actually needs built. Everything you draw must trace
 to a criterion or a constraint. A seam nobody asked for is a door you opened
@@ -45,8 +47,13 @@ are fixed and in this order.
   parts as nodes, one labelled edge per seam numbered to match the list, so a
   reader sees the mechanism and a wall can count that edges and seams agree.
   The list is the contract; the picture carries nothing the list does not.
+  A change to a reader that several seats share (a parser, a template) is a
+  seam for every reader: the drawing names the readers and fixes the
+  behaviour they keep.
 - **Fixed and free.** What the developer may not change (a seam, a format, a
-  constraint from the requirement) and what is theirs to decide. Say both;
+  constraint from the requirement) and what is theirs to decide. For a text change the
+  parts are the sentences' places, and the fixed words are what the contract
+  reads. Say both;
   silence reads as fixed and slows the developer, or reads as free and breaks
   a promise. The formats the developer's tests will name (a finding's line,
   a summary, an exit code) are fixed first, because the contract tests name

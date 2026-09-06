@@ -100,6 +100,6 @@ from the template` move is the candidate.
 - Tests: `acceptance.test.mjs`, beside this file; fixture roots
   `fixtures/stale-runner` and `fixtures/current-runner`
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: eval-runner, on its open question (the wall)

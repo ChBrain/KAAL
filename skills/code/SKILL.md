@@ -34,7 +34,9 @@ Fixtures obey the rules they are not testing: a new contract reaches into
 every fixture written for an older one, and a fixture that breaks it owes the
 fix. A fixture command is a program and its arguments that parses the same
 under every platform's shell (double quotes outside, single quotes inside,
-nothing escaped), never a shell builtin.
+nothing escaped), never a shell builtin. A change to a contract walks every
+fixture that carries the old shape, and names the fixtures that must stay as
+they are.
 
 ## 2. State the want
 
@@ -70,7 +72,10 @@ is checked by running, not by reading. Rules:
   on the whole tree, not only the directories you touched (format
   everything, every time), before you call it done; green in your head is
   not green. The house rules apply to code as well: a rule about a banned
-  character is written as its escape, never as the character.
+  character is written as its escape, never as the character. A test that reads prose
+  compares with whitespace folded, since the formatter wraps where it likes,
+  and a generated file is written as the formatter would write it, its check
+  run on the formatted tree.
 
 ## 4. Scope
 
@@ -95,7 +100,8 @@ tests) may land first in its own change where the repository separates the
 two. If the repository will not take them where you put them, ask, do not
 improvise a home.
 
-The handoff names the task, the three green runs (unit, contract, acceptance)
+A task whose tests are all green is closed in the same change, since an
+older task's runner test reads the board. The handoff names the task, the three green runs (unit, contract, acceptance)
 as runs you just made, the diff's scope in one sentence, the change class the
 repository's own tooling computes (never a class you chose), and anything
 handed back and to whom. The operator reads it against a checklist that is

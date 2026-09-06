@@ -47,6 +47,11 @@
       "fix": "evidence the rung or lower it"
     },
     {
+      "name": "runners",
+      "command": "node bin/kaal.mjs runner --check",
+      "fix": "regenerate with kaal runner <skill> <fixture> --write"
+    },
+    {
       "name": "format",
       "command": "npx prettier --check .",
       "fix": "npx prettier --write . (npm install first if the formatter is missing)"

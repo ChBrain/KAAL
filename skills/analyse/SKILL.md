@@ -53,7 +53,10 @@ sections are fixed and in this order.
   a specific run, and would the asker agree that failing it means the task is
   not done? A criterion that cannot fail is a wish. A criterion that names a
   component, a module, or a pattern has looked below its layer; rewrite it at
-  the surface.
+  the surface. A criterion on a wall's finding or a command's
+  output line fixes that line's format in the requirement, so the test can be
+  written before any code exists. Where a file the task creates lives is a
+  criterion, not a detail.
 - **Open questions.** What you could not settle from the ask and did not want
   to assume. Each is a question the asker can answer in one line. An open
   question does not block the handoff; an assumption you were not willing to
@@ -84,7 +87,9 @@ One acceptance test per criterion, numbered to match. Rules:
   every test pass on it, then discard it. The stand-in is not the work and
   never lands; it exists to find the tests that are red for the wrong reason,
   and the first real use of this skill found three that way (see
-  `retros/2026-09-04-analyse-first-use.md`).
+  `retros/2026-09-04-analyse-first-use.md`). A criterion on a skill's text
+  or a template is not exempt: it is proven on a stand-in copy of the file,
+  and a text criterion needs the stand-in most.
 - **One criterion, one test.** A criterion with no test is not a criterion; a
   test with no criterion is scope you invented. The count on both sides is
   equal, and you check it by running `scripts/count.mjs <criteria> <tests>`,
@@ -100,6 +105,8 @@ One acceptance test per criterion, numbered to match. Rules:
   commands (the runner, the judged walls) runs them on a fixture root, or
   guards on the runner's marker `KAAL_GATES`; `node --test` expands a glob
   it is handed, and a test that names its own file re-enters it forever.
+- **On fixed ground.** A test reads a fixture root, never the league's own
+  tree for a state that a rerun or a later change will move.
 - **A partial red is honest.** When a criterion is already met before any
   build, or needs a person's step to close, the handoff says which, so the
   board can tell waiting on a person from waiting on a developer.
