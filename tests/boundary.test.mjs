@@ -4,7 +4,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
-import { checkBoundary } from "../bin/lib/boundary.mjs";
+import { checkBoundary, PLACES } from "../bin/lib/boundary.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RQ = join(ROOT, "requirements", "assess-boundary", "fixtures");
@@ -37,5 +37,22 @@ test("the sink may write and may not reach, and a test beside the modules is nev
 });
 
 test("the league's own assess tree only reads", () => {
+  assert.deepEqual(checkBoundary(ROOT), []);
+});
+
+test("the witness is a guarded place with no sink, and a writer there is named", () => {
+  assert.deepEqual(
+    PLACES.map((p) => `${p.where} ${p.sink ?? "no sink"}`),
+    ["bin/lib/assess output.mjs", "bin/lib/witness no sink"],
+  );
+  const found = checkBoundary(
+    join(ROOT, "architecture", "witness-a-tree", "fixtures", "leaky-witness"),
+  );
+  assert.deepEqual(found, [
+    { where: "bin/lib/witness", file: "manifest.mjs", verb: "writes" },
+  ]);
+});
+
+test("the league's own witness only reads", () => {
   assert.deepEqual(checkBoundary(ROOT), []);
 });
