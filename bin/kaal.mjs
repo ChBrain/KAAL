@@ -11,13 +11,16 @@
 //   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
 //   node bin/kaal.mjs standard [file] the pinned spec against the live text (network)
+//   node bin/kaal.mjs assess <target> [--output <path>]  a target descriptor, read only
+//   node bin/kaal.mjs boundary        nothing under bin/lib/assess writes, executes or reaches
 //   node bin/kaal.mjs runner <skill> <fixture> [--write | --check]   the two prompts and the frontmatter, from the tree
 //   node bin/kaal.mjs runner --check   every RUNNER.md in the tree, current or stale
 //   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
-import { join, relative, sep } from "node:path";
+import { join, relative, sep, resolve, dirname } from "node:path";
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { checkLedgers, standings } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
 import { countRetros } from "./lib/retros.mjs";
@@ -27,11 +30,16 @@ import { checkAgents } from "./lib/agents.mjs";
 import { checkDrawings } from "./lib/drawings.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
+import { renderTarget } from "./lib/assess/target.mjs";
+import { refuseOutput } from "./lib/assess/paths.mjs";
+import { writeDocument } from "./lib/assess/output.mjs";
+import { checkBoundary } from "./lib/boundary.mjs";
 import { renderRunner, runnerPath } from "./lib/runner.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
+const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
 let findings = [];
 
@@ -115,6 +123,31 @@ if (cmd === "ledger") {
     console.log(`runner: ${shown} is current`);
   } else process.stdout.write(doc);
   process.exit(0);
+} else if (cmd === "assess") {
+  // Read only, and the output path is judged before anything is read: a
+  // refusal that comes after a read has already read.
+  const rest = process.argv.slice(3);
+  const flag = rest.indexOf("--output");
+  if (!rest[0] || (flag >= 0 && !rest[flag + 1])) {
+    console.error(USAGE);
+    process.exit(1);
+  }
+  const target = resolve(rest[0]);
+  const out = flag >= 0 ? resolve(rest[flag + 1]) : null;
+  const refusal = refuseOutput(out, { league, target });
+  if (refusal) {
+    console.error(refusal);
+    process.exit(1);
+  }
+  const doc = renderTarget(target);
+  if (out) writeDocument(out, doc);
+  else process.stdout.write(doc);
+  process.exit(0);
+} else if (cmd === "boundary") {
+  const found = checkBoundary(cwd);
+  for (const f of found) console.error(`boundary: ${f.file} ${f.verb}`);
+  if (!found.length) console.log("boundary: the assess tree only reads");
+  process.exit(found.length ? 1 : 0);
 } else if (cmd === "fixtures") {
   const found = listFixtures(arg ?? cwd);
   for (const x of found) console.log(`${x.shape} ${x.path}`);

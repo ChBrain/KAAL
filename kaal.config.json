@@ -52,6 +52,11 @@
       "fix": "regenerate with kaal runner <skill> <fixture> --write"
     },
     {
+      "name": "boundary",
+      "command": "node bin/kaal.mjs boundary",
+      "fix": "keep the write, the shell and the network out of bin/lib/assess; only output.mjs may write"
+    },
+    {
       "name": "format",
       "command": "npx prettier --check .",
       "fix": "npx prettier --write . (npm install first if the formatter is missing)"
