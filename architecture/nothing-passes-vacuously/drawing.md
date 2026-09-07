@@ -20,8 +20,14 @@ that read the working directory.
 What changes:
 
 - **`bin/lib/applies.mjs`**: four more entries, and `GUARDED` becomes
-  eight. `retros` and `runner` look for a skills tree, `boundary` asks the
-  wall's own list of places, `gates` looks for the config it reads.
+  eight. `retros` looks for a skills tree, `runner` for a skill that
+  carries a fixture, `boundary` asks the wall's own list of places, and
+  `gates` looks for the config it reads. The runner's entry was sharpened
+  during the build: this drawing had it looking for a skills tree too,
+  and two entries then gave the same reason, which `applies-here` fixed as
+  a defect. A fixture is what the runner actually reads, so the sharper
+  rule is also the truer one, and the requirement's second open question
+  already said a tree with no fixture is a refusal.
 - **`bin/kaal.mjs`**: `retros`, `boundary` and `gates` answer about
   `arg ?? cwd` rather than about `cwd`. `runner` is untouched.
 - **`tests/applies.test.mjs`**: three of its tests move, because the

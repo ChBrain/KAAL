@@ -6,7 +6,7 @@
 //
 //   node bin/kaal.mjs ledger [root]   every rung has its evidence
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
-//   node bin/kaal.mjs retros          unconsumed retros per skill
+//   node bin/kaal.mjs retros [root]   unconsumed retros per skill
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
@@ -16,7 +16,7 @@
 //   node bin/kaal.mjs witness <dir> [--against <manifest>]  what a directory holds, or what moved
 //   node bin/kaal.mjs runner <skill> <fixture> [--write | --check]   the two prompts and the frontmatter, from the tree
 //   node bin/kaal.mjs runner --check   every RUNNER.md in the tree, current or stale
-//   node bin/kaal.mjs gates           every wall in kaal.config.json, one exit code
+//   node bin/kaal.mjs gates [root]    every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
 import { join, relative, sep, resolve, dirname } from "node:path";
@@ -47,7 +47,7 @@ import { compare } from "./lib/witness/compare.mjs";
 import { renderRunner, runnerPath } from "./lib/runner.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary | witness <dir> [--against <manifest>] | retros | gates | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -165,7 +165,7 @@ if (cmd === "ledger") {
   else process.stdout.write(doc);
   process.exit(0);
 } else if (cmd === "boundary") {
-  const found = checkBoundary(cwd);
+  const found = checkBoundary(arg ?? cwd);
   for (const f of found)
     console.error(`boundary: ${f.where}/${f.file} ${f.verb}`);
   if (!found.length) console.log("boundary: the guarded trees only read");
@@ -231,7 +231,7 @@ if (cmd === "ledger") {
   );
   if (!findings.length) console.log("agents: every agent obeys the rules");
 } else if (cmd === "retros") {
-  for (const r of countRetros(cwd))
+  for (const r of countRetros(arg ?? cwd))
     console.log(`${r.skill}: ${r.count} unconsumed`);
 } else if (cmd === "acceptance" || cmd === "contracts") {
   const run = cmd === "acceptance" ? runAcceptance : runContracts;
@@ -241,7 +241,7 @@ if (cmd === "ledger") {
   console.log(`# pass ${a.passed}`);
   process.exit(a.ok ? 0 : 1);
 } else if (cmd === "gates") {
-  const g = runGates(cwd);
+  const g = runGates(arg ?? cwd);
   for (const l of g.lines) console.log(l);
   console.log(g.summary);
   process.exit(g.ok ? 0 : 1);
