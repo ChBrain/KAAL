@@ -8,7 +8,8 @@ vendor agnostic; the vendor files point here and add nothing.
 ## The board
 
 ```
-npm install   # once per clone; wires the pre-push hook
+npm install   # once per clone; the formatter and nothing else
+npm run hooks # once per clone; wires the pre-push hook
 npm test      # node bin/kaal.mjs gates: every wall, one exit code
 ```
 

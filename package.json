@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "node bin/kaal.mjs gates",
-    "prepare": "git config core.hooksPath .githooks",
+    "hooks": "git config core.hooksPath .githooks",
     "format": "prettier --write ."
   },
   "devDependencies": {
