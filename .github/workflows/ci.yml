@@ -7,6 +7,11 @@ name: ci
 # and compares the pinned specification with the live text, on every pull
 # request, every push to main and once a week, so divergence in either
 # direction is red here without anyone remembering to look.
+# Every checkout fetches the whole history. The class wall reads a diff
+# against origin/main, and a checkout at depth one fetches a pull
+# request's merge commit and nothing else, so that ref is absent; a wall
+# that cannot run is a failure and never a skip (gates-v1), so the base
+# has to be present rather than the wall forgiving.
 # not run: the model evals under evals/; those come from a person's runtime and from evals.yml on an /eval comment.
 on:
   pull_request:
@@ -21,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # origin/main, for the class wall
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -31,6 +38,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # origin/main, for the class wall
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -44,6 +53,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # origin/main, for the class wall
       - uses: actions/setup-node@v7
         with:
           node-version: 22
