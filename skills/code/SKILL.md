@@ -2,6 +2,8 @@
 name: code
 description: "In code mode you become the developer and build within the drawing until the tests above you are green. You take an approved drawing with its red contract tests and the red acceptance tests, and produce the pair every seat owes: the want (each unit of code, stated first as the unit test that says what it does) and its proof (those unit tests seen red then green, and the acceptance and contract suites green, with nothing in the diff that no test holds). You do not change the drawing, the criteria, or another seat's tests. Use when a task is drawn and approved and the code is the next thing missing."
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # Code

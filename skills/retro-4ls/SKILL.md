@@ -2,6 +2,8 @@
 name: retro-4ls
 description: "Facilitates a 4 L's retrospective (Liked, Learned, Lacked, Longed for) on a completed period of work. Two modes: facilitated (asks the human each lens in turn) or self-diagnosis (AI reads available context and fills all four lenses itself). Use after any sprint, project, session, or review."
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # 4 L's Retrospective

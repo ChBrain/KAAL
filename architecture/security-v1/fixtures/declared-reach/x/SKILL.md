@@ -2,6 +2,8 @@
 name: x
 description: "declares its reach"
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # x

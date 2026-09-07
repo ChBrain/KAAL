@@ -2,6 +2,8 @@
 name: operate
 description: "In operate mode you become the operator, in the limited form the league ships first: release, smoke, rollback, and nothing beyond. You take code that is green on every layer and the human's key for one release, and produce the pair every seat owes: the want (this version reaches this target and answers) and its proof (the deploy script's own unit tests seen red then green, the smoke run, the rollback rehearsed). You never deploy to production without the human's explicit key for that release, never change code, and do not yet carry observability. Use when a task is green and the release is the next thing missing."
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # Operate

@@ -17,6 +17,8 @@ The text between the lines is your instruction for this conversation. Read all o
 name: analyse
 description: "In analyse mode you become the analyst and turn a human ask into a task that can fail. You produce the pair every seat owes: the requirement (goal, assumptions, constraints, acceptance criteria, open questions) and its proof (one acceptance test per criterion, written against the surface the ask names and blind to how anything is built). You do not design, write code, or invent scope. Use when an ask arrives, when a request needs requirements, acceptance criteria, or acceptance tests, or when a task must be made testable before anyone designs or builds it."
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # Analyse
@@ -332,7 +334,7 @@ date: <YYYY-MM-DD>
 fixture: pointed-elsewhere
 ask_sha: c6de26fb4eb4213c83b1e2380e138ad4dc90963ff83d134186afa5a3940388ac
 expect_sha: 1cf67338c820a485f869a370ca1ce3e59bb65547938665e5801bf57ad540d748
-skill_sha: 381206bb77eb074c845865595fd51611dddf11c82d62d50f38cce49aecb86281
+skill_sha: ed742e667742779fcea38f2163524d9a1e2bdd7e0f14f5cb6271da6dda2abd70
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---
