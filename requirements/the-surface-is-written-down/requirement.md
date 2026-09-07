@@ -74,6 +74,6 @@ and the tool cannot disagree without a wall saying so.
   all four red, run and read
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 3, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
