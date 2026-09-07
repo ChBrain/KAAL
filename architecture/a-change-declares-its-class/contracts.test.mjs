@@ -111,7 +111,10 @@ test("2. equal and patch pass, minor and major are refused by name", () => {
       const lines = r.stderr.trim().split("\n");
       assert.equal(lines.length, 1, `${name}: ${r.stderr}`);
       assert.match(lines[0], /0\.0\.1/, name);
-      assert.match(lines[0], new RegExp(to.replace(/\./g, "\\.")), name);
+      // The version it moves to is compared as text, not built into a
+      // pattern: a regex assembled from a string escapes what its author
+      // remembered and nothing else.
+      assert.ok(lines[0].includes(to), `${name}: ${lines[0]}`);
       assert.match(lines[0], /human/i, name);
     }
   } finally {
