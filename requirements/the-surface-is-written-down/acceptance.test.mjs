@@ -21,7 +21,9 @@ const commands = () =>
     .replace(/^usage: kaal /, "")
     .split("|")
     .map((p) => p.trim().split(/\s/)[0])
-    .filter(Boolean);
+    // The line carries "[--write | --check]", so splitting on the bar yields a
+    // fragment that is not a command. A command is a lowercase word.
+    .filter((c) => /^[a-z][a-z-]*$/.test(c));
 
 test("1. the page names every command, with what it answers and how it ends", () => {
   assert.ok(existsSync(PAGE), "no SURFACE.md");
