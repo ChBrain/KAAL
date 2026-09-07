@@ -50,7 +50,9 @@ draw around it. Read the constraints as walls, not suggestions; a constraint
 you cannot meet is a question for the asker, raised through the analyst, not
 a constraint you quietly drop. Read the closed requirements whose criteria
 touch the path as constraints too, before drawing: the acceptance wall reads
-them whether the drawing did or not.
+them whether the drawing did or not. Read their tests as well as
+their criteria: a closed test fixes shapes no criterion states, a list, an
+exact string, an order two files keep.
 
 Then decide what the ask actually needs built. Everything you draw must trace
 to a criterion or a constraint. A seam nobody asked for is a door you opened
@@ -75,7 +77,11 @@ are fixed and in this order.
 - **Fixed and free.** What the developer may not change (a seam, a format, a
   constraint from the requirement) and what is theirs to decide. For a text change the
   parts are the sentences' places, and the fixed words are what the contract
-  reads. Say both;
+  reads. When the change is text, a drawing fixes three things: the section
+  each sentence lives in, its order among the sentences already there, and the
+  words the contract reads. An order is a promise like any other, held by
+  where each phrase first appears in the section; and a change joining an
+  existing section names what must not be disturbed there. Say both;
   silence reads as fixed and slows the developer, or reads as free and breaks
   a promise. The formats the developer's tests will name (a finding's line,
   a summary, an exit code) are fixed first, because the contract tests name
@@ -101,7 +107,13 @@ One contract test per seam, numbered to match the seam list. Rules:
   nothing behind the seam exists. Then write a throwaway that keeps the
   promise, in scratch, see the tests pass on it, discard it. A test that
   cannot pass is not a proof; the stand-in finds the ones red for the wrong
-  reason.
+  reason. A test green before the build is not always a defect: it is a guard
+  on a reader or a rule that must not change, and you name it in the handoff
+  with the reason it is green.
+- **Never drive the runner that runs it.** A contract that starts the
+  repository's own test runner hangs, because that runner runs the contracts,
+  which run the file that called it, and the run dies on a timeout rather than
+  on a failure anyone can read. Prove the case on a fixture instead.
 - **One seam, one test.** A seam with no test is not a seam; a test with no
   seam is a promise you did not draw.
 
