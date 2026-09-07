@@ -59,7 +59,15 @@ const RED = [
   'test("2. the one that breaks", () => assert.equal(1, 2));',
   "",
 ].join("\n");
-const EMPTY = ['import { test } from "node:test";', ""].join("\n");
+// A file whose tests are all skipped is the run that reads zero passing and
+// zero failing. An empty file does not: node counts the file itself as one
+// passing test, which was found by running both. It is also the case worth
+// refusing on its own, since this tree never skips a test to get green.
+const SKIPPED = [
+  'import { test } from "node:test";',
+  'test("1. the one that is skipped", { skip: true }, () => {});',
+  "",
+].join("\n");
 
 test("1. the passing count is the same under either reporter", () => {
   const dir = root({ tests: GREEN });
@@ -156,7 +164,7 @@ test("3. the board's units line carries its count under either reporter", () => 
 });
 
 test("4. a closed requirement with nothing passing is not judged ok", () => {
-  const dir = root({ tests: EMPTY });
+  const dir = root({ tests: SKIPPED });
   try {
     const file = join(dir, "requirements", "t", "acceptance.test.mjs");
     for (const spec of [false, true]) {
