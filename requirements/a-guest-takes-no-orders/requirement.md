@@ -81,6 +81,6 @@ skills say all three where a reader looks.
   all three red
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 3, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
