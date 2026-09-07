@@ -11,13 +11,27 @@
 // marker at the root could express.
 import { readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { PLACES } from "./boundary.mjs";
 
 /**
- * The four commands that judge a tree against a league artefact. `fixtures`
- * is not among them: it lists what is there, and a listing that finds nothing
- * has an answer, which code-v2 fixed as a refusal.
+ * The commands that judge a tree against a league artefact. `fixtures` is not
+ * among them: it lists what is there, and a listing that finds nothing has an
+ * answer, which code-v2 fixed as a refusal. Neither is `assess`, whose target
+ * is any directory at all. The last four joined in nothing-passes-vacuously,
+ * which supersedes that part of applies-here: on a tree holding none of what
+ * they read, two of them passed in silence and two exited on an unhandled
+ * error, and a crash is no more an answer than silence is.
  */
-export const GUARDED = ["ledger", "drawings", "check", "agents"];
+export const GUARDED = [
+  "ledger",
+  "drawings",
+  "check",
+  "agents",
+  "retros",
+  "boundary",
+  "runner",
+  "gates",
+];
 
 const isDir = (p) => {
   try {
@@ -57,6 +71,32 @@ export function appliesHere(cmd, arg, cwd) {
       return childHas(dir, "SKILL.md")
         ? null
         : `no <name>/SKILL.md under ${dir}`;
+    case "retros": {
+      const skills = join(root, "skills");
+      return isDir(skills) &&
+        readdirSync(skills).some((n) => isDir(join(skills, n)))
+        ? null
+        : `no skills/<name>/ under ${root}`;
+    }
+    case "runner":
+      // Asked about the working directory whatever it was handed: the first
+      // argument is a skill name, never a path, and a reason naming a
+      // directory called "analyse" would be a plausible lie. What it reads is
+      // a fixture, so a tree with skills and no fixture has nothing for it,
+      // and its reason differs from the one above, which applies-here fixed.
+      return childHas(join(cwd, "skills"), "fixtures")
+        ? null
+        : `no skills/<name>/fixtures/ under ${cwd}`;
+    case "boundary":
+      // The wall's own list, never a copy of it: it grew from one place to
+      // two, and a copy would have been wrong in silence.
+      return PLACES.some((pl) => isDir(join(root, ...pl.where.split("/"))))
+        ? null
+        : `no ${PLACES.map((pl) => pl.where).join(" or ")} under ${root}`;
+    case "gates":
+      return existsSync(join(root, "kaal.config.json"))
+        ? null
+        : `no kaal.config.json under ${root}`;
     case "agents":
       return isDir(join(root, "agents")) &&
         readdirSync(join(root, "agents")).length
