@@ -31,6 +31,7 @@ export const GUARDED = [
   "boundary",
   "runner",
   "gates",
+  "class",
 ];
 
 const isDir = (p) => {
@@ -97,6 +98,19 @@ export function appliesHere(cmd, arg, cwd) {
       return existsSync(join(root, "kaal.config.json"))
         ? null
         : `no kaal.config.json under ${root}`;
+    case "class": {
+      // Its argument is a root, but it also takes a flag, and a flag is not a
+      // directory: `kaal class --against main` asks about the working
+      // directory, the way `runner` does for a different reason.
+      const tree = arg && !arg.startsWith("-") ? arg : cwd;
+      if (!existsSync(join(tree, "package.json")))
+        return `no package.json under ${tree}`;
+      // A worktree carries a .git file rather than a directory, and both are
+      // history, so this asks whether the name is there at all.
+      return existsSync(join(tree, ".git"))
+        ? null
+        : `no git history under ${tree}`;
+    }
     case "agents":
       return isDir(join(root, "agents")) &&
         readdirSync(join(root, "agents")).length

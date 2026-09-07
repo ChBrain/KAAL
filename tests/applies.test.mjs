@@ -14,7 +14,7 @@ const FOREIGN = join(
 );
 const HALF = join(ROOT, "architecture", "applies-here", "fixtures", "half");
 
-test("the guarded commands are the eight that judge a tree against a league artefact", () => {
+test("the guarded commands are the nine that judge a tree against a league artefact", () => {
   assert.deepEqual(GUARDED, [
     "ledger",
     "drawings",
@@ -24,6 +24,7 @@ test("the guarded commands are the eight that judge a tree against a league arte
     "boundary",
     "runner",
     "gates",
+    "class",
   ]);
 });
 

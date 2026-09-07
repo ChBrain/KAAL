@@ -124,6 +124,21 @@ that. A target that is not a directory, or a manifest that does not parse,
 names the path at fault on stderr rather than printing usage. Takes a
 directory. Exits 0 or 1 (`witness-a-tree`).
 
+## class
+
+Names which of three artefacts a consumer can notice moved between a base and
+this tree: the surface (`SURFACE.md`), the tool (`bin/`) and the skills
+(`skills/<name>/SKILL.md`), one line each on stdout, and a line saying nothing
+did when nothing did. Everything else in the tree is the league's own working
+and moves without meaning. A move of the surface is reported and never
+refused while the version's minor and major places are zero. A version whose
+minor or major place differs from the base's is refused on stderr naming both
+versions, because that raise is a human's act and not something this
+repository does to itself. It reads the tree as it stands, so what is not
+committed counts too. Takes a root and `--against <ref>`, which defaults to
+`origin/main`. A tree with no history, no `package.json`, or no such ref is
+not this question's. Exits 0, 1 or 2 (`a-change-declares-its-class`).
+
 ## acceptance
 
 Runs the acceptance tests it is given and judges them by each requirement's

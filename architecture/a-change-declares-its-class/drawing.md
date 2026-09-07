@@ -100,15 +100,20 @@ flowchart LR
   so on exit 2 with the applicability line, as it does for a tree with no
   history at all.
 - Not taken: exit 1, treating an unresolvable base as a fault.
-- Because: `actions/checkout` fetches one commit by default, so
-  `origin/main` is absent in this repository's own CI, and a wall that
-  goes red there would be deleted within a week rather than fixed. There
-  is genuinely nothing to compare against, which is what exit 2 means. The
-  wall therefore bites at push time, where the hook runs with the full
-  refs, and is quiet in CI until the workflow fetches the base.
-- Reopens if: the workflows fetch depth zero, which is one line and a
-  governance change rather than this task's, at which point the wall bites
-  in both places and a misspelled ref should probably become a fault.
+- Because: there is genuinely nothing to compare against, which is what
+  exit 2 means.
+- Corrected at the build, and the second half of this record was wrong.
+  It said the wall would be quiet in CI, where `actions/checkout` fetches
+  one commit and `origin/main` is absent. It would not have been quiet:
+  `gates.mjs` reads any non-zero exit as a failure, which `gates-v1` fixed
+  on purpose so that silence and success never look alike, and this
+  drawing's own opening cites that requirement. The wall would have been
+  red on every pull request, which is the outcome the decision was written
+  to avoid. So the base is present rather than the wall forgiving: the
+  workflows fetch depth zero, which this record had already named as its
+  own reopener, and the wall bites in CI and at push time alike.
+- Reopens if: a consumer's default branch is not `main`, at which point a
+  misspelled ref and an absent one stop being the same answer.
 
 ### The base is a ref and defaults to origin/main
 

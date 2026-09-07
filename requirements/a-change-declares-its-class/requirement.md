@@ -91,6 +91,6 @@ minor or major place has changed, on the board, on every push.
 - Tests: `acceptance.test.mjs`, beside this file; the fixtures are git
   repositories the tests build in a temporary directory
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
