@@ -24,9 +24,17 @@ test("readStatus reads open or closed from the sibling requirement, and null whe
   assert.equal(readStatus(f("no-status")), null);
 });
 
-test("judge applies the four verdicts", () => {
+test("judge applies the four verdicts, and refuses a closed task that measured nothing", () => {
   assert.equal(judge("closed", 1, 1).ok, false);
   assert.equal(judge("closed", 2, 0).ok, true);
+  // A closed task with no failures and nothing passing has not been proven,
+  // it has been read wrong or skipped. The verdict asked only about failures
+  // until a runtime whose reporter the walls could not read made every count
+  // zero and every closed task green.
+  assert.equal(judge("closed", 0, 0).ok, false);
+  assert.match(judge("closed", 0, 0).label, /^FAIL/);
+  // A drawing is judged with mustClose false and inherits the same refusal.
+  assert.equal(judge("closed", 0, 0, false).ok, false);
   assert.equal(judge("open", 1, 1).ok, true);
   assert.match(judge("open", 1, 1).label, /^open/);
   assert.equal(judge("open", 1, 0).ok, false);

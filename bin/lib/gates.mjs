@@ -19,6 +19,18 @@ import { spawnSync } from "node:child_process";
 export function wallEnv(base = process.env) {
   const env = { ...base, KAAL_GATES: "1" };
   delete env.NODE_TEST_CONTEXT;
+  // And any reporter the caller named. A wall that names its own format on
+  // the command line does not override one in NODE_OPTIONS: node collects
+  // both and then refuses the pair, because reporters and destinations must
+  // match in number. So it goes for the same reason the marker goes, and
+  // whatever else the caller put there stays.
+  if (env.NODE_OPTIONS) {
+    const kept = env.NODE_OPTIONS.split(/\s+/).filter(
+      (a) => a && !a.startsWith("--test-reporter"),
+    );
+    if (kept.length) env.NODE_OPTIONS = kept.join(" ");
+    else delete env.NODE_OPTIONS;
+  }
   return env;
 }
 
@@ -66,7 +78,11 @@ export function runGates(root, config = null) {
       stdio: ["ignore", "pipe", "inherit"],
       env: wallEnv(),
     });
-    const count = (r.stdout ?? "").match(/^# pass (\d+)/m)?.[1];
+    // Either shape the runtime prints: `# pass N` from TAP, `\u2139 pass N`
+    // from spec. This side reads rather than names, because the command is
+    // whoever wrote the config's and not ours to pin, and because a count
+    // here is printed and never decides a verdict.
+    const count = (r.stdout ?? "").match(/^(?:#|\u2139) pass (\d+)/m)?.[1];
     results.push({
       name: g.name,
       ok: r.status === 0,
