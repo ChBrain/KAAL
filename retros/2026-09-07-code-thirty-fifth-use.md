@@ -23,6 +23,18 @@ Place: this repository
 - A manifest is source in the sense that matters: a field is a promise and
   a wrong one ships. What makes it feel like text is that there is nothing
   underneath it to unit test, not that it cannot be wrong.
+- Green on one platform is not green. The acceptance tests spawned `npm`
+  by its bare name with no shell, which works everywhere except the one
+  place npm is a batch file, and node has refused to spawn a batch file
+  without a shell since that was found to be an injection. Three of four
+  went red on Windows and only there, and I could not reproduce it locally
+  because the guard does not exist on this platform: the diagnosis had to
+  be read off which tests failed. The one that does no spawning passed,
+  the three that spawn npm failed, and the contracts, which spawn only
+  node's own executable, passed.
+- A spawn that never starts has a null status and an error nobody sees.
+  Every assertion on a spawn now carries `error.message` as well as the
+  output, because `null !== 0` is not a diagnosis and it cost a run.
 - The tarball is worth reading once by hand even with the tests green.
   Twenty-four files, all under `bin/` plus the manifest, the licence and
   the readme: the tests assert the shape but only the listing shows what a
