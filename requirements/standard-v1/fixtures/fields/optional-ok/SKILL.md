@@ -6,7 +6,7 @@ compatibility: Requires node 22 and git
 allowed-tools: Read Bash(git:*)
 metadata:
   author: the league
-  version: "1"
+  version: "0.0.1"
 ---
 
 # optional-ok

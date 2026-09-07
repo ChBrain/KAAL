@@ -78,6 +78,6 @@ of its own and a wall refuses one that does not.
   skills directory in a temporary place, because a finding about a broken
   skill cannot be proven on skills that are not broken
 - Open questions: 3, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing

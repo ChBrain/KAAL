@@ -56,7 +56,7 @@ Takes a root. Exits 0, 1 or 2 (`applies-here`, `architect-v2`).
 
 Answers whether every skill obeys the skill rules: the standard's shape, MIT,
 the line budget, no vendor, no dash, the reach declaration, an adversarial
-fixture. Reads `<dir>/<name>/SKILL.md` and `references/`. Takes a skills
+fixture, and a version of its own in its patch place. Reads `<dir>/<name>/SKILL.md` and `references/`. Takes a skills
 directory, not a root. Exits 0, 1 or 2 (`skills-v1`, `standard-v2`,
 `applies-here`).
 

@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { checkSkills, RULES } from "../bin/lib/rules.mjs";
 
 const F = join(
@@ -101,9 +103,76 @@ test("the standard's optional fields: refused when malformed, accepted when well
   const f = checkSkills(FX);
   assert.deepEqual(f.map((x) => `${x.skill}:${x.rule}`).sort(), [
     "compat-long:compatibility",
+    // A metadata that is a string has no version to read, and the metadata
+    // finding is the whole story: one broken thing, one finding.
     "metadata-flat:metadata",
     "tools-empty:allowed-tools",
   ]);
   for (const r of ["compatibility", "allowed-tools", "metadata"])
     assert.ok(RULES.includes(r));
+});
+
+// A skills directory of one skill whose metadata block is the caller's,
+// obeying every rule it is not testing so a version finding stands alone.
+const withMetadata = (metadata) => {
+  const dir = mkdtempSync(join(tmpdir(), "kaal-rules-version-"));
+  mkdirSync(join(dir, "one", "fixtures", "adversarial-out-of-scope"), {
+    recursive: true,
+  });
+  writeFileSync(
+    join(dir, "one", "fixtures", "adversarial-out-of-scope", "expect.md"),
+    "# Expect\n\n- Refuses to do the other thing, and says which seat owns it.\n",
+  );
+  writeFileSync(
+    join(dir, "one", "SKILL.md"),
+    [
+      "---",
+      "name: one",
+      'description: "In one mode you become the one and do the one thing. You take an ask and produce the pair every seat owes: the want and its proof. You do not do anything else. Use when the one thing is the next thing missing."',
+      "license: MIT",
+      ...metadata,
+      "---",
+      "",
+      "# One",
+      "",
+      "It does the one thing.",
+      "",
+    ].join("\n"),
+  );
+  return dir;
+};
+
+test("version: absent, misshapen and raised are findings; a patch version is not", () => {
+  assert.ok(RULES.includes("version"));
+  const cases = [
+    [[], "missing"],
+    [["metadata:", '  version: "0.0"'], "0.0"],
+    [["metadata:", '  version: "0.0.x"'], "0.0.x"],
+    [["metadata:", '  version: "0.1.0"'], "0.1.0"],
+    [["metadata:", '  version: "1.0.0"'], "1.0.0"],
+  ];
+  for (const [metadata, names] of cases) {
+    const dir = withMetadata(metadata);
+    try {
+      const f = checkSkills(dir);
+      assert.deepEqual(
+        f.map((x) => x.rule),
+        ["version"],
+        `${names}: findings other than the version`,
+      );
+      if (names !== "missing")
+        assert.ok(
+          f[0].message.includes(names),
+          `${names}: the message does not name it: ${f[0].message}`,
+        );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+  const ok = withMetadata(["metadata:", '  version: "0.0.9"']);
+  try {
+    assert.deepEqual(checkSkills(ok), []);
+  } finally {
+    rmSync(ok, { recursive: true, force: true });
+  }
 });
