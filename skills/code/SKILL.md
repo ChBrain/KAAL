@@ -49,6 +49,17 @@ wall; free is yours. Then run every suite that exists and confirm it is red
 for the reason the handoff says. A test that is green before you start is not
 testing what you are about to build; say so to its owner.
 
+Some builds have no source. When the diff is text and not source there is no
+unit layer: the contract and acceptance tests are the whole proof, the task
+closes on the layers that exist, and the handoff names which runs were made.
+That is a case and not a licence; where there is source, the unit test still
+comes first.
+
+A unit test written after the code has not been seen red. Trust it only once
+the thing it tests has been broken and watched to fail. Beware a test of an
+ordering: it can pass whatever the code does, when the order came from the
+environment rather than the code.
+
 Work one criterion at a time, and inside it one seam at a time, in the order
 the contract tests fall.
 
@@ -80,7 +91,9 @@ is checked by running, not by reading. Rules:
 
 - **Nothing untested.** Every line in the diff is there because a test
   needs it. A line no test holds is scope you invented, or a branch you
-  cannot see; either way it goes, or a test comes.
+  cannot see; either way it goes, or a test comes. Where the line is text rather
+  than source, its proof is its presence and its place, held by the tests the
+  seats above wrote, and never its meaning.
 - **Never edit a test to pass.** Not an acceptance test, not a contract test,
   not to make green: hand back to its owner with what you found. Your own
   unit tests you may change while the unit is still red, never once it is

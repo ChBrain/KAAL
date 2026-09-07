@@ -77,6 +77,6 @@ the skill says all three where a writer meets them.
   all four red, run and read
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
