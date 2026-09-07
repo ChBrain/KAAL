@@ -1,0 +1,9 @@
+{
+  "gates": [
+    {
+      "name": "nothing",
+      "command": "node -e \"\"",
+      "fix": "a wall that does nothing, so a board can be seen to run here"
+    }
+  ]
+}
