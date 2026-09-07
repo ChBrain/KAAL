@@ -3,7 +3,7 @@
 // the stack the move touches.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -66,11 +66,25 @@ test("3. the six are archived, gone from the stack, and the counts did not move"
       `${f} is still in the stack`,
     );
   }
+  // Consumption is by name, so the move changes no count. The expected count
+  // is read from the tree here rather than carved into the test: a number
+  // that was true on the day is not a promise about the mechanism.
   const r = kaal(["retros"]);
   assert.equal(r.status, 0, r.stderr);
-  // Consumption is by name, so the move changes no count: the requirement
-  // that named these six is merged, and analyse reads what it read before.
+  const named = readdirSync(join(ROOT, "requirements"))
+    .map((d) => join(ROOT, "requirements", d, "requirement.md"))
+    .filter(existsSync)
+    .map((p) => readFileSync(p, "utf8"))
+    .join("\n");
+  const expected = readdirSync(join(ROOT, "retros"))
+    .filter((f) => f.endsWith(".md"))
+    .filter((f) =>
+      /^Feeds: `?analyse`?\.?\s*$/m.test(
+        readFileSync(join(ROOT, "retros", f), "utf8"),
+      ),
+    )
+    .filter((f) => !named.includes(f)).length;
   const analyse = r.stdout.match(/^analyse: (\d+) unconsumed$/m);
   assert.ok(analyse, r.stdout);
-  assert.equal(Number(analyse[1]), 1, r.stdout);
+  assert.equal(Number(analyse[1]), expected, r.stdout);
 });
