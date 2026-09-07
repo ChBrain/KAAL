@@ -60,7 +60,10 @@ test("2. applicability is per command: a config alone answers one of the four", 
       `${name(args)} answered a tree with only a config`,
     );
   }
-  for (const args of FOUR) {
+  // Three on the league. `gates` there runs the whole board, which runs this
+  // file, so no test may drive it; its answer is the run above, on a tree
+  // that holds a config, and every board run the repository makes.
+  for (const args of FOUR.filter((a) => a[0] !== "gates")) {
     const r = kaal(args, ROOT);
     assert.equal(r.status, 0, `${name(args)} refused the league: ${r.stderr}`);
   }
