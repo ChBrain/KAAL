@@ -45,9 +45,17 @@ import { checkBoundary } from "./lib/boundary.mjs";
 import { render } from "./lib/witness/manifest.mjs";
 import { compare } from "./lib/witness/compare.mjs";
 import { renderRunner, runnerPath } from "./lib/runner.mjs";
+import {
+  DEFAULT_BASE,
+  resolves,
+  changed,
+  moved,
+  versions,
+  raised,
+} from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>]";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -240,6 +248,37 @@ if (cmd === "ledger") {
   console.log(a.summary);
   console.log(`# pass ${a.passed}`);
   process.exit(a.ok ? 0 : 1);
+} else if (cmd === "class") {
+  // What class of change this is: which of the three artefacts a consumer can
+  // notice moved, and whether the version rose past the place this repository
+  // moves on its own. A move of the surface is reported and never refused
+  // while the minor and major places are zero; that is what 0.0.x means, and
+  // refusing it would put a human in the loop for every new command.
+  const rest = process.argv.slice(3);
+  const flag = rest.indexOf("--against");
+  if (flag >= 0 && !rest[flag + 1]) {
+    console.error(USAGE);
+    process.exit(1);
+  }
+  const tree = arg && !arg.startsWith("-") ? arg : cwd;
+  const base = flag >= 0 ? rest[flag + 1] : DEFAULT_BASE;
+  // A base that is not in this tree is the same answer as no history at all:
+  // there is genuinely nothing to compare against, which is what exit 2 says.
+  if (!resolves(tree, base)) {
+    console.error(`class: not applicable here: no ref ${base} in ${tree}`);
+    process.exit(2);
+  }
+  const { from, to } = versions(tree, base);
+  if (raised(from, to)) {
+    console.error(
+      `class: ${from} to ${to} moves a place this repository does not move: the raise is the human's`,
+    );
+    process.exit(1);
+  }
+  const artefacts = moved(changed(tree, base));
+  for (const a of artefacts) console.log(`class: ${a} moved`);
+  if (!artefacts.length) console.log("class: nothing a consumer notices moved");
+  process.exit(0);
 } else if (cmd === "gates") {
   const g = runGates(arg ?? cwd);
   for (const l of g.lines) console.log(l);
