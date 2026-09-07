@@ -5,11 +5,12 @@ npm package approach", and then, on how a consumer takes the engine, the
 lean toward "improve KAAL into a package, make it a dependency for SIGNAL and
 run from there". The first consumer tried it on 7 September: a packed
 tarball installs and every command answers from `node_modules`, and an
-install from a git URL fails before anything is fetched, on
-`fatal: not in a git directory` from the `prepare` script. The drawing of
+install from a git URL dies with no registry in reach. The drawing of
 `the-engine-is-installable` chose to keep `prepare` and called the git
-install "the online path"; the run says it is no path. This is the defect,
-and it is the one thing between the tool and its first dependent._
+install "the online path". That was accurate and it is no longer enough:
+the online path is the only path, and a consumer who needs the offline one
+has arrived, which is the condition that decision named for its own
+reopening._
 
 ## Goal
 
@@ -34,13 +35,14 @@ pre-push hook it has always had.
   board in `AGENTS.md` as it has been since `push-v1` ("once per clone;
   wires the pre-push hook"). Which command that step is, is the
   architect's: the tests read it off the board rather than fixing it. Two
-  runs on 7 September bound the choice. npm installs a package's dev
-  dependencies in the clone before it packs a git dependency whenever the
-  manifest carries any install-lifecycle script, `prepare` and
-  `postinstall` alike (a stand-in with `postinstall` alone died reaching
-  for the formatter), and it then runs `prepare` in a directory git
-  refuses. So an offline git install and an install-lifecycle script
-  cannot both be true, and the wiring has to be a step of its own.
+  runs on 7 September bound the choice, and a third confirmed it: npm
+  installs a package's dev dependencies in the clone before it packs a git
+  dependency whenever the manifest carries any install-lifecycle script,
+  `prepare` and `postinstall` alike (a stand-in with `postinstall` alone
+  died reaching for the formatter). The install then dies fetching the
+  formatter and never reaches `prepare` at all, which the run below names
+  by line. So an offline git install and an install-lifecycle script cannot
+  both be true, and the wiring has to be a step of its own.
 - The version stays where it is. This task changes no command, no promise
   on `SURFACE.md`, and no place of the version; `kaal class` will say
   nothing a consumer notices moved.
@@ -89,24 +91,31 @@ pre-push hook it has always had.
 - Task: the-tag-installs-offline
 - Criteria: 3; tests: 3 (equal)
 - Red run: `node --test --test-timeout=120000 requirements/the-tag-installs-offline/acceptance.test.mjs`,
-  7 September 2026: tests 1 and 2 red on the same first cause, the git
-  install reaches for the formatter to run `prepare` and dies on
-  `ECONNREFUSED` at the dead registry (with a registry in reach it dies one
-  step later, in `prepare` itself, on `fatal: not in a git directory`, seen
-  the same day by hand); test 3 green before the build, a guard on the
-  contributor's hook that must not change, which is why it is here. Green
-  on a stand-in in scratch, 3 passing, discarded.
+  7 September 2026: tests 1 and 2 red on the same first cause, run twice
+  and read. npm reports `git dep preparation failed` and runs a dev install
+  in the clone (`--include=dev`, because an install-lifecycle script is
+  there), which dies at the dead registry on
+  `FetchError: request to http://127.0.0.1:1/prettier/-/prettier-3.9.6.tgz
+failed, reason: connect ECONNREFUSED`. It never reaches `prepare`. With a
+  registry in reach the same install exits 0 and the tool answers, so the
+  defect is the offline path alone and not the git path. Test 3 green
+  before the build, a guard on the contributor's hook that must not change,
+  which is why it is here. Green on a stand-in in scratch, 3 passing,
+  discarded.
 - Tests: `acceptance.test.mjs`, beside this file; it clones this tree into
   a temporary directory and installs there, and touches this tree not at
   all
-- Open questions: 3, listed above
+- Open questions: 4, listed above
 - Status: open
 - Blocked on: nothing
 - Supersedes: `the-engine-is-installable`, one claim of its drawing's third
-  decision: that a git install is "the online path" and runs `prepare` at a
-  cost of convenience only. A run shows the install fails whatever the
-  network does. The principle is the league's own, a claim of fact anchors
-  to a run, and the decision's reopen condition, a consumer needing an
-  offline git install, has arrived with the first consumer. The decision's
-  other half, that a contributor's `npm install` wires the hook, is kept by
-  criterion 3.
+  decision: not that it was wrong, but that its price is now due. It read
+  the mechanism correctly, that npm installs the dev dependency because an
+  install-lifecycle script exists, and it priced the trade as a
+  contributor's hook against a consumer who did not exist yet. Runs on
+  7 September confirm the mechanism and find no error beyond it: with a
+  registry in reach the git install succeeds. What moves is the price. The
+  decision named its own reopen condition, a consumer needing an offline
+  git install, and the first consumer is it. The decision's other half,
+  that a contributor's `npm install` wires the hook, does not survive, and
+  criterion 3 keeps what can be kept of it: one named step, on the board.
