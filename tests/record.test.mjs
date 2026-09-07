@@ -10,6 +10,7 @@ import {
   isFresh,
   whyStale,
   freshModels,
+  witnessKept,
 } from "../bin/lib/record.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -121,4 +122,21 @@ test("freshModels counts distinct models that are complete, pass and fresh, and 
   );
   assert.deepEqual(s.stale, [{ file: "alpha.md", why: "skill moved" }]);
   assert.deepEqual(s.reasons, ["alpha.md is stale (skill moved)"]);
+});
+
+test("witnessKept: silent for a fixture with no tree, and exact about one that has", () => {
+  const record = (witness) => ({
+    fixture: "pointed-elsewhere",
+    ...(witness ? { witness } : {}),
+  });
+  // json-flag ships no tree, so the field is not its business.
+  assert.equal(witnessKept({ fixture: "json-flag" }, ROOT, "analyse"), null);
+  assert.equal(witnessKept({}, ROOT, "analyse"), null);
+  assert.equal(witnessKept(record("clean"), ROOT, "analyse"), null);
+  assert.match(
+    witnessKept(record(null), ROOT, "analyse"),
+    /no witness for a fixture that carries a tree/,
+  );
+  assert.match(witnessKept(record("moved"), ROOT, "analyse"), /the tree moved/);
+  assert.match(witnessKept(record("maybe"), ROOT, "analyse"), /the tree moved/);
 });

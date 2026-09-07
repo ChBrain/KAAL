@@ -98,6 +98,6 @@ tree was untouched counts for nothing.
   `fixtures/guest-records/` here, three records against one fixture with a
   tree
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing

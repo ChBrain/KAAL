@@ -26,6 +26,17 @@ holds the two equal.
   does not say is not comparable and counts for nothing.
 - `verdict`: `pass` or `flag`, the reader's reading.
 
+## One more field, where the fixture ships a tree
+
+A fixture may ship a `tree/`, a directory the skill is pointed at. Such a run
+copies the tree, witnesses the copy with `kaal witness`, runs, and witnesses it
+again; the record then carries `witness`, `clean` or `moved`. It is not one of
+the ten above, because it is required by the fixture and not by every record,
+and the list above is what the evals workflow's template must write. A record
+whose fixture ships a tree and which does not say `witness: clean` counts for
+nothing whatever its verdict: the reader read an output and cannot see a
+filesystem.
+
 ## Body, two sections
 
 - `# Output`: the whole exchange, from the first line the model wrote to the

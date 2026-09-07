@@ -57,3 +57,19 @@ test("a fence inside the skill does not close the block: the fence grows past it
 test("a missing skill or fixture throws with the path", () => {
   assert.throws(() => renderRunner(TREE, "y", "nope"), /nope/);
 });
+
+test("a fixture that ships a tree gets the procedure, and one without gets none", () => {
+  const guest = renderRunner(ROOT, "analyse", "pointed-elsewhere");
+  const head = guest.slice(0, guest.indexOf("## Prompt 1"));
+  assert.match(head, /Copy the tree to a directory outside the repository/);
+  assert.match(head, /kaal witness/);
+  // Never inside a prompt: the copying is the person's act, not the model's.
+  assert.doesNotMatch(
+    guest.slice(guest.indexOf("## Prompt 1")),
+    /Copy the tree/,
+  );
+  assert.doesNotMatch(
+    renderRunner(ROOT, "analyse", "json-flag"),
+    /Copy the tree/,
+  );
+});
