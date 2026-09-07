@@ -32,6 +32,7 @@ and it carries nothing the list does not.
 - Chosen: <the choice>
 - Not taken: <option>, <option>
 - Because: <one paragraph>
+- Bought: <which good, and what it spent on the other>
 - Reopens if: <the condition>
 
 ## Test strategy
