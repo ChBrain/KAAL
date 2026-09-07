@@ -69,8 +69,9 @@ tree was untouched counts for nothing.
    only when the record says `witness: clean`. A record with no `witness`
    field, or one saying anything else, counts for nothing and the reason
    names the record and the word witness, the way a stale record's reason
-   names what moved. `evals/README.md` names `witness` among the fields
-   it lists.
+   names what moved. `evals/README.md` names `witness`, outside the list of
+   fields every record carries, since `evals-v2` derives the evals
+   workflow's template from that list and the workflow witnesses nothing.
 
 ## Open questions
 
