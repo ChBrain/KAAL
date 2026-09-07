@@ -1,8 +1,13 @@
 #!/bin/sh
 # pre-push: every wall the league has, under the one command, before a push
-# leaves this machine. Wired by `npm install` through package.json's prepare
-# script (git config core.hooksPath .githooks). A push that skips this hook
-# is not done: the ci workflow runs the same command on the pull request.
+# leaves this machine. Wired by `npm run hooks`, the step the board in
+# AGENTS.md names, which a contributor runs once per clone; nothing wires it
+# at install time any more, because npm runs a dev install inside a clone it
+# is packing whenever an install-lifecycle script exists, and that made an
+# offline git install impossible (the-tag-installs-offline). A push that
+# skips this hook is not done: the ci workflow runs the same command on the
+# pull request. It runs on the working tree, whatever ref is being pushed,
+# so a tag push runs the board too.
 #
 # KAAL_TEST_COMMAND exists so a test can prove the hook fails when its command
 # fails; it is a recorded decision in architecture/gates-v1 with a reopen
