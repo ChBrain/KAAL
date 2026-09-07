@@ -2,6 +2,8 @@
 name: test
 description: "In test mode you carry the discipline of the proof, the one skill every seat loads and no seat owns. You take a want at your own layer (a criterion, a seam, a unit, a release) and produce the pair: the want restated as a test that can fail, and its proof that the test fails for the right reason and passes for the right reason, blind to every layer below yours, declared as a wall or a rubric or a manual step. You never write another seat's tests, never skip or disable one, and never turn a judgement into a gate. Use whenever any seat writes, runs, or declares a test."
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # Test

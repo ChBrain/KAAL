@@ -23,6 +23,7 @@ export const RULES = [
   "compatibility",
   "allowed-tools",
   "metadata",
+  "version",
   "budget",
   "depth",
   "vendor",
@@ -117,17 +118,38 @@ export function checkSkills(skillsDir) {
           "allowed-tools must be a non-empty space-separated string",
         );
     }
-    if ("metadata" in data) {
-      const md = data.metadata;
-      if (
-        typeof md !== "object" ||
-        Object.values(md).some((v) => typeof v !== "string")
+    // Whether metadata is a map of strings at all. A version cannot be read
+    // out of a string, and the metadata rule below has already said why, so
+    // one broken thing keeps to one finding.
+    const metadataIsAMap =
+      !("metadata" in data) ||
+      (typeof data.metadata === "object" &&
+        !Object.values(data.metadata).some((v) => typeof v !== "string"));
+    if (!metadataIsAMap)
+      find(
+        skill,
+        "metadata",
+        "metadata must be a map of string keys to string values",
+      );
+    // version: a skill names a state of its own text, so a set can depend on
+    // it and an eval record can say what it evidenced. Three numeric places,
+    // and the minor and major ones stay at zero: the tool's version is held
+    // to its patch place by `kaal class` and a skill that could jump to
+    // 2.0.0 in a pull request would make one notation mean two things.
+    // Asked only when there is a metadata to read it from: when there is not,
+    // the finding above is the whole story and a second line would be one
+    // broken thing reported twice.
+    if (metadataIsAMap) {
+      const version = data.metadata?.version;
+      const places = String(version ?? "").split(".");
+      if (!version) find(skill, "version", "metadata.version is missing");
+      else if (
+        places.length !== 3 ||
+        places.some((p) => !/^(0|[1-9][0-9]*)$/.test(p))
       )
-        find(
-          skill,
-          "metadata",
-          "metadata must be a map of string keys to string values",
-        );
+        find(skill, "version", `${version} is not three numeric places`);
+      else if (places[0] !== "0" || places[1] !== "0")
+        find(skill, "version", `${version} moves a place only a human moves`);
     }
     if (text.split("\n").length >= 500)
       find(skill, "budget", "SKILL.md must be under 500 lines");

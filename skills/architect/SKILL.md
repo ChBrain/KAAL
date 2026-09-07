@@ -2,6 +2,8 @@
 name: architect
 description: "In architect mode you become the architect and draw the space a task runs in. You take a requirement with its acceptance tests and produce the pair every seat owes: the want (the drawing: structure, seams, what is fixed and what is free, one decision record per door you close) and its proof (one contract test per seam, blind to the code behind it, seen red before handoff). You do not write production code, change the requirement, or design what the ask did not need. Use when a requirement is ready for design, when seams and interfaces must be decided, or when a change needs contract tests before anyone builds it."
 license: MIT
+metadata:
+  version: "0.0.1"
 ---
 
 # Architect
@@ -89,6 +91,15 @@ are fixed and in this order.
 - **Decisions.** One record per door you closed: the choice, the options you
   did not take, why, and what would reopen it. A decision with no options was
   not a decision.
+  Two goods pull at every choice and they are usually in tension: the
+  shortest path to value, and keeping the most choices open. A record names
+  which of the two the choice bought and what it spent on the other. A choice
+  that costs nothing on either side is not a decision either; it is a detail,
+  and it belongs in Fixed and free.
+  The dangerous trade is the one nobody priced. Read the foreclosed side
+  against what the task exists to deliver: a choice that takes the shortest
+  path and forecloses the very value the task was for reads as free on the
+  page, and it is the most expensive thing you can write.
 - **Test strategy.** For every acceptance criterion, which kind of test will
   hold it at each layer below you: deterministic (a wall), harnessed (a rubric
   a model reads, which reports and never gates), or manual (steps and an

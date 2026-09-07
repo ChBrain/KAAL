@@ -1,9 +1,16 @@
 {
   "name": "kaal",
   "private": true,
+  "version": "0.0.1",
   "description": "Kai's Artificial Agent League: how to use LLMs to build software.",
   "type": "module",
   "license": "MIT",
+  "bin": {
+    "kaal": "bin/kaal.mjs"
+  },
+  "files": [
+    "bin"
+  ],
   "engines": {
     "node": ">=22"
   },
