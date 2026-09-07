@@ -4,7 +4,13 @@
 // directory of files.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import {
+  mkdtempSync,
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  rmSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -128,15 +134,12 @@ test("3. a raise past the patch place is refused, and a patch is not", () => {
 
 test("4. the wall is on the board and the command is on the page", () => {
   const config = JSON.parse(
-    spawnSync("cat", [join(ROOT, "kaal.config.json")], { encoding: "utf8" })
-      .stdout,
+    readFileSync(join(ROOT, "kaal.config.json"), "utf8"),
   );
   assert.ok(
     config.gates.some((g) => /kaal\.mjs class\b/.test(g.command)),
     "no class wall in the gates list",
   );
-  const page = spawnSync("cat", [join(ROOT, "SURFACE.md")], {
-    encoding: "utf8",
-  }).stdout;
+  const page = readFileSync(join(ROOT, "SURFACE.md"), "utf8");
   assert.match(page, /^## class$/m, "the page has no section for class");
 });
