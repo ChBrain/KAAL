@@ -93,7 +93,8 @@ nothing of the league's own working.
 - Red run: `node --test --test-timeout=60000 requirements/the-engine-is-installable/acceptance.test.mjs`
 - Tests: `acceptance.test.mjs`, beside this file; it packs into a temporary
   directory and installs there, and touches this tree not at all
-- Open questions: 4, listed above
-- Status: open
+- Open questions: 4, listed above; the second is answered in the drawing,
+  by npm's behaviour rather than by a preference
+- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
