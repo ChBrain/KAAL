@@ -3,7 +3,8 @@
 Self-diagnosis: drawn from session context. Not a human-reported retro.
 
 Period: the first use of the operate skill, on the release of `0.0.1` to
-the public git remote, which was refused, 7 September 2026.
+the public git remote, refused twice and shipped on the third path,
+7 September 2026.
 Place: this repository
 
 ## Liked
@@ -31,6 +32,12 @@ Place: this repository
   can earn and no retry can produce, so the handoff goes to the human and
   not to the developer.
 
+- It shipped, and the two refusals were worth more than the release. The
+  first named a permission this session does not hold and now nobody has
+  to rediscover. The second was a defect in this tool that CI cannot see,
+  because CI pins one runtime and the people who run the board do not; it
+  is a task with four red criteria rather than a story about an evening.
+
 ## Lacked
 
 - The skill has no word for a release refused by an authority. Its scope
@@ -44,9 +51,14 @@ Place: this repository
   its tests test the wrapper. I recorded the two commands verbatim and
   proved arrival with a real install instead, and the skill does not
   recognise that case.
-- Nothing says what to do with a plan whose smoke cannot run. The record is
-  finished on every line except the one that matters, and a reader has to
-  be told that a record with an unrun smoke is a plan.
+- Nothing says what to do with a plan whose smoke cannot run. For two hours
+  the record was finished on every line except the one that matters, and a
+  reader had to be told that a record with an unrun smoke is a plan. The
+  smoke is green now and the record is a record; the shape for the hours in
+  between is still missing.
+- Nothing says the operator should name the runtime a release was proven
+  on. Both machines ran the same commit and disagreed, and the record would
+  have said nothing about why if the second refusal had not forced it.
 
 ## Longed for
 
