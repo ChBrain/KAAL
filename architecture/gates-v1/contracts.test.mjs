@@ -51,14 +51,19 @@ test("2. runner to shell: a clean config exits 0 with a summary that counts the 
   assert.equal(r.stderr.trim(), "", "stderr not empty on a clean run");
 });
 
-test("3. install to hook: prepare sets core.hooksPath to .githooks in a fresh clone", () => {
+// The step that wires the hook moved out of the install lifecycle in
+// `the-tag-installs-offline`: npm runs a dev install inside a clone it is
+// packing whenever any install-lifecycle script is declared, which made an
+// offline git install impossible. The seam is unchanged, a fresh clone gets
+// its hook from a step this tree offers, and only the step's name moved.
+test("3. step to hook: the hooks script sets core.hooksPath to .githooks in a fresh clone", () => {
   const d = mkdtempSync(join(tmpdir(), "kaal-clone-"));
   try {
     for (const f of ["package.json", ".githooks", "bin", "kaal.config.json"])
       if (existsSync(join(ROOT, f)))
         cpSync(join(ROOT, f), join(d, f), { recursive: true });
     assert.equal(spawnSync("git", ["init", "-q"], { cwd: d }).status, 0);
-    const p = spawnSync("npm run prepare --silent", {
+    const p = spawnSync("npm run hooks --silent", {
       shell: true, // npm is a script on Windows; the platform's shell finds it
       cwd: d,
       encoding: "utf8",

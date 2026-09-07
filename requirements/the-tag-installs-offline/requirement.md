@@ -106,7 +106,7 @@ failed, reason: connect ECONNREFUSED`. It never reaches `prepare`. With a
   a temporary directory and installs there, and touches this tree not at
   all
 - Open questions: 4, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Supersedes: `the-engine-is-installable`, one claim of its drawing's third
   decision: not that it was wrong, but that its price is now due. It read
@@ -119,3 +119,9 @@ failed, reason: connect ECONNREFUSED`. It never reaches `prepare`. With a
   git install, and the first consumer is it. The decision's other half,
   that a contributor's `npm install` wires the hook, does not survive, and
   criterion 3 keeps what can be kept of it: one named step, on the board.
+  And `gates-v1`, its third seam, "install to hook": that the step which
+  wires a fresh clone's hook is `prepare` and runs at install time. The
+  seam itself survives whole, a fresh clone gets its hook from a step this
+  tree offers, and only the step's name and its moment move. This second
+  supersede was missed when the requirement was first written and is
+  declared here because the build found the contract red.
