@@ -53,6 +53,30 @@ export function whyStale(data, root, skill) {
   return null;
 }
 
+/**
+ * A fixture that ships a tree is run against a copy, and the record says
+ * whether the copy moved. The condition is the fixture's, not the record's,
+ * so it is read here where the root and the skill are known and not in
+ * `readRecord`, which is handed a path and nothing else; the ten fields
+ * stand, and eval-record-v1's unit test with them.
+ * @returns {string|null} the reason it counts for nothing, or null
+ */
+export function witnessKept(data, root, skill) {
+  const tree = join(
+    root,
+    "skills",
+    skill,
+    "fixtures",
+    data.fixture ?? "",
+    "tree",
+  );
+  if (!existsSync(tree)) return null;
+  if (!data.witness) return "says no witness for a fixture that carries a tree";
+  return data.witness === "clean"
+    ? null
+    : `says witness: ${data.witness}, so the tree moved`;
+}
+
 /** All three shas must equal the current files: the skill, and the fixture's ask and expect. */
 export function isFresh(data, root, skill) {
   return whyStale(data, root, skill) === null;
@@ -84,6 +108,11 @@ export function freshModels(root, evalDir, skill) {
     if (why) {
       reasons.push(`${f} is stale (${why})`);
       stale.push({ file: f, why });
+      continue;
+    }
+    const untouched = witnessKept(data, root, skill);
+    if (untouched) {
+      reasons.push(`${f} ${untouched}`);
       continue;
     }
     models.add(data.model);
