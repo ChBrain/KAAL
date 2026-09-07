@@ -69,6 +69,12 @@ it in one step.
 Then find the one who asked and the outcome they will recognise. If you cannot
 name who would notice the task succeeding, you do not have a task yet.
 
+Read the closed requirements whose paths this task touches, and read their
+tests as well as their criteria. A closed test fixes shapes no criterion
+states: a list of commands, the exact string a finding is compared as, an
+order two files must keep. A criterion is what someone chose to say; a test
+is what is actually held.
+
 ## 2. Write the want
 
 Copy [the requirement template](references/requirement.md) and fill it. The
@@ -117,6 +123,11 @@ One acceptance test per criterion, numbered to match. Rules:
   trusts it to pass. A red run reported as "not yet recorded" is not a red
   run; the handoff carries the run's own result, and a proof that has not
   been run is not handed off.
+- **Absence needs a witness.** A criterion whose subject is something not
+  happening (nothing is written, nothing is parsed, nothing is sent) needs a
+  test that proves the thing could have happened: assert the run happened and
+  did its work, then assert the effect is absent. A proof that passes because
+  nothing ran at all is a coincidence, and it will pass forever.
 - **Seen green on a stand-in.** A test that can only fail is not a proof
   either. Write a throwaway answer that meets the criteria, in scratch, see
   every test pass on it, then discard it. The stand-in is not the work and
@@ -172,12 +183,19 @@ in the conversation and ask where it lands. Do not file a run record anywhere
 the asker did not name.
 
 The handoff is the last section of the requirement. It names the task, the
-count of criteria and of tests (equal), the red run, and the open questions.
+count of criteria and of tests (equal), the red run, and the open questions. The red run is written from the run, never from the
+plan: run the tests, read what came back, and record that. A test green before
+the build is named in the handoff with the reason it is green, since it is
+either a guard on something that must not change or a criterion testing
+nothing.
 It also carries the task's status, and you own both ends of it. The task is
 open at handoff (`- Status: open`) and closed when every test is green
 (`- Status: closed`); the acceptance wall reads that line. `- Blocked on:`
 names the person or the setting the task waits for, or nothing;
-`- Supersedes:` names an earlier task and what of it, or nothing. The receiving seat reads it against a checklist that is theirs, not yours; you
+`- Supersedes:` names an earlier task and what of it, or nothing. A supersede
+names three things: the closed task, the exact claim that moves, and the
+principle that permits it. Where the closed task's own stated principle
+pushes the other way, your criterion gives way instead, and you say so. The receiving seat reads it against a checklist that is theirs, not yours; you
 do not argue with the checklist, you meet it or hand back with what you could
 not meet and why.
 
@@ -317,7 +335,7 @@ date: <YYYY-MM-DD>
 fixture: json-flag
 ask_sha: beb15ced535972519ee9912207ec7133b8832431ccf59115762d74fce80a8b8a
 expect_sha: 91fd54a814c1626d6080a73b8ec21afd2d0659a8576b699f84fc7b6919cc10a6
-skill_sha: 5a5366ed7da436e30a032909e24ef2e1af4c13bea5a88506b9ad4f36f0675bad
+skill_sha: 381206bb77eb074c845865595fd51611dddf11c82d62d50f38cce49aecb86281
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---
