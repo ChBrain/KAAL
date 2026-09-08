@@ -159,6 +159,9 @@ Place: [this repository, or a directory the skill was pointed at]
 
 ## Longed for
 [one bullet per item]
+
+Feeds: [the skill this retro is about]
+Read: [the other skills this run followed, separated by commas]
 ```
 
 Keep bullets short: one idea per bullet. Do not merge items. If a lens
@@ -207,7 +210,12 @@ The cadence is after every use of a skill: each real use ends with a
 self-diagnosis retro on that use, so the skill learns at the rate it is used
 and not at the rate someone remembers to ask. Retros accumulate; they are not
 acted on one by one. Each is filed under `retros/` and ends with the line
-`Feeds: <skill>`. When a skill has ten retros that no requirement has yet
+`Feeds: <skill>`. Beneath it, `Read: <skill>, <skill>` names every skill whose
+rules this run followed and which is not the one the retro feeds, so a skill
+that every seat reads and no seat files against stops being invisible; omit
+the line when there was none. `retro-4ls` gets no exception: a run that wrote
+a retro followed it. A read is counted and reported and it is not a retro: it
+never fires the rule of ten, and `kaal retros` prints it on its own line. When a skill has ten retros that no requirement has yet
 consumed, the analyst runs over the stack once and writes that skill's next
 requirement; a retro that names a defect (a test red for the wrong reason, an
 instruction that misled) may trigger the analyst alone. Once a requirement
