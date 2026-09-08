@@ -110,3 +110,4 @@ pre-push hook it has always had.
   offline git install, has arrived with the first consumer. The decision's
   other half, that a contributor's `npm install` wires the hook, is kept by
   criterion 3.
+- People: none

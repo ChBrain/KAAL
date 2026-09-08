@@ -205,7 +205,18 @@ Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
 Longed for to the analyst against this skill; that is you, and the loop is
 how this skill gets better.
 
-## 6. When the ask is a stack of retros
+## 6. Data about a person
+
+The handoff says whether the task touches data about a person, in one
+line, `- People:`. `none` is an answer. Otherwise the line names the data,
+the purpose, the system of record it is resolved from by identifier, and
+how it is erased. A tree holds identifiers, never the person: a person is
+resolved from the system of record at use, a local stand-in for working
+without that system is ignored by version control, and a built artefact
+that carries a person is never committed. The wall reads that the line is
+there; what it says is yours, and the reader at the merge is the check.
+
+## 7. When the ask is a stack of retros
 
 Every use of a skill ends with a `retro-4ls`, and every ten unconsumed
 retros on one skill the ask arrives as that stack. Read it as an ask like any
@@ -271,6 +282,7 @@ sentence cannot be wrong, cut it.
 - Status: <open at handoff; closed when every test is green>
 - Blocked on: <a person, a setting, or nothing>
 - Supersedes: <an earlier task and what of it, or nothing>
+- People: <none, or the data, its system of record, how it is erased>
 
 ---
 
@@ -337,7 +349,7 @@ date: <YYYY-MM-DD>
 fixture: json-flag
 ask_sha: beb15ced535972519ee9912207ec7133b8832431ccf59115762d74fce80a8b8a
 expect_sha: 91fd54a814c1626d6080a73b8ec21afd2d0659a8576b699f84fc7b6919cc10a6
-skill_sha: ed742e667742779fcea38f2163524d9a1e2bdd7e0f14f5cb6271da6dda2abd70
+skill_sha: f0bcd71d745c6407d86e611c34d78afa3896650ef36e009ddaa437039fcbc260
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---

@@ -94,3 +94,4 @@ minor or major place has changed, on the board, on every push.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

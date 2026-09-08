@@ -63,3 +63,5 @@ acceptance`, over the same glob the contracts wall already uses.
   `fixtures/`
 - Open questions: 1, listed above
 - Status: closed
+
+- People: none

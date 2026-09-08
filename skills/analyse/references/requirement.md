@@ -32,6 +32,7 @@
 - Status: <open at handoff; closed when every test is green>
 - Blocked on: <a person, a setting, or nothing>
 - Supersedes: <an earlier task and what of it, or nothing>
+- People: <none, or the data, its system of record, how it is erased>
 
 ---
 

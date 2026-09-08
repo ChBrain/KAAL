@@ -68,3 +68,5 @@ and the evals README says how to configure it.
 - Open questions: 1, listed above
 - Supersedes: push-v1, assumption on the hosted models and criterion 8
 - Status: closed
+
+- People: none

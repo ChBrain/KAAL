@@ -103,3 +103,4 @@ from the template` move is the candidate.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: eval-runner, on its open question (the wall)
+- People: none

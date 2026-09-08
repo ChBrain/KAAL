@@ -18,12 +18,18 @@ export function readStatus(testFile) {
 }
 
 /** @returns {{ ok: boolean, label: string }} */
-export function judge(status, pass, fail, mustClose = true) {
+export function judge(status, pass, fail, mustClose = true, people = "none") {
   if (status === null)
     return {
       ok: false,
       label:
         "FAIL no status: write `- Status: open` or `- Status: closed` in the Handoff",
+    };
+  if (people === null)
+    return {
+      ok: false,
+      label:
+        "FAIL no people line: write `- People: none` or the data in the Handoff",
     };
   if (status === "closed")
     return fail > 0
@@ -38,6 +44,38 @@ export function statusForDrawing(testFile) {
   const task = basename(dirname(testFile));
   const root = join(dirname(testFile), "..", "..");
   return readStatus(join(root, "requirements", task, "acceptance.test.mjs"));
+}
+
+/**
+ * The requirement a test file belongs to, resolved once for both walls: an
+ * acceptance test's sibling, a drawing's task under requirements/<task>/.
+ * @param {string} testFile @returns {string}
+ */
+export function requirementFor(testFile) {
+  const dir = dirname(testFile);
+  if (basename(dirname(dir)) === "architecture")
+    return join(
+      dir,
+      "..",
+      "..",
+      "requirements",
+      basename(dir),
+      "requirement.md",
+    );
+  return join(dir, "requirement.md");
+}
+
+/**
+ * The People line of the test's requirement: its value, or null when the
+ * requirement has none. The wall reads that the line is there and says
+ * something; what it says is the analyst's.
+ * @param {string} testFile @returns {string|null}
+ */
+export function readPeople(testFile) {
+  const req = requirementFor(testFile);
+  if (!existsSync(req)) return null;
+  const m = readFileSync(req, "utf8").match(/^- People: (.+)$/m);
+  return m ? m[1].trim() : null;
 }
 
 /**
@@ -73,7 +111,7 @@ export function runJudged(files, statusFor, mustClose = true) {
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),
     );
     const status = statusFor(file);
-    const v = judge(status, pass, fail, mustClose);
+    const v = judge(status, pass, fail, mustClose, readPeople(file));
     // The red tests by name, so a reader of the board elsewhere sees which
     // criterion failed and not only that one did.
     const red = r.stdout.match(/^not ok .*$/gm) ?? [];

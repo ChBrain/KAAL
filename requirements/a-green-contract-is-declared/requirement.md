@@ -80,3 +80,4 @@ the skill says all three where a writer meets them.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

@@ -13,3 +13,5 @@ A fixture task with two criteria.
 
 - Task: t
 - Status: open
+
+- People: none

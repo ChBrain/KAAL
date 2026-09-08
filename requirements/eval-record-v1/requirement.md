@@ -70,3 +70,5 @@ it or that names a fixture or skill that has since changed.
   `fixtures/`
 - Open questions: 2, listed above
 - Status: closed
+
+- People: none

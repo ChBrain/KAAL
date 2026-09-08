@@ -83,3 +83,5 @@ board.
   stay off, since the workflow is the advanced setup
 - Supersedes: nothing
 - Status: closed
+
+- People: none

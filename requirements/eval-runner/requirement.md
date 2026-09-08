@@ -75,3 +75,5 @@ the league's own fixture carries a current one.
 - Blocked on: nothing
 - Supersedes: nothing
 - Status: closed
+
+- People: none

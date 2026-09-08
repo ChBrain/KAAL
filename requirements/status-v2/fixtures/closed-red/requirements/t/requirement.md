@@ -3,3 +3,5 @@
 ## Handoff
 
 - Status: closed
+
+- People: none
