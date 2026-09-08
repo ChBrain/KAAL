@@ -59,6 +59,11 @@ and by the operate skill recognising a dispatch as a key.
 - The board is run by the workflow rather than trusted from a green merge.
   The v0.0.1 cut was refused by a red board on a runtime CI did not pin,
   which is exactly the case a merge's green would have hidden.
+- A release comes from main and from nowhere else. Every branch and every
+  route in this league is a route towards main, so a dispatch from a branch
+  is not a release from an earlier place, it is a release from a place that
+  was on its way somewhere. What may differ before main is which steps run,
+  not where a version is cut from.
 - The workflow's own behaviour cannot be proven here. Its criteria are read
   from its text, and the first evidence is a dispatch. That is why the
   refusals are a command with tests rather than conditions in the file.
@@ -100,6 +105,16 @@ and by the operate skill recognising a dispatch as a key.
    release record names the person, the version and the target, and says
    that where the artefact is a ref the deploy tests are the refusals
    rather than a wrapper around the commands.
+7. The workflow refuses a dispatch whose ref is not the repository's
+   default branch, before it runs the board, and the refusal names the ref
+   it was given.
+
+   _Added after the requirement was merged, 8 September 2026. Criterion 7
+   is the asker's answer to the second open question below, which is what an
+   open question is for: "merged, main only. current concept: release from
+   main, maybe different test steps till final place. Every branch / route
+   is a branch / route towards main." Nothing else in the requirement
+   changes._
 
 ## Open questions
 
@@ -107,9 +122,10 @@ and by the operate skill recognising a dispatch as a key.
   The operate retro asks what to do with a plan whose smoke cannot run, and
   a record is a plan until its smoke is green, which is a distinction no
   file format carries today.
-- Should the workflow refuse a dispatch from a ref that is not the default
-  branch? Releasing from a branch is a real want and releasing from a
-  branch by accident is a real hazard.
+- ~~Should the workflow refuse a dispatch from a ref that is not the
+  default branch?~~ Answered by Kai: main only. A branch is a route towards
+  main rather than a place to release from, so a dispatch from one is a
+  category error and not a convenience being withheld. It is criterion 7.
 - Who writes the release record, and when? The skill says before the run,
   and the workflow refuses without one, so the record must be merged before
   the dispatch. Nothing says whether that is one pull request or two.
@@ -124,12 +140,12 @@ and by the operate skill recognising a dispatch as a key.
 ## Handoff
 
 - Task: the-release-runs-on-a-key
-- Criteria: 6; tests: 6 (equal)
+- Criteria: 7; tests: 7 (equal)
 - Red run: `node --test --test-timeout=60000 requirements/the-release-runs-on-a-key/acceptance.test.mjs`
 - Tests: `acceptance.test.mjs`, beside this file; the command is driven on
   fixture trees beside it, and the workflow and the skill are read as text
 - Green before the build: none expected
-- Open questions: 5, listed above
+- Open questions: 4, listed above; one of the five is answered and is now criterion 7
 - Status: open
 - Blocked on: nothing
 - Unblocks: the next release, which is the first thing that can prove the
