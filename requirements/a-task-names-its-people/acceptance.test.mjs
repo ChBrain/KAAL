@@ -110,3 +110,61 @@ test("7. the surface page's acceptance section names the People line", () => {
   assert.ok(section, "no acceptance section");
   assert.match(section, /People/, "the section does not name the People line");
 });
+
+// The five skills that do work in a tree. `retro-4ls` is not among them: it
+// diagnoses a use of a skill rather than acting in a directory, which is
+// why `a-guest-takes-no-orders` fixed the guest paragraph in these five.
+const WORKING = ["analyse", "architect", "code", "operate", "test"];
+
+test("8. a guest names the file and never the data, and removes nothing", () => {
+  for (const name of WORKING) {
+    const t = skill(name);
+    // Read in the guest paragraph's own terms, so a sentence elsewhere in
+    // the skill about a person cannot stand in for the guest's rule.
+    const guest = t.match(
+      /In a directory you were pointed at you are a guest[\s\S]*?(?=## )/,
+    );
+    assert.ok(guest, `${name}: no guest paragraph`);
+    const g = guest[0];
+    assert.match(
+      g,
+      /data about a person|a person you find/i,
+      `${name}: the guest meets no person`,
+    );
+    assert.match(
+      g,
+      /names? the file|which file/i,
+      `${name}: the file is not what is handed back`,
+    );
+    assert.match(
+      g,
+      /never the data|not the data/i,
+      `${name}: the data is not withheld`,
+    );
+    // And the half a seat would otherwise get wrong by being helpful.
+    assert.match(g, /remove|delete/i, `${name}: removing it is not addressed`);
+    assert.match(
+      g,
+      /histor/i,
+      `${name}: why removal does not clean the tree is not said`,
+    );
+  }
+});
+
+test("9. the rule names whose presence is not the question", () => {
+  const t = skill("analyse");
+  const section = t.match(/## (\d+\. )?Data about a person[\s\S]*?(?=## )/i);
+  assert.ok(section, "the analyse skill has no section on data about a person");
+  const s = section[0];
+  // A record naming its own author, or the person who gave a key, is
+  // evidence rather than the data this rule keeps out.
+  assert.match(s, /wrote it|author/i, `authorship is not named: ${s}`);
+  assert.match(s, /\bkey\b/i, `the key is not named: ${s}`);
+  assert.match(s, /evidence/i, `neither is called evidence: ${s}`);
+  // And the person the rule is about, said positively.
+  assert.match(
+    s,
+    /did not choose to be in the tree|did not ask to be/i,
+    `who the rule is about is not said: ${s}`,
+  );
+});

@@ -10,6 +10,11 @@ engagement's real name; a rendered document committed beside its source; and
 no seat with a word for any of it. Standing means every task answers the
 question, not only the ones somebody remembers to ask it of._
 
+_Amended 8 September 2026, after Kai read the first version: "I am Kai. KAAL
+is Kais Artificial Agent League. KHAI is Kai Hacks AI. So mentioning Kai is
+fine, its mine. Mentioning others is a different discussion." That answer
+adds criteria 8 and 9. Nothing in the first seven changes._
+
 ## Goal
 
 Whoever asks for a task wants every requirement to say whether the task
@@ -59,6 +64,24 @@ must contain and what a tree may hold.
   from the system of record at use, by identifier; a local stand-in for
   working without that system is ignored by version control; a built
   artefact that carries a person is never committed.
+- Whose presence is not the question. A record that names the person who
+  wrote it, or who gave a key, is evidence of authorship or of the key and
+  is not the data this rule keeps out of a tree. The league's own records
+  name their author on thirty-five requirement pages, in fourteen retros
+  and twice in the v0.0.1 release record, once as the person who gave the
+  key. Read without this, "a tree holds identifiers, never the person"
+  instructs a seat to delete `- Key: Kai, 7 September 2026, "cut it"`,
+  which is the only evidence that release had a key at all, and the seat
+  doing it would believe it was complying. The person this rule is about is
+  the one who did not choose to be in the tree.
+- The rule as first written is preventive and the occasion was remedial. It
+  says how a tree stays clean; the pull request that prompted it was already
+  carrying a customer's name, email and telephone number, and another
+  engagement's real name. A seat meets that tree, and the first version
+  gives it no word for what to do. The guest paragraph the five working
+  skills already carry is where it belongs, because it is the paragraph
+  about reading a tree that is not the league's, and it already sorts what
+  a guest finds into two kinds.
 - A proof of absence for a name the tree must not hold cannot be a wall,
   because the wall would have to hold the name. It is a manual test at the
   merge, with its steps written, and the test skill says so as a class.
@@ -103,6 +126,15 @@ must contain and what a tree may hold.
    built artefact that carries a person committed.
 7. `SURFACE.md`'s section for `acceptance` names the `People` line among
    what the command reads.
+8. The guest paragraph in each of the five working skills says what a guest
+   does with data about a person it finds in a tree it was pointed at: it
+   names the file to the ask and never the data, and it does not remove it,
+   because a name removed from a working tree stays in the history and the
+   tree then reads as clean.
+9. The analyse skill's section on data about a person says whose presence
+   is not the question: a record naming the person who wrote it or who gave
+   a key is evidence of authorship or of the key, and the rule is about a
+   person who did not choose to be in the tree.
 
 ## Open questions
 
@@ -115,11 +147,18 @@ must contain and what a tree may hold.
 - Where a consumer's requirement names a system of record that is a
   product, the skill rule forbids naming products in skills, not in
   requirements; is that the right line?
+- A guest that names the file and not the data has told the asker where to
+  look and nothing about how bad it is. Is that the right trade, or should
+  a guest be able to say what kind of data it saw, in words that carry
+  none of it?
+- Removing a name leaves it in the history, so the tree is not clean and
+  cannot be made clean by a seat. Who decides what happens to a history
+  that carries a person, and does the league owe that decision a shape?
 
 ## Handoff
 
 - Task: a-task-names-its-people
-- Criteria: 7; tests: 7 (equal)
+- Criteria: 9; tests: 9 (equal)
 - Red run: `node --test --test-timeout=60000 requirements/a-task-names-its-people/acceptance.test.mjs`,
   8 September 2026, 7 failing, each for its own reason: the sentences are
   absent from three skills, the template and the surface page; the wall
@@ -131,7 +170,7 @@ must contain and what a tree may hold.
   What the runs said. Discarded.
 - Tests: `acceptance.test.mjs`, beside this file; `fixtures/no-people` and
   `fixtures/people-none`, each a requirement with one green test
-- Open questions: 4, listed above
+- Open questions: 6, listed above
 - Status: open
 - Blocked on: nothing
 - Unblocks: nothing
