@@ -46,13 +46,28 @@ test("3. codeql analyses javascript-typescript on pull requests, main, and a sch
 test("4. ci keeps walls on ubuntu, adds windows, both run npm test; actions pinned to v7 or higher", () => {
   const ci = read(".github", "workflows", "ci.yml");
   const jobs = ci.slice(ci.indexOf("\njobs:"));
-  assert.match(jobs, /^ {2}walls:\n(?:.*\n)*? {4}runs-on: ubuntu-latest/m);
-  assert.match(jobs, /runs-on: windows-latest/);
-  assert.equal(
-    (jobs.match(/^\s*- run: npm test\s*$/gm) ?? []).length,
-    2,
-    "two jobs run npm test",
+  // Each named job, read inside its own block. A total over the file was
+  // what this asserted, and the criterion names two jobs rather than
+  // claiming how many others there may be.
+  const block = (name) =>
+    jobs.match(
+      new RegExp(`^  ${name}:\\n([\\s\\S]*?)(?=^  \\S|(?![\\s\\S]))`, "m"),
+    )?.[1] ?? "";
+  const walls = block("walls");
+  assert.match(walls, /runs-on: ubuntu-latest/);
+  assert.match(
+    walls,
+    /^\s*- run: npm test\s*$/m,
+    "walls does not run the board",
   );
+  const windows = Object.fromEntries(
+    [...jobs.matchAll(/^  ([a-z0-9-]+):$/gm)].map((m) => [m[1], block(m[1])]),
+  );
+  const onWindows = Object.entries(windows).filter(
+    ([, b]) =>
+      /runs-on: windows-latest/.test(b) && /^\s*- run: npm test\s*$/m.test(b),
+  );
+  assert.ok(onWindows.length, "no job runs the board on windows");
   for (const f of readdirSync(join(G, "workflows"))) {
     const w = read(".github", "workflows", f);
     for (const m of w.matchAll(

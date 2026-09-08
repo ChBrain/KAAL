@@ -1,8 +1,12 @@
 name: ci
 # Every wall the league has, on every pull request and every push to main,
 # under the one command the hook runs locally. Local green and CI green are
-# the same command by construction. Two platforms: `walls` is the required
-# check and keeps its name; `walls-windows` is the proof gates-v2 lacked.
+# the same command by construction. Two platforms and two
+# runtimes: `walls` is the required check and keeps its name;
+# `walls-windows` is the proof gates-v2 lacked; `walls-node-24` is the proof
+# a-wall-reads-one-format lacked. Each is a job of its own rather than a
+# matrix on `walls`, because a matrix renames the check to `walls (22)` and
+# the required check is named `walls`.
 # The standard job runs the Agent Skills reference validator over every skill
 # and compares the pinned specification with the live text, on every pull
 # request, every push to main and once a week, so divergence in either
@@ -31,6 +35,24 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+  # The runtime the league does not pin. Node prints TAP when its test output
+  # is piped on 22 and spec on 24, and both are correct; a wall that read one
+  # shape reported every closed task as zero passing and called itself green.
+  # That defect reached main because CI ran one runtime and a contributor
+  # tripped over it on their own machine instead. Four retros asked for this
+  # job before it existed.
+  walls-node-24:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # origin/main, for the class wall
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm test
