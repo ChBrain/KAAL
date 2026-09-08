@@ -87,8 +87,16 @@ contract may not carry a number the tree will move.
    count from the same tree it asserts about, and names what that prevents:
    a test that goes red on the league's own schedule rather than on a
    change.
-5. The eleven retros this run consumed are under `retros/archive/`, and
-   `kaal retros` counts zero unconsumed for the architect skill.
+5. The eleven retros this run consumed are under `retros/archive/`, none of
+   the eleven is still live under `retros/`, and `kaal retros` counts the
+   architect skill's unconsumed retros as the tree holds them.
+
+   _Corrected during the build, 7 September 2026, for the reason
+   `a-requirement-shows-its-work` was corrected an hour earlier: a count of
+   zero is true the hour a stack is consumed and false the next time anyone
+   uses the skill. Asserting a state the tree moves is the defect this
+   task's own fourth criterion forbids a contract to commit, so a criterion
+   committing it could not stand. It now names the eleven._
 
 ## Open questions
 
@@ -126,7 +134,7 @@ contract may not carry a number the tree will move.
 - Green before the build: criterion 5, and it is not a defect. The archive
   is this change's own act, so the count is zero the moment it lands
 - Open questions: 6, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: nothing

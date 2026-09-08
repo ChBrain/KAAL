@@ -68,17 +68,20 @@ test("2. an empty seam or layer is written in the table, not under it", () => {
     .filter((b) => /test strategy|strategy table|no criterion|empty/i.test(b))
     .join(" ");
   assert.ok(said, "nothing in the drawing's sections mentions the strategy");
+  // One sentence carries the whole rule. Read across the bullet, `empty`
+  // matched the sentence explaining why the rule exists and `table` matched
+  // the same, so two thirds of this test was green with the rule deleted.
+  const rule = said
+    .split(/(?<=\.)\s+/)
+    .filter((x) => /no criterion|serves no|nothing below/i.test(x))
+    .join(" ");
+  assert.ok(rule, `a seam or layer with nothing in it is not covered: ${said}`);
   assert.match(
-    said,
-    /no criterion|serves no|nothing below|empty/i,
-    `a seam or layer with nothing in it is not covered: ${said}`,
-  );
-  assert.match(
-    said,
+    rule,
     /table/i,
-    `the table is not named as where it goes: ${said}`,
+    `the table is not named as where it goes: ${rule}`,
   );
-  assert.match(said, /reason|why/i, `the reason is not asked for: ${said}`);
+  assert.match(rule, /reason|why/i, `the reason is not asked for: ${rule}`);
 });
 
 test("3. a far side that is not built is a guess, and names the task that answers it", () => {
@@ -108,10 +111,18 @@ test("3. a far side that is not built is a guess, and names the task that answer
     /\bgap\b/i,
     `a decision that opens a gap is not covered: ${decisions}`,
   );
+  // And the task is named in that sentence, not anywhere in the bullet: the
+  // rule about pricing a choice already says "the very value the task was
+  // for", so a bullet-wide match for `task` was green before this was
+  // written and held nothing.
+  const gap = decisions
+    .split(/(?<=\.)\s+/)
+    .filter((x) => /\bgap\b/i.test(x))
+    .join(" ");
   assert.match(
-    decisions,
+    gap,
     /\btask\b/i,
-    `the task that closes it is not named: ${decisions}`,
+    `the task that closes it is not named: ${gap}`,
   );
 });
 
@@ -130,15 +141,19 @@ test("4. a contract may assert a count only when it computes it", () => {
 });
 
 test("5. the stack this run consumed is archived, and the count is zero", () => {
-  const live = readdirSync(join(ROOT, "retros")).filter((n) =>
-    n.includes("architect"),
-  );
-  assert.deepEqual(live, [], `still unconsumed: ${live.join(", ")}`);
-  for (const r of RETROS)
+  // The eleven, not the directory. An empty directory is true the hour a
+  // stack is consumed and false the next time anyone uses the skill, which
+  // is the count this task's own fourth criterion forbids a test to carry.
+  const live = readdirSync(join(ROOT, "retros"));
+  for (const r of RETROS) {
+    assert.ok(!live.includes(r), `${r} is still unconsumed`);
     assert.ok(
       existsSync(join(ROOT, "retros", "archive", r)),
       `${r} is not archived`,
     );
+  }
+  // And the tool's count is read from the same tree it counts.
+  const expected = live.filter((n) => n.includes("architect")).length;
   const r = spawnSync(
     process.execPath,
     [join(ROOT, "bin", "kaal.mjs"), "retros", ROOT],
@@ -146,7 +161,7 @@ test("5. the stack this run consumed is archived, and the count is zero", () => 
   );
   assert.match(
     r.stdout,
-    /^architect: 0 unconsumed$/m,
-    `the tool counts: ${r.stdout.trim()}`,
+    new RegExp(`^architect: ${expected} unconsumed$`, "m"),
+    `the tree holds ${expected}, the tool says: ${r.stdout.trim()}`,
   );
 });

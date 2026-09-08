@@ -65,6 +65,13 @@ for your own comfort, and it will have to be tested, built, and kept.
 Copy [the drawing template](references/drawing.md) and fill it. The sections
 are fixed and in this order.
 
+- **What the runs said.** A fact you established by running something goes
+  here, with the command and what came back, and never inside a decision's
+  reasoning. A decision is a door you closed and a reader may disagree with
+  it; a run is a thing anyone can repeat, and burying one inside the other
+  makes a checkable fact read as a matter of taste. A version the tool
+  printed, an error you reproduced, a count you read from the tree: all of
+  it belongs under What the runs said.
 - **Structure.** The parts and how they sit: what exists, what is new, what
   changes. Name each part by what it is for, not by how it will be coded.
 - **Seams.** Every boundary another part or the outside world crosses: its
@@ -76,6 +83,10 @@ are fixed and in this order.
   A change to a reader that several seats share (a parser, a template) is a
   seam for every reader: the drawing names the readers and fixes the
   behaviour they keep.
+  A seam whose far side is not built yet is drawn as the guess it is, said
+  so in the list, and names the task that will answer it. Drawn straight, a
+  guess reads as a promise somebody already keeps, and the first developer
+  to cross it builds against a shape nobody agreed to.
 - **Fixed and free.** What the developer may not change (a seam, a format, a
   constraint from the requirement) and what is theirs to decide. For a text change the
   parts are the sentences' places, and the fixed words are what the contract
@@ -96,6 +107,8 @@ are fixed and in this order.
   which of the two the choice bought and what it spent on the other. A choice
   that costs nothing on either side is not a decision either; it is a detail,
   and it belongs in Fixed and free.
+  A decision that opens a gap names the task that closes it, in the record
+  and not only in the handoff, so the gap and its price are read together.
   The dangerous trade is the one nobody priced. Read the foreclosed side
   against what the task exists to deliver: a choice that takes the shortest
   path and forecloses the very value the task was for reads as free on the
@@ -103,7 +116,12 @@ are fixed and in this order.
 - **Test strategy.** For every acceptance criterion, which kind of test will
   hold it at each layer below you: deterministic (a wall), harnessed (a rubric
   a model reads, which reports and never gates), or manual (steps and an
-  expected result), and why that kind.
+  expected result), and why that kind. A seam that serves no criterion, and a
+  layer with nothing below it, are rows in the same table with the reason in
+  the why column, never a paragraph beneath it. A reader who counts the table
+  counts the empty cases too, and prose under a table is where a reader stops
+  looking; written there, an emptiness that was chosen is indistinguishable
+  from one nobody noticed.
 
 ## 3. Write the proof
 
@@ -125,6 +143,12 @@ One contract test per seam, numbered to match the seam list. Rules:
   repository's own test runner hangs, because that runner runs the contracts,
   which run the file that called it, and the run dies on a timeout rather than
   on a failure anyone can read. Prove the case on a fixture instead.
+- **A count is computed, never carried.** A contract may assert a count only
+  when it computes that count from the same tree it asserts about. A number
+  written into the test is true on the day it is written and false on the day
+  the tree moves, so the test goes red on the league's own schedule rather
+  than on a change, and the seat that meets it learns nothing. Read the tree,
+  then assert the two agree.
 - **One seam, one test.** A seam with no test is not a seam; a test with no
   seam is a promise you did not draw.
 
