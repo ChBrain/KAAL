@@ -67,10 +67,16 @@ root. Exits 0, 1 or 2 (`agent-v1`, `applies-here`).
 
 ## retros
 
-Answers how many retros feed each skill that no requirement has yet consumed.
-Reads `retros/` and `requirements/`; consumption is by filename, so archiving
-a retro changes no count. Takes a root. Exits 0 or 2
-(`nothing-passes-vacuously`).
+Answers, for each skill, how many retros feed it that no requirement has yet
+consumed, and how many retros read it. Reads `retros/` and `requirements/`;
+consumption is by filename, so archiving a retro changes no unconsumed
+count. A read is never counted as an unconsumed retro, so it does not fire
+the rule of ten; reads are counted over `retros/` alone, so archiving a
+retro does remove its read. A `Read:` line naming something this tree holds
+no skill for is a finding. `--check` prints the findings and nothing else,
+which is the form the board runs. Takes a root. Exits 0, 1 and 2
+(`a-retro-names-what-it-read`, `the-board-counts-the-reads`,
+`nothing-passes-vacuously`).
 
 ## boundary
 

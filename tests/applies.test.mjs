@@ -84,3 +84,17 @@ test("a command the table does not name is never refused", () => {
   for (const cmd of ["fixtures", "assess", "nope"])
     assert.equal(appliesHere(cmd, FOREIGN, ROOT), null, cmd);
 });
+
+test("retros is asked about the working directory when its argument is a flag", () => {
+  // A root and a flag share one position, and a flag is not a directory.
+  // `kaal retros --check` asks about the tree underfoot; a reason naming a
+  // place called "--check" would be a plausible lie, and it was the lie
+  // this command told before the flag existed.
+  assert.equal(appliesHere("retros", "--check", ROOT), null);
+  const away = appliesHere("retros", "--check", FOREIGN);
+  assert.match(away, /skills/);
+  assert.doesNotMatch(away, /--check/);
+  // With a root it is still asked about that root, flag or no flag.
+  assert.equal(appliesHere("retros", ROOT, FOREIGN), null);
+  assert.match(appliesHere("retros", FOREIGN, ROOT), /skills/);
+});

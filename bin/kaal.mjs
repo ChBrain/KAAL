@@ -6,7 +6,7 @@
 //
 //   node bin/kaal.mjs ledger [root]   every rung has its evidence
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
-//   node bin/kaal.mjs retros [root]   unconsumed and read retros per skill
+//   node bin/kaal.mjs retros [root] [--check]   unconsumed and read retros per skill
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
@@ -55,7 +55,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>]";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -241,12 +241,18 @@ if (cmd === "ledger") {
 } else if (cmd === "retros") {
   // Two lines a skill, adjacent and unconsumed first: ten closed tests read
   // the first line anchored, so it keeps its shape and the read count is a
-  // line of its own.
-  const root = arg ?? cwd;
-  for (const r of countRetros(root)) {
-    console.log(`${r.skill}: ${r.count} unconsumed`);
-    console.log(`${r.skill}: ${r.read} read`);
-  }
+  // line of its own. `--check` is the board's form: the findings and
+  // nothing else, because a wall that prints twelve numbers it does not
+  // judge is noise on a board a person reads at a glance.
+  const check = process.argv.includes("--check");
+  // A flag is not a directory, the same reading `applies.mjs` does for this
+  // command and for `class`.
+  const root = arg && !arg.startsWith("-") ? arg : cwd;
+  if (!check)
+    for (const r of countRetros(root)) {
+      console.log(`${r.skill}: ${r.count} unconsumed`);
+      console.log(`${r.skill}: ${r.read} read`);
+    }
   const findings = readFindings(root);
   for (const f of findings)
     console.log(`${f.retro}: reads ${f.name}, which is no skill in this tree`);
