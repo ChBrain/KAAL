@@ -32,6 +32,7 @@ export const GUARDED = [
   "runner",
   "gates",
   "class",
+  "release",
 ];
 
 const isDir = (p) => {
@@ -102,6 +103,15 @@ export function appliesHere(cmd, arg, cwd) {
       return existsSync(join(root, "kaal.config.json"))
         ? null
         : `no kaal.config.json under ${root}`;
+    case "release":
+      // Asked about the working directory whatever it was handed, the way
+      // `runner` is: the argument is a version, never a path. Its reason
+      // names what it wanted, a version, rather than the file it read:
+      // `class` reads the same file for a different question, and two
+      // commands refusing in the same words tell a reader nothing.
+      return existsSync(join(cwd, "package.json"))
+        ? null
+        : `no version to release: no package.json under ${cwd}`;
     case "class": {
       // Its argument is a root, but it also takes a flag, and a flag is not a
       // directory: `kaal class --against main` asks about the working

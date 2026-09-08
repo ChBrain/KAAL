@@ -6,6 +6,7 @@
 //
 //   node bin/kaal.mjs ledger [root]   every rung has its evidence
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
+//   node bin/kaal.mjs release <version>   whether this tree may be released as that version
 //   node bin/kaal.mjs retros [root] [--check]   unconsumed and read retros per skill
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
@@ -31,6 +32,7 @@ import { fileURLToPath } from "node:url";
 import { checkLedgers, standings } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
 import { countRetros, readFindings } from "./lib/retros.mjs";
+import { checkRelease } from "./lib/release.mjs";
 import { runGates } from "./lib/gates.mjs";
 import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
@@ -55,7 +57,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>]";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -238,6 +240,19 @@ if (cmd === "ledger") {
     (f) => `${f.agent}: ${f.rule}: ${f.message}`,
   );
   if (!findings.length) console.log("agents: every agent obeys the rules");
+} else if (cmd === "release") {
+  // A refusal, not a release. It is asked about the working directory
+  // whatever it was handed, the way `runner` is and for the same reason:
+  // its argument is a version, never a path, and a reason naming a
+  // directory called "0.0.1" would be a plausible lie.
+  const [version] = process.argv.slice(3);
+  if (!version) {
+    console.error(usage);
+    process.exit(1);
+  }
+  const r = checkRelease(cwd, version);
+  for (const l of r.lines) console.log(l);
+  if (!r.ok) process.exit(1);
 } else if (cmd === "retros") {
   // Two lines a skill, adjacent and unconsumed first: ten closed tests read
   // the first line anchored, so it keeps its shape and the read count is a

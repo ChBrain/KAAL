@@ -1,0 +1,53 @@
+name: release
+# The key, spent as one run. A person starts this, names the version, and
+# nothing else can: no push, no schedule, no merge. That is the operate
+# skill's rule about production, which is taken on the key and nothing else,
+# expressed as a trigger.
+#
+# The board runs here rather than being trusted from a green merge. The
+# v0.0.1 cut was refused by a red board on a runtime CI did not pin, which
+# is exactly the case a merge's green would have hidden.
+#
+# `kaal release` is the refusal: it says whether the tree carries the
+# version and whether the plan exists. Neither is checkable from a tag, and
+# both are cheap to get wrong by hand.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to release, as package.json carries it
+        required: true
+        type: string
+permissions:
+  contents: write # the tag, and nothing else
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # origin/main, for the class wall
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      # Main and nowhere else. Every branch in this league is a route
+      # towards main, so a dispatch from one is a release from a place that
+      # was on its way somewhere. Checked before the board, because a
+      # release from the wrong place should not spend two minutes of CI
+      # proving it is well made.
+      - name: refuse a dispatch from anywhere but the default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "release: dispatched from ${{ github.ref_name }}, and this releases from ${{ github.event.repository.default_branch }} only"
+          exit 1
+      - run: npm ci
+      - run: npm test
+      - run: node bin/kaal.mjs release "${{ inputs.version }}"
+      # After the board and the refusal, and never before either.
+      - name: tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ inputs.version }}" -m "KAAL v${{ inputs.version }}"
+          git push origin "refs/tags/v${{ inputs.version }}"

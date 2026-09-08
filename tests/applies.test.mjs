@@ -14,7 +14,7 @@ const FOREIGN = join(
 );
 const HALF = join(ROOT, "architecture", "applies-here", "fixtures", "half");
 
-test("the guarded commands are the nine that judge a tree against a league artefact", () => {
+test("the guarded commands are the ten that judge a tree against a league artefact", () => {
   assert.deepEqual(GUARDED, [
     "ledger",
     "drawings",
@@ -25,6 +25,7 @@ test("the guarded commands are the nine that judge a tree against a league artef
     "runner",
     "gates",
     "class",
+    "release",
   ]);
 });
 
@@ -41,11 +42,13 @@ test("every guarded command applies to the league's own tree", () => {
 });
 
 test("none applies to a tree that holds no league artefact, and each names what it looked for", () => {
-  // The runner is the exception, and it is the design: its first argument is
-  // a skill name, so it is asked about the working directory and a foreign
-  // path handed to it is not a root. It is driven below, by its cwd.
+  // Two are exceptions and both are the design: `runner` takes a skill name
+  // and `release` takes a version, so neither first argument is a path and
+  // both are asked about the working directory. They are driven below, by
+  // their cwd, and a foreign path handed to either is not a root.
+  const byCwd = ["runner", "release"];
   const reasons = new Set();
-  for (const cmd of GUARDED.filter((c) => c !== "runner")) {
+  for (const cmd of GUARDED.filter((c) => !byCwd.includes(c))) {
     const why = appliesHere(cmd, FOREIGN, ROOT);
     assert.ok(why, `${cmd} answered a foreign tree`);
     assert.match(why, /foreign/, `${cmd}: the reason does not name the path`);
@@ -56,6 +59,11 @@ test("none applies to a tree that holds no league artefact, and each names what 
   assert.match(runner, /foreign/, "the runner's reason does not name the path");
   assert.doesNotMatch(runner, /analyse/, "the runner read a skill as a path");
   reasons.add(runner);
+  const release = appliesHere("release", "0.0.1", FOREIGN);
+  assert.ok(release, "release answered a foreign working directory");
+  assert.match(release, /foreign/, "the release reason does not name the path");
+  assert.doesNotMatch(release, /0\.0\.1/, "release read a version as a path");
+  reasons.add(release);
   assert.equal(
     reasons.size,
     GUARDED.length,

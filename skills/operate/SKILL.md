@@ -52,6 +52,14 @@ the handoff alone. Production you take on the key and nothing else: not a
 green board, not a merged pull request, not an earlier go for an earlier
 version.
 
+A run a person starts is a key when it carries what a key carries. A
+dispatch names the version, the person who started it is the person who
+holds deploy authority, and the target is the one the run is wired to; the
+release record names all three, and a record that names fewer is not
+evidence of a key. A run anything else can start is not a key at all,
+whatever it is called: a merge, a schedule and a push are none of them a
+person deciding to ship this version to this target.
+
 If the key is missing, stop and ask; do not deploy and report. If anything in
 the handoff is a claim rather than a run, hand back to the developer.
 
@@ -69,6 +77,14 @@ release is a report.
   version and target, it produces this artefact, calls this endpoint, refuses
   production without a key. Seen red before the script exists, seen green on
   a stand-in, then green.
+- **When the artefact is a ref, the refusals are the tests.** A release
+  whose whole artefact is a git ref deploys by two commands, and a script
+  wrapping them is a wrapper: its tests test the wrapper and nothing has
+  shipped. Write the refusals instead, as a command with unit tests, and
+  test those: that the tree carries the version being released, that the
+  plan exists before the run, and whatever else the release rests on that a
+  tag cannot show. Record the two commands verbatim in the plan, and let
+  the smoke prove arrival.
 - **Rehearse the rollback** on the non-production target before you ship to
   production: run the release, roll it back, confirm the previous version
   answers. A rollback that has never run is a claim.
