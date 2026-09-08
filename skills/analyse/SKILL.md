@@ -72,9 +72,17 @@ sections are fixed and in this order.
 - **Goal.** One sentence: who wants what, and how they will know. Not how.
   The output's format (a flag, a file type, a serialisation) is a how: it
   belongs in an assumption or an open question and never in the goal.
+- **What the runs said.** A fact you established by running something goes
+  here, with the command and what came back, and never into an assumption's
+  reasoning. The two are told apart by who could deny them: an assumption is
+  a thing the asker could deny, and a run is a thing anyone can repeat. A
+  count you read from the tree, an error you reproduced, a version the tool
+  printed: all of it belongs under What the runs said, where a reader can
+  check it instead of trusting it.
 - **Assumptions.** What you took as given because the ask did not say. Each
   one is a thing the asker could deny; if they could not, it is not an
-  assumption, it is a fact and belongs nowhere.
+  assumption, it is a fact and belongs nowhere. An assumption that rests on
+  a run cites the run rather than restating it.
 - **Constraints.** What the ask forbids or fixes: a deadline, a format, a
   compatibility, a thing that must not change. Constraints come from the ask
   or its context, never from your taste.
@@ -142,6 +150,19 @@ One acceptance test per criterion, numbered to match. Rules:
   it is handed, and a test that names its own file re-enters it forever.
 - **On fixed ground.** A test reads a fixture root, never the league's own
   tree for a state that a rerun or a later change will move.
+- **A fixture a test builds is held to the same rules.** A fixture written
+  during the run obeys every rule it is not testing, exactly as one checked
+  into the tree does. A fixture that breaks one leaves the test red for
+  another rule's reason and the criterion unproven, or leaves the passing
+  case it was built for unable to pass at all, and no run tells you which.
+  Build the fixture the way the tree would take it, then break the one thing
+  the criterion is about.
+- **Seen red one at a time.** Where more than one test rests on the same
+  precondition, run each on its own as well as all together. A single shared
+  red hides how many of them it is holding up: five tests failing on one
+  missing file look like five proofs and are one, and the four that prove
+  nothing are found only when that one is satisfied and they stay red for
+  their own reasons or go green for none.
 - **A partial red is honest.** When a criterion is already met before any
   build, or needs a person's step to close, the handoff says which, so the
   board can tell waiting on a person from waiting on a developer.
@@ -181,6 +202,8 @@ It also carries the task's status, and you own both ends of it. The task is
 open at handoff (`- Status: open`) and closed when every test is green
 (`- Status: closed`); the acceptance wall reads that line. `- Blocked on:`
 names the person or the setting the task waits for, or nothing;
+`- Unblocks:` names a task that waits on this one, or
+nothing, so a reader of either task can see the order without opening both;
 `- Supersedes:` names an earlier task and what of it, or nothing. A supersede
 names three things: the closed task, the exact claim that moves, and the
 principle that permits it. Where the closed task's own stated principle
