@@ -16,6 +16,32 @@ something has a place on the page, when the order a task sits in is on the
 page rather than in a pull request, and when the skill says how a proof is
 seen red and what a fixture owes even when a test builds it.
 
+## What the runs said
+
+This section is the thing criterion 1 asks for, written here first because a
+requirement that asks for it and does not use it is an argument against
+itself.
+
+- The stack is twelve and the analyse count is zero after archiving:
+  `node bin/kaal.mjs retros` answered `analyse: 12 unconsumed` before the
+  move and `analyse: 0 unconsumed` after it, with `architect: 11` unchanged
+  on both sides, which is what makes the architect stack a second ask rather
+  than part of this one.
+- The six-fold repetition is counted from the files and not from memory:
+  the phrase about a fact established by running something appears in the
+  thirty-eighth, thirty-ninth, fortieth, forty-third, forty-fourth and
+  forty-fifth retros, and four of them number the streak themselves.
+- Two of the five tests were green for the wrong reason and a run found
+  each. Criterion 1 passed against the unchanged tree because the template
+  folded to one line and any heading matched; criterion 1 passed again,
+  after that was fixed, with the skill's new rule deleted, because section 2
+  already says "run" and "assumption" for other reasons. The test now ties
+  the two documents by the heading's own words.
+- Criterion 3's first form demanded a rule and its reason in one sentence,
+  which is a test about punctuation. It reads the whole rule now, found by
+  matching the proof's bullets and filtering rather than by a pattern that
+  expected the phrase twice.
+
 ## Assumptions
 
 - The loudest item is not close. Six of the twelve say the requirement
@@ -44,32 +70,6 @@ seen red and what a fixture owes even when a test builds it.
   the same shape `a-decision-balances-two-goods` took and for the same
   reason: the ask is about how a seat works.
 
-## What the runs said
-
-This section is the thing criterion 1 asks for, written here first because a
-requirement that asks for it and does not use it is an argument against
-itself.
-
-- The stack is twelve and the analyse count is zero after archiving:
-  `node bin/kaal.mjs retros` answered `analyse: 12 unconsumed` before the
-  move and `analyse: 0 unconsumed` after it, with `architect: 11` unchanged
-  on both sides, which is what makes the architect stack a second ask rather
-  than part of this one.
-- The six-fold repetition is counted from the files and not from memory:
-  the phrase about a fact established by running something appears in the
-  thirty-eighth, thirty-ninth, fortieth, forty-third, forty-fourth and
-  forty-fifth retros, and four of them number the streak themselves.
-- Two of the five tests were green for the wrong reason and a run found
-  each. Criterion 1 passed against the unchanged tree because the template
-  folded to one line and any heading matched; criterion 1 passed again,
-  after that was fixed, with the skill's new rule deleted, because section 2
-  already says "run" and "assumption" for other reasons. The test now ties
-  the two documents by the heading's own words.
-- Criterion 3's first form demanded a rule and its reason in one sentence,
-  which is a test about punctuation. It reads the whole rule now, found by
-  matching the proof's bullets and filtering rather than by a pattern that
-  expected the phrase twice.
-
 ## Constraints
 
 - The skill's rules apply to its own text: MIT, the standard's shape, no
@@ -95,8 +95,17 @@ itself.
    single shared red hides.
 4. The handoff names what the task unblocks beside what it is blocked on,
    and the template carries that line.
-5. The twelve retros this run consumed are under `retros/archive/`, and
-   `kaal retros` counts zero unconsumed for the analyse skill.
+5. The twelve retros this run consumed are under `retros/archive/`, none of
+   the twelve is still live under `retros/`, and `kaal retros` counts the
+   analyse skill's unconsumed retros as the tree holds them.
+
+   _Corrected during the build, 7 September 2026. It read "and `kaal retros`
+   counts zero unconsumed for the analyse skill", which was true the hour it
+   was written and false two retros later, because the stream does not stop
+   when a stack is consumed. The criterion asserted a state the tree moves,
+   which is the defect `a-drawing-shows-its-ground` names in its own fourth
+   criterion and which this skill's own rule "On fixed ground" already
+   forbids. What the criterion is about is the twelve, and it now says so._
 
 ## Open questions
 
@@ -138,7 +147,7 @@ itself.
   a criterion because a run that consumes a stack and leaves it unconsumed
   has read it twice
 - Open questions: 6, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing yet; the architect stack of eleven is the next ask and
   is independent of this one

@@ -4,6 +4,11 @@
 
 <One sentence: who wants what, and how they will know it happened. No how.>
 
+## What the runs said
+
+- <A fact established by running something: the command, and what came back.
+  Not a thing you took as given; that is an assumption.>
+
 ## Assumptions
 
 - <A thing taken as given that the asker could deny.>
@@ -31,6 +36,7 @@
 - Open questions: <count>, listed above
 - Status: <open at handoff; closed when every test is green>
 - Blocked on: <a person, a setting, or nothing>
+- Unblocks: <a task that waits on this one, or nothing>
 - Supersedes: <an earlier task and what of it, or nothing>
 
 ---

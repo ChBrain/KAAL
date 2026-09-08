@@ -134,15 +134,20 @@ test("4. the handoff names what the task unblocks", () => {
 });
 
 test("5. the stack this run consumed is archived, and the count is zero", () => {
-  const live = readdirSync(join(ROOT, "retros")).filter((n) =>
-    n.includes("analyse"),
-  );
-  assert.deepEqual(live, [], `still unconsumed: ${live.join(", ")}`);
-  for (const r of RETROS)
+  // The twelve, not the directory. An empty directory was this criterion's
+  // first reading and it went red two retros later without anything about
+  // this task changing, which is the thing "On fixed ground" forbids.
+  const live = readdirSync(join(ROOT, "retros"));
+  for (const r of RETROS) {
+    assert.ok(!live.includes(r), `${r} is still unconsumed`);
     assert.ok(
       existsSync(join(ROOT, "retros", "archive", r)),
       `${r} is not archived`,
     );
+  }
+  // And the tool's count is checked against the same tree it counts, so it
+  // cannot go red on the day someone files an unrelated retro.
+  const expected = live.filter((n) => n.includes("analyse")).length;
   const r = spawnSync(
     process.execPath,
     [join(ROOT, "bin", "kaal.mjs"), "retros", ROOT],
@@ -150,7 +155,7 @@ test("5. the stack this run consumed is archived, and the count is zero", () => 
   );
   assert.match(
     r.stdout,
-    /^analyse: 0 unconsumed$/m,
-    `the tool counts: ${r.stdout.trim().split("\n")[0]}`,
+    new RegExp(`^analyse: ${expected} unconsumed$`, "m"),
+    `the tree holds ${expected}, the tool says: ${r.stdout.trim().split("\n")[0]}`,
   );
 });
