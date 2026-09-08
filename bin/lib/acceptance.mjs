@@ -25,10 +25,15 @@ export function judge(status, pass, fail, mustClose = true) {
       label:
         "FAIL no status: write `- Status: open` or `- Status: closed` in the Handoff",
     };
-  if (status === "closed")
-    return fail > 0
-      ? { ok: false, label: "FAIL closed" }
-      : { ok: true, label: "ok   closed" };
+  if (status === "closed") {
+    if (fail > 0) return { ok: false, label: "FAIL closed" };
+    // Nothing failed is not the same as something passed. A closed task
+    // whose run reports no passing test has been read wrong or skipped, and
+    // either way it is evidence of nothing.
+    return pass > 0
+      ? { ok: true, label: "ok   closed" }
+      : { ok: false, label: "FAIL closed and nothing ran" };
+  }
   if (fail > 0 || !mustClose) return { ok: true, label: "open" };
   return { ok: false, label: "FAIL open and all green: close it" };
 }
@@ -63,11 +68,20 @@ export function runContracts(files) {
 export function runJudged(files, statusFor, mustClose = true) {
   const results = [];
   for (const file of expand(files)) {
-    const r = spawnSync(process.execPath, ["--test", file], {
-      encoding: "utf8",
-      env: wallEnv(),
-      stdio: ["ignore", "pipe", "inherit"],
-    });
+    // The reporter is named and not inherited: node 22 prints TAP when this
+    // output is piped and node 24 prints spec, both by default and both
+    // correctly, and the two patterns below read one of them. `wallEnv`
+    // clears any reporter from the environment, because a named one does not
+    // beat an inherited one, it joins it and node then refuses the pair.
+    const r = spawnSync(
+      process.execPath,
+      ["--test", "--test-reporter=tap", file],
+      {
+        encoding: "utf8",
+        env: wallEnv(),
+        stdio: ["ignore", "pipe", "inherit"],
+      },
+    );
     const pass = Number(r.stdout.match(/^# pass (\d+)/m)?.[1] ?? 0);
     const fail = Number(
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),

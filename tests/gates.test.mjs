@@ -51,6 +51,24 @@ test("a failing node --test wall stays red even when the runner itself runs unde
   );
   assert.equal(wallEnv().NODE_TEST_CONTEXT, undefined);
   assert.equal(wallEnv().KAAL_GATES, "1");
+  // A reporter in NODE_OPTIONS does not lose to one a wall names on the
+  // command line: node collects both and refuses the pair. So it goes, for
+  // the same reason the marker above goes, and whatever else was there stays.
+  assert.equal(
+    wallEnv({ NODE_OPTIONS: "--test-reporter=spec" }).NODE_OPTIONS,
+    undefined,
+  );
+  assert.equal(
+    wallEnv({
+      NODE_OPTIONS:
+        "--max-old-space-size=99 --test-reporter=spec --test-reporter-destination=stdout",
+    }).NODE_OPTIONS,
+    "--max-old-space-size=99",
+  );
+  assert.equal(
+    wallEnv({ NODE_OPTIONS: "--max-old-space-size=99" }).NODE_OPTIONS,
+    "--max-old-space-size=99",
+  );
   const r = runGates(join(F, "clean"), {
     gates: [
       {
