@@ -30,19 +30,24 @@ test("1. SECURITY.md: reporting, supported versions, and a threat model naming t
   assert.match(threats, /data/);
 });
 
-test("2. every workflow declares permissions; only evals writes contents", () => {
+test("2. every workflow declares permissions, and a contents write says what it is for", () => {
   const files = readdirSync(W).filter((f) => /\.ya?ml$/.test(f));
   assert.ok(files.length >= 2);
   for (const f of files) {
     const t = readFileSync(join(W, f), "utf8");
     assert.ok(/^permissions:/m.test(t), `${f}: no permissions block`);
-    const writes = /^\s*contents:\s*write/m.test(t);
-    const isEvals = /startsWith\([^)]*['"]\/eval/.test(t);
-    assert.equal(
-      writes,
-      isEvals,
-      `${f}: contents: write is ${writes ? "present" : "absent"} and it ${isEvals ? "is" : "is not"} the evals workflow`,
-    );
+    // Which write says why, not which workflow may write. Naming the
+    // workflows was a snapshot of who wrote at the time. `contents: write`
+    // is the one that can move this repository's own code and refs, so it
+    // is the one that must say what it is for, on its own line, where a
+    // consumer reading the block meets it.
+    const block = t.match(/^permissions:\n((?:\s+.+\n)*)/m)?.[1] ?? "";
+    for (const [line, rest] of block.matchAll(/^\s*contents:\s*write\b(.*)$/gm))
+      assert.match(
+        rest,
+        /#\s*\S/,
+        `${f}: ${line.trim()} does not say what the write is for`,
+      );
   }
 });
 
