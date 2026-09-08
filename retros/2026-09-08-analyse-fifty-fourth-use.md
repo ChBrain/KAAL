@@ -2,59 +2,55 @@
 
 Self-diagnosis: drawn from session context. Not a human-reported retro.
 
-Period: the fifty-fourth use of the analyse skill, on
-`requirements/an-architect-names-its-principles`, written from a discussion
-rather than an ask, 8 September 2026.
-Place: this repository
+Period: the forty-fourth use of the analyse skill, a guest reading of an
+open pull request in the repository that holds the work, pointed at an
+archived copy of its tree, 8 September 2026.
+Refiled under the fifty-fourth ordinal on 8 September 2026: the file was
+written on a branch that was not merged, and by the time it could land the
+ordinal it carried belonged to another run's retro on main.
+Place: a directory the skill was pointed at
 
 ## Liked
 
-- The discussion produced the thing the requirement is about, while it was
-  happening. We decided where a lens belongs, I argued it from retro counts,
-  and Kai named what had actually decided it. A principle created because a
-  decision needed one and there was no name: the creation path this task
-  writes down, demonstrated before it was written.
-- The evidence for the shape was already merged and only needed counting.
-  Seven decisions across six drawings weigh the same tension and none of
-  them names it, back to the thirtieth architect retro. That turned "found
-  rather than declared" from a preference into a reading of the tree.
-- Refusing to write DRY. It is the best evidenced principle in the tree and
-  writing it here would have been declaring one, which is the thing the
-  shape exists to prevent. The lens nominates it or it does not.
+- The archive and the witness took one command each, and the reading was
+  of a copy, so the branch could not have moved even by accident.
+- The scouting headings from the day before (files addressed to agents,
+  conventions that disagree with the league's, what the landing place
+  holds) worked a second time unchanged, on a tree of another kind: prose,
+  data files and a small renderer rather than a codebase.
 
 ## Learned
 
-- Four isolations reddened nothing and every one of them was the test
-  reading too widely. A file named `the-seat-owns-the-lens` satisfies a
-  match for "seat owns"; a provenance section quoting the asker satisfies it
-  again; a section introducing principles says "retro" and "tension" for its
-  own reasons; and the sentence defining when a tension becomes a principle
-  says everything the sentence instructing the lens says. Reading a named
-  region rather than a page is now the fix eleven times this week, and the
-  helper that would end it is still a Longed for.
-- The wall's rules have an order and one of them returns early. The orphan
-  rule stops the read, so the new citation rule never ran on a fixture that
-  is also an orphan. It reads the drawing alone, so it belongs above that
-  return, and a drawing that is both says both now.
-- A fixture that cites two principles never exercises the answer the
-  template offers. Dropping the guard that treats `none` as naming nothing
-  reddened no test until a second drawing said `none`. The case a template
-  offers is a case a fixture owes.
+- A tree can carry another engagement's real name beside that
+  engagement's codename, and only a reader who knows both trees sees the
+  unmasking. A witness cannot see it, a wall cannot see it without the
+  name, and the skill has no step for it. It is the absence-of-a-name
+  criterion of the thirty-seventh use seen from the other side.
+- A rule written as a comment in a data file ("nothing is created before
+  this date is filled") is a claim at the Human rung; the ladder says it
+  becomes a refusal in the tool, and the requirement that would say so
+  writes itself from the tree's own README.
+- A rendered artefact committed beside its source is a learning the
+  previous engagement recorded in its ignore file and this tree did not
+  inherit. Learning travels between trees only if something carries it,
+  which is what the retro stack is for and a plan file is not.
 
 ## Lacked
 
-- Nothing tells the analyst what to do when a task's own subject is created
-  during its discussion. The second principle here comes from a sentence
-  said an hour ago, and its provenance section is the only record that it
-  was said rather than derived.
-- A principle file has a shape and nothing checks it. The wall resolves the
-  name and the criteria read the two files this task writes; the third
-  principle can be a sentence and no wall will care.
+- No step for reading a tree against another tree's learnings. The
+  findings that mattered most came from remembering the first tree's
+  ignore file and its mask, and nothing in the skill said to look.
+- Still no shape for a scouting output (thirty-sixth use), and this time
+  the tree was a pull request, where findings have a natural home in its
+  review and the skill says only "where the ask can see it".
+- Nothing says what to do when the tree's data is a person's: names, a
+  phone number, an email in a customer file. The repository is private and
+  its README says so; the skill has no word for it either way.
 
 ## Longed for
 
-- A rule for the shape of a principle file, read the way `kaal check` reads
-  a skill, so the tenth principle has the same bones as the first.
+- One line in the skill saying that a run which has seen more than one
+  tree reads each for the other's names.
 
 Feeds: analyse
 Read: test
