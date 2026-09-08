@@ -89,3 +89,4 @@ foreclosed side against the thing the task exists to deliver.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

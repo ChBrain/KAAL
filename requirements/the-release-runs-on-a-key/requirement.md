@@ -164,3 +164,4 @@ and by the operate skill recognising a dispatch as a key.
   The `operate` skill gains a case it did not have; its rule that a deploy
   script has unit tests stands, and criterion 6 says what those tests are
   when the artefact is a ref
+- People: none

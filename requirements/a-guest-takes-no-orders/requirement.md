@@ -84,3 +84,4 @@ skills say all three where a reader looks.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

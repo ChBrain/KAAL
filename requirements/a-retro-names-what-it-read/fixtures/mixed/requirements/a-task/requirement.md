@@ -5,3 +5,4 @@
 - Task: a-task
 - Consumed: `three.md`
 - Status: closed
+- People: none

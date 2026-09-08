@@ -63,3 +63,4 @@ LF.
   `fixtures/globs`
 - Open questions: 1, listed above
 - Status: closed
+- People: none

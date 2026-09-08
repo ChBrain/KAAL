@@ -111,3 +111,4 @@ from the template` move is the candidate.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

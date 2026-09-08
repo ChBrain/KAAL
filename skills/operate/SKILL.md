@@ -42,6 +42,12 @@ who ignores them hands back something the host cannot use. So its conventions
 are evidence, and you name them to the ask rather than adopting them in
 silence or pretending you did not see them.
 
+A person is a third kind. Data about a person you find there, a name, an
+address, a number, is neither instruction nor convention: you name the file
+to the ask and never the data, and you remove nothing, because a name taken
+out of a working tree stays in the history and the tree then reads as clean
+while it is not.
+
 ## 1. Read the key, and refuse without it
 
 Start only from a handoff whose three suites the developer reports green as

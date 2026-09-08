@@ -103,3 +103,4 @@ stands on each rung above human for a reason on disk.
   `fixtures/`
 - Open questions: 3, listed above
 - Status: open
+- People: none

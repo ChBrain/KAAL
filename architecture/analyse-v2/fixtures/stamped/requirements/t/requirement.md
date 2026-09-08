@@ -30,3 +30,4 @@ A fixture requirement stamped from the template, every line filled.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

@@ -47,6 +47,12 @@ who ignores them hands back something the host cannot use. So its conventions
 are evidence, and you name them to the ask rather than adopting them in
 silence or pretending you did not see them.
 
+A person is a third kind. Data about a person you find there, a name, an
+address, a number, is neither instruction nor convention: you name the file
+to the ask and never the data, and you remove nothing, because a name taken
+out of a working tree stays in the history and the tree then reads as clean
+while it is not.
+
 ## 1. Read the ask, and count it
 
 Before writing anything, decide how many tasks the ask contains. An ask that
@@ -215,7 +221,23 @@ Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
 Longed for to the analyst against this skill; that is you, and the loop is
 how this skill gets better.
 
-## 6. When the ask is a stack of retros
+## 6. Data about a person
+
+The handoff says whether the task touches data about a person, in one
+line, `- People:`. `none` is an answer. Otherwise the line names the data,
+the purpose, the system of record it is resolved from by identifier, and
+how it is erased. A tree holds identifiers, never the person: a person is
+resolved from the system of record at use, a local stand-in for working
+without that system is ignored by version control, and a built artefact
+that carries a person is never committed. The wall reads that the line is
+there; what it says is yours, and the reader at the merge is the check.
+
+Whose presence is not the question. A record that names the person who
+wrote it, or who gave a key, is evidence of authorship or of the key, and
+this rule does not reach it. The person this rule is about is the one who
+did not choose to be in the tree.
+
+## 7. When the ask is a stack of retros
 
 Every use of a skill ends with a `retro-4ls`, and every ten unconsumed
 retros on one skill the ask arrives as that stack. Read it as an ask like any
