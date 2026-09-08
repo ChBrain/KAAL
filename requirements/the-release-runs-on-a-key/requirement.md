@@ -146,7 +146,7 @@ and by the operate skill recognising a dispatch as a key.
   fixture trees beside it, and the workflow and the skill are read as text
 - Green before the build: none expected
 - Open questions: 4, listed above; one of the five is answered and is now criterion 7
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Unblocks: the next release, which is the first thing that can prove the
   workflow

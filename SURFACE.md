@@ -78,6 +78,16 @@ which is the form the board runs. Takes a root. Exits 0, 1 and 2
 (`a-retro-names-what-it-read`, `the-board-counts-the-reads`,
 `nothing-passes-vacuously`).
 
+## release
+
+Answers whether this tree may be released as a version: whether
+`package.json` carries that version, and whether the release plan exists at
+`deploy/releases/<version>.md`. It refuses and never releases; the tag is
+made by whoever holds the key. Takes a version and no root, and is asked
+about the working directory whatever it was handed, because a version is not
+a path. Exits 0, 1 and 2 (`the-release-runs-on-a-key`,
+`nothing-passes-vacuously`).
+
 ## boundary
 
 Answers whether anything under a guarded place writes, executes or reaches the
