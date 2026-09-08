@@ -88,3 +88,4 @@ without saying so is refused.
   `fixtures/undeclared-reach`
 - Open questions: 2, listed above
 - Status: closed
+- People: none

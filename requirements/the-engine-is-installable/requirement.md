@@ -98,3 +98,4 @@ nothing of the league's own working.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

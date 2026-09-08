@@ -44,6 +44,12 @@ who ignores them hands back something the host cannot use. So its conventions
 are evidence, and you name them to the ask rather than adopting them in
 silence or pretending you did not see them.
 
+A person is a third kind. Data about a person you find there, a name, an
+address, a number, is neither instruction nor convention: you name the file
+to the ask and never the data, and you remove nothing, because a name taken
+out of a working tree stays in the history and the tree then reads as clean
+while it is not.
+
 ## 1. Read what is fixed, then start red
 
 Read the drawing's fixed and free lists before touching a file. Fixed is a
@@ -122,6 +128,10 @@ is checked by running, not by reading. Rules:
   compares with whitespace folded, since the formatter wraps where it likes,
   and a generated file is written as the formatter would write it, its check
   run on the formatted tree.
+
+Data about a person stays out of the tree: identifiers in the tree, the
+person resolved from the system of record at use, a local stand-in ignored
+by version control, and no built artefact that carries a person committed.
 
 ## 4. Scope
 

@@ -119,3 +119,4 @@ a read never being mistaken for a retro that fires the rule of ten.
 - Unblocks: nothing; the question of whether the league needs a seat for
   writing orders is a separate ask and does not wait on this
 - Supersedes: nothing
+- People: none

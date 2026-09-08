@@ -159,7 +159,8 @@ not this question's. Exits 0, 1 or 2 (`a-change-declares-its-class`).
 
 Runs the acceptance tests it is given and judges them by each requirement's
 status: an open task's red is reported, a closed task's red is a failure, and
-an open task that is all green is told to close. Takes files or globs. Exits 0
+an open task that is all green is told to close, and a handoff with no
+`People` line is refused. Takes files or globs. Exits 0
 or 1 (`status-v1`, `status-v2`).
 
 ## contracts

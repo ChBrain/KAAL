@@ -38,6 +38,7 @@
 - Blocked on: <a person, a setting, or nothing>
 - Unblocks: <a task that waits on this one, or nothing>
 - Supersedes: <an earlier task and what of it, or nothing>
+- People: <none, or the data, its system of record, how it is erased>
 
 ---
 

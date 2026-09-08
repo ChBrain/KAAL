@@ -70,3 +70,4 @@ waiver, and the config lists the three gates with the evidence each needs.
   `fixtures/`
 - Open questions: 2, listed above
 - Status: closed
+- People: none

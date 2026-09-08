@@ -81,3 +81,4 @@ of its own and a wall refuses one that does not.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

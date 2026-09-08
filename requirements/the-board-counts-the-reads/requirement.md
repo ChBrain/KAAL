@@ -118,3 +118,4 @@ tree`), and 2 on a tree with no skills. Three codes.
 - Supersedes: nothing. `SURFACE.md`'s `retros` entry is corrected rather
   than superseded: no closed test holds the sentences that went stale, and
   the page was describing a command that had already changed under it
+- People: none

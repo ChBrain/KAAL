@@ -104,3 +104,4 @@ candidate skill, <n> of 2 fresh models`, on the root
 - Blocked on: nothing
 - Supersedes: nothing
 - Status: closed
+- People: none

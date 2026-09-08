@@ -112,3 +112,4 @@ under, and by the closed contract that counts CI's jobs naming them instead.
   count only when it computes that count from the same tree it asserts
   about, and a total written into a test goes red on the league's own
   schedule rather than on a change
+- People: none

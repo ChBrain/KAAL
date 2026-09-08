@@ -69,3 +69,4 @@ marks met or not met, in the same shape as the rest.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- People: none

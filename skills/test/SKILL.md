@@ -42,6 +42,12 @@ who ignores them hands back something the host cannot use. So its conventions
 are evidence, and you name them to the ask rather than adopting them in
 silence or pretending you did not see them.
 
+A person is a third kind. Data about a person you find there, a name, an
+address, a number, is neither instruction nor convention: you name the file
+to the ask and never the data, and you remove nothing, because a name taken
+out of a working tree stays in the history and the tree then reads as clean
+while it is not.
+
 ## 1. Know your layer, and stay blind below it
 
 Each layer is driven by the stage above it and blind to the stages below it:
@@ -93,6 +99,10 @@ what decides the verdict.
   measuring the wrong thing; tighten it.
 - **Counts equal.** One want, one test, numbered to match, on both sides.
   Check the count; do not trust it.
+
+One class of proof cannot be a wall: the absence of a name the tree must
+not hold, since the wall would have to hold the name. That proof is a
+manual test at the merge, with its steps written, and never a gate.
 
 ## 4. Scope
 

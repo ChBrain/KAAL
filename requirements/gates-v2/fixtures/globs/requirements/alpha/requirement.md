@@ -6,3 +6,4 @@ A fixture requirement for gates-v2: a task the glob must find.
 
 - Task: alpha
 - Status: closed
+- People: none

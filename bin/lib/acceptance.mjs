@@ -18,12 +18,21 @@ export function readStatus(testFile) {
 }
 
 /** @returns {{ ok: boolean, label: string }} */
-export function judge(status, pass, fail, mustClose = true) {
+export function judge(status, pass, fail, mustClose = true, people = "none") {
   if (status === null)
     return {
       ok: false,
       label:
         "FAIL no status: write `- Status: open` or `- Status: closed` in the Handoff",
+    };
+  // A handoff that does not say whether the task touches a person has not
+  // answered a standing question, and the wall reads that it answered, never
+  // what it said: presence is a wall, meaning is not.
+  if (people === null)
+    return {
+      ok: false,
+      label:
+        "FAIL no people line: write `- People: none` or the data in the Handoff",
     };
   if (status === "closed") {
     if (fail > 0) return { ok: false, label: "FAIL closed" };
@@ -36,6 +45,38 @@ export function judge(status, pass, fail, mustClose = true) {
   }
   if (fail > 0 || !mustClose) return { ok: true, label: "open" };
   return { ok: false, label: "FAIL open and all green: close it" };
+}
+
+/**
+ * The requirement a test file belongs to, resolved once for both walls: an
+ * acceptance test's sibling, a drawing's task under requirements/<task>/.
+ * @param {string} testFile @returns {string}
+ */
+export function requirementFor(testFile) {
+  const dir = dirname(testFile);
+  if (basename(dirname(dir)) === "architecture")
+    return join(
+      dir,
+      "..",
+      "..",
+      "requirements",
+      basename(dir),
+      "requirement.md",
+    );
+  return join(dir, "requirement.md");
+}
+
+/**
+ * The People line of the test's requirement: its value, or null when the
+ * requirement has none. The wall reads that the line is there and says
+ * something; what it says is the analyst's.
+ * @param {string} testFile @returns {string|null}
+ */
+export function readPeople(testFile) {
+  const req = requirementFor(testFile);
+  if (!existsSync(req)) return null;
+  const m = readFileSync(req, "utf8").match(/^- People: (.+)$/m);
+  return m ? m[1].trim() : null;
 }
 
 /** A drawing's status is its task's: architecture/<task>/ reads requirements/<task>/requirement.md. */
@@ -87,7 +128,7 @@ export function runJudged(files, statusFor, mustClose = true) {
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),
     );
     const status = statusFor(file);
-    const v = judge(status, pass, fail, mustClose);
+    const v = judge(status, pass, fail, mustClose, readPeople(file));
     // The red tests by name, so a reader of the board elsewhere sees which
     // criterion failed and not only that one did.
     const red = r.stdout.match(/^not ok .*$/gm) ?? [];
