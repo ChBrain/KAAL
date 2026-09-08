@@ -57,6 +57,11 @@
       "fix": "keep the write, the shell and the network out of bin/lib/assess; only output.mjs may write"
     },
     {
+      "name": "reads",
+      "command": "node bin/kaal.mjs retros --check",
+      "fix": "a retro's Read line names a skill this tree does not hold: correct the name, or drop the line if the skill it meant is gone"
+    },
+    {
       "name": "class",
       "command": "node bin/kaal.mjs class",
       "fix": "put the version back: only a human moves the minor or the major place. A tree with no base ref answers that the question is not its own"

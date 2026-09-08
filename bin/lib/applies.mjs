@@ -73,11 +73,15 @@ export function appliesHere(cmd, arg, cwd) {
         ? null
         : `no <name>/SKILL.md under ${dir}`;
     case "retros": {
-      const skills = join(root, "skills");
+      // A root and a flag, the same pair `class` carries below and for the
+      // same reason: `kaal retros --check` asks about the working directory,
+      // and a reason naming a directory called "--check" would be a lie.
+      const tree = arg && !arg.startsWith("-") ? arg : cwd;
+      const skills = join(tree, "skills");
       return isDir(skills) &&
         readdirSync(skills).some((n) => isDir(join(skills, n)))
         ? null
-        : `no skills/<name>/ under ${root}`;
+        : `no skills/<name>/ under ${tree}`;
     }
     case "runner":
       // Asked about the working directory whatever it was handed: the first
