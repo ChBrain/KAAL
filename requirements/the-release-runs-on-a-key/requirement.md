@@ -150,6 +150,17 @@ and by the operate skill recognising a dispatch as a key.
 - Blocked on: nothing
 - Unblocks: the next release, which is the first thing that can prove the
   workflow
-- Supersedes: nothing. The `operate` skill gains a case it did not have;
-  its rule that a deploy script has unit tests stands, and criterion 6 says
-  what those tests are when the artefact is a ref
+- Supersedes: `security-v1`, in part, and the supersede is declared in that
+  requirement beside the criterion that moves. Its second criterion read
+  "and only the evals workflow declares `contents: write`", which this task
+  contradicts by adding a second workflow that writes. The claim that moves
+  is the enumeration; what replaces it is that a workflow declaring
+  `contents: write` says on that line what the write is for. The principle
+  that permits it is `security-v1`'s own goal, that a consumer can answer
+  what a workflow may touch by reading its block: a named reason answers
+  that better than a list of blessed names, and it does not go stale on the
+  next writer. Found by the board rather than by reading, which is the cheap
+  case the `code` skill names.
+  The `operate` skill gains a case it did not have; its rule that a deploy
+  script has unit tests stands, and criterion 6 says what those tests are
+  when the artefact is a ref

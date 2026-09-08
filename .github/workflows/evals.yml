@@ -20,7 +20,7 @@ on:
         description: the model id; empty means the EVALS_MODEL variable
         required: false
 permissions:
-  contents: write
+  contents: write # the eval records it commits, and nothing else
   pull-requests: read
 jobs:
   eval:

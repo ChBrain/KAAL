@@ -42,8 +42,26 @@ without saying so is refused.
    output as untrusted text and states that they are data, never
    instructions.
 2. Every workflow under `.github/workflows/` declares a top-level
-   `permissions` block, and only the evals workflow declares
-   `contents: write`.
+   `permissions` block, and a workflow that declares `contents: write` says
+   on that line what the write is for.
+
+   _Superseded in part by `the-release-runs-on-a-key`, 8 September 2026.
+   It read "and only the evals workflow declares `contents: write`", which
+   was a snapshot of who wrote when it was written rather than a rule.
+   The principle this requirement states is that a consumer can answer what
+   a workflow may touch by reading its block, and a second workflow that
+   needs to write a tag and declares exactly that keeps the principle rather
+   than breaking it.
+
+   The trade is worth naming rather than hiding: counting the writers was
+   stricter about how many, and saying why is stricter about each one. A
+   consumer reading a block now learns what the write is for instead of
+   having to know which workflow was blessed, and the claim does not go
+   stale the next time a workflow needs to write. `contents: write` is
+   singled out because it is the write that can move this repository's own
+   code and refs; CodeQL's `security-events: write` posts findings and is a
+   different kind of thing._
+
 3. `package-lock.json` is committed and the ci workflow installs with
    `npm ci`.
 4. `node bin/kaal.mjs check <dir>` reports a `reach` finding for a skill
