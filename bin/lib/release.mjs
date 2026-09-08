@@ -8,11 +8,18 @@
 // the wrapper. That is right, and it is why this is not that script. What
 // is worth testing about such a release is what it refuses.
 import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, posix } from "node:path";
 
-/** Where a release's plan lives, relative to the root. */
+/**
+ * Where a release's plan lives, relative to the root. Always with forward
+ * slashes: this is a line a person reads and types, and the requirement
+ * fixes it as `deploy/releases/<version>.md`, so joining it with the host's
+ * separator made the finding say something different on Windows and the
+ * acceptance test refused it there. Node opens a forward slash path on
+ * every platform, so the reading below is unaffected.
+ */
 export const recordPath = (version) =>
-  join("deploy", "releases", `${version}.md`);
+  posix.join("deploy", "releases", `${version}.md`);
 
 /**
  * @param {string} root @param {string} version

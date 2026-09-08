@@ -27,10 +27,17 @@ const tree = (version, record) => {
   return dir;
 };
 
-test("the plan's path is the version under deploy/releases, and nothing else", () => {
-  assert.equal(recordPath("0.0.1"), join("deploy", "releases", "0.0.1.md"));
-  // A version is a name here, never a path: it is joined, so a version that
-  // is not a plain name cannot climb out of the directory.
+test("the plan's path is the same line on every platform", () => {
+  // Written out, not joined. This test asserted `join(...)` and so agreed
+  // with the host it ran on, which is how a finding that reads
+  // `deploy\\releases\\0.0.1.md` on Windows reached CI: the unit encoded the
+  // defect and only the Windows wall could see it.
+  assert.equal(recordPath("0.0.1"), "deploy/releases/0.0.1.md");
+  assert.doesNotMatch(
+    recordPath("0.0.1"),
+    /\\/,
+    "a path a person reads should not carry the host's separator",
+  );
   assert.match(recordPath("1.2.3"), /1\.2\.3\.md$/);
 });
 

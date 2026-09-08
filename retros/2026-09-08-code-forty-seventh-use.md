@@ -33,6 +33,22 @@ Place: this repository
   to be in the wrong place. Nothing was committed; the check that caught it
   was reading the command's output rather than trusting it.
 
+- A path in a message is not a path in a call, and only one of them may
+  carry the host's separator. `recordPath` joined with `path.join`, so the
+  finding read `deploy/releases/0.0.1.md` on this machine and
+  `deploy\releases\0.0.1.md` on Windows, and the criterion fixes the first.
+  The wall that found it is the one added two days ago for a different
+  runtime, and no other machine in this session could have.
+- The unit encoded the defect and looked like a test. It asserted
+  `recordPath` equals `join("deploy", "releases", ...)`, which agrees with
+  whatever host it runs on and can therefore never disagree. A test written
+  in the same terms as the code it tests holds nothing, and the terms here
+  were a function call rather than the string a person reads.
+- The sweep after the fix answered nothing, and that is worth the minute it
+  took. Every other `join` in a finding is an array's, and the one other
+  repository relative path is written with literal slashes already, so this
+  was the only place the defect could live.
+
 ## Lacked
 
 - Nothing tells a build to run the sweep before it writes rather than after
