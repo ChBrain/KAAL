@@ -6,7 +6,7 @@
 //
 //   node bin/kaal.mjs ledger [root]   every rung has its evidence
 //   node bin/kaal.mjs check  [dir]    every skill obeys the skill rules
-//   node bin/kaal.mjs retros [root]   unconsumed retros per skill
+//   node bin/kaal.mjs retros [root]   unconsumed and read retros per skill
 //   node bin/kaal.mjs agents [root]   every agent obeys the agent rules
 //   node bin/kaal.mjs drawings [root] every drawing holds the template's shape
 //   node bin/kaal.mjs fixtures [root] every fixture artefact, by shape
@@ -30,7 +30,7 @@ import {
 import { fileURLToPath } from "node:url";
 import { checkLedgers, standings } from "./lib/ledger.mjs";
 import { checkSkills } from "./lib/rules.mjs";
-import { countRetros } from "./lib/retros.mjs";
+import { countRetros, readFindings } from "./lib/retros.mjs";
 import { runGates } from "./lib/gates.mjs";
 import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
@@ -239,8 +239,18 @@ if (cmd === "ledger") {
   );
   if (!findings.length) console.log("agents: every agent obeys the rules");
 } else if (cmd === "retros") {
-  for (const r of countRetros(arg ?? cwd))
+  // Two lines a skill, adjacent and unconsumed first: ten closed tests read
+  // the first line anchored, so it keeps its shape and the read count is a
+  // line of its own.
+  const root = arg ?? cwd;
+  for (const r of countRetros(root)) {
     console.log(`${r.skill}: ${r.count} unconsumed`);
+    console.log(`${r.skill}: ${r.read} read`);
+  }
+  const findings = readFindings(root);
+  for (const f of findings)
+    console.log(`${f.retro}: reads ${f.name}, which is no skill in this tree`);
+  if (findings.length) process.exit(1);
 } else if (cmd === "acceptance" || cmd === "contracts") {
   const run = cmd === "acceptance" ? runAcceptance : runContracts;
   const a = run(process.argv.slice(3));
