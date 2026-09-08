@@ -1,5 +1,10 @@
 # Drawing: <task>
 
+## What the runs said
+
+- <A fact established by running something: the command, and what came back.
+  Not a thing you decided; that belongs in Decisions.>
+
 ## Structure
 
 <The parts and how they sit: what exists, what is new, what changes. Each
@@ -37,9 +42,10 @@ and it carries nothing the list does not.
 
 ## Test strategy
 
-| criterion | layer    | kind                               | why  |
-| --------- | -------- | ---------------------------------- | ---- |
-| 1         | contract | deterministic / harnessed / manual | <..> |
+| criterion | layer    | kind                               | why                            |
+| --------- | -------- | ---------------------------------- | ------------------------------ |
+| 1         | contract | deterministic / harnessed / manual | <..>                           |
+| none      | <layer>  | none                               | <why this layer holds nothing> |
 
 ## Handoff
 
