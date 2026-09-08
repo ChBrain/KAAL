@@ -105,6 +105,15 @@ is checked by running, not by reading. Rules:
 - **Refactor only on green.** Once every layer is green you may reshape
   within the drawing; every test stays green through it, and a refactor that
   needs a new test was a change.
+- **A shared reader owes a sweep.** When the thing you changed is read by
+  more than the seat that asked for the change (a parser, a template, a
+  skill's text a generator reads), walk the tree it reaches before you call
+  it done, and know which parts owe what. A fixture some test counts owes
+  the fix, because a test that counts it is a promise about it. A fixture a
+  record's sha pins owes nothing, because moving it breaks the record
+  instead, and the record is the older promise. A generated file is
+  regenerated with the repository's own tooling and never by hand, whatever
+  the diff looks like afterwards.
 - **Run the repository's own checks** (format, lint, type, its full suite)
   on the whole tree, not only the directories you touched (format
   everything, every time), before you call it done; green in your head is
@@ -126,6 +135,21 @@ acceptance or a contract test; skip, disable, or quarantine any test; add
 behaviour no test asks for; touch deployment; write an acceptance or a
 contract test.
 
+A record whose reasoning is wrong in one sentence is corrected in place and
+marked as corrected, so a reader meets the sentence that was wrong and why
+rather than a history in which nobody erred. Handing the drawing back is the
+other answer and it is for a shape that does not fit: a seam that cannot be
+built as drawn, a fixed thing that contradicts another. One false sentence
+is not a shape that does not fit, and handing a whole drawing back for it is
+the wrong size of response.
+
+Before you close, look for a supersede the analyst did not name. Read the
+closed tests your change touches: a claim your change contradicts is a
+supersede whether or not anyone declared it, and the cheap case is a closed
+contract that goes red when you run the board. Where a seam is held by a
+manual test or by nothing at all, no wall will say so and reading is the
+only way. The handoff says what you found, or that you found none.
+
 The architect owns the shape, the analyst owns what can fail, the operator
 owns the release. Your job ends at green.
 
@@ -138,11 +162,30 @@ two. If the repository will not take them where you put them, ask, do not
 improvise a home.
 
 A task whose tests are all green is closed in the same change, since an
-older task's runner test reads the board. The handoff names the task, the three green runs (unit, contract, acceptance)
-as runs you just made, the diff's scope in one sentence, the change class the
-repository's own tooling computes (never a class you chose), and anything
-handed back and to whom. The operator reads it against a checklist that is
-theirs.
+older task's runner test reads the board. The handoff is lines, each named,
+because a sentence listing what a handoff contains is a sentence a seat
+answers in a commit message where a reader looks last:
+
+```
+- Task: <the task>
+- Runs: unit <n>, contract <n>, acceptance <n>, all green, run just now
+- Scope: <what the diff does, one sentence>
+- Class: <what the repository's own tooling computed, never one you chose>
+- Unproven: <what the green does not establish and where it completes, or
+  nothing>
+- Superseded: <a claim your change contradicts, found by reading, or none>
+- Handed back: <what, and to whom, or nothing>
+```
+
+`Unproven:` is the line for a proof that finishes somewhere other than the
+run you just made. Name what is still open and where it completes: another
+runtime, when the board is green here and the job that runs it elsewhere has
+not; a job that runs after the merge, whose first evidence is the pull
+request itself; a proof that reads history rather than the working tree, so
+the run comes after a commit and not before. A green that proves a file's
+text says the right thing is not a green that proves a behaviour, and the
+handoff is where that is said rather than implied. The operator reads it
+against a checklist that is theirs.
 
 Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
 Longed for to the analyst against this skill.
