@@ -155,3 +155,48 @@ test("6. the operate skill knows a dispatch is a key, and what its tests are", (
   );
   assert.match(proof, /wrapper/i, `what they replace is not named: ${proof}`);
 });
+
+test("7. a dispatch from anywhere but the default branch is refused first", () => {
+  const w = readFileSync(
+    join(ROOT, ".github", "workflows", "release.yml"),
+    "utf8",
+  );
+  // The comparison, wherever it sits: a job-level condition or a step. It
+  // names the default branch rather than a literal, or names main; both are
+  // the same promise and the spelling is the build's.
+  const guard = w
+    .split("\n")
+    .findIndex(
+      (l) =>
+        !/^\s*#/.test(l) &&
+        /default_branch|refs\/heads\/main|ref_name/.test(l) &&
+        /if:|!=|==|\bne\b|\beq\b/.test(l),
+    );
+  assert.ok(
+    guard > -1,
+    "nothing in the workflow compares the dispatched ref to the default branch",
+  );
+  // Before the board, because a release from the wrong place should not
+  // spend two minutes of CI proving it is well made.
+  const steps = w.split("\n");
+  const board = steps.findIndex((l) => !/^\s*#/.test(l) && /npm test/.test(l));
+  assert.ok(board > -1, "the workflow does not run the board");
+  assert.ok(
+    guard < board,
+    `the ref is checked after the board: ${guard} then ${board}`,
+  );
+  // And the refusal says which ref it was given, or a person reads a red
+  // run and learns only that something was wrong.
+  // Below the condition, not the condition itself. The `if:` line names the
+  // ref for its own reasons, so a slice that includes it was green with the
+  // message saying nothing about where the dispatch came from.
+  const says = steps
+    .slice(guard + 1, board)
+    .filter((l) => !/^\s*#/.test(l) && !/^\s*if:/.test(l))
+    .join(" ");
+  assert.match(
+    says,
+    /github\.ref|ref_name/,
+    `the refusal does not name the ref it was given: ${says}`,
+  );
+});
