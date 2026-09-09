@@ -1,7 +1,7 @@
 ---
 traces:
-  requirement: the-engine-installs-by-name
-  principles: the-two-goods
+  requirement: the-engine-installs-by-name@bc49d25cc15c4fe432c5bba699a17667b7d39b91c89741955cd304c354894f92
+  principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6
 ---
 
 # Drawing: the-engine-installs-by-name

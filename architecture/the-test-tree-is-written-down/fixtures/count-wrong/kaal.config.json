@@ -3,7 +3,7 @@
     {
       "name": "acceptance",
       "command": "node bin/kaal.mjs acceptance requirements/*/acceptance.test.mjs",
-      "fix": "make the criterion true"
+      "fix": "fix it"
     }
   ]
 }

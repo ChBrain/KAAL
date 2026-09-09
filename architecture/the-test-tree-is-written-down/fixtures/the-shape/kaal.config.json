@@ -3,22 +3,22 @@
     {
       "name": "acceptance",
       "command": "node bin/kaal.mjs acceptance requirements/*/acceptance.test.mjs",
-      "fix": "make the criterion true"
+      "fix": "fix it"
     },
     {
       "name": "contracts",
       "command": "node bin/kaal.mjs contracts architecture/*/contracts.test.mjs",
-      "fix": "keep the promise"
+      "fix": "fix it"
     },
     {
       "name": "units",
       "command": "node --test tests/*.test.mjs",
-      "fix": "fix the unit"
+      "fix": "fix it"
     },
     {
       "name": "format",
       "command": "npx prettier --check .",
-      "fix": "format it"
+      "fix": "fix it"
     }
   ]
 }

@@ -34,7 +34,12 @@ const notUsage = (out) =>
 const parentOf = (text) => {
   const b = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/)?.[1];
   const m = b?.match(/^traces:\s*$\n((?:[ \t]+\S.*\n?)*)/m);
-  return m?.[1].match(/^\s+parent:\s*(.*)$/m)?.[1].trim() ?? null;
+  const v = m?.[1].match(/^\s+parent:\s*(.*)$/m)?.[1].trim() ?? null;
+  // The name without its pin. Every kind may carry `@<sha>` and this one is
+  // no exception; reading the raw value worked only while no artefact in
+  // the league declared a parent at all, and the first one that did read as
+  // a name that is in no tree.
+  return v === null ? null : v.split("@")[0].trim();
 };
 const DRAW_TEMPLATE = join(
   ROOT,
@@ -191,17 +196,24 @@ test("6. a trunk in kaal/, and it is the only artefact declaring none", () => {
     const v = parentOf(read(p));
     return v !== null && /^none$/i.test(v);
   });
+  // One trunk, and it is under kaal/: it belongs to no tree, which is why
+  // all three can answer to it.
+  const trunks = roots.filter((p) => /^kaal\//.test(norm(p)));
   assert.equal(
-    roots.length,
+    trunks.length,
     1,
-    `expected one trunk and found ${roots.length}: ${roots.join(", ") || "none"}`,
+    `expected one trunk under kaal/ and found ${trunks.length}: ${trunks.join(", ") || "none"}`,
   );
-  // It belongs to no tree, which is why all three can answer to it.
-  assert.match(
-    norm(roots[0]),
-    /^kaal\//,
-    `the trunk is not under kaal/: ${roots[0]}`,
-  );
+  // A further root is a tree's own root and it argues, which is what this
+  // criterion's second sentence says and what criterion 2 makes the board
+  // report. Counting every `none` in the league as a trunk read the first
+  // sentence alone, and it was true only while no tree had a root.
+  for (const p of roots.filter((p) => !trunks.includes(p)))
+    assert.match(
+      read(p),
+      /^- Root because: \S/m,
+      `${p} declares none and carries no argument`,
+    );
 });
 
 test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {

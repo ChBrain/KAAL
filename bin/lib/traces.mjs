@@ -29,8 +29,13 @@ export const KINDS = {
   // handed the artefact that declared it, because a parent resolves inside
   // its own tree and the same name means a different file in each.
   parent: {
+    // A place holding directories keeps its named file; a place holding loose
+    // pages resolves to the page itself, which is where a name in such a
+    // place has always meant to point and never had to.
     where: (name, from) =>
-      join(from.dir, name, PLACE_FILE[from.dir] ?? "requirement.md"),
+      PLACE_FILE[from.dir] === null
+        ? join(from.dir, `${name}.md`)
+        : join(from.dir, name, PLACE_FILE[from.dir] ?? "requirement.md"),
     region: null,
     perArtefact: true,
   },
@@ -92,6 +97,12 @@ const PLACES = [
   { dir: "kaal", file: null },
   { dir: "requirements", file: "requirement.md" },
   { dir: "architecture", file: "drawing.md" },
+  // The one place listed through its subdirectories, so `plans/acceptance`
+  // and `strategy` are artefacts of the same place and one can name the
+  // other. Per place and not everywhere: `kaal/` holds one trunk and a rule
+  // about how many trunks there are should not change because a place it is
+  // not read the same way.
+  { dir: "tests", file: null, deep: true },
 ];
 const PLACE_FILE = Object.fromEntries(PLACES.map((p) => [p.dir, p.file]));
 const TREES = ["requirements", "architecture"];
@@ -127,12 +138,17 @@ export function tracedNames(value) {
   return splitTrace(value).map((e) => e.name);
 }
 
-/** A place holds directories with a named file, or loose pages. */
-const entries = (root, dir, file) => {
+/**
+ * A place holds directories with a named file, or loose pages. A deep place
+ * lists its pages through subdirectories and names each by its path below
+ * the place, so `plans/acceptance` is one artefact and not two.
+ */
+const entries = (root, dir, file, deep = false) => {
   const d = join(root, dir);
   if (file) return dirs(d);
   return existsSync(d)
-    ? readdirSync(d)
+    ? readdirSync(d, { recursive: deep })
+        .map((n) => String(n).replaceAll("\\", "/"))
         .filter((n) => n.endsWith(".md"))
         .map((n) => n.slice(0, -3))
         .sort()
@@ -154,8 +170,8 @@ export function checkTraces(root) {
   const out = [];
   const find = (artefact, kind, message) =>
     out.push({ artefact, kind, message });
-  for (const { dir, file } of PLACES)
-    for (const artefact of entries(root, dir, file)) {
+  for (const { dir, file, deep } of PLACES)
+    for (const artefact of entries(root, dir, file, deep)) {
       const path = file
         ? join(root, dir, artefact, file)
         : join(root, dir, `${artefact}.md`);
@@ -228,8 +244,8 @@ export function checkTraces(root) {
 /** Every artefact, its place, and the parent it declares. */
 function nodes(root) {
   const all = [];
-  for (const { dir, file } of PLACES)
-    for (const artefact of entries(root, dir, file)) {
+  for (const { dir, file, deep } of PLACES)
+    for (const artefact of entries(root, dir, file, deep)) {
       const path = file
         ? join(root, dir, artefact, file)
         : join(root, dir, `${artefact}.md`);
@@ -337,8 +353,8 @@ export function checkShape(root) {
  * @param {string} root
  */
 export function writePins(root) {
-  for (const { dir, file } of PLACES)
-    for (const artefact of entries(root, dir, file)) {
+  for (const { dir, file, deep } of PLACES)
+    for (const artefact of entries(root, dir, file, deep)) {
       const path = file
         ? join(root, dir, artefact, file)
         : join(root, dir, `${artefact}.md`);
@@ -351,7 +367,13 @@ export function writePins(root) {
         if (!KINDS[kind]) continue;
         const pinned = splitTrace(value)
           .map(({ name }) => {
-            const sha = regionSha(root, kind, name);
+            // The declaring artefact, which `parent` reads and the other
+            // kinds ignore. Without it every parent was pinned from
+            // `requirements/<name>/requirement.md` whatever tree declared
+            // it: a name that resolved there was pinned to the wrong file
+            // and read back as moved for ever, and a name that did not was
+            // silently left bare.
+            const sha = regionSha(root, kind, name, { dir, artefact });
             return sha ? `${name}@${sha}` : name;
           })
           .join(", ");
