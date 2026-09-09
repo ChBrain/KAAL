@@ -8,6 +8,51 @@ traces:
 This league tests in three places because three different things want
 proving, and each of them can be wrong while the other two are right.
 
+## Two questions, and both of them are testing
+
+The tester keeps two questions apart, and most arguments about quality are
+really an argument about which one was meant.
+
+**Verification** asks whether a thing is what it was specified to be. It is a
+question with one right answer, so it can be settled the same way twice, and
+a thing that can be settled the same way twice can be a wall. That is why the
+board is deterministic and offline: every wall on it is verification, and the
+three plans below are the three walls that run tests.
+
+**Validation** asks whether a thing works for whoever asked. It is a question
+about a reader, a model or a person meeting the work, and it cannot be
+settled the same way twice. So it is never a wall, and the league does not
+pretend otherwise. It lives in the eval records under `evals/`, where a
+skill's move stands at the skill rung only with complete, passing, fresh
+records from at least two distinct models.
+
+What the ledger wall checks there is the record and never the judgement: that
+a judgement was made, by two models rather than one, against the text as it
+stands now rather than as it stood, and that it was written down. The
+judgement itself belongs to whoever made it. A wall that graded the judgement
+would be a wall consulting the thing it judges, and this league has a name
+for that.
+
+Neither question outranks the other and a thing can pass one and fail the
+other. A tool that does exactly what its criteria say and that nobody can use
+has been verified and not validated; a tool everybody likes that nobody can
+prove has been validated and not verified.
+
+## The tester argues
+
+The tester is a seat and not a service. It owns the method, and every other
+seat owns what the method is pointed at in its own work, which is why the
+cases live with what they test rather than here. But owning the method
+carries standing: the tester argues with the analyst about a criterion nobody
+could fail, with the architect about a seam nobody could drive, and with the
+developer about a behaviour nobody could reach. If you cannot test it you
+cannot have it, and the tester is the seat that gets to say so before the
+work is taken rather than after it is built.
+
+That is the same rule as the one below, read from the other end. The rule
+says a seat that cannot name a failure hands the question back; this says
+somebody is there to hand it back to, and to insist.
+
 ## The three plans
 
 The **acceptance** plan is motivated by the requirements. A criterion is a
@@ -50,6 +95,14 @@ plans already hold, at all three layers, and a fourth plan for them would be
 a plan about the same tests a second time.
 
 A fourth plan waits for a fourth wall that runs tests.
+
+## What has no plan and is still tested
+
+The eval records are validation and have no plan, because a plan names a wall
+and validation is not a wall. They are named here so that the absence is a
+statement rather than an oversight: the league tests in three places
+deterministically and in one place it cannot, and the fourth is the one where
+a person or a model reads the work and says whether it is any good.
 
 ## Below the plans
 

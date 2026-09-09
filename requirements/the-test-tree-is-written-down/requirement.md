@@ -195,5 +195,19 @@ wall, and by the board reporting a wall with no plan or a plan with no wall.
   artefact it can resolve, so it pinned two drawings of other tasks that
   had none. Reverting them leaves a tree where running the tree's own tool
   produces a diff, so they stay
+- Added after the first green, from the asker: the strategy said three plans
+  and said nothing about the other half of testing. The tester keeps
+  verification and validation apart, verification has one right answer and
+  can therefore be a wall, validation has a reader and therefore cannot, and
+  both are testing. The league already does both and only one of them was
+  written down: twelve deterministic walls, and eval records under `evals/`
+  where a skill's move stands only with fresh passing records from two
+  distinct models. What the ledger wall checks there is the record and never
+  the judgement, which is the distinction made mechanical. And the tester
+  argues: it owns the method, every seat owns what the method is pointed at,
+  and owning the method carries standing to refuse a criterion, a seam or a
+  behaviour nobody could fail
+- The trace wall caught the edit. Changing the strategy moved the file its
+  three plans pin, and all three reported it before anything else did
 - Class: surface moved, tool moved (`kaal class . --against origin/main`,
   run last, after the final edit)
