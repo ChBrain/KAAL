@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: each-skill-carries-its-own-version
+  requirement: each-skill-carries-its-own-version@80a06730b79a9bf03e642e74f1a0031011396176bbdadd1f3ff393f8c4f30d72
   principles: nothing
 ---
 

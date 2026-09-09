@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: the-board-counts-the-reads
+  requirement: the-board-counts-the-reads@18895ef53d69c11b26134e5ff49d9ca72d81496bbad1f7313240fefb974d8d05
   principles: nothing
 ---
 

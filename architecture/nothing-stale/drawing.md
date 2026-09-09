@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: nothing-stale
+  requirement: nothing-stale@dd25209ca9f88d9161f52e0ef028372c19aa3bd8dacbbcc9df7634b6a8717cba
   principles: nothing
 ---
 

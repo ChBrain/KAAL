@@ -6,6 +6,8 @@
 // meaning is not a wall.
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
+import { writeFileSync } from "node:fs";
 import { parseFrontmatter } from "./frontmatter.mjs";
 
 /**
@@ -15,11 +17,61 @@ import { parseFrontmatter } from "./frontmatter.mjs";
  * at, and a row that never resolves is a finding nobody can fix.
  */
 export const KINDS = {
-  requirement: (name) => join("requirements", name, "requirement.md"),
-  supersedes: (name) => join("requirements", name, "requirement.md"),
-  principles: (name) =>
-    join("skills", "architect", "references", "principles", `${name}.md`),
+  requirement: {
+    where: (name) => join("requirements", name, "requirement.md"),
+    region: "Acceptance criteria",
+  },
+  supersedes: {
+    where: (name) => join("requirements", name, "requirement.md"),
+    region: "Acceptance criteria",
+  },
+  // No region: a principle is its claim and has no part that is not.
+  principles: {
+    where: (name) =>
+      join("skills", "architect", "references", "principles", `${name}.md`),
+    region: null,
+  },
 };
+
+/** The text under `## <title>`, or the whole text when a row names none. */
+const region = (text, title) =>
+  title === null
+    ? text
+    : (text.match(
+        new RegExp(`^## ${title}\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m"),
+      )?.[1] ?? "");
+
+/**
+ * One entry per name: its name, and its pin or null. `<name>` and
+ * `<name>@<sha>` both parse; `nothing` yields no entries at all.
+ * @param {string | undefined} value
+ */
+export function splitTrace(value) {
+  return (value ?? "")
+    .split(",")
+    .map((s) => s.trim().replace(/^[`\'"]+|[`\'".]+$/g, ""))
+    .filter((s) => s && !/^nothing$/i.test(s))
+    .map((s) => {
+      const at = s.indexOf("@");
+      return at === -1
+        ? { name: s, pin: null }
+        : { name: s.slice(0, at), pin: s.slice(at + 1) };
+    });
+}
+
+/**
+ * The sha of the region a kind's row names, or null when the file is gone.
+ * @param {string} root @param {string} kind @param {string} name
+ */
+export function regionSha(root, kind, name) {
+  const row = KINDS[kind];
+  if (!row) return null;
+  const path = join(root, row.where(name));
+  if (!existsSync(path)) return null;
+  return createHash("sha256")
+    .update(region(readFileSync(path, "utf8"), row.region))
+    .digest("hex");
+}
 
 /** The two artefacts that carry a trace, and the file each keeps it in. */
 const PLACES = [
@@ -53,10 +105,7 @@ export function readTrace(text) {
  * @param {string | undefined} value
  */
 export function tracedNames(value) {
-  return (value ?? "")
-    .split(",")
-    .map((s) => s.trim().replace(/^[`'"]+|[`'".]+$/g, ""))
-    .filter((s) => s && !/^nothing$/i.test(s));
+  return splitTrace(value).map((e) => e.name);
 }
 
 const dirs = (d) =>
@@ -99,10 +148,20 @@ export function checkTraces(root) {
           );
           continue;
         }
-        for (const name of tracedNames(value)) {
-          const where = KINDS[kind](name);
-          if (!existsSync(join(root, where)))
+        for (const { name, pin } of splitTrace(value)) {
+          const where = KINDS[kind].where(name);
+          if (!existsSync(join(root, where))) {
             find(artefact, kind, `${name} is not at ${where}`);
+            continue;
+          }
+          // The name is there and what it says may not be. A different
+          // finding in different words: one wants a rename, this a reread.
+          if (pin && pin !== regionSha(root, kind, name))
+            find(
+              artefact,
+              kind,
+              `${name} moved: its ${KINDS[kind].region ?? "whole file"} no longer matches the pin`,
+            );
         }
       }
       // The prose must carry what the trace declares, read one direction
@@ -120,4 +179,36 @@ export function checkTraces(root) {
       }
     }
   return out;
+}
+
+/**
+ * Write the pin of every trace that resolves, in place, changing nothing
+ * else on the page. Nobody types a sha.
+ * @param {string} root
+ */
+export function writePins(root) {
+  for (const { dir, file } of PLACES)
+    for (const artefact of dirs(join(root, dir))) {
+      const path = join(root, dir, artefact, file);
+      if (!existsSync(path)) continue;
+      const text = readFileSync(path, "utf8");
+      const trace = readTrace(text);
+      if (!trace || !Object.keys(trace).length) continue;
+      let out = text;
+      for (const [kind, value] of Object.entries(trace)) {
+        if (!KINDS[kind]) continue;
+        const pinned = splitTrace(value)
+          .map(({ name }) => {
+            const sha = regionSha(root, kind, name);
+            return sha ? `${name}@${sha}` : name;
+          })
+          .join(", ");
+        if (!pinned) continue;
+        out = out.replace(
+          new RegExp(`^(\\s+${kind}:).*$`, "m"),
+          `$1 ${pinned}`,
+        );
+      }
+      if (out !== text) writeFileSync(path, out);
+    }
 }

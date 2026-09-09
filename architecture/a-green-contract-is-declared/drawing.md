@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: a-green-contract-is-declared
+  requirement: a-green-contract-is-declared@3aea244786bd73be82048ccc6f9492f7aa1f1f6d141cf5c3eac7d019b17d1782
   principles: nothing
 ---
 

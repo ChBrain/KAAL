@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: a-change-declares-its-class
+  requirement: a-change-declares-its-class@2e38d440bdc1504612b8c4299018931962209eda0890762b1c53f535830436e1
   principles: nothing
 ---
 

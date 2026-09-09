@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: `eval-runner`
+  supersedes: eval-runner@3f890bda67340db579b91e1c65660c0065c48069b4cd13f80d1696e8dc8ef02e
 ---
 
 # Requirement: nothing-stale

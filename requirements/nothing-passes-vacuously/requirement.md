@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: `applies-here`
+  supersedes: applies-here@24a94ee55dc4b5dcd6b546c94e4284f5702b415f1436f0372683daa71d92647d
 ---
 
 # Requirement: nothing-passes-vacuously

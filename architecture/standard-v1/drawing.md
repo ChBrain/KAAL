@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: standard-v1
+  requirement: standard-v1@4f4689998bb657f039cf9d5c455fdceedfdf631398b97d9efae1e2930c421062
   principles: nothing
 ---
 

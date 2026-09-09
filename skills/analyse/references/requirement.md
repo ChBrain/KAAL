@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: <nothing, or the tasks whose claim this one moves>
+  supersedes: <nothing, or the tasks whose claim this one moves, each <name>@<sha>>
 ---
 
 # Requirement: <task>

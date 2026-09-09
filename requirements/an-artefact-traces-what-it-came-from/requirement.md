@@ -215,6 +215,10 @@ does not know.
   line order are honoured rather than superseded: every body line keeps its
   name, its place and its prose, and the frontmatter is added beside them
 - People: none
+- Superseded by: `a-trace-pins-what-it-read`, in part. A trace's value grew
+  from `<name>` to `<name>` or `<name>@<sha>`, so this task's criterion 6
+  reads the name without its pin. Nothing else moved: the prose still carries
+  the name and never the sha, because nobody types one
 
 ## Build handoff
 

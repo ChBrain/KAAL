@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: read-before-drawing
+  requirement: read-before-drawing@3c1af8cddb6ba69554dc77eb0c8ee3756984ad7f9faf816b13581f4d2fab03cd
   principles: nothing
 ---
 

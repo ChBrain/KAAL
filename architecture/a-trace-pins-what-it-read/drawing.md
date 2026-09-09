@@ -1,7 +1,7 @@
 ---
 traces:
-  requirement: a-trace-pins-what-it-read
-  principles: the-two-goods
+  requirement: a-trace-pins-what-it-read@577516cded2a3421163205bcbc0983492b45926d30c6d669e1f7822e971bb3b7
+  principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6
 ---
 
 # Drawing: a-trace-pins-what-it-read
