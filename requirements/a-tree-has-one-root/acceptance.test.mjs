@@ -40,8 +40,8 @@ const read = (rel) => readFileSync(join(ROOT, rel), "utf8");
 const pages = () =>
   globSync("requirements/*/requirement.md", { cwd: ROOT }).sort();
 
-test("1. every requirement names its parent, and the template offers it", () => {
-  const all = pages();
+test("1. every requirement and drawing names its parent, and both templates offer it", () => {
+  const all = [...pages(), ...drawings()];
   assert.ok(all.length >= 50, `found ${all.length} requirements`);
   const without = all.filter((p) => !parentOf(read(p)));
   assert.deepEqual(without, [], `no parent: ${without.slice(0, 6).join(", ")}`);
@@ -51,9 +51,25 @@ test("1. every requirement names its parent, and the template offers it", () => 
     if (/^none$/i.test(v)) continue;
     assert.match(v, /^[a-z0-9][a-z0-9-]*$/, `${p}: "${v}" is not a task name`);
   }
-  assert.ok(
-    parentOf(readFileSync(TEMPLATE, "utf8")) !== null,
-    "the analyst's template does not offer a parent",
+  for (const [what, tpl] of [
+    ["the analyst's template", TEMPLATE],
+    ["the drawing template", DRAW_TEMPLATE],
+  ])
+    assert.ok(
+      parentOf(readFileSync(tpl, "utf8")) !== null,
+      `${what} does not offer a parent`,
+    );
+  // A drawing's parent is another drawing. Parenting it to its requirement
+  // flattens architecture into a mirror of requirements and loses the thing
+  // architecture is for.
+  const flattened = drawings().filter((p) => {
+    const v = parentOf(read(p));
+    return v && !/^none$/i.test(v) && v === requirementOf(read(p));
+  });
+  assert.deepEqual(
+    flattened,
+    [],
+    `a drawing is parented to its own requirement: ${flattened.join(", ")}`,
   );
 });
 
@@ -102,7 +118,20 @@ test("4. a drawing answering none or more than one requirement is a finding", ()
   const out = said(r);
   notUsage(out);
   assert.equal(r.status, 1, `a drawing answering two was allowed: ${out}`);
-  assert.match(out, /\ba\b/, `the drawing is not named: ${out}`);
+  // Not any finding: this one. Before `parent` was a kind the table knew,
+  // every fixture here tripped "no such kind" and the exit code alone made
+  // this test green for a reason that had nothing to do with the criterion.
+  const lines = out
+    .split("\n")
+    .filter((l) => l.trim() && !/no such kind/.test(l));
+  assert.ok(
+    lines.length,
+    `the only findings were about an unrecognised kind: ${out}`,
+  );
+  assert.ok(
+    lines.some((l) => /\ba\b/.test(l)),
+    `the drawing is not named: ${out}`,
+  );
   // Both requirements resolve, so this cannot arrive as a dangling name.
   assert.doesNotMatch(
     out,
@@ -121,7 +150,36 @@ test("5. a star is reported, and a tree with depth is not", () => {
   assert.equal(deep.status, 0, `a tree with depth was reported: ${said(deep)}`);
 });
 
-test("6. this tree is one tree: rooted, acyclic, argued where it forks", () => {
+test("6. the trunk is the requirements root, and the other two trees argue", () => {
+  const rootsOf = (files) =>
+    files.filter((p) => /^none$/i.test(parentOf(read(p)) ?? ""));
+  const argued = (p) => /^- Root because: \S/m.test(read(p));
+  const reqRoots = rootsOf(pages());
+  assert.equal(
+    reqRoots.length,
+    1,
+    `the requirements tree has ${reqRoots.length} roots: ${reqRoots.join(", ")}`,
+  );
+  // The trunk carries no argument, because it is the trunk.
+  assert.ok(
+    !argued(reqRoots[0]),
+    `the trunk argues for itself: ${reqRoots[0]}`,
+  );
+  // The architecture tree roots itself and says why it is not a branch of
+  // the requirements. Its root is a drawing, so the line lives there.
+  const drawRoots = rootsOf(drawings());
+  assert.equal(
+    drawRoots.length,
+    1,
+    `the architecture tree has ${drawRoots.length} roots: ${drawRoots.join(", ")}`,
+  );
+  assert.ok(
+    argued(drawRoots[0]),
+    `the architecture tree's root carries no argument: ${drawRoots[0]}`,
+  );
+});
+
+test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {
   const r = kaal("traces", ROOT);
   const out = said(r);
   notUsage(out);

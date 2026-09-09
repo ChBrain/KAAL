@@ -12,7 +12,16 @@ and will disagree with each other without us having any protection." The
 analyst had argued for waiting on evidence that documents needed splitting.
 That was an answer to a different question: which documents are too big is
 local, and whether the set has a shape is not. The ask was restated and the
-runs below say it is right._
+runs below say it is right.
+
+Amended before the drawing, when the asker settled the shape: "KAAL is the
+top root, splitting into three trees (requirements, architecture, test) which
+are in negotiation with each other. inside those three they shall split from
+overview into details. underneath: code answers tests, what's not testable
+can't be coded (we never know if it's true without)." That answers the open
+question about what the root is and it moves two things: the tree edge is now
+told apart from the edges between trees, and criterion 1 reaches the
+architecture tree rather than the requirements alone._
 
 ## Goal
 
@@ -57,6 +66,15 @@ with one trunk and fifty four leaves.
   red: the wall still runs and its line says waived, with who and why".
 - `bin/lib/frontmatter.mjs` reads one level of map, so `parent` joins
   `traces` beside the kinds already there and needs no parser change.
+- Two of the three trees exist as documents and the third does not. There
+  are 57 requirements and 50 drawings, each a page with frontmatter. The
+  test tree is 128 files, 57 acceptance, 50 contract and 21 unit, and above
+  them nothing: no strategy, no plan, and 50 per task Test strategy sections
+  inside the drawings, which are 50 local strategies rather than one.
+- The trace already carries an edge between trees. A drawing's
+  `traces.requirement` says which requirement it answers, and
+  `traces.supersedes` says whose claim moved. Neither is a parent: they run
+  across, not down.
 
 ## Assumptions
 
@@ -75,6 +93,32 @@ with one trunk and fifty four leaves.
 - A second root does not expire the way a waiver does. A deliberate second
   tree is a decision, not a temporary excuse, and an expiry date on it would
   be a lie about what it is.
+- `KAAL` is the top root and it is a requirement, not a fourth kind of
+  document. The asker wrote it as one: `Requirement: "Do KAAL"`. So the
+  requirements tree's root is the trunk, and the architecture tree's root
+  and the test tree's root are the second and third roots, each carrying the
+  argument criterion 2 already demands. That is why this task needs no new
+  artefact above the three: the mechanism for a second tree was already
+  specified and this is what it was for.
+- A document above all three would be a fourth kind, belonging to no tree,
+  parented by nothing and pinned against nothing. Three argued roots say the
+  same thing with the artefacts the league already has.
+- Two edges, and they are not the same edge. `parent` runs **down** a tree,
+  overview to detail, and it is what this task adds. The trace's other
+  kinds run **across** between trees: a drawing's `requirement` is the
+  negotiation between architecture and requirements, and a requirement's
+  `supersedes` is the negotiation between a requirement and an older one.
+  A reader who confuses the two will parent a drawing to its requirement,
+  which flattens architecture into a mirror of requirements and loses the
+  thing architecture is for.
+- Code has no tree. It answers tests, and what cannot be tested cannot be
+  coded because nobody would ever know whether it were true. That is a rule
+  below the three trees rather than a fourth tree, and this task does not
+  wall it.
+- The test tree cannot be shaped until it has documents. This task gives a
+  parent to requirements and to drawings, and names the task that writes the
+  strategy and its plans. Claiming the third tree here would be claiming a
+  shape over files that carry no frontmatter and no place to put one.
 - One tree makes three. Architecture and test hang off requirements one to
   one, so this task shapes requirements and holds the other two by checking
   that the one to one is real. A drawing answering two requirements, or
@@ -103,27 +147,35 @@ with one trunk and fifty four leaves.
 
 ## Acceptance criteria
 
-1. Every `requirements/<task>/requirement.md` declares `parent` in its trace,
-   whose value is a requirement's name or `none`, and the analyst's template
-   offers it.
+1. Every `requirements/<task>/requirement.md` and every
+   `architecture/<task>/drawing.md` declares `parent` in its trace, whose
+   value is a name in the same tree or `none`, and both templates offer it.
+   A drawing's parent is another drawing, never its requirement: that edge
+   is `requirement` and it runs across rather than down.
 2. `kaal traces` reports every root beyond the first whose Handoff carries no
    `- Root because:` line, naming each such root; a root that carries the
    line is not a finding, and the board never judges what it says.
 3. A cycle among parents is a finding naming every task in the ring.
 4. A drawing that answers no requirement, or more than one, is a finding
    naming it; this is what holds architecture and test to the same shape.
-5. The tree has depth: the board reports when the number of requirements
-   whose parent is the root exceeds a stated share of the whole, so a star
-   cannot pass as a tree.
-6. On this tree `kaal traces` answers: one root, or each further root
+5. The tree has depth: the board reports when the number of artefacts whose
+   parent is their tree's root exceeds a stated share of that tree, so a
+   star cannot pass as a tree.
+6. The trunk is the requirement that says what the league is for, and it is
+   the only root that carries no argument. The architecture tree's root and
+   the test tree's root each carry a `- Root because:` line naming the tree
+   they root and why it is not a branch of the requirements.
+7. On this tree `kaal traces` answers: one root, or each further root
    argued; no cycle; every drawing answering exactly one requirement; and
    the depth report silent.
 
 ## Open questions
 
-- What is the root, and what does it claim? A root requirement states what
-  the league is for, and every other requirement is a refinement of it.
-  Nobody has written that document and the asker should name it.
+- Is the trunk the requirements root, or a document above all three? This
+  requirement takes the first, because the asker wrote KAAL as a requirement
+  and because the second invents a kind that belongs to no tree. One word
+  from the asker settles it and the drawing would change if it were the
+  second.
 - What share of requirements parented to the root is too many? Criterion 5
   needs a number and nobody has evidence for one. Half is a guess; the honest
   first version may report the share rather than judge it.
@@ -138,17 +190,21 @@ with one trunk and fifty four leaves.
 ## Handoff
 
 - Task: a-tree-has-one-root
-- Criteria: 6; tests: 6 (equal)
+- Criteria: 7; tests: 7 (equal)
 - Red run: `node --test --test-timeout=60000 requirements/a-tree-has-one-root/acceptance.test.mjs`
 - Tests: `acceptance.test.mjs`, beside this file, with fixture roots for two
   unargued roots, an argued second root, a cycle, a drawing answering two
   requirements, and a star
 - Green before the build: none expected
-- Open questions: 5, listed above
+- Open questions: 4, listed above; the fifth, what the root is, was answered
+  by the asker and is now an assumption
 - Status: open
 - Blocked on: `an-artefact-traces-what-it-came-from`, which fixes the trace
   and the command; and the asker, who names the root
-- Unblocks: the report over the trace map that names a crowded document,
+- Unblocks: **the test tree written down**, a strategy and the three plans
+  the ask named, without which the third tree has no documents to shape and
+  criterion 1 cannot reach it; and the report over the trace map that names a
+  crowded document,
   which is a signal rather than a wall and is worth building once the tree
   gives it something to measure against
 - Supersedes: nothing
