@@ -40,6 +40,7 @@ import { checkDrawings } from "./lib/drawings.mjs";
 import { checkTraces, checkShape, writePins } from "./lib/traces.mjs";
 import { checkPlans, writeCounts } from "./lib/plans.mjs";
 import { readRun, verdict, writeRuns } from "./lib/runs.mjs";
+import { rows as coverageRows, states } from "./lib/coverage.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
@@ -60,7 +61,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -106,6 +107,12 @@ if (cmd === "ledger") {
     ...checkPlans(troot),
   ].map((f) => `${f.artefact}: ${f.kind}: ${f.message}`);
   if (!findings.length) console.log("traces: every trace resolves");
+} else if (cmd === "coverage") {
+  // A root that may be a flag, the shape `class`, `traces` and `runs` carry.
+  // It answers or says the question is not this tree's, and never finds: a
+  // gap is a fact about how far the work has got and not a finding.
+  const croot = arg && !arg.startsWith("-") ? arg : cwd;
+  for (const line of coverageRows(croot)) console.log(line);
 } else if (cmd === "runs") {
   // A root that may be a flag, the pair `class` and `traces` carry.
   const rroot = arg && !arg.startsWith("-") ? arg : cwd;

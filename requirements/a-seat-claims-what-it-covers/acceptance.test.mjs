@@ -7,6 +7,7 @@ import { readFileSync, existsSync, globSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { runGates } from "../../bin/lib/gates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const F = (n) => join(dirname(fileURLToPath(import.meta.url)), "fixtures", n);
@@ -118,12 +119,29 @@ test("6. the board runs it, and its line carries the counts", () => {
   ).gates;
   const gate = gates.find((g) => /coverage/.test(g.command ?? ""));
   assert.ok(gate, `no gate runs coverage: ${gates.map((g) => g.name)}`);
-  // The board reads a count from a wall that declares one, so the line a
-  // reader sees carries the numbers rather than only the word ok.
-  assert.ok(
-    gate.count,
-    `the board reads no count from the coverage wall: ${JSON.stringify(gate)}`,
+  // Supersedes what this test asked for when it was written: a per gate
+  // `count` pattern in the config, which nothing reads and which could
+  // carry one number where the criterion asks for four. The drawing's
+  // first decision fixed the mechanism instead: a gate declares that its
+  // own line belongs on the board, and the board carries that wall's
+  // output while it is green. The criterion is unmoved; only the shape it
+  // is proved against is.
+  assert.equal(
+    gate.show,
+    true,
+    `the coverage wall does not declare that its line shows: ${JSON.stringify(gate)}`,
   );
+  // And the board honours it: the wall passes, so nothing here would print
+  // under the old rule, and the seat rows have to be on the board anyway.
+  const board = runGates(ROOT, { gates: [gate] });
+  assert.equal(board.ok, true, board.lines.join("\n"));
+  const shown = board.lines.join("\n");
+  for (const seat of ["analyst", "architect", "tester"])
+    assert.match(
+      shown,
+      new RegExp(`^\\s+${seat}\\b.*\\d+ of \\d+`, "m"),
+      shown,
+    );
 });
 
 test("7. on this tree the rows agree with the tree counted independently", () => {

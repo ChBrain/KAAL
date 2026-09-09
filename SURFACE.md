@@ -122,6 +122,27 @@ region of each file a kind points at, and the `gates` list in
 (`applies-here`, `an-artefact-traces-what-it-came-from`,
 `a-trace-pins-what-it-read`, `the-test-tree-is-written-down`).
 
+## coverage
+
+Answers how much of what was asked each seat has answered, as one row per
+seat: the seat, the word for what it counts, how many of how many, the share
+as a whole percentage, and the tasks it does not cover by name, up to a limit,
+with how many more when it stops. The analyst's row counts what was stated;
+the architect's counts requirements a drawing declares it answers, read from
+that drawing's own trace and never from a directory listing; the tester's
+counts requirements with a run on record that is still about the suite it
+names.
+
+Every number here is computed and none of them is written down anywhere in
+the tree, which is why no seat can claim one. The share is truncated and never
+rounded: 199 of 200 rounded prints 100 per cent and reads as done. This
+command has no way to fail. A gap is a fact about how far the work has got and
+not a promise anybody broke, so it exits 0 with its rows on any tree that
+states a requirement, 2 on a tree that states none, and never 1. On the board
+it is a wall that cannot refuse, and its own lines are carried under its `ok`
+line rather than only when something is wrong. Takes a root, which may be a
+flag. Exits 0 or 2 (`a-seat-claims-what-it-covers`).
+
 ## check
 
 Answers whether every skill obeys the skill rules: the standard's shape, MIT,
