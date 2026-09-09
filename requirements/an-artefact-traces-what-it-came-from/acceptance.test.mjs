@@ -49,10 +49,19 @@ const traces = (text) => {
   }
   return out;
 };
+// Superseded in part by `a-trace-pins-what-it-read`: a value became
+// `<name>` or `<name>@<sha>`, so the name is read without its pin. The
+// prose carries the name and never the sha, because nobody types one.
 const names = (v) =>
   (v ?? "")
     .split(",")
-    .map((s) => s.trim().replace(/^`|`$|\.$/g, ""))
+    .map(
+      (s) =>
+        s
+          .trim()
+          .replace(/^`|`$|\.$/g, "")
+          .split("@")[0],
+    )
     .filter((s) => s && !/^nothing$/i.test(s));
 const kaal = (...args) =>
   spawnSync(process.execPath, [join(ROOT, "bin", "kaal.mjs"), ...args], {

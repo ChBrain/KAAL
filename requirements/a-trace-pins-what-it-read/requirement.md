@@ -141,7 +141,7 @@ written by the tool rather than typed.
   name at once, a trace with no pin, and a tree for the writer to write
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: open
+- Status: closed
 - Blocked on: `an-artefact-traces-what-it-came-from`, which fixes the trace's
   shape, the kind table and the command this one extends
 - Unblocks: the asker's other two questions, which are one task and not this
@@ -150,3 +150,39 @@ written by the tool rather than typed.
   they need no pin, and they are buildable the day the trace lands
 - Supersedes: nothing
 - People: none
+
+## Build handoff
+
+- Task: a-trace-pins-what-it-read
+- Runs: unit 107, contract 145, acceptance 253, all green, run just now
+- Scope: the kind table's rows become pairs of where and which region, a
+  value splits into a name and a pin, a pin that no longer matches its
+  region is a finding in its own words, `--write` puts the pin on every
+  trace that resolves, and 59 artefacts are pinned
+- Class: surface moved, tool moved (`kaal class . --against origin/main`,
+  run after the last edit)
+- Unproven: nothing that a run can prove. What no run can prove is whether a
+  person read the change before clearing a pin, and that is the requirement's
+  own open question
+- Superseded: one the analyst did not name.
+  `an-artefact-traces-what-it-came-from`'s criterion 6 reads a trace's names
+  and compares them to the prose; the value grammar grew a pin, so it now
+  splits the name off first. Recorded on that task's own page. The grammar
+  change itself was declared in criterion 1; what was not declared is that a
+  closed test read the old grammar
+- Handed back: nothing
+
+## What the loop does, shown
+
+With the tree pinned, adding one sentence to `applies-here`'s acceptance
+criteria and running `kaal traces` prints:
+
+```
+nothing-passes-vacuously: supersedes: applies-here moved: its Acceptance criteria no longer matches the pin
+applies-here: requirement: applies-here moved: its Acceptance criteria no longer matches the pin
+```
+
+and exits 1. The drawing that answers that requirement and the requirement
+that supersedes it are both found, both named, from one edit. That is the
+chain the asker described: a requirement changes, the architecture that
+answered it is no longer valid, and it is found rather than remembered.

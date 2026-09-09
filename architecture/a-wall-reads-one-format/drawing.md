@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: a-wall-reads-one-format
+  requirement: a-wall-reads-one-format@f4597706e4089d992a1be073d9acfe162572674c5cec8ed5605f9e0359c30528
   principles: nothing
 ---
 

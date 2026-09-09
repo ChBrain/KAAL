@@ -284,7 +284,7 @@ sentence cannot be wrong, cut it.
 ---- references/requirement.md ----
 ---
 traces:
-  supersedes: <nothing, or the tasks whose claim this one moves>
+  supersedes: <nothing, or the tasks whose claim this one moves, each <name>@<sha>>
 ---
 
 # Requirement: <task>

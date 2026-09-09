@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: agent-v1
+  requirement: agent-v1@ba5c5d8d1725cdcc951e48ca3d3c5779a9169cacb3c276801307c8b9568970f4
   principles: nothing
 ---
 

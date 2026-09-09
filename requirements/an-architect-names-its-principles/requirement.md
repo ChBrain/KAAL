@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: `a-decision-balances-two-goods`
+  supersedes: a-decision-balances-two-goods@1dbf075ca9966dafd1254f9b145b8ecc90cc0ec6bb7a6d3f02d9e495e24efea2
 ---
 
 # Requirement: an-architect-names-its-principles

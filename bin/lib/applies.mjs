@@ -70,13 +70,17 @@ export function appliesHere(cmd, arg, cwd) {
       return childHas(join(root, "architecture"), "drawing.md")
         ? null
         : `no architecture/<task>/drawing.md under ${root}`;
-    case "traces":
+    case "traces": {
+      // A root that may be a flag, the pair `class` and `retros` carry, and
+      // a reason naming a directory called "--write" would be a lie.
+      const tree = arg && !arg.startsWith("-") ? arg : cwd;
       // Either artefact is enough: a tree may carry requirements before any
       // drawing exists, and the question is still its own.
-      return childHas(join(root, "requirements"), "requirement.md") ||
-        childHas(join(root, "architecture"), "drawing.md")
+      return childHas(join(tree, "requirements"), "requirement.md") ||
+        childHas(join(tree, "architecture"), "drawing.md")
         ? null
-        : `no requirements/<task>/requirement.md or architecture/<task>/drawing.md under ${root}`;
+        : `no requirements/<task>/requirement.md or architecture/<task>/drawing.md under ${tree}`;
+    }
     case "check":
       return childHas(dir, "SKILL.md")
         ? null

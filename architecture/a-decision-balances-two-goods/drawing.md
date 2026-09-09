@@ -1,6 +1,6 @@
 ---
 traces:
-  requirement: a-decision-balances-two-goods
+  requirement: a-decision-balances-two-goods@1dbf075ca9966dafd1254f9b145b8ecc90cc0ec6bb7a6d3f02d9e495e24efea2
   principles: nothing
 ---
 

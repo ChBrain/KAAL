@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: `push-v1`
+  supersedes: push-v1@cd52c37170763eda3069d20b62a6dd4b25360468f92a265bcb32fa99e51517ed
 ---
 
 # Requirement: evals-v2

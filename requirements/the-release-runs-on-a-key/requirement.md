@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: `security-v1`
+  supersedes: security-v1@58da36a958c75bdeadf9e058ccc8441e4ab568e1b76001efd8ae81bb2dddd322
 ---
 
 # Requirement: the-release-runs-on-a-key

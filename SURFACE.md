@@ -59,11 +59,16 @@ resolves: one row per kind says where things of that kind live, a kind the
 table does not hold is a finding rather than a silence, and a requirement's
 `Supersedes:` prose must still mention each name its trace declares. What is
 pinned for each kind is the region a reader would go to: a requirement's
-`## Acceptance criteria`, and for a principle the whole file. Reads the
-frontmatter of `requirements/<task>/requirement.md` and
-`architecture/<task>/drawing.md`, and the directories a kind points at; it
-resolves a name and never reads what it finds. Takes a root. Exits 0, 1 or 2
-(`applies-here`, `an-artefact-traces-what-it-came-from`).
+`## Acceptance criteria`, and for a principle the whole file. A value is
+`<name>` or `<name>@<sha>`: a pin that no longer matches the region it names
+is a finding saying the text moved, which is a different finding in different
+words from a name that resolves to nothing, because one wants a rename and the
+other a reread. `--write` puts the pin on every trace it can resolve, changes
+nothing else on the page, and writes nothing on a second run; nobody types a
+sha. Reads the frontmatter of `requirements/<task>/requirement.md` and
+`architecture/<task>/drawing.md`, and the region of each file a kind points
+at. Takes a root, which may be a flag. Exits 0, 1 or 2 (`applies-here`,
+`an-artefact-traces-what-it-came-from`, `a-trace-pins-what-it-read`).
 
 ## check
 
