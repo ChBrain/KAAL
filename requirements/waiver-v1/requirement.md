@@ -74,5 +74,4 @@ waiver, and the config lists the three gates with the evidence each needs.
 - Tests: `acceptance.test.mjs`, beside this file; fixture roots under
   `fixtures/`
 - Open questions: 2, listed above
-- Status: closed
 - People: none

@@ -176,7 +176,6 @@ must contain and what a tree may hold.
 - Tests: `acceptance.test.mjs`, beside this file; `fixtures/no-people` and
   `fixtures/people-none`, each a requirement with one green test
 - Open questions: 6, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: nothing

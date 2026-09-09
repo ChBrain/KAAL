@@ -201,7 +201,6 @@ does not know.
   prose does not carry, and an artefact with no block
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: `a-trace-pins-what-it-read`, which adds the sha and the three
   questions it answers; `unblocks` computed from everyone else's

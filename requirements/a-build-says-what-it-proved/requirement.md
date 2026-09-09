@@ -165,7 +165,6 @@ rather than stumbled on.
   requirement and the archive lands with them, so it is red on the run
   recorded here and green from the merge onward
 - Open questions: 7, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: nothing. Section 5 already asks for the change class and

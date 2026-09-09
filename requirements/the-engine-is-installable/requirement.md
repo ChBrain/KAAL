@@ -100,7 +100,6 @@ nothing of the league's own working.
   directory and installs there, and touches this tree not at all
 - Open questions: 4, listed above; the second is answered in the drawing,
   by npm's behaviour rather than by a preference
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

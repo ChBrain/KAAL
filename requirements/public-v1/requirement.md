@@ -87,5 +87,4 @@ board.
   updates, and code review by a bot if wanted; CodeQL's default setup must
   stay off, since the workflow is the advanced setup
 - Supersedes: nothing
-- Status: closed
 - People: none

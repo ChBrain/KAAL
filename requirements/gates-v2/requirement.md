@@ -67,5 +67,4 @@ LF.
 - Tests: `acceptance.test.mjs`, beside this file; `fixtures/plain`,
   `fixtures/globs`
 - Open questions: 1, listed above
-- Status: closed
 - People: none

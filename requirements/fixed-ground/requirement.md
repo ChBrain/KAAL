@@ -100,7 +100,6 @@ file from the template` moves, both already candidates for Script.
   the skill, then discarded
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 4, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

@@ -94,7 +94,6 @@ allowed to be one.
   all three red
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 5, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

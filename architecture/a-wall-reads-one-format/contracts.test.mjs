@@ -118,24 +118,20 @@ test("3. nothing ran is not the same as nothing failed", () => {
   // Only the promise this seam adds. The four verdicts that were already
   // right have a unit test of their own and it is the developer's; asserting
   // them here would be the same claim in two lanes.
-  const closed = judge("closed", 0, 0);
-  assert.equal(
-    closed.ok,
-    false,
-    "a closed requirement measuring nothing was ok",
-  );
+  //
+  // The call moved when delivery stopped being a field: `judge` takes the
+  // verdict a run and its record produced, and a run that measured nothing
+  // is `nothing ran` rather than a closed task with nothing in it. The claim
+  // is the one this criterion always made, that silence is not success.
+  const nothing = judge({ word: "nothing ran", ok: false }, "none");
+  assert.equal(nothing.ok, false, "a run measuring nothing was ok");
   assert.match(
-    closed.label,
+    nothing.label,
     /^FAIL/,
-    `the label does not refuse: ${closed.label}`,
+    `the label does not refuse: ${nothing.label}`,
   );
-  // A drawing is judged with mustClose false and inherits the same refusal,
-  // because the rule lives in the verdict and both walls read it.
-  const drawing = judge("closed", 0, 0, false);
-  assert.equal(drawing.ok, false, "a closed drawing measuring nothing was ok");
-  assert.match(
-    drawing.label,
-    /^FAIL/,
-    `the label does not refuse: ${drawing.label}`,
-  );
+  // Both walls read the same table, so a drawing inherits the same refusal
+  // without a second argument saying so.
+  assert.equal(judge({ word: "regressed", ok: false }, "none").ok, false);
+  assert.equal(judge({ word: "delivered", ok: true }, "none").ok, true);
 });

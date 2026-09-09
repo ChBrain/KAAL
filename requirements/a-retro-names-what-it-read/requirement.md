@@ -119,7 +119,6 @@ a read never being mistaken for a retro that fires the rule of ten.
   counts move every time anyone files a retro
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing; the question of whether the league needs a seat for
   writing orders is a separate ask and does not wait on this

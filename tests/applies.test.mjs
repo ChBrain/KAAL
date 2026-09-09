@@ -14,11 +14,12 @@ const FOREIGN = join(
 );
 const HALF = join(ROOT, "architecture", "applies-here", "fixtures", "half");
 
-test("the guarded commands are the eleven that judge a tree against a league artefact", () => {
-  // Ten until `an-artefact-traces-what-it-came-from` added `traces`, which
-  // takes a root and judges a tree against the league's own artefacts like
-  // the ten before it. Named rather than counted, so a command added by
-  // accident is still a red.
+test("the guarded commands are the twelve that judge a tree against a league artefact", () => {
+  // Ten until `an-artefact-traces-what-it-came-from` added `traces`, and
+  // eleven until `a-task-is-delivered-by-its-run` added `runs`, both of
+  // which take a root and judge a tree against the league's own artefacts
+  // like the ten before them. Named rather than counted, so a command added
+  // by accident is still a red.
   assert.deepEqual(GUARDED, [
     "ledger",
     "drawings",
@@ -31,6 +32,7 @@ test("the guarded commands are the eleven that judge a tree against a league art
     "class",
     "release",
     "traces",
+    "runs",
   ]);
 });
 

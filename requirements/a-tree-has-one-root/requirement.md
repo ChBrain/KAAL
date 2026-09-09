@@ -220,7 +220,6 @@ with one trunk and fifty four leaves.
 - Green before the build: none expected
 - Open questions: 4, listed above; the fifth, what the root is, was answered
   by the asker and is now an assumption
-- Status: closed
 - Blocked on: `an-artefact-traces-what-it-came-from`, which fixes the trace
   and the command; and the asker, who names the root
 - Unblocks: **a topology per seat**, one task each for the analyst, the

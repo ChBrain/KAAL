@@ -141,7 +141,6 @@ what changes when the artefact stops being a ref.
   defect. What the package carries is correct today and the criterion exists
   so that removing `private` and adding a name cannot quietly widen it
 - Open questions: 4, listed above; the first is answered, public
-- Status: closed
 - Blocked on: nothing. The first publish and the visibility that follows it
   are Kai's, and criterion 6 only required the record to have a place for
   them, which it now has

@@ -86,7 +86,6 @@ this tree's, and never pass because they found nothing to judge.
 - Tests: `acceptance.test.mjs`, beside this file; fixture root
   `fixtures/config-only/` here, and the foreign tree of `applies-here`
 - Open questions: 3, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: `applies-here`, in part: its table of four becomes eight,
   and its unit test's list of commands the table does not name loses

@@ -91,7 +91,6 @@ foreclosed side against the thing the task exists to deliver.
   and its template with whitespace folded, because the formatter wraps where
   it likes
 - Open questions: 3, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - Superseded by: `an-architect-names-its-principles`, in part. The claim that

@@ -71,7 +71,6 @@ marks met or not met, in the same shape as the rest.
   red; seen green on a stand-in line in the checklist, then discarded
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 3, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

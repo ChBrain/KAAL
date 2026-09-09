@@ -117,7 +117,6 @@ tree`), and 2 on a tree with no skills. Three codes.
   defect. The bare command is correct today and the criterion exists so the
   build cannot pay for a flag by changing the lines ten closed tests read
 - Open questions: 4, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: nothing. `SURFACE.md`'s `retros` entry is corrected rather

@@ -82,5 +82,4 @@ text and says drift.
 - Open questions: 2, listed above
 - Blocked on: nothing
 - Supersedes: nothing
-- Status: closed
 - People: none

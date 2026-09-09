@@ -113,7 +113,6 @@ from the template` move is the candidate.
   on a stand-in copy of the skill, then discarded
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 6, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none
