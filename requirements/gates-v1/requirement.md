@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: gates-v1
 
 _Written in analyse mode. The second of the two tasks counted out of the ask

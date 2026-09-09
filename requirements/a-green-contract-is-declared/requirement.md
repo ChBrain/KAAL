@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-green-contract-is-declared
 
 _Written in analyse mode, the second of three tasks from the run over

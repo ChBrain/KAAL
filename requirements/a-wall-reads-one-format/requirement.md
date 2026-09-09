@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-wall-reads-one-format
 
 _Written in analyse mode. Ask, from Kai: "go, open it as a-wall-reads-one-format",

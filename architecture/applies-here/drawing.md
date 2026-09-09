@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: applies-here
+  principles: nothing
+---
+
 # Drawing: applies-here
 
 _Written in architect mode from `requirements/applies-here`, three

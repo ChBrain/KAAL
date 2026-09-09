@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-green-contract-is-declared
+  principles: nothing
+---
+
 # Drawing: a-green-contract-is-declared
 
 _Written in architect mode from `requirements/a-green-contract-is-declared`,

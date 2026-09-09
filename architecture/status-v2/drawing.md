@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: status-v2
+  principles: nothing
+---
+
 # Drawing: status-v2
 
 _Written in architect mode from `requirements/status-v2`, three criteria,

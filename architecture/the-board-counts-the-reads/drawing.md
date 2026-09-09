@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: the-board-counts-the-reads
+  principles: nothing
+---
+
 # Drawing: the-board-counts-the-reads
 
 _Written in architect mode from `requirements/the-board-counts-the-reads`,

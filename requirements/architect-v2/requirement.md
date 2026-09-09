@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: architect-v2
 
 _Written in analyse mode. The ask is a stack: the first ten retros on the

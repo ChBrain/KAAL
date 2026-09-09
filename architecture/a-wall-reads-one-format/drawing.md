@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-wall-reads-one-format
+  principles: nothing
+---
+
 # Drawing: a-wall-reads-one-format
 
 _Written in architect mode from `requirements/a-wall-reads-one-format`, four

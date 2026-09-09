@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: code-v2
+  principles: nothing
+---
+
 # Drawing: code-v2
 
 _Written in architect mode from `requirements/code-v2`, seven criteria,

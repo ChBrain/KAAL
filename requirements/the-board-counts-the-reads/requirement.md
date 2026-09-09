@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: the-board-counts-the-reads
 
 _Named by the drawing `a-retro-names-what-it-read` as the task that closes a

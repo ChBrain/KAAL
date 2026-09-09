@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: skills-v1
 
 _Written in analyse mode. Ask, verbatim: "we need to build skills better:

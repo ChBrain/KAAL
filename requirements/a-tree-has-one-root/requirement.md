@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-tree-has-one-root
 
 _Ask, from Kai: "requirements is a tree, not a forrest; architecture is a

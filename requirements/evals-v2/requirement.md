@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `push-v1`
+---
+
 # Requirement: evals-v2
 
 _Written in analyse mode. Ask, from a defect: the first `/eval analyse`

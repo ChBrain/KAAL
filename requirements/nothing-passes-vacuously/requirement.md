@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `applies-here`
+---
+
 # Requirement: nothing-passes-vacuously
 
 _Written in analyse mode. Ask, from Kai: "any chance to run KAAL without a

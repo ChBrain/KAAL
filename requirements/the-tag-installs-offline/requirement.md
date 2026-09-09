@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `the-engine-is-installable`
+---
+
 # Requirement: the-tag-installs-offline
 
 _Written in analyse mode. Ask, from Kai: "right now I work KAAL towards a

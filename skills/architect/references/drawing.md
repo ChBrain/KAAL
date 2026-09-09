@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: <the task this drawing answers>
+  principles: <nothing, or the principles its decisions weighed>
+---
+
 # Drawing: <task>
 
 ## What the runs said

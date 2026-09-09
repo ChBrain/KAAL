@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: <nothing, or the tasks whose claim this one moves>
+---
+
 # Requirement: <task>
 
 ## Goal

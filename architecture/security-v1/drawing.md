@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: security-v1
+  principles: nothing
+---
+
 # Drawing: security-v1
 
 _Written in architect mode from `requirements/security-v1`, five criteria,

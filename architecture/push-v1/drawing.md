@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: push-v1
+  principles: nothing
+---
+
 # Drawing: push-v1
 
 _Written in architect mode from `requirements/push-v1`, whose eight criteria

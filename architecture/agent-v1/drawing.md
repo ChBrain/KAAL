@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: agent-v1
+  principles: nothing
+---
+
 # Drawing: agent-v1
 
 _Written in architect mode from `requirements/agent-v1`, five criteria, five

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `a-decision-balances-two-goods`
+---
+
 # Requirement: an-architect-names-its-principles
 
 _Ask, from Kai: architecture principles, tested with DRY, and "how do we

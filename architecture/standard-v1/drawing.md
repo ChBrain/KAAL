@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: standard-v1
+  principles: nothing
+---
+
 # Drawing: standard-v1
 
 _Written in architect mode from `requirements/standard-v1`, four criteria,

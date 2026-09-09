@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: fixed-ground
 
 _Written in analyse mode. Ask: the stack of ten unconsumed retros on the

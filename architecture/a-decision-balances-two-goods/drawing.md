@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-decision-balances-two-goods
+  principles: nothing
+---
+
 # Drawing: a-decision-balances-two-goods
 
 _Written in architect mode from `requirements/a-decision-balances-two-goods`,

@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: analyse-v3
+  principles: nothing
+---
+
 # Drawing: analyse-v3
 
 _Written in architect mode from `requirements/analyse-v3`, four criteria,

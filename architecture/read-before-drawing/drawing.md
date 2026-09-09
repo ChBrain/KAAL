@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: read-before-drawing
+  principles: nothing
+---
+
 # Drawing: read-before-drawing
 
 _Written in architect mode from `requirements/read-before-drawing`, five

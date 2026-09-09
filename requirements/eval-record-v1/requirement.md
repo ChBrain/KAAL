@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: eval-record-v1
 
 _Written in analyse mode. Ask: the eval record, which today carries a model,

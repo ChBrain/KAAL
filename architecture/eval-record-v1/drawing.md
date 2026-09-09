@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: eval-record-v1
+  principles: nothing
+---
+
 # Drawing: eval-record-v1
 
 _Written in architect mode from `requirements/eval-record-v1`, four criteria,

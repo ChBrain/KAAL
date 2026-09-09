@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: public-v1
+  principles: nothing
+---
+
 # Drawing: public-v1
 
 _Written in architect mode from `requirements/public-v1`, six criteria, six

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-build-says-what-it-proved
 
 _Written in analyse mode, from a stack. Thirteen unconsumed retros on the

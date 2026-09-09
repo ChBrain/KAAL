@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-change-declares-its-class
 
 _Written in analyse mode. Ask, from Kai, in two parts: "we start with

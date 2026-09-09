@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: the-tag-installs-offline
+  principles: nothing
+---
+
 # Drawing: the-tag-installs-offline
 
 _Written in architect mode from `requirements/the-tag-installs-offline`,

@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: an-artefact-traces-what-it-came-from
+  principles: nothing
+---
+
 # Drawing: an-artefact-traces-what-it-came-from
 
 _Written in architect mode from `requirements/an-artefact-traces-what-it-came-from`,

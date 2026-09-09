@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: what-a-closed-task-fixes
 
 _Written in analyse mode, in the same analyst run as

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: security-v1
 
 _Written in analyse mode. Ask: before skills with scripts are reused outside

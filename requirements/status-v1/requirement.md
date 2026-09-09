@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: status-v1
 
 _Written in analyse mode. The ask arrived as a refusal: the pre-push hook,

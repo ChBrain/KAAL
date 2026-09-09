@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `security-v1`
+---
+
 # Requirement: the-release-runs-on-a-key
 
 _Kai asked for this after the v0.0.1 cut: "we might want to have a Github

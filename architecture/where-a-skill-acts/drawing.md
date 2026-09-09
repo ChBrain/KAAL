@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: where-a-skill-acts
+  principles: nothing
+---
+
 # Drawing: where-a-skill-acts
 
 _Written in architect mode from `requirements/where-a-skill-acts`, four

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-task-names-its-people
 
 _Written in analyse mode. Ask, from Kai: data protection (he names the

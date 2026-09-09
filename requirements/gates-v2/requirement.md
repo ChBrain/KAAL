@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: gates-v2
 
 _Written in analyse mode. Ask, from a defect: on a Windows machine with no

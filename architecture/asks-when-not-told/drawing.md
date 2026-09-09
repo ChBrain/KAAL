@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: asks-when-not-told
+  principles: nothing
+---
+
 # Drawing: asks-when-not-told
 
 _Written in architect mode from `requirements/asks-when-not-told`, one

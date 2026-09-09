@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: standard-v2
 
 _Written in analyse mode. Ask, from a defect reported in a comment on pull

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-decision-balances-two-goods
 
 _Written in analyse mode. Ask, from Kai, on the architect: "two good choices

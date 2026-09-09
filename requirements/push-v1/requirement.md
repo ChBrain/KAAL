@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: push-v1
 
 _Written in analyse mode. Ask, verbatim: "now KAAL needs to eat its own

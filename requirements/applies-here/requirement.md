@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: applies-here
 
 _Written in analyse mode. Ask, from Kai: KAAL now has an external mode in
