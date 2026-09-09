@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: assess-boundary
+  principles: nothing
+---
+
 # Drawing: assess-boundary
 
 _Written in architect mode from `requirements/assess-boundary`, six

@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: standard-v2
+  principles: nothing
+---
+
 # Drawing: standard-v2
 
 _Written in architect mode from `requirements/standard-v2`, one criterion,

@@ -219,6 +219,12 @@ more than once is a principle waiting to be written, and the next use of this
 skill should find it already written.
 
 ---- references/drawing.md ----
+---
+traces:
+  requirement: <the task this drawing answers>
+  principles: <nothing, or the principles its decisions weighed>
+---
+
 # Drawing: <task>
 
 ## What the runs said

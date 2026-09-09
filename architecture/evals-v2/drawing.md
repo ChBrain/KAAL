@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: evals-v2
+  principles: nothing
+---
+
 # Drawing: evals-v2
 
 _Written in architect mode from `requirements/evals-v2`, four criteria,

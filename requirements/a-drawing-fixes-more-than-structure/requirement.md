@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-drawing-fixes-more-than-structure
 
 _Written in analyse mode, in an analyst run over twenty unconsumed retros,

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-trace-pins-what-it-read
 
 _Ask, from Kai, following `an-artefact-traces-what-it-came-from`: "that allows

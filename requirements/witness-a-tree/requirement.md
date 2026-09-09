@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: witness-a-tree
 
 _Written in analyse mode. Ask, from Kai: "how can we test external work

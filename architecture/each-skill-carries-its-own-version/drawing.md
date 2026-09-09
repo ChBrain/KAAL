@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: each-skill-carries-its-own-version
+  principles: nothing
+---
+
 # Drawing: each-skill-carries-its-own-version
 
 _Written in architect mode from `requirements/each-skill-carries-its-own-version`,

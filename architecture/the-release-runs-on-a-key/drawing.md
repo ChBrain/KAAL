@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: the-release-runs-on-a-key
+  principles: nothing
+---
+
 # Drawing: the-release-runs-on-a-key
 
 _Written in architect mode from `requirements/the-release-runs-on-a-key`,

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: waiver-v1
 
 _Written in analyse mode. Ask: the design places the human at three gates

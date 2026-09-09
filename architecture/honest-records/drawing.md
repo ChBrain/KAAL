@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: honest-records
+  principles: nothing
+---
+
 # Drawing: honest-records
 
 _Written in architect mode from `requirements/honest-records`, five

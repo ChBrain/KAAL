@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: what-a-closed-task-fixes
+  principles: nothing
+---
+
 # Drawing: what-a-closed-task-fixes
 
 _Written in architect mode from `requirements/what-a-closed-task-fixes`,

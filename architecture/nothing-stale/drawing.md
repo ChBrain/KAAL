@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: nothing-stale
+  principles: nothing
+---
+
 # Drawing: nothing-stale
 
 _Written in architect mode from `requirements/nothing-stale`, six criteria,

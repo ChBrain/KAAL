@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-retro-names-what-it-read
+  principles: nothing
+---
+
 # Drawing: a-retro-names-what-it-read
 
 _Written in architect mode from `requirements/a-retro-names-what-it-read`,

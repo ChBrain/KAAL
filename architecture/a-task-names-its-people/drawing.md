@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-task-names-its-people
+  principles: nothing
+---
+
 # Drawing: a-task-names-its-people
 
 _Written in architect mode from `requirements/a-task-names-its-people`,

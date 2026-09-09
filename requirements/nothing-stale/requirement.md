@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `eval-runner`
+---
+
 # Requirement: nothing-stale
 
 _Written in analyse mode. Ask: the stack of ten unconsumed retros on the

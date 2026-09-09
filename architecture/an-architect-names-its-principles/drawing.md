@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: an-architect-names-its-principles
+  principles: nothing
+---
+
 # Drawing: an-architect-names-its-principles
 
 _Written in architect mode from `requirements/an-architect-names-its-principles`,

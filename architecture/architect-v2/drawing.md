@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: architect-v2
+  principles: nothing
+---
+
 # Drawing: architect-v2
 
 _Written in architect mode from `requirements/architect-v2`, six criteria,

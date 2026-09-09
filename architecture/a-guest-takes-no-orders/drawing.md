@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-guest-takes-no-orders
+  principles: nothing
+---
+
 # Drawing: a-guest-takes-no-orders
 
 _Written in architect mode from `requirements/a-guest-takes-no-orders`,

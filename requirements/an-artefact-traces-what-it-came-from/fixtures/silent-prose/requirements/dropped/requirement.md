@@ -1,9 +1,9 @@
 ---
 traces:
-  supersedes: t
+  supersedes: dropped
 ---
 
-# Requirement: t
+# Requirement: dropped
 
 ## Goal
 
@@ -31,7 +31,7 @@ A fixture.
 
 ## Handoff
 
-- Task: t
+- Task: dropped
 - Criteria: 1; tests: 1 (equal)
 - Red run: none; a fixture
 - Tests: `acceptance.test.mjs`, beside this file

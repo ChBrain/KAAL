@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: standard-v1
 
 _Written in analyse mode. Ask, verbatim: "make it tested. it should hit us

@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: nothing-passes-vacuously
+  principles: nothing
+---
+
 # Drawing: nothing-passes-vacuously
 
 _Written in architect mode from `requirements/nothing-passes-vacuously`,

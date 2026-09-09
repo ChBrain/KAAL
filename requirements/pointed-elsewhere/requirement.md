@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: pointed-elsewhere
 
 _Written in analyse mode. Ask, from Kai: "how can we test external work

@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: gates-v2
+  principles: nothing
+---
+
 # Drawing: gates-v2
 
 _Written in architect mode from `requirements/gates-v2`, four criteria, four

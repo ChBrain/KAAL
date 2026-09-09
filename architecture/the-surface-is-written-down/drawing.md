@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: the-surface-is-written-down
+  principles: nothing
+---
+
 # Drawing: the-surface-is-written-down
 
 _Written in architect mode from `requirements/the-surface-is-written-down`,

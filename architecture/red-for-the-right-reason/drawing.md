@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: red-for-the-right-reason
+  principles: nothing
+---
+
 # Drawing: red-for-the-right-reason
 
 _Written in architect mode from `requirements/red-for-the-right-reason`,

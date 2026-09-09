@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: agent-v1
 
 _Written in analyse mode. Ask: the design says an agent is a persona, a

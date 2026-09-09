@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-change-declares-its-class
+  principles: nothing
+---
+
 # Drawing: a-change-declares-its-class
 
 _Written in architect mode from `requirements/a-change-declares-its-class`,

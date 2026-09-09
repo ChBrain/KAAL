@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: an-artefact-traces-what-it-came-from
 
 _Ask, from Kai, in three steps. First the problem: the dependencies between
@@ -31,10 +36,16 @@ does not know.
 - No requirement and no drawing carries frontmatter: 0 of 54 and 0 of 48.
   All six skills do, and so do eval records, waivers, agent bindings and
   personas.
-- Forty-four requirements carry a `- Supersedes:` line. Thirty-two say
-  `nothing`. Twelve name something, and none of the twelve is a name a
-  script can read: every one is a sentence, eight wrap onto a second line,
-  and one names a pull request rather than a task. Verbatim:
+- Forty-seven requirements carry a `- Supersedes:` line. Thirty-four say
+  `nothing` and three more say `nothing` followed by a sentence. Ten name
+  something, nine of which are a task in this tree and one a pull request,
+  and none of the ten is a name a script can read: every one is a sentence
+  and eight wrap onto a second line. Verbatim:
+  _Corrected during the build. This paragraph first read "forty-four ...
+  thirty-two say nothing ... twelve name something", counted by grepping for
+  the line rather than reading its value, so three lines that say `nothing`
+  and then explain why were counted as naming a task. The migration found it,
+  which is the defect this task exists to catch, met on its own page._
   `` `security-v1`, in part, and the supersede is declared in that ``, and
   `two, both in `security-v1`and`operate`. `security-v1`'s`.
 - Forty-two requirements carry `- Blocked on:` and only ten carry
@@ -190,7 +201,7 @@ does not know.
   prose does not carry, and an artefact with no block
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Unblocks: `a-trace-pins-what-it-read`, which adds the sha and the three
   questions it answers; `unblocks` computed from everyone else's
@@ -204,3 +215,42 @@ does not know.
   line order are honoured rather than superseded: every body line keeps its
   name, its place and its prose, and the frontmatter is added beside them
 - People: none
+
+## Build handoff
+
+- Task: an-artefact-traces-what-it-came-from
+- Runs: unit 107, contract 141, acceptance 249, all green, run just now
+- Scope: a trace module with a table of three kinds, a `traces` command, an
+  eleventh guarded case, a twelfth wall, a surface entry, a block on both
+  templates, and 106 artefacts migrated from what their own pages already
+  said
+- Class: surface moved, tool moved (`kaal class . --against origin/main`, run last, after the final edit)
+- Unproven: nothing. Every criterion is a wall or text and both run here
+- Superseded: one the analyst did not name. `applies-here`'s unit fixes the
+  guarded commands as exactly ten by name, and the drawing put `traces`
+  among them. Moved to eleven, named rather than counted, so a command added
+  by accident is still a red. Found by running the closed tests the change
+  touches
+- Handed back: nothing
+
+## What the build corrected in this record
+
+- The count in What the runs said was wrong and this task is the reason it
+  was found. It read "forty-four ... thirty-two say nothing ... twelve name
+  something", counted by grepping for the line rather than reading its value.
+  The truth is forty-seven lines, thirty-four saying `nothing`, three more
+  saying `nothing` and then explaining why, nine naming a task in this tree,
+  and one naming a pull request. Criterion 6's test moved from twelve to
+  nine with the reason beside it.
+- The `silent-prose` fixture could not fire. Its task was `t` and its prose
+  says "something-else", which contains the letter t, so the check it exists
+  to drive passed on a letter. Renamed to `dropped`. This is the second time
+  in two days a one letter fixture name has hidden a case, and the first
+  time was in this task's own contract fixtures.
+- Criterion 6's test stripped every lowercase token before asking whether
+  prose remained, which erased the prose it was looking for: `evals-v2`'s
+  nine word line read as bare names. It now strips only the declared names.
+- `agent-v1` answers the requirement's open question by example. Its line
+  says "PR #1, which closes when this lands", which is not a task, so its
+  trace is `nothing` and the prose keeps the fact. A pull request is not a
+  kind and the league did not gain one.

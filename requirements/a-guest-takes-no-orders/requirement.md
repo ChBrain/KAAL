@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-guest-takes-no-orders
 
 _Written in analyse mode. Ask, from Kai, on a finding rather than a plan:

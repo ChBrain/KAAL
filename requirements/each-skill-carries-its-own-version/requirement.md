@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: each-skill-carries-its-own-version
 
 _Written in analyse mode. Ask, from Kai: "go for it, but also skill version

@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: a-drawing-fixes-more-than-structure
+  principles: nothing
+---
+
 # Drawing: a-drawing-fixes-more-than-structure
 
 _Written in architect mode from

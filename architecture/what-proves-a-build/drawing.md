@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: what-proves-a-build
+  principles: nothing
+---
+
 # Drawing: what-proves-a-build
 
 _Written in architect mode from `requirements/what-proves-a-build`, four

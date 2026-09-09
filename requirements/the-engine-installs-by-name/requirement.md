@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `security-v1`
+---
+
 # Requirement: the-engine-installs-by-name
 
 _Ask, from Kai: "we might want to release kaal to ChBrain, like my other

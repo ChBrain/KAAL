@@ -52,6 +52,19 @@ order, one labelled edge and one contract test per seam, every criterion in
 the strategy table. Reads `architecture/<task>/` and the task's requirement.
 Takes a root. Exits 0, 1 or 2 (`applies-here`, `architect-v2`).
 
+## traces
+
+Answers whether every artefact declares what it was made from and every name
+resolves: one row per kind says where things of that kind live, a kind the
+table does not hold is a finding rather than a silence, and a requirement's
+`Supersedes:` prose must still mention each name its trace declares. What is
+pinned for each kind is the region a reader would go to: a requirement's
+`## Acceptance criteria`, and for a principle the whole file. Reads the
+frontmatter of `requirements/<task>/requirement.md` and
+`architecture/<task>/drawing.md`, and the directories a kind points at; it
+resolves a name and never reads what it finds. Takes a root. Exits 0, 1 or 2
+(`applies-here`, `an-artefact-traces-what-it-came-from`).
+
 ## check
 
 Answers whether every skill obeys the skill rules: the standard's shape, MIT,

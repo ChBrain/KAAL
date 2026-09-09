@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-retro-names-what-it-read
 
 _Kai asked whether the retro stacks are running on all six skills and whether

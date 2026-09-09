@@ -282,6 +282,11 @@ disputed; a criterion can fail; a test can be red for the wrong reason. If a
 sentence cannot be wrong, cut it.
 
 ---- references/requirement.md ----
+---
+traces:
+  supersedes: <nothing, or the tasks whose claim this one moves>
+---
+
 # Requirement: <task>
 
 ## Goal

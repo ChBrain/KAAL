@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-drawing-shows-its-ground
 
 _Written in analyse mode, from a stack. Eleven unconsumed retros on the

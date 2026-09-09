@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: status-v2
 
 _Written in analyse mode. Ask, again a refusal: with three drawings written

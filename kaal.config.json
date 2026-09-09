@@ -42,6 +42,11 @@
       "fix": "give the drawing the template's six sections in order, one labelled edge and one contract test per seam, every criterion in the strategy table, and a requirement of the same task"
     },
     {
+      "name": "traces",
+      "command": "node bin/kaal.mjs traces",
+      "fix": "declare what the artefact came from, and make every name resolve"
+    },
+    {
       "name": "ledger",
       "command": "node bin/kaal.mjs ledger",
       "fix": "evidence the rung or lower it"

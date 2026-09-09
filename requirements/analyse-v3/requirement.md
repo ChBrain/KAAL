@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: analyse-v3
 
 _Written in analyse mode. Ask, from a retro that names a defect: two

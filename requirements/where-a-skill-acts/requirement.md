@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: where-a-skill-acts
 
 _Written in analyse mode. Ask, from Kai, in his words: "core concept is

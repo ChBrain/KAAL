@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: eval-runner
+  principles: nothing
+---
+
 # Drawing: eval-runner
 
 _Written in architect mode from `requirements/eval-runner`, three

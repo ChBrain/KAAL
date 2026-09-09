@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `eval-record-v1`
+---
+
 # Requirement: honest-records
 
 _Written in analyse mode. Ask, from a day of readings: three readings said

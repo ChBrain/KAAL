@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: fixtures-v1
+  principles: nothing
+---
+
 # Drawing: fixtures-v1
 
 _Written in architect mode from `requirements/fixtures-v1`, four criteria,

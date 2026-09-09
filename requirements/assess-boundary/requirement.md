@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: assess-boundary
 
 _Written in analyse mode. Ask: the dual-mode design proposal, which asks

@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: fixtures-v1
 
 _Written in analyse mode. Ask: every skill has one friendly fixture, the ask

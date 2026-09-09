@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: waiver-v1
+  principles: nothing
+---
+
 # Drawing: waiver-v1
 
 _Written in architect mode from `requirements/waiver-v1`, five criteria,

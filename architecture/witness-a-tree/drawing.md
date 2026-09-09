@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: witness-a-tree
+  principles: nothing
+---
+
 # Drawing: witness-a-tree
 
 _Written in architect mode from `requirements/witness-a-tree`, four

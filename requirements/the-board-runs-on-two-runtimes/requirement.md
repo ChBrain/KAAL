@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: `public-v1`
+---
+
 # Requirement: the-board-runs-on-two-runtimes
 
 _Named in five retros before it was written. The defect that made it

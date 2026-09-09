@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: a-requirement-shows-its-work
 
 _Written in analyse mode, from a stack. Twelve unconsumed retros on the

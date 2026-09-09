@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: pointed-elsewhere
+  principles: nothing
+---
+
 # Drawing: pointed-elsewhere
 
 _Written in architect mode from `requirements/pointed-elsewhere`, four

@@ -180,7 +180,10 @@ test("6. the prose stays, and carries every name the trace declares", () => {
   const out = said(r);
   notUsage(out);
   assert.equal(r.status, 1, `a name the prose drops was allowed: ${out}`);
-  assert.match(out, /\bt\b/, `the requirement is not named: ${out}`);
+  // The fixture's task was `t` and its prose says "something-else", which
+  // contains the letter t, so the case never fired. Every fixture name is
+  // now long enough that none is a substring of the prose beside it.
+  assert.match(out, /dropped/, `the requirement is not named: ${out}`);
   // The declared name is the one missing from the prose, and `t` resolves,
   // so this cannot be the criterion 3 finding under another name.
   assert.doesNotMatch(
@@ -193,9 +196,12 @@ test("6. the prose stays, and carries every name the trace declares", () => {
     .sort()
     .map((p) => [p, names(traces(read(p))?.supersedes)])
     .filter(([, ns]) => ns && ns.length);
+  // Nine, corrected during the build from twelve: three of the twelve say
+  // `nothing` and then explain why, and one names a pull request, which is
+  // not a task and traces as nothing with the prose kept.
   assert.ok(
-    named.length >= 12,
-    `only ${named.length} requirements trace a supersede; the runs found 12`,
+    named.length >= 9,
+    `only ${named.length} requirements trace a supersede; the runs found 9`,
   );
   for (const [p, ns] of named) {
     const line = read(p).match(/^- Supersedes: (.+)$/m);
@@ -204,10 +210,19 @@ test("6. the prose stays, and carries every name the trace declares", () => {
       assert.ok(line[1].includes(n), `${p}: the prose does not carry ${n}`);
     // The prose, not the name. A line that is only the names repeats the
     // trace and says nothing a reader could not already compute, so the
-    // words that made it worth keeping have to still be there.
-    const rest = line[1].replace(/`?[a-z0-9-]+`?/g, "").replace(/[.,;:]/g, "");
+    // words that made it worth keeping have to still be there. Only the
+    // declared names come out: an earlier version stripped every lowercase
+    // token, which erased the prose it was looking for and called a line
+    // of nine words bare.
+    let rest = line[1];
+    for (const n of ns)
+      rest = rest
+        .split("`" + n + "`")
+        .join(" ")
+        .split(n)
+        .join(" ");
     assert.ok(
-      rest.trim().length > 0,
+      rest.replace(/[.,;:\s]/g, "").length > 0,
       `${p}: the Supersedes line is bare names; which claim moved?`,
     );
   }

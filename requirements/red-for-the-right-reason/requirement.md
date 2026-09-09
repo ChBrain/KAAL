@@ -1,3 +1,8 @@
+---
+traces:
+  supersedes: nothing
+---
+
 # Requirement: red-for-the-right-reason
 
 _Written in analyse mode, in an analyst run over twelve unconsumed retros

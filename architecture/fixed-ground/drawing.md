@@ -1,3 +1,9 @@
+---
+traces:
+  requirement: fixed-ground
+  principles: nothing
+---
+
 # Drawing: fixed-ground
 
 _Written in architect mode from `requirements/fixed-ground`, five criteria,
