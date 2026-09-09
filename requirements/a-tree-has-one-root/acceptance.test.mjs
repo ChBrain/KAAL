@@ -150,33 +150,40 @@ test("5. a star is reported, and a tree with depth is not", () => {
   assert.equal(deep.status, 0, `a tree with depth was reported: ${said(deep)}`);
 });
 
-test("6. the trunk is the requirements root, and the other two trees argue", () => {
-  const rootsOf = (files) =>
-    files.filter((p) => /^none$/i.test(parentOf(read(p)) ?? ""));
-  const argued = (p) => /^- Root because: \S/m.test(read(p));
-  const reqRoots = rootsOf(pages());
+test("6. a trunk above all three, and it is the only root", () => {
+  // A document of its own kind: it belongs to no tree, which is why all
+  // three can answer to it. The build names the file; this reads whatever
+  // carries a traces block and declares no parent.
+  const candidates = [
+    ...pages(),
+    ...drawings(),
+    ...globSync("*.md", { cwd: ROOT }),
+    ...globSync("tests/**/*.md", { cwd: ROOT }),
+  ];
+  const roots = candidates.filter((p) => {
+    const v = parentOf(read(p));
+    return v !== null && /^none$/i.test(v);
+  });
   assert.equal(
-    reqRoots.length,
+    roots.length,
     1,
-    `the requirements tree has ${reqRoots.length} roots: ${reqRoots.join(", ")}`,
+    `expected one trunk and found ${roots.length}: ${roots.join(", ") || "none"}`,
   );
-  // The trunk carries no argument, because it is the trunk.
-  assert.ok(
-    !argued(reqRoots[0]),
-    `the trunk argues for itself: ${reqRoots[0]}`,
-  );
-  // The architecture tree roots itself and says why it is not a branch of
-  // the requirements. Its root is a drawing, so the line lives there.
-  const drawRoots = rootsOf(drawings());
-  assert.equal(
-    drawRoots.length,
-    1,
-    `the architecture tree has ${drawRoots.length} roots: ${drawRoots.join(", ")}`,
-  );
-  assert.ok(
-    argued(drawRoots[0]),
-    `the architecture tree's root carries no argument: ${drawRoots[0]}`,
-  );
+  const trunk = roots[0].replace(/\.md$/, "").split("/").pop();
+  // The three trees answer to it. Each tree's root is the artefact whose
+  // parent is the trunk, and there is exactly one per tree.
+  const rootOf = (files) => files.filter((p) => parentOf(read(p)) === trunk);
+  for (const [tree, files] of [
+    ["requirements", pages()],
+    ["architecture", drawings()],
+  ]) {
+    const r = rootOf(files);
+    assert.equal(
+      r.length,
+      1,
+      `the ${tree} tree declares ${r.length} roots under the trunk: ${r.join(", ")}`,
+    );
+  }
 });
 
 test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {

@@ -4,7 +4,8 @@ Self-diagnosis: drawn from session context. Not a human-reported retro.
 
 Period: the sixtieth use of the analyse skill, amending
 `requirements/a-tree-has-one-root` after the asker settled the shape (seven
-criteria, seven red tests), 9 September 2026.
+criteria, seven red tests), 9 September 2026. Amended twice: the first
+reading of the trunk was wrong and the asker corrected it in five words.
 Place: this repository
 
 ## Liked
@@ -28,11 +29,17 @@ Place: this repository
   earlier note said architecture hangs off requirements one to one, which
   would have parented every drawing to its requirement and flattened
   architecture into a mirror. The criterion now forbids it by name.
-- My first draft of criterion 6 invented a fourth kind of document, a root
-  above the three trees belonging to none of them, parented by nothing and
-  pinned against nothing. The asker had written the root as a requirement in
-  their own message and I read past it. A structure that needs a new kind of
-  artefact to express it is usually a structure read wrong.
+- My first draft of criterion 6 invented a fourth kind of document above the
+  three trees, and my second argued it away because the asker had written
+  KAAL as a requirement. The asker then said "KAAL is trunk above all three",
+  which is the first draft. The rule I applied, that a structure needing a
+  new kind of artefact is usually read wrong, is a good rule and it was the
+  wrong one here: three trees that answer to one thing have something in
+  common that none of them contains, and there is nowhere else to put it.
+  The tell I missed is in my own criterion 1: a requirement that parents a
+  drawing makes architecture a branch of requirements, which is the exact
+  flattening I had just written a criterion to forbid. My own page argued
+  against my own reading and I did not notice for two drafts.
 - A test can go green because a different rule fired. Test 4 asserted an exit
   code and the fixtures used `parent:`, which the kind table does not hold
   yet, so every fixture reported "no such kind" and the code alone made the

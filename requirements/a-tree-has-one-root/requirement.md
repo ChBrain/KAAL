@@ -21,7 +21,14 @@ overview into details. underneath: code answers tests, what's not testable
 can't be coded (we never know if it's true without)." That answers the open
 question about what the root is and it moves two things: the tree edge is now
 told apart from the edges between trees, and criterion 1 reaches the
-architecture tree rather than the requirements alone._
+architecture tree rather than the requirements alone.
+
+Amended twice. The first amendment read the trunk as the requirements root,
+because the asker had written KAAL as a requirement and because a document
+above all three belongs to no tree. The asker answered plainly: "KAAL is trunk
+above all three." So the trunk is a document of its own kind, the analyst's
+reading is recorded as wrong rather than quietly dropped, and what it costs is
+priced below._
 
 ## Goal
 
@@ -93,16 +100,23 @@ with one trunk and fifty four leaves.
 - A second root does not expire the way a waiver does. A deliberate second
   tree is a decision, not a temporary excuse, and an expiry date on it would
   be a lie about what it is.
-- `KAAL` is the top root and it is a requirement, not a fourth kind of
-  document. The asker wrote it as one: `Requirement: "Do KAAL"`. So the
-  requirements tree's root is the trunk, and the architecture tree's root
-  and the test tree's root are the second and third roots, each carrying the
-  argument criterion 2 already demands. That is why this task needs no new
-  artefact above the three: the mechanism for a second tree was already
-  specified and this is what it was for.
-- A document above all three would be a fourth kind, belonging to no tree,
-  parented by nothing and pinned against nothing. Three argued roots say the
-  same thing with the artefacts the league already has.
+- `KAAL` is a trunk above all three trees and a document of its own kind. The
+  analyst read it as the requirements root and the asker corrected that: a
+  requirement that parents a drawing would make architecture a branch of
+  requirements, which is the flattening the edge distinction above exists to
+  prevent. A trunk belongs to no tree precisely because all three answer to
+  it.
+- What the trunk costs, said rather than hidden: it is a fourth kind of
+  artefact, so the trace wall gains a place to read and the kind table gains
+  a target that is not a directory of many. It is bought because the three
+  trees have something in common that none of them contains, and there is
+  nowhere else to write it.
+- `parent` is the first kind whose target depends on who declares it. A
+  requirement's parent is a requirement, a drawing's is a drawing, a test
+  document's is a test document, and a tree root's is the trunk. Every other
+  kind resolves to one place for everyone; this one resolves inside the
+  declaring artefact's own tree. The drawing decides how, and the table's
+  claim that a row names where a kind lives does not survive it unchanged.
 - Two edges, and they are not the same edge. `parent` runs **down** a tree,
   overview to detail, and it is what this task adds. The trace's other
   kinds run **across** between trees: a drawing's `requirement` is the
@@ -161,21 +175,21 @@ with one trunk and fifty four leaves.
 5. The tree has depth: the board reports when the number of artefacts whose
    parent is their tree's root exceeds a stated share of that tree, so a
    star cannot pass as a tree.
-6. The trunk is the requirement that says what the league is for, and it is
-   the only root that carries no argument. The architecture tree's root and
-   the test tree's root each carry a `- Root because:` line naming the tree
-   they root and why it is not a branch of the requirements.
+6. A trunk document exists above the three trees, carries a `traces` block
+   with `parent: none`, and is the only artefact in the league whose parent
+   is none. The three tree roots declare it as their parent, and a fourth
+   child of the trunk carries the argument criterion 2 demands of any
+   further root.
 7. On this tree `kaal traces` answers: one root, or each further root
    argued; no cycle; every drawing answering exactly one requirement; and
    the depth report silent.
 
 ## Open questions
 
-- Is the trunk the requirements root, or a document above all three? This
-  requirement takes the first, because the asker wrote KAAL as a requirement
-  and because the second invents a kind that belongs to no tree. One word
-  from the asker settles it and the drawing would change if it were the
-  second.
+- Where does the trunk live, and is it one page or a directory like the
+  others? A single `KAAL.md` beside the other standing pages is the smallest
+  answer and the one this requirement assumes; a `kaal/` directory would
+  match the shape of every other artefact and cost a directory for one file.
 - What share of requirements parented to the root is too many? Criterion 5
   needs a number and nobody has evidence for one. Half is a guess; the honest
   first version may report the share rather than judge it.
