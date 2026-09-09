@@ -164,6 +164,21 @@ test("5. no block and no map are findings; nothing is an ordinary value", () => 
 });
 
 test("6. the prose stays, and carries every name the trace declares", () => {
+  // The board holds it, not only this run. Without this the criterion is
+  // true on the day the tree is migrated and true of nothing afterwards.
+  const r = kaal("traces", F("silent-prose"));
+  const out = said(r);
+  notUsage(out);
+  assert.equal(r.status, 1, `a name the prose drops was allowed: ${out}`);
+  assert.match(out, /\bt\b/, `the requirement is not named: ${out}`);
+  // The declared name is the one missing from the prose, and `t` resolves,
+  // so this cannot be the criterion 3 finding under another name.
+  assert.doesNotMatch(
+    out,
+    /something-else/,
+    `the wall read a name out of the prose: ${out}`,
+  );
+
   const named = globSync("requirements/*/requirement.md", { cwd: ROOT })
     .sort()
     .map((p) => [p, names(traces(read(p))?.supersedes)])

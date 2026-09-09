@@ -131,9 +131,10 @@ does not know.
    kind. A trace is never ignored for being unrecognised.
 5. An artefact with no block, or with no `traces` map, is a finding naming
    it; and `nothing` is accepted as a kind's value without one.
-6. For every requirement whose trace names a task, the Handoff's
-   `Supersedes:` line still carries the prose and mentions each name the
-   trace declares.
+6. The board reports a requirement whose `Supersedes:` line does not mention
+   a name its trace declares, naming the requirement and the name; and for
+   every requirement in this tree whose trace names a task, that line still
+   carries the prose as well as the name.
 
 ## Open questions
 
