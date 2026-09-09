@@ -1,8 +1,8 @@
 ---
 traces:
-  parent: a-tree-has-one-root
-  requirement: the-test-tree-is-written-down
-  principles: the-two-goods, the-seat-owns-the-lens
+  parent: a-tree-has-one-root@6a481bbf330998342534ce7ba387ab8bc28ba6533ca2491a157ae97b878b7901
+  requirement: the-test-tree-is-written-down@ac8c1dd740ac54d37b21875f28d113278f099a6487c8d3249287ec00b393ffe1
+  principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
 ---
 
 # Drawing: the-test-tree-is-written-down
@@ -64,12 +64,18 @@ one more function.
   ways, what motivates each, and the rule beneath all of it that code answers
   tests. It declares `parent: none` and carries the argument that a further
   root owes.
-- `tests/acceptance.md`, `tests/contracts.md`, `tests/units.md` are the three
-  plans, one per wall that runs tests. Each declares `parent: strategy`,
-  names its wall by the name the board uses, names the globs its suites live
-  under with the count each matched, and says what a case is.
-- `PLACES` in `bin/lib/traces.mjs` gains `{ dir: "tests", file: null }`, the
-  loose page shape the trunk already uses. `TREES` is unchanged.
+- `tests/plans/acceptance.md`, `tests/plans/contracts.md` and
+  `tests/plans/units.md` are the three plans, one per wall that runs tests,
+  named for the wall each is about. Each declares `parent: strategy`, names
+  its wall by the name the board uses, names in backticks the globs its
+  suites live under, says how many suites those globs match, and says what a
+  case is.
+- `PLACES` in `bin/lib/traces.mjs` gains
+  `{ dir: "tests", file: null, deep: true }`: the loose page shape the trunk
+  already uses, listed through subdirectories so `plans/acceptance` is one
+  artefact of the `tests` place and its parent resolves beside the place's
+  own root. `TREES` is unchanged. The flag is per place, so `kaal/` keeps
+  reading exactly what it reads today.
 - `KINDS.parent.where` learns the loose page shape: where a place declares no
   file, a parent is `<dir>/<name>.md` and not `<dir>/<name>/requirement.md`.
   One expression, and it is what makes a place with loose pages a place a
@@ -96,46 +102,54 @@ One labelled edge per seam, numbered to match the list below; the parts are
 the structure's parts. The list is the contract; the picture is the reading,
 and it carries nothing the list does not.
 
-1. place: in a root, out every `.md` page directly under `tests/` as an
-   artefact with its trace map read, and nothing under a subdirectory of it
-   and nothing that is not `.md`; and in a page's `parent` naming another
-   page of that place, out that page's own path and not a directory beneath
-   it. A place is both how its artefacts are listed and where a name inside
-   it resolves, and the second half has never been exercised. Owned by
-   `PLACES` and `KINDS.parent.where` / the pages.
-2. plan names its wall: in a plan page's `- Wall:` value, out nothing when
-   the config holds a gate of that name, and a finding naming the plan and
-   the name it carried when it does not. Every page of the place except the
-   root is a plan, so a page carrying no `- Wall:` line is the same finding
-   with nothing to quote back. Owned by `plans.mjs` / the page.
+1. place: in a root, out every `.md` page under `tests/` at any depth as an
+   artefact named by its path below the place, and nothing that is not
+   `.md`; and in a page's `parent` naming another page of that place, out
+   that page's own file and not a directory beneath it. A place is both how
+   its artefacts are listed and where a name inside it resolves, and the
+   second half has never been exercised. Owned by `PLACES` and
+   `KINDS.parent.where` / the pages.
+2. plan names its wall: in a plan page's `Wall:` value, backticked or bare
+   and wherever in the page it appears, out nothing when the config holds a
+   gate of that name, and a finding of kind `plan` naming the page and the
+   name it carried when it does not. A page under `tests/plans/` that says
+   no wall at all is the same finding with nothing to quote back. Owned by
+   `plans.mjs` / the page.
 3. wall wants its plan: in the gates whose command carries an argument
-   ending in `.test.mjs`, out nothing when exactly one plan names each, and
-   a finding naming the wall when none does or more than one does. Owned by
-   `plans.mjs` / `kaal.config.json`.
-4. suites counted: in a plan page's `- Suites:` globs with their pins and the
-   root, out nothing when each glob matches the number pinned to it, and a
-   finding naming the plan, the glob, the number pinned and the number found
-   when it does not; and out the pins written when asked to write. A plan
-   whose globs are not its wall's globs is the same finding in different
-   words, naming both. Owned by `plans.mjs` / the page.
+   ending in `.test.mjs`, out nothing when exactly one plan is about each,
+   and a finding of kind `wall` naming the wall when none is or more than
+   one is. The kind is what keeps the two directions apart on the page: a
+   plan is usually named for its wall, so `acceptance` the page and
+   `acceptance` the wall would otherwise print the same prefix and mean
+   different things. Owned by `plans.mjs` / `kaal.config.json`.
+4. suites counted: in a plan page's backticked globs and its stated number
+   of suites, and the root, out nothing when the globs together match that
+   number, and a finding naming the plan, the number stated and the number
+   found when they do not; and out the number rewritten when asked to write.
+   A page that states no number states no count and is not a finding, which
+   is the trace grammar's own rule that a name without a pin resolves. What
+   makes the count true of this league is criterion 6, which reads this
+   tree's pages and not every tree's. A plan whose globs are not its wall's
+   globs is the same finding in different words, naming both. Owned by
+   `plans.mjs` / the page.
 5. the strategy roots the tree: in the four pages' `parent` values, out one
    root carrying its argument and three children of it, no cycle, and no
    depth finding. Owned by `checkShape` / the pages.
 
 ## Fixed and free
 
-- Fixed: the four pages live directly under `tests/` as loose `.md`, named
-  `strategy` and then by their wall. Criterion 3 fixes one plan per wall and
-  decision 1 fixes the shape.
+- Fixed: `tests/strategy.md`, and one plan per wall under `tests/plans/`
+  named for its wall. Criterion 3 fixes both, and decision 1 says why the
+  first version of this drawing had them somewhere else.
 - Fixed: `tests` joins `PLACES` and does not join `TREES`. Criterion 5 fixes
   the first and decision 2 fixes the second.
 - Fixed: which gates owe a plan is read from the config and never declared
   there: a gate owes a plan when its command carries an argument ending in
   `.test.mjs`. Criterion 4 fixes the both ways report and decision 5 fixes
   the predicate.
-- Fixed: a plan's suite counts are pins on its globs, in the body and not the
-  frontmatter, written by a flag. Criterion 6 fixes the agreement and
-  decision 3 fixes the grammar.
+- Fixed: a plan names its globs in backticks and says how many suites they
+  match, in the body and not the frontmatter, and the number is written by a
+  flag. Criterion 6 fixes the agreement and the grammar its test reads.
 - Fixed: the plan rules live in their own module and `checkTraces` and
   `checkShape` keep the finding lists they return today. Decision 4, and the
   fifty third code retro, which cost four closed contracts to learn it.
@@ -151,26 +165,30 @@ and it carries nothing the list does not.
 
 ### Where the four pages live
 
-- Chosen: flat `.md` pages directly under `tests/`, beside the unit suites:
-  `tests/strategy.md`, `tests/acceptance.md`, `tests/contracts.md`,
-  `tests/units.md`.
-- Not taken: `tests/plans/<name>.md` with the strategy above it, which the
-  requirement assumed; a directory of directories like `requirements/`; a
-  new top level directory beside the other two trees.
-- Because: `entries()` knows two shapes and a nested one is a third, written
-  for four files. The ask already said the word tree describes the topology
-  and does not belong in a directory name, and the same holds a level down:
-  the hierarchy is the parent edge, which every one of these pages declares,
-  and not the folder they sit in. Putting them where the unit suites already
-  are keeps the test tree in one place, and the `.md` filter means the pages
-  and the suites cannot be mistaken for each other by anything that reads
-  them.
-- Bought: the shortest path, and it spent options. A nested layout would
-  have left room for plans of plans without moving any file; this one will
-  cost a rename if that day comes.
+- Chosen: `tests/strategy.md`, and one plan per wall under `tests/plans/`,
+  named for its wall. The `tests` place is listed through subdirectories, so
+  `plans/acceptance` is an artefact of the same place as `strategy` and can
+  declare it as its parent.
+- Not taken: four flat pages directly under `tests/`, which is what this
+  drawing chose the first time and the build put back; a directory of
+  directories like `requirements/`; `tests/plans/` as a second place beside
+  `tests/`.
+- Because: criterion 3 says the plans live under `tests/plans/`, and a
+  criterion is the ask. The first version of this drawing read the
+  requirement's Assumptions and Open questions and decided the layout on the
+  cost of a third shape in `entries()`, which was an architect answering a
+  question the analyst had already closed. The third shape is real and it is
+  one flag rather than a rewrite: a place says whether it is listed through
+  subdirectories, and only the new one is. Two places was the other way to
+  avoid the flag, and it costs more than it saves: a parent resolves inside
+  its declaring artefact's own place, so a plan in a second place could not
+  name the strategy at all, and the tree would have two roots to argue for
+  instead of one.
+- Bought: the shortest path, and it spent parts. There is now a per place
+  flag that exactly one place sets.
 - Weighed against: the-two-goods.
-- Reopens if: a plan acquires sub plans, or the test tree grows past what a
-  single flat listing reads clearly.
+- Reopens if: a second place wants the same listing, at which point the flag
+  is the default and the trunk is the exception.
 
 ### The test tree is a place and not a tree the depth rule reads
 
@@ -196,24 +214,28 @@ and it carries nothing the list does not.
   sharpest: the depth rule has never read a real tree, and once it does, an
   exemption written while it read nothing is owed a fresh argument.
 
-### A plan's suite count is a pin on its glob
+### A plan's suite count is written, not kept
 
-- Chosen: `- Suites: <glob>@<n>`, comma separated where a wall has more than
-  one, in the page's body; `--write` fills the numbers as it fills a trace's
-  shas.
-- Not taken: no count, with the board reporting what the glob matched; a
-  count kept by hand; the count in the frontmatter as a trace kind.
-- Because: a count in a document is a fact about the tree, and this league
-  already has a grammar for that, which is a pin. Kept by hand it would cost
-  an edit to a plan on every task that adds a suite, and a number nobody can
-  afford to update is a number that goes stale and teaches a reader to
-  ignore the page. Written by a flag it costs a command run, which is the
-  cost of a trace pin and is already paid on every task. It stays out of the
-  frontmatter because the trace table resolves a name to a file and a glob
-  resolves to a count, and a row that does not resolve to a file is a row
-  that breaks the table's one rule.
-- Bought: evidence, and it spent parts. There is now a second thing `--write`
-  writes and a second grammar with an `@` in it.
+- Chosen: a plan names its globs in backticks and states how many suites
+  they match, in prose; `--write` rewrites the number as it rewrites a
+  trace's shas.
+- Not taken: no count, with the board reporting what the globs matched; a
+  count kept by hand; a pin on the glob itself, `<glob>@<n>`, which is what
+  this drawing chose the first time.
+- Because: criterion 6 asks the plan's count to agree with what its glob
+  matches, so the count is in the page, and its acceptance test reads a
+  backticked glob and a number before the word suites. The analyst's own
+  fixtures settled the rest of the grammar and the drawing had guessed it
+  wrong twice: a wall is named `Wall:` in a sentence and not only as a
+  field, and a plan that states no number is silent rather than a finding. That is the grammar,
+  and inventing a second one with an `@` in it would have been the drawing
+  overruling the proof. What survives from the first version is the reason:
+  a count kept by hand costs an edit to a plan on every task that adds a
+  suite, and a number nobody can afford to update teaches a reader to
+  ignore the page, so the flag writes it and the cost is a command run that
+  every task already makes.
+- Bought: evidence, and it spent parts. There is a second thing `--write`
+  writes, and it writes prose rather than a field.
 - Weighed against: the-two-goods.
 - Reopens if: writing pins stops being a step every task already takes, or
   the count starts disagreeing for a reason other than a suite landing.

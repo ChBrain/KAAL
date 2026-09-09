@@ -89,10 +89,20 @@ requirement, and no tree with more than **half** its artefacts hanging
 directly off its own root, which is a star rather than a tree. That share is
 one number chosen without evidence, and the first tree to trip it is the
 evidence for changing it. A parent that is absent is never a finding: each
-seat populates its own tree. Reads the frontmatter of `requirements/<task>/requirement.md` and
-`architecture/<task>/drawing.md`, and the region of each file a kind points
-at. Takes a root, which may be a flag. Exits 0, 1 or 2 (`applies-here`,
-`an-artefact-traces-what-it-came-from`, `a-trace-pins-what-it-read`).
+seat populates its own tree. And it answers whether the test tree is written
+down: every wall whose command names a file ending in `.test.mjs` has one
+plan under `tests/plans/` that is about it, every plan is about a wall the
+board holds and names that wall's own globs, and a plan that states how many
+suites its globs match must state the number they match. Which end is missing
+is the finding's own kind, `plan` or `wall`, because a plan is usually named
+for its wall. A plan that states no number states no count, and `--write`
+rewrites a number that is there rather than inventing one. Reads the
+frontmatter of `requirements/<task>/requirement.md`,
+`architecture/<task>/drawing.md` and every `.md` page under `tests/`, the
+region of each file a kind points at, and the `gates` list in
+`kaal.config.json`. Takes a root, which may be a flag. Exits 0, 1 or 2
+(`applies-here`, `an-artefact-traces-what-it-came-from`,
+`a-trace-pins-what-it-read`, `the-test-tree-is-written-down`).
 
 ## check
 

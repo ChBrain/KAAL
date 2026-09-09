@@ -1,0 +1,16 @@
+---
+traces:
+  parent: nowhere
+---
+
+# Test plan: contracts
+
+## Wall
+
+- Wall: contracts
+
+Its suites live under `architecture/*/contracts.test.mjs`, and today that matches 0 suites.
+
+## Cases
+
+A case is a numbered test inside a suite.

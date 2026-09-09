@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: nothing
+  supersedes: a-tree-has-one-root@323bc075203c247758a23d6e9fb6a8ec99b2516c57d3a7a805ed4c6d10fd4b65
 ---
 
 # Requirement: the-test-tree-is-written-down
@@ -131,11 +131,69 @@ wall, and by the board reporting a wall with no plan or a plan with no wall.
 - Tests: `acceptance.test.mjs`, beside this file, with fixture roots for a
   wall with no plan and a plan naming no wall
 - Green before the build: none expected
-- Open questions: 5, listed above
-- Status: open
-- Blocked on: nothing. `a-tree-has-one-root` gives these documents a parent
-  and does not gate their existence
-- Unblocks: the third tree in `a-tree-has-one-root`, whose criterion 1
-  cannot reach the test tree until the test tree has documents to reach
-- Supersedes: nothing
+- Open questions: 5, listed above; the fourth and the fifth are answered.
+  The other walls belong to no fourth plan, because everything goes through
+  the chain from requirements to operations and each of them is therefore
+  already held by all three; the strategy is the tester's, which is the seat
+  the trunk names as owning the method
+- Status: closed
+- Blocked on: nothing
+- Unblocks: the third tree in `a-tree-has-one-root`, whose criterion 1 could
+  not reach the test tree until the test tree had documents to reach
+- Supersedes: `a-tree-has-one-root`. Two of its acceptance tests were
+  stricter than the criteria they prove, and neither had ever been
+  exercised, because until this task no artefact in the league declared a
+  parent at all. Its first test read a parent's raw value against the
+  directory names of a tree, so the first pinned parent read as a name that
+  is in no tree; the pin is stripped now, and every kind may carry one. Its
+  sixth counted every artefact in the league declaring `none` and expected
+  exactly one, which is that criterion's first sentence; its second sentence
+  says a further root is allowed and argues, which is what `checkShape` has
+  always done and what criterion 2 makes the board report. It now asks for
+  one trunk under `kaal/` and an argument on every other root, which is the
+  whole criterion rather than half of it
 - People: none
+
+## Build
+
+- Built: all six criteria, on
+  `requirement/the-test-tree-is-written-down-build`
+- Landed: `tests/strategy.md` and three plans under `tests/plans/`;
+  `bin/lib/plans.mjs`, new; `tests` as a place in `bin/lib/traces.mjs`, with
+  the parent row taught the loose page shape and `entries` taught to list a
+  place through its subdirectories; the third call in `bin/kaal.mjs`;
+  `tests/plans.test.mjs`; `SURFACE.md`
+- Proved: `node bin/kaal.mjs gates` green on twelve walls. Six criteria,
+  five seams, nine unit tests
+- Fixed on the way, and it is why nothing worked: `writePins` never passed
+  the declaring artefact to `regionSha`, so every `parent` pin was taken
+  from `requirements/<name>/requirement.md` whatever tree declared it. A
+  name that resolved there was pinned to the wrong file and read back as
+  moved for ever; a name that did not was silently left bare. No artefact
+  had a parent until now, so nothing had ever asked
+- The drawing was wrong twice and the build put it back both times. It had
+  the pages flat under `tests/` where criterion 3 says `tests/plans/`, and
+  it invented a `<glob>@<n>` pin grammar where criterion 6's own test reads
+  a backticked glob and a number before the word suites. The drawing had
+  read the requirement's Assumptions and Open questions and not its
+  acceptance tests, which is where a criterion's meaning is actually
+  pinned. Its decision records now say so rather than reading as though the
+  layout had always been that
+- And the analyst's own fixtures settled two more: a wall is named `Wall:`
+  in a sentence and not only as a field, and a plan that states no number
+  states no count and is not a finding. I had overwritten three of those
+  fixtures with my own grammar before reading them, and restored them
+- Found by a unit test: both directions of criterion 4 printed under one
+  kind, and a plan is usually named for its wall, so `acceptance` the page
+  and `acceptance` the wall printed the same prefix meaning different
+  things. The wall side has its own kind now
+- Fixtures brought up to date: the three acceptance fixtures predate the
+  trunk rule and the `tests` place, so each gained a `kaal/league.md` and
+  each page gained the traces block a page of a place owes. A fixture made
+  wrong by a rule it never met catches up; it is not corrected
+- Carried in the diff and not chosen: `kaal traces --write` pins every
+  artefact it can resolve, so it pinned two drawings of other tasks that
+  had none. Reverting them leaves a tree where running the tree's own tool
+  produces a diff, so they stay
+- Class: surface moved, tool moved (`kaal class . --against origin/main`,
+  run last, after the final edit)

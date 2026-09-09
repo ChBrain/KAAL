@@ -7,7 +7,7 @@ traces:
 
 ## Acceptance criteria
 
-1. it holds
+1. It holds.
 
 ## Handoff
 

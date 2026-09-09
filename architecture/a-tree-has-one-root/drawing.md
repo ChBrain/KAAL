@@ -1,7 +1,7 @@
 ---
 traces:
-  requirement: a-tree-has-one-root
-  principles: the-two-goods, the-seat-owns-the-lens
+  requirement: a-tree-has-one-root@323bc075203c247758a23d6e9fb6a8ec99b2516c57d3a7a805ed4c6d10fd4b65
+  principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
 ---
 
 # Drawing: a-tree-has-one-root
