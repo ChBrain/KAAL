@@ -148,6 +148,12 @@ run and the record alone.
 - The board says why. A task not delivered because its record is stale and
   one not delivered because nobody has recorded it are the same word and
   different work, so the verdict's reason is printed beside it
+- Red on Windows and nowhere else, caught by CI: the empty suite reading
+  compared the runner's name for the file against the path it was given, and
+  the two platforms do not write a path the same way. It compares the last
+  segment alone now. That is the third time a path crossing a boundary has
+  cost this league a red on one runtime only, and the first two are in
+  retros saying the same thing
 - Owed next, and it is not this diff's: every task reads not delivered until
   a run is recorded, because the coder has claimed and the tester has not yet
   proved. The first `kaal runs --write` belongs in the tester's own lane

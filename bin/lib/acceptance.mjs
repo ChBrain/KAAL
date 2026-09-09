@@ -105,14 +105,16 @@ export function runJudged(files) {
     // passing test named for the file itself: `ok 1 - alpha.test.mjs`. That
     // is a suite whose tests were deleted reading as green, so it counts as
     // nothing having run, which is what it is.
-    // The runner names it by the path it was given, so that is what this
-    // compares against; separators are normalised because one platform
-    // writes them the other way.
-    const flat = (p) => String(p).replaceAll("\\", "/");
+    // The runner names it by the file it ran, and the two platforms do not
+    // agree on how a path is written, so the comparison is on the last
+    // segment alone. Comparing whole paths passed on one runtime and failed
+    // on the other, which is the third time a path crossing a boundary has
+    // cost this league a red on Windows only.
+    const tail = (p) => String(p).replaceAll("\\", "/").split("/").pop();
     const named = [...r.stdout.matchAll(/^ok \d+ - (.+)$/gm)].map((m) =>
       m[1].trim(),
     );
-    const empty = named.length === 1 && flat(named[0]) === flat(file);
+    const empty = named.length === 1 && tail(named[0]) === tail(file);
     const pass = empty ? 0 : Number(r.stdout.match(/^# pass (\d+)/m)?.[1] ?? 0);
     const fail = Number(
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),

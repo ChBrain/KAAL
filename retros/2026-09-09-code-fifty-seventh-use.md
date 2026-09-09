@@ -45,6 +45,16 @@ Place: this repository
   temporary directory instead. The seat rule changed how I wrote a test
   before the wall that enforces it exists.
 
+- And I wrote the Windows defect anyway. The reading that finds an empty
+  suite compared the runner's name for the file against the path it was
+  given, which is a path crossing a boundary between two things that format
+  it differently. Green here, red on Windows, caught by CI rather than by me.
+  Two earlier retros in this league say the same sentence about `globSync`
+  and about a path built with `join` and printed in a finding. Knowing the
+  family is not the same as checking for it, and the check is one line: never
+  compare two paths that came from different places, compare their last
+  segment or normalise both at the boundary.
+
 ## Lacked
 
 - No word for the state this build leaves the tree in. Every task reads not
