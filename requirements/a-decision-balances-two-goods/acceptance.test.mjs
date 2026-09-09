@@ -24,15 +24,24 @@ const decisions = () => {
 };
 
 test("1. the two goods are named where decisions are described, and said to pull apart", () => {
-  const d = decisions();
-  assert.match(d, /shortest path to value/i, "the first good is not named");
-  assert.match(d, /choices open/i, "the second good is not named");
+  // Superseded in part by `an-architect-names-its-principles`: the words
+  // moved to a principle file and the Decisions bullet cites it, so the
+  // claim is read where it lives and the citation where it points.
+  const p = fold(
+    readFileSync(
+      join(SKILL, "references", "principles", "the-two-goods.md"),
+      "utf8",
+    ),
+  );
+  assert.match(p, /shortest path to value/i, "the first good is not named");
+  assert.match(p, /choices open/i, "the second good is not named");
   assert.match(
-    d,
+    p,
     /usually|often/i,
     "nothing says the two are usually in tension",
   );
-  assert.match(d, /tension|contrast|pull/i, "nothing says they pull apart");
+  assert.match(p, /tension|contrast|pull/i, "nothing says they pull apart");
+  assert.match(decisions(), /the-two-goods/, "the bullet does not cite it");
 });
 
 test("2. a record names which good it bought and what it spent on the other", () => {

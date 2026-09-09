@@ -89,4 +89,10 @@ foreclosed side against the thing the task exists to deliver.
 - Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
+- Superseded by: `an-architect-names-its-principles`, in part. The claim that
+  moved is where the two goods lives: from this skill's Decisions bullet to
+  `skills/architect/references/principles/the-two-goods.md`, which the bullet
+  now cites. The principle's words and the obligation to price the trade did
+  not change. This task's criterion 1 is read in the file it moved to, and
+  its template shape grew a sixth label, `Weighed against:`
 - People: none

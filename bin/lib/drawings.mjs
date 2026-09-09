@@ -1,7 +1,8 @@
 // The drawings wall: every drawing under architecture/<task>/ holds the
 // template's shape, read from text and never by running anything (the
 // contracts wall runs the tests). Five rules, one finding per broken rule
-// per drawing, naming the task and the rule.
+// per drawing, naming the task and the rule. Six rules: five need the
+// drawing alone, one needs its requirement, and the order below says which.
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 
@@ -13,7 +14,17 @@ export const SECTIONS = [
   "Test strategy",
   "Handoff",
 ];
-export const RULES = ["sections", "edges", "tests", "strategy", "orphan"];
+export const RULES = [
+  "sections",
+  "edges",
+  "tests",
+  "principles",
+  "strategy",
+  "orphan",
+];
+
+/** Where the architect keeps a principle, relative to a root. */
+const PRINCIPLES = ["skills", "architect", "references", "principles"];
 
 const dirs = (d) =>
   existsSync(d)
@@ -26,6 +37,27 @@ const section = (text, title) =>
     new RegExp(`^## ${title}\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m"),
   )?.[1] ?? "";
 const numbered = (text) => (text.match(/^\d+\. /gm) ?? []).length;
+
+/**
+ * The principles a drawing's decisions were weighed against, in the order
+ * written and without repeats. Text in, names out: `none` names nothing
+ * whatever its case, and so do an empty value and a line that is absent.
+ * The two liberties are the ones `Feeds:` and `Read:` already accept.
+ * @param {string} text
+ */
+export function citedPrinciples(text) {
+  const out = [];
+  for (const m of section(text, "Decisions").matchAll(
+    /^[-*]\s*Weighed against:(.*)$/gm,
+  ))
+    for (const raw of m[1].split(",")) {
+      const name = raw.trim().replace(/^[`'"]+|[`'".]+$/g, "");
+      if (!name || name.toLowerCase() === "none" || out.includes(name))
+        continue;
+      out.push(name);
+    }
+  return out;
+}
 
 /** The numbers a strategy cell names: "1", "2, 3", "1 to 3". */
 export function criteriaInCell(cell) {
@@ -80,6 +112,16 @@ export function checkDrawing(root, task) {
     find("tests", `no contracts.test.mjs for ${seams} seam(s)`);
   else if (tests !== seams)
     find("tests", `${tests} numbered contract test(s) for ${seams} seam(s)`);
+
+  // Above the orphan return: this rule reads the drawing and one directory,
+  // so a drawing with no requirement still answers for its citations. Below
+  // it the rule would be dead on exactly the fixture written to prove it.
+  for (const name of citedPrinciples(text))
+    if (!existsSync(join(root, ...PRINCIPLES, `${name}.md`)))
+      find(
+        "principles",
+        `no ${PRINCIPLES.join("/")}/${name}.md for the name ${name}`,
+      );
 
   const rq = join(root, "requirements", task, "requirement.md");
   if (!existsSync(rq)) {

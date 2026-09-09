@@ -121,11 +121,17 @@ are fixed and in this order.
 - **Decisions.** One record per door you closed: the choice, the options you
   did not take, why, and what would reopen it. A decision with no options was
   not a decision.
-  Two goods pull at every choice and they are usually in tension: the
-  shortest path to value, and keeping the most choices open. A record names
-  which of the two the choice bought and what it spent on the other. A choice
-  that costs nothing on either side is not a decision either; it is a detail,
-  and it belongs in Fixed and free.
+  Read the choice against the principles the league has already weighed,
+  kept as one file each under `references/principles/`, and name them on the
+  record's `Weighed against:` line, or `none`. A principle is a file there, and it is always a pair in tension
+  rather than a rule: it states both pulls, what each pull buys and what it
+  costs, and how to tell which side a case is on. A principle written as one
+  side is a stick, and the record's job is to weigh, not to be hit with
+  something.
+  `the-two-goods` is the one every decision meets: a record names which of
+  the two the choice bought and what it spent on the other. A choice that
+  costs nothing on either side is not a decision either; it is a detail, and
+  it belongs in Fixed and free.
   A decision that opens a gap names the task that closes it, in the record
   and not only in the handoff, so the gap and its price are read together.
   The dangerous trade is the one nobody priced. Read the foreclosed side
@@ -206,7 +212,11 @@ each seam serves, and what is fixed for the developer. The developer reads it
 against a checklist that is theirs.
 
 Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
-Longed for to the analyst against this skill.
+Longed for to the analyst against this skill. Name which tensions this drawing
+weighed and whether any of them had no name, because the method is the retro's
+and what it is pointed at is this seat's. A tension weighed without a name
+more than once is a principle waiting to be written, and the next use of this
+skill should find it already written.
 
 ---- references/drawing.md ----
 # Drawing: <task>
@@ -249,6 +259,7 @@ and it carries nothing the list does not.
 - Not taken: <option>, <option>
 - Because: <one paragraph>
 - Bought: <which good, and what it spent on the other>
+- Weighed against: <none, or the principles this choice was read against>
 - Reopens if: <the condition>
 
 ## Test strategy
@@ -317,7 +328,7 @@ date: <YYYY-MM-DD>
 fixture: edge-count
 ask_sha: 8e513b2d77bfbbf162e1aa81e184c0571f45361f1bc21ea987f045ec78375946
 expect_sha: 6e193abda8a4667247d6b472685a6556d8430221ebc83fcd9ceb41f86ea266ab
-skill_sha: aebd05142de103add759c9dff11b538977068fe6cae63ee72b42fbb669535d4e
+skill_sha: e3cb753c39ae64667d06ce2088f711131af983b15c7da39dd18c8731a65d7b38
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---
