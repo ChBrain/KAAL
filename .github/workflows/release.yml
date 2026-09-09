@@ -28,10 +28,26 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # origin/main, for the class wall
+      # The registry and the scope are what let the token this run already
+      # holds reach npm: setup-node writes the credentials file npm reads only
+      # when it is given a registry to name, and the scope is what sends a
+      # scoped name there rather than to the default registry. Without them
+      # `npm publish` answers that it requires a login, after the tag is
+      # already pushed.
+      # The registry and the scope are what let the token this run already
+      # holds reach npm: setup-node writes the credentials file npm reads only
+      # when it is given a registry to name, and the scope is what sends a
+      # scoped name there rather than to the default registry. Without them
+      # `npm publish` answers that it requires a login, after the tag is
+      # already pushed.
       - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@chbrain"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@chbrain"
       # Main and nowhere else. Every branch in this league is a route
       # towards main, so a dispatch from one is a release from a place that
       # was on its way somewhere. Checked before the board, because a

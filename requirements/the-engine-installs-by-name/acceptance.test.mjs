@@ -114,6 +114,18 @@ test("3. the run publishes what it tagged, after it tagged it", () => {
     /--tag |inputs\.version/,
     `the publish names a version of its own: ${step}`,
   );
+  // And that the step could publish at all, which this criterion says and
+  // this test did not ask for four hours: the order of the steps was proved
+  // and the capability was not. setup-node writes the credentials file npm
+  // reads only when it is given a registry to name, so a run without one
+  // tags and then answers that it requires a login.
+  // `the-publish-carries-a-token` owns the claim in full; this asks the part
+  // its own word `publishes` already promised.
+  assert.match(
+    release(),
+    /^\s*registry-url:/m,
+    "the run sets node up naming no registry, so the publish cannot sign in",
+  );
 });
 
 test("4. every write in every workflow says what it is for", () => {
