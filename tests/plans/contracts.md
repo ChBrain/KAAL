@@ -1,6 +1,6 @@
 ---
 traces:
-  parent: strategy@b2a7d146504aa1c7fb45c74e4e0b3f5bf811c89b3374082d80375c2ee6a7d6e2
+  parent: strategy@32c960be1eaf76aa805fd0855379da3fae81951ebe70829b34703afa87262139
 ---
 
 # Test plan: contracts

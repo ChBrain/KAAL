@@ -26,12 +26,16 @@ pretend otherwise. It lives in the eval records under `evals/`, where a
 skill's move stands at the skill rung only with complete, passing, fresh
 records from at least two distinct models.
 
-What the ledger wall checks there is the record and never the judgement: that
-a judgement was made, by two models rather than one, against the text as it
-stands now rather than as it stood, and that it was written down. The
-judgement itself belongs to whoever made it. A wall that graded the judgement
-would be a wall consulting the thing it judges, and this league has a name
-for that.
+What the ledger wall reads there is the record: every field present, the
+verdict pass, the three shas of the ask, the expectation and the skill still
+matching the files, and two distinct models rather than one. What it never
+reads is the output those models judged. Whether a pass was deserved belongs
+to whoever gave it, and a wall that graded that would be a wall consulting
+the thing it judges, which this league has a name for.
+
+So a non deterministic answer is held to account by a deterministic wall over
+its evidence, and the wall's whole claim is that a judgement was made, freshly
+and more than once, and written down.
 
 Neither question outranks the other and a thing can pass one and fail the
 other. A tool that does exactly what its criteria say and that nobody can use
