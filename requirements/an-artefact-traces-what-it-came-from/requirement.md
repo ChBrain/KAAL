@@ -154,6 +154,16 @@ does not know.
 - `PR #1, which closes when this lands` names a pull request, not a task.
   Does that become `nothing` with the prose kept, or does the league admit a
   kind whose things do not live in this tree?
+- A trace names and does not yet pin. The asker has named the next step,
+  a sha so that "is this requirement answered, how many answer it, and has
+  the requirement changed" are all scriptable, and a run over the tree's own
+  history settled what to hash: of 48 drawings, 47 had their requirement
+  edited afterwards and only 2 had the acceptance criteria change, so a whole
+  file pin cries wolf 45 times in 47. Does the value grammar therefore become
+  `<name>@<sha>`, which this parser reads and which a list still separates by
+  comma? Nothing here forbids it, the migration would be written by the tool
+  that computes the shas rather than by hand, and the task is named in the
+  handoff.
 - Which kinds does the table hold on the first day, beyond `supersedes` and
   `principles`? Tests, code and operations were all in the ask and none of
   them has a name a trace could resolve yet.
@@ -170,8 +180,9 @@ does not know.
 - Open questions: 5, listed above
 - Status: open
 - Blocked on: nothing
-- Unblocks: `unblocks` computed from everyone else's `blocked_on` rather
-  than written; a trace for retros and for the standing pages; and
+- Unblocks: `a-trace-pins-what-it-read`, which adds the sha and the three
+  questions it answers; `unblocks` computed from everyone else's
+  `blocked_on` rather than written; a trace for retros and for the standing pages; and
   `a-skill-names-the-principles-it-cites`, which is the hole
   `architecture/an-architect-names-its-principles` priced and left open.
   That drawing named its closing task `an-artefact-names-what-it-describes`;
