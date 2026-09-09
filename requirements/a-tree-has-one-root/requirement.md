@@ -134,6 +134,12 @@ with one trunk and fifty four leaves.
   coded because nobody would ever know whether it were true. That is a rule
   below the three trees rather than a fourth tree, and this task does not
   wall it.
+- The shape is the league's and a tree is its seat's. The asker settled it:
+  every seat settles both its own topology and what each of its documents
+  exists for. So this task builds the trunk, the kind and the rules, and a
+  task per seat follows, each shaping its own tree and writing its root. A
+  shape task that also assigned 107 parents would be one seat doing four
+  seats' judgement.
 - The test tree cannot be shaped until it has documents. This task gives a
   parent to requirements and to drawings, and names the task that writes the
   strategy and its plans. Claiming the third tree here would be claiming a
@@ -159,18 +165,20 @@ with one trunk and fifty four leaves.
 - The trace's shape, the kind table and the command come from
   `an-artefact-traces-what-it-came-from`; this task adds a kind and three
   readings over the graph it makes, and moves nothing that one fixed.
-- Every one of the 55 requirements is given a parent in the same change, or
-  the board is red on the day it lands.
+- This task assigns no parent but the trunk's own. Populating a tree is the
+  work of the seat that owns it, so the wall reports a parent that does not
+  resolve and never a parent that is absent; a rule making one required
+  belongs to the task that lands after the last seat has finished.
 - The skill rules apply: the standard's shape, MIT, under five hundred
   lines, no vendor or product named, no dash.
 
 ## Acceptance criteria
 
-1. Every `requirements/<task>/requirement.md` and every
-   `architecture/<task>/drawing.md` declares `parent` in its trace, whose
-   value is a name in the same tree or `none`, and both templates offer it.
-   A drawing's parent is another drawing, never its requirement: that edge
-   is `requirement` and it runs across rather than down.
+1. `parent` is a kind the trace table holds, and both templates offer it. A
+   declared parent resolves inside the declaring artefact's own tree and
+   nowhere else: a drawing's parent is another drawing, never its
+   requirement, because that edge is `requirement` and it runs across rather
+   than down.
 2. `kaal traces` reports every root beyond the first whose Handoff carries no
    `- Root because:` line, naming each such root; a root that carries the
    line is not a finding, and the board never judges what it says.
@@ -182,9 +190,8 @@ with one trunk and fifty four leaves.
    star cannot pass as a tree.
 6. A trunk document exists at `kaal/`, above the three trees, carries a
    `traces` block with `parent: none`, and is the only artefact in the
-   league whose parent is none. The three tree roots declare it as their parent, and a fourth
-   child of the trunk carries the argument criterion 2 demands of any
-   further root.
+   league whose parent is none. Any other artefact declaring `none` is a
+   further root and carries the argument criterion 2 demands.
 7. On this tree `kaal traces` answers: one root, or each further root
    argued; no cycle; every drawing answering exactly one requirement; and
    the depth report silent.
@@ -216,7 +223,10 @@ with one trunk and fifty four leaves.
 - Status: open
 - Blocked on: `an-artefact-traces-what-it-came-from`, which fixes the trace
   and the command; and the asker, who names the root
-- Unblocks: **the test tree written down**, a strategy and the three plans
+- Unblocks: **a topology per seat**, one task each for the analyst, the
+  architect and the tester, each shaping its own tree and writing its root,
+  and a closing task that makes a missing parent a finding once all three
+  have landed; **the test tree written down**, a strategy and the three plans
   the ask named, without which the third tree has no documents to shape and
   criterion 1 cannot reach it; and the report over the trace map that names a
   crowded document,

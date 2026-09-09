@@ -40,17 +40,7 @@ const read = (rel) => readFileSync(join(ROOT, rel), "utf8");
 const pages = () =>
   globSync("requirements/*/requirement.md", { cwd: ROOT }).sort();
 
-test("1. every requirement and drawing names its parent, and both templates offer it", () => {
-  const all = [...pages(), ...drawings()];
-  assert.ok(all.length >= 50, `found ${all.length} requirements`);
-  const without = all.filter((p) => !parentOf(read(p)));
-  assert.deepEqual(without, [], `no parent: ${without.slice(0, 6).join(", ")}`);
-  // A value is a name or `none`, never a sentence.
-  for (const p of all) {
-    const v = parentOf(read(p));
-    if (/^none$/i.test(v)) continue;
-    assert.match(v, /^[a-z0-9][a-z0-9-]*$/, `${p}: "${v}" is not a task name`);
-  }
+test("1. parent is a kind, both templates offer it, and it never runs across", () => {
   for (const [what, tpl] of [
     ["the analyst's template", TEMPLATE],
     ["the drawing template", DRAW_TEMPLATE],
@@ -59,13 +49,31 @@ test("1. every requirement and drawing names its parent, and both templates offe
       parentOf(readFileSync(tpl, "utf8")) !== null,
       `${what} does not offer a parent`,
     );
-  // A drawing's parent is another drawing. Parenting it to its requirement
-  // flattens architecture into a mirror of requirements and loses the thing
-  // architecture is for.
-  const flattened = drawings().filter((p) => {
-    const v = parentOf(read(p));
-    return v && !/^none$/i.test(v) && v === requirementOf(read(p));
-  });
+  // A declared parent resolves inside its own tree. Populating a tree is the
+  // seat's work, so this asks nothing of an artefact that declares none yet.
+  const declared = (files) =>
+    files.filter((p) => {
+      const v = parentOf(read(p));
+      return v && !/^none$/i.test(v);
+    });
+  for (const [tree, files, dir] of [
+    ["requirements", pages(), "requirements"],
+    ["architecture", drawings(), "architecture"],
+  ])
+    for (const p of declared(files)) {
+      const v = parentOf(read(p));
+      assert.ok(
+        globSync(`${dir}/*/`, { cwd: ROOT }).some(
+          (d) => d.replace(/\/$/, "").split("/").pop() === v,
+        ),
+        `${p}: parent ${v} is not in the ${tree} tree`,
+      );
+    }
+  // And never the edge that runs across: a drawing parented to its own
+  // requirement flattens architecture into a mirror of requirements.
+  const flattened = declared(drawings()).filter(
+    (p) => parentOf(read(p)) === requirementOf(read(p)),
+  );
   assert.deepEqual(
     flattened,
     [],
@@ -150,14 +158,11 @@ test("5. a star is reported, and a tree with depth is not", () => {
   assert.equal(deep.status, 0, `a tree with depth was reported: ${said(deep)}`);
 });
 
-test("6. a trunk above all three, and it is the only root", () => {
-  // A document of its own kind: it belongs to no tree, which is why all
-  // three can answer to it. The build names the file; this reads whatever
-  // carries a traces block and declares no parent.
+test("6. a trunk in kaal/, and it is the only artefact declaring none", () => {
   const candidates = [
     ...pages(),
     ...drawings(),
-    ...globSync("*.md", { cwd: ROOT }),
+    ...globSync("kaal/**/*.md", { cwd: ROOT }),
     ...globSync("tests/**/*.md", { cwd: ROOT }),
   ];
   const roots = candidates.filter((p) => {
@@ -169,21 +174,12 @@ test("6. a trunk above all three, and it is the only root", () => {
     1,
     `expected one trunk and found ${roots.length}: ${roots.join(", ") || "none"}`,
   );
-  const trunk = roots[0].replace(/\.md$/, "").split("/").pop();
-  // The three trees answer to it. Each tree's root is the artefact whose
-  // parent is the trunk, and there is exactly one per tree.
-  const rootOf = (files) => files.filter((p) => parentOf(read(p)) === trunk);
-  for (const [tree, files] of [
-    ["requirements", pages()],
-    ["architecture", drawings()],
-  ]) {
-    const r = rootOf(files);
-    assert.equal(
-      r.length,
-      1,
-      `the ${tree} tree declares ${r.length} roots under the trunk: ${r.join(", ")}`,
-    );
-  }
+  // It belongs to no tree, which is why all three can answer to it.
+  assert.match(
+    roots[0],
+    /^kaal\//,
+    `the trunk is not under kaal/: ${roots[0]}`,
+  );
 });
 
 test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {
