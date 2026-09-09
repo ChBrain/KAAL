@@ -72,9 +72,13 @@ test("2. argv to judged files: a literal glob names the same files as its expans
   );
   assert.equal(literal.status, 0, literal.stdout + literal.stderr);
   assert.equal(literal.stdout, expanded.stdout);
-  const names = [...literal.stdout.matchAll(/^ok {3}closed\s+(\w+)/gm)].map(
-    (m) => m[1],
-  );
+  // The task's name, whatever verdict stands in front of it. This seam is
+  // about a glob naming the same files as its expansion, and it read the
+  // word `closed` only because that word used to be there; a verdict is not
+  // what this promise is about.
+  const names = [
+    ...literal.stdout.matchAll(/^ok\s+.*?(\S+) \(\d+ passing/gm),
+  ].map((m) => m[1]);
   assert.deepEqual(names, ["alpha", "beta"]);
   const none = kaal(["contracts", "architecture/*/nothing.test.mjs"], {
     cwd: GLOBS,

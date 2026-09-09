@@ -31,13 +31,28 @@ const RETROS = [
   "2026-09-05-analyse-tenth-use.md",
 ];
 
-test("1. the template's Handoff carries Status, Blocked on, Supersedes; the skill says the analyst owns both ends of the status", () => {
+test("1. the template's Handoff carries Blocked on and Supersedes, and asks for no status", () => {
+  // Superseded by `a-task-is-delivered-by-its-run`. The template asked for a
+  // `- Status:` line and the analyst was told to own both ends of it. Nobody
+  // writes one now: whether a task was delivered is a report its run and its
+  // record produce, so a template asking for the field would be asking for a
+  // claim no wall reads and every reader would believe.
   const tpl = readFileSync(join(SKILL, "references", "requirement.md"), "utf8");
-  for (const line of ["Status:", "Blocked on:", "Supersedes:"])
+  for (const line of ["Blocked on:", "Supersedes:"])
     assert.ok(tpl.includes(line), `template lacks ${line}`);
+  assert.doesNotMatch(
+    tpl,
+    /^- Status:/m,
+    "the template still asks for a status nobody writes",
+  );
+  // What the analyst still owns is the ask and its proof, which is the half
+  // of that sentence that was never about the field.
   const h = section(text(), "Hand off");
-  assert.match(h, /open at handoff/i);
-  assert.match(h, /closed when/i);
+  assert.match(
+    h,
+    /criteri|test/i,
+    `the handoff says nothing about the proof: ${h}`,
+  );
 });
 
 test("2. the proof rules say a test that iterates asserts the count first", () => {

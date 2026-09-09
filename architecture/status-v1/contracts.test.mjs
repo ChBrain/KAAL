@@ -14,18 +14,43 @@ const kaal = (...args) =>
     encoding: "utf8",
   });
 
-test("1. requirement to command: the status decides the verdict, and its absence is a failure", () => {
+test("1. record to command: the record decides the verdict, and its absence is not a failure", () => {
+  // Superseded by `a-task-is-delivered-by-its-run`. The seam was between a
+  // requirement's status line and the command's verdict; it is between the
+  // run on record and the verdict now, and the promise is the same one in
+  // both halves: a red that matters is told from a red that does not, and
+  // the command says which.
+  const R = join(
+    ROOT,
+    "requirements",
+    "a-task-is-delivered-by-its-run",
+    "fixtures",
+  );
+  const suite = (n) =>
+    join(R, n, "requirements", "alpha", "acceptance.test.mjs");
   const r = kaal(
     "acceptance",
-    join(F, "closed-red", "acceptance.test.mjs"),
-    join(F, "open-red", "acceptance.test.mjs"),
-    join(F, "no-status", "acceptance.test.mjs"),
+    suite("regressed"),
+    suite("not-delivered"),
+    suite("delivered"),
   );
-  assert.equal(r.status, 1);
-  const line = (n) => r.stdout.split("\n").find((l) => l.includes(n)) ?? "";
-  assert.match(line("closed-red"), /^FAIL/);
-  assert.match(line("open-red"), /^open/);
-  assert.match(line("no-status"), /^FAIL.*status/i);
+  // One of the three is a regression, so the run refuses, and the other two
+  // are answers rather than failures.
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  const lines = r.stdout.split("\n");
+  assert.equal(
+    lines.filter((l) => /^FAIL/.test(l)).length,
+    1,
+    `expected one refusal: ${r.stdout}`,
+  );
+  assert.match(r.stdout, /^FAIL\s+regressed/m, r.stdout);
+  assert.match(r.stdout, /^ok\s+not delivered/m, r.stdout);
+  assert.match(r.stdout, /^ok\s+delivered/m, r.stdout);
+  // And the absence of a record is not a failure, which is the half that
+  // changed: an unproved task is work in progress, and the old field made it
+  // a failure only when somebody had written `closed` on the page.
+  const alone = kaal("acceptance", suite("not-delivered"));
+  assert.equal(alone.status, 0, `an unproved task refused: ${alone.stdout}`);
 });
 
 test("2. test file to command: pass and fail counts are read from the run and printed", () => {

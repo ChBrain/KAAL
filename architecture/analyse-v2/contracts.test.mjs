@@ -20,22 +20,26 @@ const section = (t, title) =>
     ),
   )?.[1] ?? "";
 
-test("1. template to requirements: the three lines in order, and a stamped requirement reads as closed", () => {
+test("1. template to requirements: the lines in order, and a stamped requirement reads from its record", () => {
+  // Superseded by `a-task-is-delivered-by-its-run`. The template asked for a
+  // `- Status:` line between Open questions and Blocked on; nobody writes one
+  // now. The seam is what it always was, that the template's order is the
+  // order a written requirement carries, with one fewer line in it.
   const h = section(read("references", "requirement.md"), "Handoff");
   const at = (l) => h.indexOf(`- ${l}`);
   assert.ok(at("Open questions:") >= 0, "no Open questions line");
+  assert.equal(at("Status:"), -1, "the template still asks for a status");
   assert.ok(
-    at("Status:") > at("Open questions:"),
-    "Status missing or misplaced",
-  );
-  assert.ok(
-    at("Blocked on:") > at("Status:"),
+    at("Blocked on:") > at("Open questions:"),
     "Blocked on missing or misplaced",
   );
   assert.ok(
     at("Supersedes:") > at("Blocked on:"),
     "Supersedes missing or misplaced",
   );
+  // And a requirement written from it is judged by its run and its record.
+  // The stamped fixture has no record, so its green suite reads not
+  // delivered: the coder has claimed and nobody has proved.
   const r = spawnSync(
     process.execPath,
     [
@@ -46,7 +50,7 @@ test("1. template to requirements: the three lines in order, and a stamped requi
     { cwd: join(HERE, "fixtures", "stamped"), encoding: "utf8" },
   );
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /^ok {3}closed {2}t /m);
+  assert.match(r.stdout, /^ok\s+not delivered\s+t /m, r.stdout);
 });
 
 test("2. skill text to the proof: four bold leads in section 3", () => {

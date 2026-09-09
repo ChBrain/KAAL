@@ -87,11 +87,25 @@ test("3. the acceptance wall runs kaal acceptance over the requirements glob", (
   );
 });
 
-test("4. the board is green while push-v1 is open with its manual step undone", () => {
-  const push = readFileSync(
-    join(ROOT, "requirements", "push-v1", "requirement.md"),
-    "utf8",
+test("4. the board is green while push-v1 is unfinished with its manual step undone", () => {
+  // Superseded by `a-task-is-delivered-by-its-run`, and it is the same claim
+  // asked of the report. It used to read `- Status: open` from the page;
+  // there is no page to ask, so it asks the tree: a task nobody has proved
+  // has no record, and a red suite with no record is work in progress rather
+  // than a failure. That is the whole of what this criterion ever said.
+  assert.ok(
+    !existsSync(join(ROOT, "tests", "runs", "push-v1.md")),
+    "push-v1 has a record, so it is not the unfinished task this reads",
   );
-  assert.match(push, /^- Status: open$/m, "push-v1 is not open");
+  const r = kaal(
+    "acceptance",
+    join(ROOT, "requirements", "push-v1", "acceptance.test.mjs"),
+  );
+  assert.match(
+    r.stdout,
+    /not delivered/,
+    `an unfinished task did not read as not delivered: ${r.stdout}`,
+  );
+  assert.equal(r.status, 0, `an unfinished task failed the wall: ${r.stdout}`);
   if (!INSIDE) assert.equal(kaal("gates").status, 0, "the board is red");
 });
