@@ -1,10 +1,12 @@
 {
-  "name": "kaal",
-  "private": true,
+  "name": "@chbrain/kaal",
   "version": "0.0.1",
   "description": "Kai's Artificial Agent League: how to use LLMs to build software.",
   "type": "module",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "bin": {
     "kaal": "bin/kaal.mjs"
   },

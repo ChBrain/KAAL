@@ -91,11 +91,26 @@ test("2. the git install brings one package, and it is the tool and nothing of t
   const scratch = mkdtempSync(join(tmpdir(), "kaal-tag-alone-"));
   try {
     const consumer = installedFromGit(scratch);
-    const packages = readdirSync(join(consumer, "node_modules")).filter(
-      (n) => !n.startsWith("."),
+    // A scoped package is a directory holding a directory, so the entries
+    // under node_modules are not package names until the scopes are read
+    // through. Reading the top level alone answered the scope and would
+    // have answered the same for a scope carrying ten strangers.
+    const tree = join(consumer, "node_modules");
+    const packages = readdirSync(tree)
+      .filter((n) => !n.startsWith("."))
+      .flatMap((n) =>
+        n.startsWith("@")
+          ? readdirSync(join(tree, n)).map((p) => `${n}/${p}`)
+          : [n],
+      );
+    assert.deepEqual(
+      packages,
+      ["@chbrain/kaal"],
+      `the install added ${packages}`,
     );
-    assert.deepEqual(packages, ["kaal"], `the install added ${packages}`);
-    const inside = readdirSync(join(consumer, "node_modules", "kaal"));
+    // The one package this test just found, not the name again: what is
+    // read is what was installed.
+    const inside = readdirSync(join(tree, ...packages[0].split("/")));
     assert.ok(
       inside.includes("bin"),
       `no bin/ in the installed tool: ${inside}`,

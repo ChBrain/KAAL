@@ -16,7 +16,7 @@ jobs:
     name: Analyze (javascript-typescript)
     runs-on: ubuntu-latest
     permissions:
-      security-events: write
+      security-events: write # the analysis it uploads, and nothing else
       packages: read
       actions: read
       contents: read

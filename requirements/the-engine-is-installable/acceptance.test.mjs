@@ -138,12 +138,21 @@ test("4. the install brings nothing with it", () => {
   const scratch = mkdtempSync(join(tmpdir(), "kaal-alone-"));
   try {
     const consumer = installed(scratch);
-    const packages = readdirSync(join(consumer, "node_modules")).filter(
-      (n) => !n.startsWith("."),
-    );
+    // A scoped package is a directory holding a directory, so the entries
+    // under node_modules are not package names until the scopes are read
+    // through. Reading the top level alone answered `@chbrain` and would
+    // have answered the same for a scope carrying ten strangers.
+    const tree = join(consumer, "node_modules");
+    const packages = readdirSync(tree)
+      .filter((n) => !n.startsWith("."))
+      .flatMap((n) =>
+        n.startsWith("@")
+          ? readdirSync(join(tree, n)).map((p) => `${n}/${p}`)
+          : [n],
+      );
     assert.deepEqual(
       packages,
-      ["kaal"],
+      ["@chbrain/kaal"],
       `the install added ${packages.join(", ")}`,
     );
   } finally {

@@ -83,7 +83,13 @@ release is a report.
   version and target, it produces this artefact, calls this endpoint, refuses
   production without a key. Seen red before the script exists, seen green on
   a stand-in, then green.
-- **When the artefact is a ref, the refusals are the tests.** A release
+- **When the artefact is built and uploaded, the deploy owes tests of its
+  own.** A release that packs a thing and pushes it somewhere has produced
+  something a test can hold: what the package carries, what it is called,
+  where it went. Write those, because a build that ships more than it meant
+  to ships it quietly, and the first person to notice is a consumer.
+- **When the artefact is a ref, the refusals are the tests.** This is the
+  case where nothing is built, and it is a case rather than the rule. A release
   whose whole artefact is a git ref deploys by two commands, and a script
   wrapping them is a wrapper: its tests test the wrapper and nothing has
   shipped. Write the refusals instead, as a command with unit tests, and
@@ -99,7 +105,10 @@ release is a report.
   assumed. A smoke that fails is a rollback, now, and a handoff back with the
   failure; it is not a retry.
 - **Record the run** as a run you just made: version, target, time, smoke
-  result, and whether the rollback was rehearsed or executed.
+  result, and whether the rollback was rehearsed or executed. Where the
+  release publishes to a registry, the record also names the visibility the
+  package was published with and the person who set it. No tree can read a
+  registry's own setting, so the record is a person's word and says whose.
 
 ## 4. Scope
 

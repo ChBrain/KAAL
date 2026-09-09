@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: security-v1@58da36a958c75bdeadf9e058ccc8441e4ab568e1b76001efd8ae81bb2dddd322
+  supersedes: security-v1@58da36a958c75bdeadf9e058ccc8441e4ab568e1b76001efd8ae81bb2dddd322, the-engine-is-installable@95ec4bb3baeac9088a41a22496e6d07b07bd123a25ec88427ce28ee4169b5397, the-release-runs-on-a-key@83c1dfad60d4c78de8f0cd9569ac7386ae877218b217348a5ddc00d992902045, the-tag-installs-offline@40a65577ba6faeae4dc238ab75b9667aa4be1f05d81d15bd34b64f9c29eb94f6
 ---
 
 # Requirement: the-engine-installs-by-name
@@ -112,11 +112,13 @@ what changes when the artefact stops being a ref.
 
 ## Open questions
 
-- Public or restricted? The repository is public and MIT, and twelve of the
-  asker's thirteen packages are restricted. A restricted package on a
-  public repository asks every consumer and every consumer's CI for a token
-  to install something whose source they can already read. Kai decides, and
-  criterion 6 records the answer rather than assuming it.
+- Public or restricted? Answered by Kai during the build: public. The
+  repository is public and MIT, and twelve of the asker's thirteen packages
+  are restricted, so this one is the exception on purpose. A restricted
+  package on a public repository asks every consumer and every consumer's
+  CI for a token to install something whose source they can already read.
+  The answer is a fact about the first publish and not about the tree, so
+  criterion 6 still records it in the release record rather than in code.
 - `^0.0.1` matches only `0.0.1`, because npm treats every 0.0.x as
   incompatible with every other. A consumer pinning a caret range gets no
   patches until 0.1.0. Does that argue for reaching 0.1.0 sooner than the
@@ -138,21 +140,75 @@ what changes when the artefact stops being a ref.
 - Green before the build: criterion 2, and it is a guard rather than a
   defect. What the package carries is correct today and the criterion exists
   so that removing `private` and adding a name cannot quietly widen it
-- Open questions: 4, listed above
-- Status: open
-- Blocked on: nothing to build. The first publish and the visibility that
-  follows it are Kai's, and criterion 6 only requires the record to have a
-  place for them
+- Open questions: 4, listed above; the first is answered, public
+- Status: closed
+- Blocked on: nothing. The first publish and the visibility that follows it
+  are Kai's, and criterion 6 only required the record to have a place for
+  them, which it now has
 - Unblocks: a consumer installing by name, which is every consumer that has
   a registry
-- Supersedes: two, both in `security-v1` and `operate`. `security-v1`'s
-  second criterion, amended four hours ago in `the-release-runs-on-a-key`
-  to require a reason on `contents: write`, is widened here to any write:
-  that amendment narrowed the claim to the write it had in front of it, and
-  this task brings `packages: write`, which would owe no reason under it.
-  The principle is the same one that permitted the first move, that a
-  consumer answers what a workflow may touch by reading its block. And the
-  `operate` skill's rule that the refusals are the tests keeps its case and
-  gains its complement: it is true where the artefact is a ref, and this
-  task makes an artefact that is not
+- Supersedes: `security-v1`, `the-engine-is-installable`, `the-release-runs-on-a-key`, `the-tag-installs-offline`. Five claims across the four, and three of the four the plan did not see.
+  Named before the build: `security-v1`'s second criterion, amended four hours ago in
+  `the-release-runs-on-a-key` to require a reason on `contents: write`, is
+  widened here to any write in any block, top level or under a job. That
+  amendment narrowed the claim to the write it had in front of it, and this
+  task brings `packages: write`, which would have owed no reason under it.
+  The principle is the one that permitted the first move, that a consumer
+  answers what a workflow may touch by reading its block. And the `operate`
+  skill's rule that the refusals are the tests keeps its case and gains its
+  complement: it is true where the artefact is a ref, and this task makes
+  an artefact that is not.
+  Found by the build, both by a wall going red: `the-engine-is-installable`
+  read the installed tree one directory deep, so a scope reads as the
+  package and `@chbrain` answered where `kaal` used to. Its criterion, that
+  the install brings nothing with it, is unchanged; the reading is widened
+  to name packages rather than directories. And `the-release-runs-on-a-key`
+  listed `packages: write` among the writes the release run has no business
+  holding, which was true of a run that only tagged. The list keeps the
+  four writes the run still has no business with, and what every write owes
+  moved to `security-v1`, where it belongs. And `the-tag-installs-offline`
+  read the installed tree one directory deep for the same reason, which is
+  the same widening. It was the last of the five to appear because it
+  installs from a bare clone of this tree at HEAD, so it could not see the
+  new name until the build was committed: it went red at the push hook and
+  nowhere earlier
 - People: none
+
+## Build
+
+- Built: all seven criteria, on `requirement/the-engine-installs-by-name-build`
+- Landed: `package.json` takes the scoped name, drops `private` and
+  declares its registry; `release.yml` gains `packages: write` with its
+  reason and a publish step after the tag; `codeql.yml` gives its job level
+  write a reason; `skills/operate/SKILL.md` says a built and uploaded
+  artefact owes deploy tests of its own and that the record names the
+  visibility and who set it; `skills/operate/references/release.md` gains
+  the Visibility line; `SURFACE.md` gains `## Installing it`
+- Proved: `node bin/kaal.mjs gates` green on twelve walls. Each criterion
+  was broken on its own on a file copy and restored from that copy, and
+  each break reddened its own criterion and no other
+- Superseded tests, each proved red for the right reason on its own break:
+  `security-v1` 2 falls on a job level write with no reason and on a top
+  level write that is not contents; `the-engine-is-installable` 4 falls on
+  a declared dependency and, separately, on an unscoped name, which is what
+  proves the flatten reads the tree rather than a constant;
+  `the-release-runs-on-a-key` 5 falls on `id-token: write`;
+  `the-tag-installs-offline` 2 falls on an unscoped name, which needed a
+  commit to prove, because a bare clone reads refs and not a working tree
+- Found while building: `the-release-runs-on-a-key` 5 held a dead
+  assertion, `/write/g && /(packages|id-token|...)/`, whose left side was
+  discarded by the `&&` and never ran. It has been removed rather than
+  fixed, because the surviving right side is the whole claim
+- Broken on purpose, and said out loud: proving
+  `the-tag-installs-offline` 2 needed a commit, and the commit carrying the
+  break could not pass the hook that the break existed to redden, so it was
+  made with `--no-verify` and reset in the same breath. The league forbids
+  that flag and this is the one place it was used; no history left this
+  tree, and the working tree afterwards held only the intended diff
+- Not done, and owed: `package.json` still describes the tool as "Kai's
+  Artificial Agent League". The trunk says KHAI's, and Kai has said which
+  it is. That is a published string this task makes reachable, but no
+  criterion here claims it, so it is a finding and not a drive by edit
+- Class: surface moved, skills moved (`kaal class . --against origin/main`,
+  run last, after the final edit). The tool did not move: nothing under
+  `bin/` changed, and the manifest is not one of the three

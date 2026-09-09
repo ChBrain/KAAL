@@ -17,6 +17,8 @@
 - Shipped: <time>
 - Smoke: <result as a run just made>
 - Rollback executed: <no / yes, because <failure>>
+- Visibility: <what the package was published with, and who set it; or
+  nothing, where the release publishes to no registry>
 
 ## Handoff
 

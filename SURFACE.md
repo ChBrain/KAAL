@@ -12,6 +12,23 @@ question after "this is not a patch" is "who decided that".
 `README.md` tells a reader how to use the tool. This page tells a reader what
 the tool has promised not to change quietly.
 
+## Installing it
+
+Two paths, and a consumer with a registry takes the first.
+
+`npm i @chbrain/kaal` resolves the package from the registry the manifest
+declares, which is where the release workflow publishes it. This is the path
+for anyone whose machine can reach that registry and who wants a version
+rather than a checkout.
+
+Installing from the git URL still works and always will. It needs no
+registry, which is the point: it is the offline path, and it is what a
+consumer takes when the registry is unreachable, unwanted, or not theirs. It
+resolves a tag rather than a published version.
+
+What the two paths deliver is the same package. The registry path is a name
+and a version; the git URL is a ref.
+
 ## The exit codes
 
 Three, and they are the whole vocabulary.

@@ -20,6 +20,7 @@ on:
         type: string
 permissions:
   contents: write # the tag, and nothing else
+  packages: write # the package it publishes, and nothing else
 jobs:
   cut:
     runs-on: ubuntu-latest
@@ -51,3 +52,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag -a "v${{ inputs.version }}" -m "KAAL v${{ inputs.version }}"
           git push origin "refs/tags/v${{ inputs.version }}"
+
+      - name: publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
