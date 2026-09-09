@@ -1,6 +1,6 @@
 ---
 traces:
-  parent: strategy@32c960be1eaf76aa805fd0855379da3fae81951ebe70829b34703afa87262139
+  parent: strategy@768288f9e1505f9808f14387940e6774a2f7facfde762963e43262d308452e8a
 ---
 
 # Test plan: units

@@ -327,8 +327,13 @@ and it carries nothing the list does not.
   task builds the first tree that declares any, which is why the depth rule
   fires here first and nowhere else. Whether the other two trees are made to
   declare theirs is a task, not a line
-- Found and not fixed: `skills/test/SKILL.md` says the test skill is owned by
-  no seat, and `kaal/league.md` says the tester is a seat that owns the
-  method. The strategy this task writes is the tester's, which is the answer
-  to the requirement's fifth open question, and it makes the disagreement
-  load bearing
+- Read as a disagreement and it is not one, which the asker corrected while
+  this was being built. `skills/test/SKILL.md` says the test skill is loaded
+  by every seat and owned by none; `kaal/league.md` says the tester is a seat
+  that owns the method. Those are two different nouns. The skill is the
+  discipline of the proof and the analyst, the architect and the developer
+  all load it; the seat is who owns the method and argues about it. The skill
+  already draws the line this task needed: its output "is the proof half of
+  whichever seat loaded it, and lands in that seat's lane". The seat decides
+  where a result goes, never the skill, which is why the cases live with what
+  they test and only the strategy and the plans live here

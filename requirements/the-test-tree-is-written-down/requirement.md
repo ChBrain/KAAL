@@ -207,6 +207,14 @@ wall, and by the board reporting a wall with no plan or a plan with no wall.
   argues: it owns the method, every seat owns what the method is pointed at,
   and owning the method carries standing to refuse a criterion, a seam or a
   behaviour nobody could fail
+- Corrected, and it was mine: this task's drawing recorded a disagreement
+  between the test skill and the trunk, and there is none. The skill is the
+  discipline of the proof and every seat loads it and none owns it; the
+  tester is a seat and what a seat owns is the method. Two nouns, not one.
+  The skill already draws the line this whole task needed, that its output
+  lands in the lane of whoever loaded it, so the seat decides where a result
+  goes and never the skill. The drawing says so now and the strategy carries
+  the distinction
 - The trace wall caught the edit. Changing the strategy moved the file its
   three plans pin, and all three reported it before anything else did
 - Class: surface moved, tool moved (`kaal class . --against origin/main`,

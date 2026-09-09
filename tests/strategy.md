@@ -42,6 +42,25 @@ other. A tool that does exactly what its criteria say and that nobody can use
 has been verified and not validated; a tool everybody likes that nobody can
 prove has been validated and not verified.
 
+## The seat and the skill are different things
+
+There is a `test` skill and there is a tester, and they are not the same. The
+skill is the discipline of the proof, and every seat loads it: the analyst to
+write an acceptance case, the architect a contract case, the developer a
+unit case. No seat owns it. The tester is a seat, and what a seat owns is the
+method and the argument about it.
+
+The line that matters in practice: **the seat decides where a result goes,
+never the skill.** The skill says what a proof must be, seen red for a stated
+reason and green on a stand in, one per want. Where the file lands is the
+lane of whoever loaded it, which is why an acceptance case sits with its
+requirement, a contract case with its drawing, a unit case with its code, and
+only this page and the plans sit here.
+
+A skill that placed its own output would quietly make every seat that loads
+it into the same seat, and there would be one directory holding everybody's
+work with nobody answering for any of it.
+
 ## The tester argues
 
 The tester is a seat and not a service. It owns the method, and every other
