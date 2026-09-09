@@ -1,0 +1,24 @@
+{
+  "gates": [
+    {
+      "name": "acceptance",
+      "command": "node bin/kaal.mjs acceptance requirements/*/acceptance.test.mjs",
+      "fix": "make the criterion true"
+    },
+    {
+      "name": "contracts",
+      "command": "node bin/kaal.mjs contracts architecture/*/contracts.test.mjs",
+      "fix": "keep the promise"
+    },
+    {
+      "name": "units",
+      "command": "node --test tests/*.test.mjs",
+      "fix": "fix the unit"
+    },
+    {
+      "name": "format",
+      "command": "npx prettier --check .",
+      "fix": "format it"
+    }
+  ]
+}

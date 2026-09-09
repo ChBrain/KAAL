@@ -1,0 +1,6 @@
+---
+traces:
+  parent: nowhere
+---
+
+# Buried
