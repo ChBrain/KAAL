@@ -106,6 +106,11 @@ with one trunk and fifty four leaves.
   requirements, which is the flattening the edge distinction above exists to
   prevent. A trunk belongs to no tree precisely because all three answer to
   it.
+- The trunk lives in `kaal/`, a directory of its own, because every other
+  artefact in the league is a directory holding a page and its neighbours,
+  and a trunk that is one loose file at the root would read as a standing
+  page like `README.md` rather than as the top of the tree. The asker chose
+  it.
 - What the trunk costs, said rather than hidden: it is a fourth kind of
   artefact, so the trace wall gains a place to read and the kind table gains
   a target that is not a directory of many. It is bought because the three
@@ -175,9 +180,9 @@ with one trunk and fifty four leaves.
 5. The tree has depth: the board reports when the number of artefacts whose
    parent is their tree's root exceeds a stated share of that tree, so a
    star cannot pass as a tree.
-6. A trunk document exists above the three trees, carries a `traces` block
-   with `parent: none`, and is the only artefact in the league whose parent
-   is none. The three tree roots declare it as their parent, and a fourth
+6. A trunk document exists at `kaal/`, above the three trees, carries a
+   `traces` block with `parent: none`, and is the only artefact in the
+   league whose parent is none. The three tree roots declare it as their parent, and a fourth
    child of the trunk carries the argument criterion 2 demands of any
    further root.
 7. On this tree `kaal traces` answers: one root, or each further root
@@ -186,10 +191,6 @@ with one trunk and fifty four leaves.
 
 ## Open questions
 
-- Where does the trunk live, and is it one page or a directory like the
-  others? A single `KAAL.md` beside the other standing pages is the smallest
-  answer and the one this requirement assumes; a `kaal/` directory would
-  match the shape of every other artefact and cost a directory for one file.
 - What share of requirements parented to the root is too many? Criterion 5
   needs a number and nobody has evidence for one. Half is a guess; the honest
   first version may report the share rather than judge it.
