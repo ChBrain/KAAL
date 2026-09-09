@@ -13,7 +13,7 @@ What this plan proves is that every seam a drawing fixes still holds. It is writ
 
 ## Suites
 
-Its suites live under `architecture/*/contracts.test.mjs`, and today that matches 54 suites.
+Its suites live under `architecture/*/contracts.test.mjs`, and today that matches 55 suites.
 
 ## Cases
 
