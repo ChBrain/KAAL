@@ -1,4 +1,9 @@
-# Requirement: no-block
+---
+traces:
+  supersedes: nothing
+---
+
+# Requirement: t
 
 ## Goal
 
@@ -26,7 +31,7 @@ A fixture.
 
 ## Handoff
 
-- Task: no-block
+- Task: t
 - Criteria: 1; tests: 1 (equal)
 - Red run: none; a fixture
 - Tests: `acceptance.test.mjs`, beside this file

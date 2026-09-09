@@ -1,8 +1,4 @@
----
-supersedes: a-task-nobody-wrote
----
-
-# Requirement: dangling
+# Requirement: t
 
 ## Goal
 
@@ -30,7 +26,7 @@ A fixture.
 
 ## Handoff
 
-- Task: dangling
+- Task: t
 - Criteria: 1; tests: 1 (equal)
 - Red run: none; a fixture
 - Tests: `acceptance.test.mjs`, beside this file
@@ -38,5 +34,5 @@ A fixture.
 - Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
-- Supersedes: `a-task-nobody-wrote`, in part
+- Supersedes: nothing
 - People: none
