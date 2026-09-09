@@ -108,11 +108,17 @@ are fixed and in this order.
 - **Decisions.** One record per door you closed: the choice, the options you
   did not take, why, and what would reopen it. A decision with no options was
   not a decision.
-  Two goods pull at every choice and they are usually in tension: the
-  shortest path to value, and keeping the most choices open. A record names
-  which of the two the choice bought and what it spent on the other. A choice
-  that costs nothing on either side is not a decision either; it is a detail,
-  and it belongs in Fixed and free.
+  Read the choice against the principles the league has already weighed,
+  kept as one file each under `references/principles/`, and name them on the
+  record's `Weighed against:` line, or `none`. A principle is a file there, and it is always a pair in tension
+  rather than a rule: it states both pulls, what each pull buys and what it
+  costs, and how to tell which side a case is on. A principle written as one
+  side is a stick, and the record's job is to weigh, not to be hit with
+  something.
+  `the-two-goods` is the one every decision meets: a record names which of
+  the two the choice bought and what it spent on the other. A choice that
+  costs nothing on either side is not a decision either; it is a detail, and
+  it belongs in Fixed and free.
   A decision that opens a gap names the task that closes it, in the record
   and not only in the handoff, so the gap and its price are read together.
   The dangerous trade is the one nobody priced. Read the foreclosed side
@@ -193,4 +199,8 @@ each seam serves, and what is fixed for the developer. The developer reads it
 against a checklist that is theirs.
 
 Then run `retro-4ls` on this use, self-diagnosis, and hand its Lacked and
-Longed for to the analyst against this skill.
+Longed for to the analyst against this skill. Name which tensions this drawing
+weighed and whether any of them had no name, because the method is the retro's
+and what it is pointed at is this seat's. A tension weighed without a name
+more than once is a principle waiting to be written, and the next use of this
+skill should find it already written.

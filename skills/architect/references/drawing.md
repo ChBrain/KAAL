@@ -38,6 +38,7 @@ and it carries nothing the list does not.
 - Not taken: <option>, <option>
 - Because: <one paragraph>
 - Bought: <which good, and what it spent on the other>
+- Weighed against: <none, or the principles this choice was read against>
 - Reopens if: <the condition>
 
 ## Test strategy

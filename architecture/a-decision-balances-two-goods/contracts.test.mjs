@@ -26,16 +26,30 @@ const bullet = () => {
   assert.ok(m, "the skill has no Decisions bullet");
   return m[0];
 };
+// Superseded in part by `an-architect-names-its-principles`: the two goods
+// moved out of the skill into a principle file the bullet cites, so the
+// words are read where they now live. What the record must say did not
+// move and is still read in the bullet.
+const principle = () =>
+  fold(
+    readFileSync(
+      join(SKILL, "references", "principles", "the-two-goods.md"),
+      "utf8",
+    ),
+  );
 
 test("1. what a record must say, and where", () => {
   const b = fold(bullet());
-  // The two goods, in the asker's words, said to pull apart.
-  assert.match(b, /shortest path to value/i);
-  assert.match(b, /choices open/i);
+  // The two goods, in the asker's words, said to pull apart. They live in
+  // the principle file now and the bullet names it.
+  const p = principle();
+  assert.match(p, /shortest path to value/i);
+  assert.match(p, /choices open/i);
   assert.match(
-    b,
+    p,
     /(usually|often)[^.]*(tension|contrast|pull)|( tension|contrast|pull)[^.]*(usually|often)/i,
   );
+  assert.match(b, /the-two-goods/, "the bullet does not cite the principle");
   // What the record names.
   assert.match(b, /bought|buys/i);
   assert.match(b, /spen[dt]|cost/i);
@@ -55,16 +69,16 @@ test("1. what a record must say, and where", () => {
   // and the check comes after the price it is a check on.
   const at = (re) => b.search(re);
   assert.ok(
-    at(/with no options was not a decision/i) < at(/shortest path to value/i),
+    at(/with no options was not a decision/i) < at(/the-two-goods/i),
     "the price arrives before the question of whether a choice existed",
   );
   assert.ok(
-    at(/shortest path to value/i) < at(/foreclos/i),
+    at(/the-two-goods/i) < at(/foreclos/i),
     "the check arrives before the price it checks",
   );
-  // And nowhere else: a rule repeated in two places drifts in one of them.
-  const elsewhere = fold(skill().replace(bullet(), ""));
-  assert.doesNotMatch(elsewhere, /shortest path to value/i);
+  // One home, which is now the file: a rule repeated in two places drifts
+  // in one of them, and this is the pair that proves it.
+  assert.doesNotMatch(fold(skill()), /shortest path to value/i);
 });
 
 test("2. the decision shape a drawing copies", () => {
@@ -79,8 +93,15 @@ test("2. the decision shape a drawing copies", () => {
   );
   assert.deepEqual(
     labels,
-    ["Chosen", "Not taken", "Because", "Bought", "Reopens if"],
-    "the decision shape is not the five labels in that order",
+    [
+      "Chosen",
+      "Not taken",
+      "Because",
+      "Bought",
+      "Weighed against",
+      "Reopens if",
+    ],
+    "the decision shape is not the six labels in that order",
   );
 });
 

@@ -147,7 +147,7 @@ drawing weighed without a name.
   that cites a principle which does not exist
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: `a-decision-balances-two-goods`. The claim that moves is where
@@ -157,3 +157,34 @@ drawing weighed without a name.
   it is the one this task writes as its second file: the seat owns the lens,
   and a principle with two homes is the tension it exists to name
 - People: none
+
+## Build handoff
+
+- Task: an-architect-names-its-principles
+- Runs: unit 107, contract 137, acceptance 241, all green, run just now
+- Scope: two principle files under the architect's references, a sixth line
+  on the decision record, a citation where the skill used to restate, the
+  lens at the close of a use, and a sixth rule in the drawings wall that
+  resolves a cited principle before the orphan return
+- Class: tool moved, skills moved (`kaal class . --against origin/main`)
+- Unproven: nothing. Every criterion is text or a wall and both run here
+- Superseded: one the analyst did not name. `a-decision-balances-two-goods`
+  was named for where the two goods lives, and its contract also fixed the
+  decision record as exactly five labels in order. Criterion 2 adds a sixth,
+  so that contract moved too, from five labels to six. Found by running the
+  closed tests the change touches, and recorded on that task's own page
+  beside the move the analyst did name
+- Handed back: nothing
+
+## What the build met that the drawing did not say
+
+- The skills wall's `depth` rule forbids a markdown link whose target has
+  more than two path segments, so the skill cannot link into
+  `references/principles/` at all. The drawing fixed where a principle
+  lives and never asked whether the skill could point at it. The build names
+  the path in prose instead. It is worth knowing that the rule counts a
+  trailing slash as a segment, so the directory reads as deeper than it is,
+  and that no link to a principle file itself could ever pass.
+- Changing `skills/architect/SKILL.md` invalidated three runner pages, which
+  carry the skill's sha. Regenerated with `kaal runner architect <fixture>
+--write`, never by hand, which is the sweep the code skill names.
