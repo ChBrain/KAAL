@@ -91,13 +91,16 @@ test("5. the workflow runs on a key, and tags after the board and the check", ()
     `something other than a person can start it: ${on}`,
   );
   assert.match(on, /inputs:[\s\S]*version/, `it takes no version: ${on}`);
-  // The narrowest permission that can tag, and nothing wider.
+  // The narrowest permission that can do the run's work, and nothing wider.
+  // `packages: write` left this list when the run gained a publish: the
+  // list names what the run has no business touching, and a write the run
+  // uses is not that. What every write owes is a reason on its own line,
+  // and `security-v1` is the claim that asks for it.
   const perms = w.match(/^permissions:\n([\s\S]*?)(?=^\S)/m)?.[1] ?? "";
   assert.match(perms, /contents:\s*write/, `it cannot tag: ${perms}`);
   assert.doesNotMatch(
     perms,
-    /write/g &&
-      /(packages|id-token|actions|deployments|pull-requests):\s*write/,
+    /(id-token|actions|deployments|pull-requests):\s*write/,
     `it takes more than it needs: ${perms}`,
   );
   // The board and the check come before anything that makes a tag.

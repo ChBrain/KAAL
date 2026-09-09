@@ -30,24 +30,51 @@ test("1. SECURITY.md: reporting, supported versions, and a threat model naming t
   assert.match(threats, /data/);
 });
 
-test("2. every workflow declares permissions, and a contents write says what it is for", () => {
+// Every `permissions:` block in a file, top level or under a job, as the
+// lines indented past the key that opened it. A blank line does not end a
+// block; a line at or left of the key does. Reading only the top level was
+// a snapshot of where the writes happened to be: the analysis workflow
+// declares its write under a job, and no top level read would ever meet it.
+function permissionBlocks(text) {
+  const lines = text.split("\n");
+  const blocks = [];
+  for (let i = 0; i < lines.length; i++) {
+    const opened = lines[i].match(/^([ \t]*)permissions:[ \t]*$/);
+    if (!opened) continue;
+    const depth = opened[1].length;
+    const body = [];
+    for (let j = i + 1; j < lines.length; j++) {
+      if (!lines[j].trim()) continue;
+      if (lines[j].match(/^[ \t]*/)[0].length <= depth) break;
+      body.push(lines[j]);
+    }
+    blocks.push(body);
+  }
+  return blocks;
+}
+
+test("2. every workflow declares permissions, and every write says what it is for", () => {
   const files = readdirSync(W).filter((f) => /\.ya?ml$/.test(f));
   assert.ok(files.length >= 2);
   for (const f of files) {
     const t = readFileSync(join(W, f), "utf8");
     assert.ok(/^permissions:/m.test(t), `${f}: no permissions block`);
     // Which write says why, not which workflow may write. Naming the
-    // workflows was a snapshot of who wrote at the time. `contents: write`
-    // is the one that can move this repository's own code and refs, so it
-    // is the one that must say what it is for, on its own line, where a
-    // consumer reading the block meets it.
-    const block = t.match(/^permissions:\n((?:\s+.+\n)*)/m)?.[1] ?? "";
-    for (const [line, rest] of block.matchAll(/^\s*contents:\s*write\b(.*)$/gm))
-      assert.match(
-        rest,
-        /#\s*\S/,
-        `${f}: ${line.trim()} does not say what the write is for`,
-      );
+    // workflows was a snapshot of who wrote at the time. Any write is a
+    // thing this repository hands out, so any write must say what it is
+    // for, on its own line, where a consumer reading the block meets it.
+    // `contents: write` alone was the narrower claim, and it was narrow
+    // because contents was the only write in the tree when it was written.
+    for (const body of permissionBlocks(t))
+      for (const line of body) {
+        const write = line.match(/^\s*[a-z-]+:\s*write\b(.*)$/);
+        if (!write) continue;
+        assert.match(
+          write[1],
+          /#\s*\S/,
+          `${f}: ${line.trim()} does not say what the write is for`,
+        );
+      }
   }
 });
 

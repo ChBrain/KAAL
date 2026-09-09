@@ -96,7 +96,13 @@ release is a report.
   version and target, it produces this artefact, calls this endpoint, refuses
   production without a key. Seen red before the script exists, seen green on
   a stand-in, then green.
-- **When the artefact is a ref, the refusals are the tests.** A release
+- **When the artefact is built and uploaded, the deploy owes tests of its
+  own.** A release that packs a thing and pushes it somewhere has produced
+  something a test can hold: what the package carries, what it is called,
+  where it went. Write those, because a build that ships more than it meant
+  to ships it quietly, and the first person to notice is a consumer.
+- **When the artefact is a ref, the refusals are the tests.** This is the
+  case where nothing is built, and it is a case rather than the rule. A release
   whose whole artefact is a git ref deploys by two commands, and a script
   wrapping them is a wrapper: its tests test the wrapper and nothing has
   shipped. Write the refusals instead, as a command with unit tests, and
@@ -112,7 +118,10 @@ release is a report.
   assumed. A smoke that fails is a rollback, now, and a handoff back with the
   failure; it is not a retry.
 - **Record the run** as a run you just made: version, target, time, smoke
-  result, and whether the rollback was rehearsed or executed.
+  result, and whether the rollback was rehearsed or executed. Where the
+  release publishes to a registry, the record also names the visibility the
+  package was published with and the person who set it. No tree can read a
+  registry's own setting, so the record is a person's word and says whose.
 
 ## 4. Scope
 
@@ -167,6 +176,8 @@ already known, and it is observability.
 - Shipped: <time>
 - Smoke: <result as a run just made>
 - Rollback executed: <no / yes, because <failure>>
+- Visibility: <what the package was published with, and who set it; or
+  nothing, where the release publishes to no registry>
 
 ## Handoff
 
@@ -215,7 +226,7 @@ date: <YYYY-MM-DD>
 fixture: release
 ask_sha: 7b29904c08258a4034da0194d368c47399413ac7c75cc839944a0e7dfa9c8da9
 expect_sha: 16de5e0b2f01631159392e0e56d73023e4b0fef2b6c2fcf08b0f886124e63d32
-skill_sha: 68723a5cd59b3477314d7dbc16eaedc5449e852620a0063035f72338da8295cc
+skill_sha: 417baba6e9d589d133c364e5395a4ae62b8d13f307cc60892a1627631537d25a
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---
