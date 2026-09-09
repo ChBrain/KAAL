@@ -41,4 +41,5 @@ A fixture.
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: nothing
+- Root because: a fixture needs a second tree to be one.
 - People: none

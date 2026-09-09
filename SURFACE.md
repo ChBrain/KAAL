@@ -65,7 +65,14 @@ is a finding saying the text moved, which is a different finding in different
 words from a name that resolves to nothing, because one wants a rename and the
 other a reread. `--write` puts the pin on every trace it can resolve, changes
 nothing else on the page, and writes nothing on a second run; nobody types a
-sha. Reads the frontmatter of `requirements/<task>/requirement.md` and
+sha. It also reads the shape the `parent` kind makes: one trunk under `kaal/`
+and no other artefact declaring `none` without a `- Root because:` line in
+its Handoff, no cycle among parents, a drawing answering exactly one
+requirement, and no tree with more than **half** its artefacts hanging
+directly off its own root, which is a star rather than a tree. That share is
+one number chosen without evidence, and the first tree to trip it is the
+evidence for changing it. A parent that is absent is never a finding: each
+seat populates its own tree. Reads the frontmatter of `requirements/<task>/requirement.md` and
 `architecture/<task>/drawing.md`, and the region of each file a kind points
 at. Takes a root, which may be a flag. Exits 0, 1 or 2 (`applies-here`,
 `an-artefact-traces-what-it-came-from`, `a-trace-pins-what-it-read`).

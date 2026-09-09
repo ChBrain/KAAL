@@ -220,7 +220,7 @@ with one trunk and fifty four leaves.
 - Green before the build: none expected
 - Open questions: 4, listed above; the fifth, what the root is, was answered
   by the asker and is now an assumption
-- Status: open
+- Status: closed
 - Blocked on: `an-artefact-traces-what-it-came-from`, which fixes the trace
   and the command; and the asker, who names the root
 - Unblocks: **a topology per seat**, one task each for the analyst, the
@@ -234,3 +234,40 @@ with one trunk and fifty four leaves.
   gives it something to measure against
 - Supersedes: nothing
 - People: none
+
+## Build handoff
+
+- Task: a-tree-has-one-root
+- Runs: unit 107, contract 150, acceptance 260, all green, run just now
+- Scope: a fourth row in the kind table whose `where` is handed the artefact
+  that declared it, `kaal/` as a third place, the trunk written, four rules
+  over the graph the parents make, and both templates offering a parent
+- Class: surface moved, tool moved (`kaal class . --against origin/main`, run last)
+- Unproven: the tree itself. Every rule runs and the league is still a forest
+  with a trunk above it, because each seat populates its own tree and none
+  has yet. The wall is silent on that by design and the task that closes
+  behind the three seats is named in `Unblocks:`
+- Superseded: one the analyst did not name.
+  `an-artefact-traces-what-it-came-from`'s contract fixes the kind table's
+  rows at three by name, and this task adds a fourth. Moved to four, still
+  named rather than counted, and recorded on that task's own page
+- Handed back: nothing
+
+## What the build met that the drawing did not say
+
+- Folding the shape rules into `checkTraces` changes what every caller of
+  that function means by a finding, and three closed contracts call it. The
+  command calls `checkTraces` and `checkShape` in turn instead. The drawing
+  said the graph is read four ways and never said by whom, and the build
+  found it by reddening four closed tests at once.
+- A new place is a sweep nobody has a name for. Sixteen fixture roots across
+  three tasks are trees the command runs on, and each now owes a trunk or
+  reports one missing. Two fixture drawings also predated the rule that a
+  drawing answers exactly one requirement and were silent about theirs. The
+  code skill's sweep clause covers fixtures a test counts, fixtures a sha
+  pins, and generated files; a fixture that is a whole tree is a fourth kind
+  and the widest of them.
+- The acceptance fixtures for this task were written before the trunk
+  existed, so each tree's own root became a second root the moment the trunk
+  did. Four of them now carry the `- Root because:` line they always needed
+  and nobody could have written earlier.

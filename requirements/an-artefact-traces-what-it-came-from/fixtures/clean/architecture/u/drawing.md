@@ -1,5 +1,6 @@
 ---
 traces:
+  requirement: u
   principles: the-two-goods
 ---
 

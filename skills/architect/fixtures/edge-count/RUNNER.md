@@ -221,6 +221,7 @@ skill should find it already written.
 ---- references/drawing.md ----
 ---
 traces:
+  parent: <the drawing this one makes more specific, or none>
   requirement: <the task this drawing answers, as <name>@<sha>>
   principles: <nothing, or the principles its decisions weighed, each <name>@<sha>>
 ---

@@ -36,7 +36,25 @@ const parentOf = (text) => {
   const m = b?.match(/^traces:\s*$\n((?:[ \t]+\S.*\n?)*)/m);
   return m?.[1].match(/^\s+parent:\s*(.*)$/m)?.[1].trim() ?? null;
 };
+const DRAW_TEMPLATE = join(
+  ROOT,
+  "skills",
+  "architect",
+  "references",
+  "drawing.md",
+);
 const read = (rel) => readFileSync(join(ROOT, rel), "utf8");
+const drawings = () =>
+  globSync("architecture/*/drawing.md", { cwd: ROOT }).sort();
+// The `requirement` kind runs across trees and `parent` runs down one, so a
+// drawing parented to its own requirement has confused the two.
+const requirementOf = (text) => {
+  const b = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/)?.[1];
+  const m = b?.match(/^traces:\s*$\n((?:[ \t]+\S.*\n?)*)/m);
+  return (m?.[1].match(/^\s+requirement:\s*(.*)$/m)?.[1] ?? "")
+    .trim()
+    .split("@")[0];
+};
 const pages = () =>
   globSync("requirements/*/requirement.md", { cwd: ROOT }).sort();
 
@@ -190,12 +208,31 @@ test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {
   // Answering is not the same as having a shape: a reader that never looked
   // for a parent would also answer. So the shape is read here as text, and
   // it must not be a star either.
-  const roots = pages().filter((p) => /^none$/i.test(parentOf(read(p)) ?? ""));
-  assert.ok(roots.length >= 1, "no root at all");
-  const trunk = roots[0].split("/")[1];
-  const onTrunk = pages().filter((p) => parentOf(read(p)) === trunk);
-  assert.ok(
-    onTrunk.length < pages().length / 2,
-    `${onTrunk.length} of ${pages().length} requirements hang off the trunk; that is a star`,
+  const roots = [
+    ...globSync("kaal/*.md", { cwd: ROOT }),
+    ...pages(),
+    ...drawings(),
+  ].filter((p) => /^none$/i.test(parentOf(read(p)) ?? ""));
+  assert.equal(
+    roots.length,
+    1,
+    `expected one root and found ${roots.length}: ${roots.join(", ") || "none"}`,
   );
+  assert.match(roots[0], /^kaal\//, `the root is not the trunk: ${roots[0]}`);
+  // Not a star either. Each tree is measured against its own root, and a
+  // tree whose seat has not populated it yet has none, which is silence
+  // rather than a shape.
+  for (const [dir, files] of [
+    ["requirements", pages()],
+    ["architecture", drawings()],
+  ]) {
+    const treeRoot = files.find((p) => /^none$/i.test(parentOf(read(p)) ?? ""));
+    if (!treeRoot) continue;
+    const name = treeRoot.split("/")[1];
+    const on = files.filter((p) => parentOf(read(p)) === name).length;
+    assert.ok(
+      on <= files.length / 2,
+      `${on} of ${files.length} in ${dir} hang off ${name}; that is a star`,
+    );
+  }
 });
