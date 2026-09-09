@@ -96,7 +96,6 @@ the third and carries the place in what it compiles.
   discarded
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 4, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

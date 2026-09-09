@@ -69,6 +69,24 @@ order, one labelled edge and one contract test per seam, every criterion in
 the strategy table. Reads `architecture/<task>/` and the task's requirement.
 Takes a root. Exits 0, 1 or 2 (`applies-here`, `architect-v2`).
 
+## runs
+
+Answers what a run recorded and whether the record still speaks for the suite
+it names. A record is a page under `tests/runs/`, one per task, carrying the
+task, the suite, when it ran, the sha of that suite and its counts. `--write`
+runs every acceptance suite and records the ones that are green, and records
+nothing else: a record is evidence of a pass and a red suite made none. No
+wall writes one, because recording is the act of the seat that proves and a
+wall only reads.
+
+What the record is for is the one question a run cannot answer about itself.
+A red suite is a regression if it ever passed and a task nobody has built if
+it never did, and the walls tell those apart by reading the record beside the
+run. A record whose suite has changed since counts as no record, because a
+pass against text that no longer exists says nothing about the text that is
+failing now. Takes a root, which may be a flag. Exits 0, 1 or 2
+(`a-task-is-delivered-by-its-run`).
+
 ## traces
 
 Answers whether every artefact declares what it was made from and every name

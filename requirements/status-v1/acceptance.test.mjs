@@ -18,7 +18,13 @@ const kaal = (...args) =>
   });
 const fixture = (name) => join(F, name, "acceptance.test.mjs");
 
-test("1. every requirement declares exactly one status, open or closed", () => {
+// Criteria 1 and 2 are superseded by `a-task-is-delivered-by-its-run`. The
+// field they fixed is gone from every page: whether a task was delivered is a
+// report a run produces, not a declaration a seat writes. What survives is
+// the question those criteria were really asking, which is that the wall
+// tells a red that matters from a red that does not, and it asks it of the
+// report instead of the field.
+test("1. no requirement declares a status, and the wall asks no page for one", () => {
   const dirs = readdirSync(join(ROOT, "requirements")).filter((d) =>
     existsSync(join(ROOT, "requirements", d, "requirement.md")),
   );
@@ -29,37 +35,43 @@ test("1. every requirement declares exactly one status, open or closed", () => {
         join(ROOT, "requirements", d, "requirement.md"),
         "utf8",
       ).match(/^- Status: (open|closed)\s*$/gm) ?? [];
-    assert.equal(
-      lines.length,
-      1,
-      `${d}: expected one status line, found ${lines.length}`,
-    );
+    assert.equal(lines.length, 0, `${d}: still declares a status`);
   }
 });
 
-test("2. kaal acceptance: closed red fails, open red is reported, open green must close, no status fails", () => {
-  const ok = kaal("acceptance", fixture("closed-green"), fixture("open-red"));
+test("2. kaal acceptance: a regression fails, an unbuilt task is reported, and neither reads a page", () => {
+  const F = join(
+    ROOT,
+    "requirements",
+    "a-task-is-delivered-by-its-run",
+    "fixtures",
+  );
+  const suite = (n) =>
+    join(F, n, "requirements", "alpha", "acceptance.test.mjs");
+  // Red and never recorded is work in progress: reported, and the wall
+  // answers. Red with a record of it passing is a regression and refuses.
+  const ok = kaal("acceptance", suite("not-delivered"), suite("delivered"));
   assert.equal(ok.status, 0, ok.stdout + ok.stderr);
-  const lineOf = (name) =>
-    ok.stdout.split("\n").find((l) => l.includes(name)) ?? "";
-  assert.match(lineOf("open-red"), /\bopen\b/, "open-red not reported open");
+  assert.match(ok.stdout, /not delivered/, "an unbuilt task was not reported");
   assert.match(
-    lineOf("closed-green"),
-    /\bclosed\b/,
-    "closed-green not reported closed",
+    ok.stdout,
+    /\bok +delivered/,
+    "a recorded pass was not reported",
   );
   assert.equal(
-    kaal("acceptance", fixture("closed-red")).status,
+    kaal("acceptance", suite("regressed")).status,
     1,
-    "closed red not refused",
+    "a regression was not refused",
   );
-  const green = kaal("acceptance", fixture("open-green"));
-  assert.equal(green.status, 1, "open and all green not refused");
-  assert.match(green.stdout + green.stderr, /close/i);
-  assert.equal(
-    kaal("acceptance", fixture("no-status")).status,
-    1,
-    "missing status not refused",
+  // And the verdict comes from the record, not from the page: these fixture
+  // pages carry no status at all and the wall still answers.
+  assert.doesNotMatch(
+    readFileSync(
+      join(F, "delivered", "requirements", "alpha", "requirement.md"),
+      "utf8",
+    ),
+    /^- Status:/m,
+    "the fixture page carries a status, so this proves nothing",
   );
 });
 

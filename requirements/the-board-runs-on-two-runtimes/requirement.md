@@ -106,7 +106,6 @@ under, and by the closed contract that counts CI's jobs naming them instead.
   the build from reaching for a matrix, which is the obvious way to add a
   runtime and the one that would un-require the board
 - Open questions: 4, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: `public-v1`. The claim that moves is its fourth acceptance

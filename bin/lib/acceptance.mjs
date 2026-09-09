@@ -1,50 +1,34 @@
-// The acceptance wall with a status. Every requirement says in its Handoff
-// whether it is open or closed. A closed requirement's red test is a failure.
-// An open requirement's red tests are its analyst's red run: reported, never
-// failed. An open requirement with no red test is done and must be closed,
-// so that is a failure too. A requirement with no status is a failure. Each
-// test file runs under wallEnv, so the verdict does not depend on the caller.
+// The acceptance wall with a report. Nobody writes down whether a task was
+// delivered: the run just made and the run on record say so between them, in
+// one of four words. Regressed and nothing ran are failures; delivered and
+// not delivered are answers. Each test file runs under wallEnv, so the
+// verdict does not depend on the caller.
+//
+// A drawing's verdict is its task's. That is not a special case bolted on:
+// the wall that judged drawings has always read the requirement whose task
+// the drawing answers, because downstream answers upstream and a seam proved
+// belongs to the task whose criteria it serves.
 import { readFileSync, existsSync, globSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { spawnSync } from "node:child_process";
 import { wallEnv } from "./gates.mjs";
+import { readRun, verdict } from "./runs.mjs";
 
-/** @param {string} testFile @returns {"open"|"closed"|null} */
-export function readStatus(testFile) {
-  const req = join(dirname(testFile), "requirement.md");
-  if (!existsSync(req)) return null;
-  const m = readFileSync(req, "utf8").match(/^- Status: (open|closed)\s*$/gm);
-  return m && m.length === 1 ? m[0].replace(/^- Status: /, "").trim() : null;
-}
-
-/** @returns {{ ok: boolean, label: string }} */
-export function judge(status, pass, fail, mustClose = true, people = "none") {
-  if (status === null)
-    return {
-      ok: false,
-      label:
-        "FAIL no status: write `- Status: open` or `- Status: closed` in the Handoff",
-    };
-  // A handoff that does not say whether the task touches a person has not
-  // answered a standing question, and the wall reads that it answered, never
-  // what it said: presence is a wall, meaning is not.
+/**
+ * The label a reader of the board sees, from a verdict and the people line.
+ * The people question is unchanged and is still presence and never meaning:
+ * a Handoff that does not say whether a task touches a person has not
+ * answered a standing question.
+ * @returns {{ ok: boolean, label: string }}
+ */
+export function judge(v, people = "none") {
   if (people === null)
     return {
       ok: false,
       label:
         "FAIL no people line: write `- People: none` or the data in the Handoff",
     };
-  if (status === "closed") {
-    if (fail > 0) return { ok: false, label: "FAIL closed" };
-    // Nothing failed is not the same as something passed. A closed task
-    // whose run reports no passing test has been read wrong or skipped, and
-    // either way it is evidence of nothing.
-    return pass > 0
-      ? { ok: true, label: "ok   closed" }
-      : { ok: false, label: "FAIL closed and nothing ran" };
-  }
-  if (fail > 0 || !mustClose) return { ok: true, label: "open" };
-  return { ok: false, label: "FAIL open and all green: close it" };
+  return { ok: v.ok, label: `${v.ok ? "ok  " : "FAIL"} ${v.word}` };
 }
 
 /**
@@ -80,12 +64,6 @@ export function readPeople(testFile) {
 }
 
 /** A drawing's status is its task's: architecture/<task>/ reads requirements/<task>/requirement.md. */
-export function statusForDrawing(testFile) {
-  const task = basename(dirname(testFile));
-  const root = join(dirname(testFile), "..", "..");
-  return readStatus(join(root, "requirements", task, "acceptance.test.mjs"));
-}
-
 /**
  * The commands expand their own globs: a shell may hand them over expanded
  * (sh) or not (cmd.exe), and the files must be the same, in the same order.
@@ -97,16 +75,16 @@ export function expand(patterns) {
 
 /** @param {string[]} files */
 export function runAcceptance(files) {
-  return runJudged(files, readStatus);
+  return runJudged(files);
 }
 
 /** @param {string[]} files */
 export function runContracts(files) {
-  return runJudged(files, statusForDrawing, false);
+  return runJudged(files);
 }
 
 /** One judged runner for both walls: the verdict table lives once. */
-export function runJudged(files, statusFor, mustClose = true) {
+export function runJudged(files) {
   const results = [];
   for (const file of expand(files)) {
     // The reporter is named and not inherited: node 22 prints TAP when this
@@ -123,18 +101,36 @@ export function runJudged(files, statusFor, mustClose = true) {
         stdio: ["ignore", "pipe", "inherit"],
       },
     );
-    const pass = Number(r.stdout.match(/^# pass (\d+)/m)?.[1] ?? 0);
+    // A file that declares no test at all is reported by the runner as one
+    // passing test named for the file itself: `ok 1 - alpha.test.mjs`. That
+    // is a suite whose tests were deleted reading as green, so it counts as
+    // nothing having run, which is what it is.
+    // The runner names it by the path it was given, so that is what this
+    // compares against; separators are normalised because one platform
+    // writes them the other way.
+    const flat = (p) => String(p).replaceAll("\\", "/");
+    const named = [...r.stdout.matchAll(/^ok \d+ - (.+)$/gm)].map((m) =>
+      m[1].trim(),
+    );
+    const empty = named.length === 1 && flat(named[0]) === flat(file);
+    const pass = empty ? 0 : Number(r.stdout.match(/^# pass (\d+)/m)?.[1] ?? 0);
     const fail = Number(
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),
     );
-    const status = statusFor(file);
-    const v = judge(status, pass, fail, mustClose, readPeople(file));
+    // The task this suite answers to, and the root it lives in. A drawing's
+    // suite resolves to its requirement, which is where its record is.
+    const req = requirementFor(file);
+    const task = basename(dirname(req));
+    const root = join(dirname(req), "..", "..");
+    const reported = verdict(root, readRun(root, task), pass, fail);
+    const v = judge(reported, readPeople(file));
     // The red tests by name, so a reader of the board elsewhere sees which
     // criterion failed and not only that one did.
     const red = r.stdout.match(/^not ok .*$/gm) ?? [];
     results.push({
       name: basename(dirname(file)),
-      status,
+      word: reported.word,
+      why: reported.why,
       pass,
       fail,
       red,
@@ -143,7 +139,12 @@ export function runJudged(files, statusFor, mustClose = true) {
   }
   const ok = results.length > 0 && results.every((x) => x.ok);
   const lines = results.flatMap((x) => [
-    `${x.label.padEnd(12)} ${x.name} (${x.pass} passing, ${x.fail} failing)`,
+    `${x.label.padEnd(16)} ${x.name} (${x.pass} passing, ${x.fail} failing)` +
+      // Why, where the verdict has one. A task reading not delivered because
+      // its record is stale and one reading not delivered because nobody has
+      // recorded it are the same word and different work, and the reader
+      // needs to know which.
+      (x.why ? `: ${x.why}` : ""),
     ...(x.ok && !x.fail ? [] : x.red.map((l) => `  ${l}`)),
   ]);
   const summary =

@@ -88,5 +88,4 @@ Resolved by the asker on 4 September 2026, each in one line:
   the run is not filed
 - Tests: `acceptance.test.mjs`, beside this file
 - Open questions: 3, all resolved, listed above
-- Status: closed
 - People: none

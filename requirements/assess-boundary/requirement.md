@@ -110,7 +110,6 @@ the network.
 - Tests: `acceptance.test.mjs`, beside this file; fixture roots
   `fixtures/plain`, `fixtures/clean-assess`, `fixtures/second-writer`
 - Open questions: 5, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

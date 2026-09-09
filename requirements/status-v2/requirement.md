@@ -67,5 +67,4 @@ acceptance`, over the same glob the contracts wall already uses.
 - Tests: `acceptance.test.mjs`, beside this file; fixture tasks under
   `fixtures/`
 - Open questions: 1, listed above
-- Status: closed
 - People: none

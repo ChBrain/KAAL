@@ -152,7 +152,6 @@ itself.
   a criterion because a run that consumes a stack and leaves it unconsumed
   has read it twice
 - Open questions: 6, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing yet; the architect stack of eleven is the next ask and
   is independent of this one

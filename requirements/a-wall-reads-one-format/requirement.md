@@ -95,7 +95,6 @@ green.
   `NODE_OPTIONS`, because the defect is a disagreement between two runs and
   not a property of either
 - Open questions: 3, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

@@ -71,5 +71,4 @@ requirement with one red test still refuses the push.
 - Tests: `acceptance.test.mjs`, beside this file; fixture requirements under
   `fixtures/`
 - Open questions: 2, listed above
-- Status: closed
 - People: none

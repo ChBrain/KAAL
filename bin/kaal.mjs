@@ -39,6 +39,7 @@ import { checkAgents } from "./lib/agents.mjs";
 import { checkDrawings } from "./lib/drawings.mjs";
 import { checkTraces, checkShape, writePins } from "./lib/traces.mjs";
 import { checkPlans, writeCounts } from "./lib/plans.mjs";
+import { readRun, verdict, writeRuns } from "./lib/runs.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
@@ -59,7 +60,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -105,6 +106,34 @@ if (cmd === "ledger") {
     ...checkPlans(troot),
   ].map((f) => `${f.artefact}: ${f.kind}: ${f.message}`);
   if (!findings.length) console.log("traces: every trace resolves");
+} else if (cmd === "runs") {
+  // A root that may be a flag, the pair `class` and `traces` carry.
+  const rroot = arg && !arg.startsWith("-") ? arg : cwd;
+  if (process.argv.includes("--write")) {
+    const written = writeRuns(rroot);
+    console.log(
+      written.length
+        ? `runs: recorded ${written.length} (${written.join(", ")})`
+        : "runs: nothing green to record",
+    );
+  } else {
+    // Reading only: what is on record, and whether each record is still
+    // about the suite it names. The verdict itself belongs to the walls,
+    // which run the suites; this says what evidence exists.
+    const tasks = readdirSync(join(rroot, "requirements"), {
+      withFileTypes: true,
+    })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name)
+      .sort();
+    for (const task of tasks) {
+      const run = readRun(rroot, task);
+      const v = verdict(rroot, run, 1, 0);
+      console.log(
+        `runs: ${task}: ${run ? (v.word === "delivered" ? "on record" : (v.why ?? "no record")) : "no record"}`,
+      );
+    }
+  }
 } else if (cmd === "standard") {
   const r = await compareSpec(cwd, arg ?? null);
   if (r.same) console.log(`standard: the pinned spec is unchanged (${r.live})`);

@@ -79,5 +79,4 @@ the league's own fixture carries a current one.
 - Open questions: 1, listed above
 - Blocked on: nothing
 - Supersedes: nothing
-- Status: closed
 - People: none

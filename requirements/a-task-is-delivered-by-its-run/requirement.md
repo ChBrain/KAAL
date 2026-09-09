@@ -116,12 +116,44 @@ run and the record alone.
 - Tests: `acceptance.test.mjs`, beside this file, with fixture roots for a
   task delivered, not delivered, regressed, stale and never run
 - Open questions: 4, listed above
-- Status: open
-- This page carries the very line it exists to remove, and it carries it
-  exactly, because the wall reads `- Status: open` to the end of the line and
-  nothing else. A requirement that fails the wall it is changing is a
-  requirement nobody can read, and the build deletes this line here last
 - Blocked on: nothing
+- Unblocks: the lane guard, whose drawing needed an exemption only because a
+  build had to write on the analyst's page; and the coverage report, which is
+  a second reading of the same records
+
+## Build
+
+- Built: all seven criteria, on
+  `requirement/a-task-is-delivered-by-its-run-build`
+- Landed: `bin/lib/runs.mjs`, new; both walls rewired off the field, with
+  `readStatus`, `statusForDrawing` and `mustClose` gone; `kaal runs [root]
+[--write]` and its applicability; `- Status:` gone from 61 requirement
+  pages and from the analyst's template; the `acceptance` and `judged` unit
+  suites rewritten; `SURFACE.md`
+- Proved: `node bin/kaal.mjs gates` green on twelve walls, seven criteria,
+  five seams, eleven units
+- Found by a fixture that would not behave: the runner reports a file
+  declaring no test at all as one passing test, named for the file itself.
+  So a suite whose tests were all deleted reads as green, and the old wall's
+  guard against a closed task measuring nothing could not catch it either,
+  because it asked for `pass > 0` and the count was one. The wall now reads
+  the single passing line's name against the file it ran and calls that
+  nothing having run. The fixture named `nothing-ran` did not run nothing
+  until this was fixed
+- Superseded beyond what was declared, and both found by measuring first:
+  `status-v1`'s first two criteria are the field and the four verdicts read
+  from it, rewritten to ask the report instead of the page; and
+  `a-wall-reads-one-format`'s third contract called `judge` with a status,
+  where its claim, that silence is not success, now reads `nothing ran`
+- The board says why. A task not delivered because its record is stale and
+  one not delivered because nobody has recorded it are the same word and
+  different work, so the verdict's reason is printed beside it
+- Owed next, and it is not this diff's: every task reads not delivered until
+  a run is recorded, because the coder has claimed and the tester has not yet
+  proved. The first `kaal runs --write` belongs in the tester's own lane
+- Class: surface moved, tool moved (`kaal class . --against origin/main`,
+  run last, after the final edit)
+
 - Unblocks: the lane guard, whose drawing needed an exemption only because a
   build had to write on the analyst's page; and the coverage report, which is
   a second reading of the same records

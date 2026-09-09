@@ -3,7 +3,6 @@ import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  readStatus,
   readPeople,
   requirementFor,
   judge,
@@ -19,13 +18,6 @@ const F = join(
   "fixtures",
 );
 const f = (n) => join(F, n, "acceptance.test.mjs");
-
-test("readStatus reads open or closed from the sibling requirement, and null when absent", () => {
-  assert.equal(readStatus(f("open-red")), "open");
-  assert.equal(readStatus(f("closed-green")), "closed");
-  assert.equal(readStatus(f("no-status")), null);
-});
-
 const P = join(
   dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -84,77 +76,34 @@ test("readPeople reads the People line's value from the test's requirement, and 
   );
 });
 
-test("judge: no status is judged before no people line, and no people line is a verdict of its own", () => {
-  assert.match(judge(null, 1, 0, true, null).label, /^FAIL no status/);
-  const v = judge("closed", 1, 0, true, null);
-  assert.equal(v.ok, false);
+test("judge: no people line is a verdict of its own, and it comes first", () => {
+  // The people question is presence and never meaning, and it outranks the
+  // verdict: a Handoff that has not answered it has not been read yet.
+  const green = { word: "delivered", ok: true };
+  assert.match(judge(green, null).label, /^FAIL no people line/);
+  assert.equal(judge(green, null).ok, false);
+  assert.equal(judge(green, "none").ok, true);
   assert.equal(
-    v.label,
-    "FAIL no people line: write `- People: none` or the data in the Handoff",
-  );
-  assert.equal(judge("closed", 1, 0, true, "none").ok, true);
-  assert.equal(
-    judge("open", 1, 1, true, "the data, its record, erased on request").ok,
+    judge(
+      { word: "not delivered", ok: true },
+      "the data, its record, erased on request",
+    ).ok,
     true,
   );
 });
 
-test("judge applies the four verdicts, and refuses a closed task that measured nothing", () => {
-  assert.equal(judge("closed", 1, 1).ok, false);
-  assert.equal(judge("closed", 2, 0).ok, true);
-  // A closed task with no failures and nothing passing has not been proven,
-  // it has been read wrong or skipped. The verdict asked only about failures
-  // until a runtime whose reporter the walls could not read made every count
-  // zero and every closed task green.
-  assert.equal(judge("closed", 0, 0).ok, false);
-  assert.match(judge("closed", 0, 0).label, /^FAIL/);
-  // A drawing is judged with mustClose false and inherits the same refusal.
-  assert.equal(judge("closed", 0, 0, false).ok, false);
-  assert.equal(judge("open", 1, 1).ok, true);
-  assert.match(judge("open", 1, 1).label, /^open/);
-  assert.equal(judge("open", 1, 0).ok, false);
-  assert.match(judge("open", 1, 0).label, /close/i);
-  assert.equal(judge(null, 1, 0).ok, false);
-  assert.match(judge(null, 1, 0).label, /status/i);
-});
-
-test("runAcceptance runs the files, reads counts, and fails on any FAIL", () => {
-  const r = runAcceptance([f("open-red"), f("closed-green")]);
-  assert.equal(r.ok, true);
-  assert.deepEqual(
-    r.results.map((x) => [x.pass, x.fail]),
-    [
-      [1, 1],
-      [1, 0],
-    ],
-  );
-  assert.equal(runAcceptance([f("closed-red")]).ok, false);
-  assert.equal(runAcceptance([]).ok, false, "no files is not a pass");
-});
-
-test("expand: a glob becomes its sorted matches, a plain path passes through, nothing matched is nothing", () => {
-  const G = join(F, "..", "..", "gates-v2", "fixtures", "globs");
-  const got = expand([join(G, "requirements", "*", "acceptance.test.mjs")]);
-  assert.deepEqual(
-    got.map((p) => p.split(/[\\/]/).at(-2)),
-    ["alpha", "beta"],
-  );
-  assert.deepEqual(expand(["a/plain/path.mjs"]), ["a/plain/path.mjs"]);
-  assert.deepEqual(expand([join(G, "nowhere", "*", "x.mjs")]), []);
-});
-
-test("a red file's failing tests follow its line by name, indented; a green file's line stands alone", () => {
-  const red = runAcceptance([f("open-red")]);
-  assert.ok(red.results[0].red.length >= 1, "no red test named");
-  assert.match(red.lines[1], /^ {2}not ok \d+ - /);
-  const green = runAcceptance([f("closed-green")]);
-  assert.equal(green.lines.length, 1);
-});
-
-test("runAcceptance sums the passing tests across files for the board's count", () => {
-  assert.equal(
-    runAcceptance([f("closed-green"), f("open-red")]).passed >= 1,
-    true,
-  );
-  assert.equal(typeof runAcceptance([f("closed-green")]).passed, "number");
+test("judge carries the verdict's own word into the label a reader sees", () => {
+  for (const [word, ok, head] of [
+    ["delivered", true, "ok"],
+    ["not delivered", true, "ok"],
+    ["regressed", false, "FAIL"],
+    ["nothing ran", false, "FAIL"],
+  ]) {
+    const v = judge({ word, ok }, "none");
+    assert.equal(v.ok, ok, `${word} was judged ${v.ok}`);
+    assert.match(v.label, new RegExp(`^${head}`), `${word} reads ${v.label}`);
+    // The word itself, not a paraphrase: the board's line is where a reader
+    // learns which of the four this is.
+    assert.ok(v.label.includes(word), `${word} is not in ${v.label}`);
+  }
 });

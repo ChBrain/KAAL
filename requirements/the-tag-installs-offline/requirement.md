@@ -111,7 +111,6 @@ failed, reason: connect ECONNREFUSED`. It never reaches `prepare`. With a
   a temporary directory and installs there, and touches this tree not at
   all
 - Open questions: 4, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: `the-engine-is-installable`, one claim of its drawing's third
   decision: not that it was wrong, but that its price is now due. It read

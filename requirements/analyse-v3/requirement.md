@@ -74,5 +74,4 @@ archived.
 - Open questions: 1, listed above
 - Blocked on: nothing
 - Supersedes: nothing
-- Status: closed
 - People: none

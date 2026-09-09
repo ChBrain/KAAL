@@ -121,7 +121,6 @@ being the one the package publishes to, and by no token living in this tree.
 - Tests: `acceptance.test.mjs`, beside this file; the workflow and the
   manifest are read as text, and the tree is swept for a token
 - Open questions: 2, listed above
-- Status: open
 - Blocked on: nothing
 - Unblocks: 0.0.2, which is the first publish under the scoped name and would
   fail at its last step without this

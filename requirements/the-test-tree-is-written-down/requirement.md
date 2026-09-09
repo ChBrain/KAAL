@@ -136,7 +136,6 @@ wall, and by the board reporting a wall with no plan or a plan with no wall.
   the chain from requirements to operations and each of them is therefore
   already held by all three; the strategy is the tester's, which is the seat
   the trunk names as owning the method
-- Status: closed
 - Blocked on: nothing
 - Unblocks: the third tree in `a-tree-has-one-root`, whose criterion 1 could
   not reach the test tree until the test tree had documents to reach

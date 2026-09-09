@@ -34,6 +34,7 @@ export const GUARDED = [
   "class",
   "release",
   "traces",
+  "runs",
 ];
 
 const isDir = (p) => {
@@ -70,6 +71,14 @@ export function appliesHere(cmd, arg, cwd) {
       return childHas(join(root, "architecture"), "drawing.md")
         ? null
         : `no architecture/<task>/drawing.md under ${root}`;
+    case "runs": {
+      // A root that may be a flag, and the same reading as `traces`: a tree
+      // with no requirement has no task whose delivery could be reported.
+      const tree = arg && !arg.startsWith("-") ? arg : cwd;
+      return childHas(join(tree, "requirements"), "requirement.md")
+        ? null
+        : `no requirements/<task>/requirement.md under ${tree}`;
+    }
     case "traces": {
       // A root that may be a flag, the pair `class` and `retros` carry, and
       // a reason naming a directory called "--write" would be a lie.

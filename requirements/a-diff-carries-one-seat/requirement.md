@@ -174,7 +174,6 @@ write unless the change is declared as a supersede.
 - Tests: `acceptance.test.mjs`, beside this file, with fixture roots holding
   a scratch git repository per shape of diff
 - Open questions: 5, listed above
-- Status: open
 - Blocked on: nothing to specify. The second open question changes how many
   pull requests a build becomes, and the drawing can hold it
 - Unblocks: every future build, which is the point: this is the task that

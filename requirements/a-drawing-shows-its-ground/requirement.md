@@ -139,7 +139,6 @@ contract may not carry a number the tree will move.
 - Green before the build: criterion 5, and it is not a defect. The archive
   is this change's own act, so the count is zero the moment it lands
 - Open questions: 6, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: nothing

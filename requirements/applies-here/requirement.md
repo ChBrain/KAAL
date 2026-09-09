@@ -104,7 +104,6 @@ looked for>`.
 - Tests: `acceptance.test.mjs`, beside this file; fixture root
   `fixtures/foreign`
 - Open questions: 4, listed above
-- Status: closed
 - Blocked on: nothing
 - Supersedes: nothing
 - People: none

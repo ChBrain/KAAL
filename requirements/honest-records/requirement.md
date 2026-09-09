@@ -83,5 +83,4 @@ ledger` on `fixtures/no-setup` exits 1 naming `setup` as missing; the
 - Open questions: 1, listed above
 - Blocked on: nothing
 - Supersedes: eval-record-v1, on the field list (one field added)
-- Status: closed
 - People: none

@@ -152,7 +152,6 @@ drawing weighed without a name.
   that cites a principle which does not exist
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: closed
 - Blocked on: nothing
 - Unblocks: nothing
 - Supersedes: `a-decision-balances-two-goods`. The claim that moves is where

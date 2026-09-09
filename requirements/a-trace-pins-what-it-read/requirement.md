@@ -141,7 +141,6 @@ written by the tool rather than typed.
   name at once, a trace with no pin, and a tree for the writer to write
 - Green before the build: none expected
 - Open questions: 5, listed above
-- Status: closed
 - Blocked on: `an-artefact-traces-what-it-came-from`, which fixes the trace's
   shape, the kind table and the command this one extends
 - Unblocks: the asker's other two questions, which are one task and not this
