@@ -58,6 +58,14 @@ does not know.
   `architecture/an-architect-names-its-principles` states the counterpart
   for a reference: "That a decision names a principle which exists is text,
   and text is."
+- A drawing's requirement is found today by the directory's name, and that
+  convention forces the relation to be one to one: across all 48 pairs the
+  greatest number of drawings pointing at one requirement is 1, and it cannot
+  be otherwise. A trace that is derived from a name can never be many to one,
+  so a count over derived traces can never signal anything.
+- The same count over a trace that **is** written by hand does signal:
+  `security-v1` is superseded by three requirements, and it is the document
+  this session broke twice and amended twice.
 - `GUARDED` in `bin/lib/applies.mjs` holds ten commands and `RULES` in each
   wall holds a rule list. A table from a name to what the league does with
   it is the shape this tree already uses.
@@ -70,6 +78,13 @@ does not know.
   and does not belong in a trace; on the evidence above it is `Blocked on:`
   read from the other end and should be computed rather than written, which
   is a task of its own and not this one.
+- A drawing declares `requirement:` even though its directory name says the
+  same thing. It reads as one home too many, and the run above is why it is
+  not: a trace derived from a name is one to one by construction, so how many
+  artefacts answer one requirement is a question the tree cannot ask until
+  the trace is written down. The duplication buys a relation that can be
+  counted, and the `orphan` rule keeps its own job of finding a drawing with
+  no requirement at all.
 - A kind is a name in one table and the table says where that kind lives.
   Adding a kind is adding a row, which is what makes the concept general
   rather than one rule per link.
@@ -121,7 +136,8 @@ does not know.
 
 1. Every `requirements/<task>/requirement.md` and every
    `architecture/<task>/drawing.md` opens with a frontmatter block holding a
-   `traces` map, and both templates do.
+   `traces` map, and both templates do; every drawing's map names the
+   requirement it was drawn from.
 2. `kaal traces [root]` answers on a tree whose every trace resolves, and
    the surface page names it with what it answers, what it reads and its
    exit codes.
@@ -138,10 +154,6 @@ does not know.
 
 ## Open questions
 
-- Does a drawing declare `requirement:` when its directory name already
-  says so, and `bin/lib/drawings.mjs`'s `orphan` rule already resolves it?
-  Declaring it is one home too many; leaving it out means the most obvious
-  trace in the league is the one the map does not carry.
 - Once a drawing declares its principles, should the `Weighed against:` line
   that `architecture/an-architect-names-its-principles` drew resolve against
   the declaration rather than against the directory? That would make the

@@ -74,6 +74,16 @@ test("1. every requirement and drawing, and both templates, carry a traces map",
   assert.ok(all.length >= 100, `found ${all.length} artefacts`);
   const bad = all.filter((p) => traces(read(p)) === null);
   assert.deepEqual(bad, [], `no traces map: ${bad.slice(0, 6).join(", ")}`);
+  // A drawing names the requirement it was drawn from. Derived from the
+  // directory name it is one to one by construction, so how many drawings
+  // answer one requirement is unaskable until it is written down.
+  const drawings = globSync("architecture/*/drawing.md", { cwd: ROOT }).sort();
+  const unsourced = drawings.filter((p) => !traces(read(p))?.requirement);
+  assert.deepEqual(
+    unsourced,
+    [],
+    `no requirement in the trace: ${unsourced.slice(0, 6).join(", ")}`,
+  );
   for (const [what, p] of [
     ["the analyst's template", REQ_TEMPLATE],
     ["the drawing template", DRAW_TEMPLATE],
