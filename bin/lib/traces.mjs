@@ -102,7 +102,11 @@ const PLACES = [
   // other. Per place and not everywhere: `kaal/` holds one trunk and a rule
   // about how many trunks there are should not change because a place it is
   // not read the same way.
-  { dir: "tests", file: null, deep: true },
+  // The strategy and the plans, and not the runs. A record is evidence a
+  // suite passed, produced by running one; it is not an artefact of the
+  // tree and it declares nothing it was made from. Reading it as one asked
+  // 53 pieces of evidence to carry a frontmatter block.
+  { dir: "tests", file: null, deep: true, not: ["runs"] },
 ];
 const PLACE_FILE = Object.fromEntries(PLACES.map((p) => [p.dir, p.file]));
 const TREES = ["requirements", "architecture"];
@@ -143,13 +147,14 @@ export function tracedNames(value) {
  * lists its pages through subdirectories and names each by its path below
  * the place, so `plans/acceptance` is one artefact and not two.
  */
-const entries = (root, dir, file, deep = false) => {
+const entries = (root, dir, file, deep = false, not = []) => {
   const d = join(root, dir);
   if (file) return dirs(d);
   return existsSync(d)
     ? readdirSync(d, { recursive: deep })
         .map((n) => String(n).replaceAll("\\", "/"))
         .filter((n) => n.endsWith(".md"))
+        .filter((n) => !not.some((skip) => n.startsWith(`${skip}/`)))
         .map((n) => n.slice(0, -3))
         .sort()
     : [];
@@ -170,8 +175,8 @@ export function checkTraces(root) {
   const out = [];
   const find = (artefact, kind, message) =>
     out.push({ artefact, kind, message });
-  for (const { dir, file, deep } of PLACES)
-    for (const artefact of entries(root, dir, file, deep)) {
+  for (const { dir, file, deep, not } of PLACES)
+    for (const artefact of entries(root, dir, file, deep, not)) {
       const path = file
         ? join(root, dir, artefact, file)
         : join(root, dir, `${artefact}.md`);
@@ -244,8 +249,8 @@ export function checkTraces(root) {
 /** Every artefact, its place, and the parent it declares. */
 function nodes(root) {
   const all = [];
-  for (const { dir, file, deep } of PLACES)
-    for (const artefact of entries(root, dir, file, deep)) {
+  for (const { dir, file, deep, not } of PLACES)
+    for (const artefact of entries(root, dir, file, deep, not)) {
       const path = file
         ? join(root, dir, artefact, file)
         : join(root, dir, `${artefact}.md`);
@@ -353,8 +358,8 @@ export function checkShape(root) {
  * @param {string} root
  */
 export function writePins(root) {
-  for (const { dir, file, deep } of PLACES)
-    for (const artefact of entries(root, dir, file, deep)) {
+  for (const { dir, file, deep, not } of PLACES)
+    for (const artefact of entries(root, dir, file, deep, not)) {
       const path = file
         ? join(root, dir, artefact, file)
         : join(root, dir, `${artefact}.md`);

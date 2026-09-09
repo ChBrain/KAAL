@@ -30,7 +30,7 @@ const LABEL =
   "FAIL no people line: write `- People: none` or the data in the Handoff";
 const WORKING = ["analyse", "architect", "code", "operate", "test"];
 
-test("1. template to handoff: six lines in order, the last on one line, and a stamped requirement reads closed", () => {
+test("1. template to handoff: five lines in order, the last on one line, and a stamped requirement reads from its record", () => {
   const h = section(
     readFileSync(
       join(ROOT, "skills", "analyse", "references", "requirement.md"),
@@ -39,9 +39,11 @@ test("1. template to handoff: six lines in order, the last on one line, and a st
     "Handoff",
   );
   const at = (l) => h.indexOf(`- ${l}`);
+  // Five, not six. `- Status:` left the template with the field itself when
+  // `a-task-is-delivered-by-its-run` made delivery a report; the order of
+  // what remains is the promise this seam always made.
   const order = [
     "Open questions:",
-    "Status:",
     "Blocked on:",
     "Unblocks:",
     "Supersedes:",
@@ -58,10 +60,14 @@ test("1. template to handoff: six lines in order, the last on one line, and a st
     "requirements/t/acceptance.test.mjs",
   );
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /^ok {3}closed {2}t /m);
+  // The stamped fixture has a People line and no record, so it reads as a
+  // claim nobody has proved. What this seam asserts is that a requirement
+  // written from the template is judged at all, and the word it is judged
+  // with comes from its run and its record.
+  assert.match(r.stdout, /^ok\s+not delivered\s+t /m, r.stdout);
 });
 
-test("2. one line, two walls, one verdict: no status first, then no people line, on acceptance and contracts alike", () => {
+test("2. one line, two walls, one verdict: a missing People line refuses on acceptance and contracts alike", () => {
   const acc = (c) =>
     kaal(join(F, c), "acceptance", "requirements/t/acceptance.test.mjs");
   const con = (c) =>
@@ -84,16 +90,21 @@ test("2. one line, two walls, one verdict: no status first, then no people line,
   );
   assert.ok(lineOf(c).startsWith(LABEL), `contracts label: ${lineOf(c)}`);
 
+  // A drawing naming a task that does not exist has no requirement to read a
+  // People line from, and refuses for that rather than for a missing status.
   const o = con("orphan");
   assert.equal(o.status, 1, "an orphan drawing passed");
-  assert.match(lineOf(o), /^FAIL no status/, `orphan label: ${lineOf(o)}`);
+  assert.ok(lineOf(o).startsWith(LABEL), `orphan label: ${lineOf(o)}`);
 
+  // And a handoff that answers the People question is judged on its run and
+  // its record instead. Neither fixture carries one, so both read as a claim
+  // nobody has proved, which is an answer and not a refusal.
   const ok = acc("people-none");
   assert.equal(ok.status, 0, ok.stdout + ok.stderr);
-  assert.match(lineOf(ok), /^ok {3}closed/);
+  assert.match(lineOf(ok), /^ok\s+not delivered/, lineOf(ok));
   const okc = con("people-none");
   assert.equal(okc.status, 0, okc.stdout + okc.stderr);
-  assert.match(lineOf(okc), /^ok {3}closed/);
+  assert.match(lineOf(okc), /^ok\s+not delivered/, lineOf(okc));
 });
 
 test("3. a rule at its seat: the analyse section in its place with its number and whose presence is not the question, the two paragraphs in theirs, every skill within the rules", () => {
