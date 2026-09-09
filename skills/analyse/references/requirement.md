@@ -1,5 +1,6 @@
 ---
 traces:
+  parent: <the requirement this one makes more specific, or none>
   supersedes: <nothing, or the tasks whose claim this one moves, each <name>@<sha>>
 ---
 

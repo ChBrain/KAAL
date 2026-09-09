@@ -37,7 +37,7 @@ import { runGates } from "./lib/gates.mjs";
 import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
 import { checkDrawings } from "./lib/drawings.mjs";
-import { checkTraces, writePins } from "./lib/traces.mjs";
+import { checkTraces, checkShape, writePins } from "./lib/traces.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
@@ -95,7 +95,7 @@ if (cmd === "ledger") {
   // A root that may be a flag, the pair `class` and `retros` carry.
   const troot = arg && !arg.startsWith("-") ? arg : cwd;
   if (process.argv.includes("--write")) writePins(troot);
-  findings = checkTraces(troot).map(
+  findings = [...checkTraces(troot), ...checkShape(troot)].map(
     (f) => `${f.artefact}: ${f.kind}: ${f.message}`,
   );
   if (!findings.length) console.log("traces: every trace resolves");

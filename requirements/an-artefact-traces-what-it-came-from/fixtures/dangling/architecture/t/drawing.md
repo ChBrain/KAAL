@@ -1,5 +1,6 @@
 ---
 traces:
+  requirement: t
   principles: a-principle-nobody-wrote
 ---
 

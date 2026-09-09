@@ -65,10 +65,13 @@ test("2. every kind is a row, an unknown kind is a finding, and nothing resolves
   const names = Array.isArray(KINDS)
     ? KINDS.map((k) => k.kind ?? k.name)
     : Object.keys(KINDS);
+  // Superseded in part by `a-tree-has-one-root`, which added `parent`: the
+  // first row whose target depends on the artefact that declared it. Named
+  // rather than counted, so a kind added by accident is still a red.
   assert.deepEqual(
     [...names].sort(),
-    ["principles", "requirement", "supersedes"],
-    `the table's rows are not the three kinds: ${names.join(", ")}`,
+    ["parent", "principles", "requirement", "supersedes"],
+    `the table's rows are not the four kinds: ${names.join(", ")}`,
   );
   // A tree where everything resolves says nothing, including a kind valued
   // `nothing` and a drawing whose principle exists.

@@ -25,6 +25,15 @@ export const KINDS = {
     where: (name) => join("requirements", name, "requirement.md"),
     region: "Acceptance criteria",
   },
+  // The one row that reads more of the question than the others: it is
+  // handed the artefact that declared it, because a parent resolves inside
+  // its own tree and the same name means a different file in each.
+  parent: {
+    where: (name, from) =>
+      join(from.dir, name, PLACE_FILE[from.dir] ?? "requirement.md"),
+    region: null,
+    perArtefact: true,
+  },
   // No region: a principle is its claim and has no part that is not.
   principles: {
     where: (name) =>
@@ -47,26 +56,31 @@ const region = (text, title) =>
  * @param {string | undefined} value
  */
 export function splitTrace(value) {
-  return (value ?? "")
-    .split(",")
-    .map((s) => s.trim().replace(/^[`\'"]+|[`\'".]+$/g, ""))
-    .filter((s) => s && !/^nothing$/i.test(s))
-    .map((s) => {
-      const at = s.indexOf("@");
-      return at === -1
-        ? { name: s, pin: null }
-        : { name: s.slice(0, at), pin: s.slice(at + 1) };
-    });
+  return (
+    (value ?? "")
+      .split(",")
+      .map((s) => s.trim().replace(/^[`\'"]+|[`\'".]+$/g, ""))
+      // `none` and `nothing` both name nothing. The trace grammar said
+      // `nothing` and the parent's criterion says `none`, and two words for
+      // one idea in one grammar is a trap rather than a nicety.
+      .filter((s) => s && !/^(nothing|none)$/i.test(s))
+      .map((s) => {
+        const at = s.indexOf("@");
+        return at === -1
+          ? { name: s, pin: null }
+          : { name: s.slice(0, at), pin: s.slice(at + 1) };
+      })
+  );
 }
 
 /**
  * The sha of the region a kind's row names, or null when the file is gone.
  * @param {string} root @param {string} kind @param {string} name
  */
-export function regionSha(root, kind, name) {
+export function regionSha(root, kind, name, from = { dir: "requirements" }) {
   const row = KINDS[kind];
   if (!row) return null;
-  const path = join(root, row.where(name));
+  const path = join(root, row.where(name, from));
   if (!existsSync(path)) return null;
   return createHash("sha256")
     .update(region(readFileSync(path, "utf8"), row.region))
@@ -75,9 +89,14 @@ export function regionSha(root, kind, name) {
 
 /** The two artefacts that carry a trace, and the file each keeps it in. */
 const PLACES = [
+  { dir: "kaal", file: null },
   { dir: "requirements", file: "requirement.md" },
   { dir: "architecture", file: "drawing.md" },
 ];
+const PLACE_FILE = Object.fromEntries(PLACES.map((p) => [p.dir, p.file]));
+const TREES = ["requirements", "architecture"];
+/** Over this share of a tree hanging off its own root, the shape is a star. */
+export const STAR_SHARE = 0.5;
 
 /**
  * An artefact's trace map. Three answers, kept apart on purpose: the map,
@@ -108,6 +127,18 @@ export function tracedNames(value) {
   return splitTrace(value).map((e) => e.name);
 }
 
+/** A place holds directories with a named file, or loose pages. */
+const entries = (root, dir, file) => {
+  const d = join(root, dir);
+  if (file) return dirs(d);
+  return existsSync(d)
+    ? readdirSync(d)
+        .filter((n) => n.endsWith(".md"))
+        .map((n) => n.slice(0, -3))
+        .sort()
+    : [];
+};
+
 const dirs = (d) =>
   existsSync(d)
     ? readdirSync(d)
@@ -124,8 +155,10 @@ export function checkTraces(root) {
   const find = (artefact, kind, message) =>
     out.push({ artefact, kind, message });
   for (const { dir, file } of PLACES)
-    for (const artefact of dirs(join(root, dir))) {
-      const path = join(root, dir, artefact, file);
+    for (const artefact of entries(root, dir, file)) {
+      const path = file
+        ? join(root, dir, artefact, file)
+        : join(root, dir, `${artefact}.md`);
       if (!existsSync(path)) continue;
       const text = readFileSync(path, "utf8");
       const trace = readTrace(text);
@@ -149,20 +182,31 @@ export function checkTraces(root) {
           continue;
         }
         for (const { name, pin } of splitTrace(value)) {
-          const where = KINDS[kind].where(name);
+          const where = KINDS[kind].where(name, { dir, artefact });
           if (!existsSync(join(root, where))) {
             find(artefact, kind, `${name} is not at ${where}`);
             continue;
           }
           // The name is there and what it says may not be. A different
           // finding in different words: one wants a rename, this a reread.
-          if (pin && pin !== regionSha(root, kind, name))
+          if (pin && pin !== regionSha(root, kind, name, { dir, artefact }))
             find(
               artefact,
               kind,
               `${name} moved: its ${KINDS[kind].region ?? "whole file"} no longer matches the pin`,
             );
         }
+      }
+      // A drawing answers exactly one requirement: the edge that runs
+      // across, and the only rule here that is not about `parent`.
+      if (dir === "architecture") {
+        const answers = splitTrace(trace.requirement).length;
+        if (answers !== 1)
+          find(
+            artefact,
+            "requirement",
+            `answers ${answers} requirements; a drawing answers exactly one`,
+          );
       }
       // The prose must carry what the trace declares, read one direction
       // only. The other way is finding a task name inside a sentence, which
@@ -181,6 +225,112 @@ export function checkTraces(root) {
   return out;
 }
 
+/** Every artefact, its place, and the parent it declares. */
+function nodes(root) {
+  const all = [];
+  for (const { dir, file } of PLACES)
+    for (const artefact of entries(root, dir, file)) {
+      const path = file
+        ? join(root, dir, artefact, file)
+        : join(root, dir, `${artefact}.md`);
+      if (!existsSync(path)) continue;
+      const text = readFileSync(path, "utf8");
+      const trace = readTrace(text) ?? {};
+      const raw = (trace.parent ?? "").trim();
+      all.push({
+        dir,
+        artefact,
+        text,
+        parent:
+          raw && !/^none$/i.test(raw)
+            ? (splitTrace(raw)[0]?.name ?? null)
+            : null,
+        isRoot: /^none$/i.test(raw),
+      });
+    }
+  return all;
+}
+
+/**
+ * The rules over the graph the parents make: one trunk, an argued root, no
+ * ring, and a tree with depth. Kept out of `checkTraces`, which answers
+ * about one artefact's own trace: folding these in would change what every
+ * caller of that function means by a finding, and three closed contracts
+ * call it. An absent parent is never a finding: the
+ * seats populate their own trees and this task populates none.
+ * @param {string} root
+ */
+export function checkShape(root) {
+  const out = [];
+  const find = (artefact, kind, message) =>
+    out.push({ artefact, kind, message });
+  const all = nodes(root);
+
+  // The trunk is a place, so a tree with none and a tree with two are both
+  // findings and neither is a special case written four times.
+  const trunks = all.filter((n) => n.dir === "kaal");
+  if (!trunks.length)
+    find("kaal", "parent", "no trunk under kaal/ above the three trees");
+  else if (trunks.length > 1)
+    find(
+      "kaal",
+      "parent",
+      `${trunks.length} trunks under kaal/: ${trunks.map((t) => t.artefact).join(", ")}`,
+    );
+
+  // A root beyond the trunk argues, and the board reads that it argued.
+  for (const n of all.filter((n) => n.isRoot && n.dir !== "kaal"))
+    if (!/^- Root because: \S/m.test(n.text))
+      find(
+        n.artefact,
+        "parent",
+        "declares no parent and carries no `- Root because:` line",
+      );
+
+  // A ring, named in full so a reader can see where to break it.
+  const by = new Map(all.map((n) => [`${n.dir}/${n.artefact}`, n]));
+  const seen = new Set();
+  for (const n of all) {
+    const path = [];
+    let cur = n;
+    while (cur?.parent) {
+      const key = `${cur.dir}/${cur.artefact}`;
+      if (path.includes(key)) {
+        const ring = path
+          .slice(path.indexOf(key))
+          .map((k) => k.split("/").pop());
+        const id = [...ring].sort().join(",");
+        if (!seen.has(id)) {
+          seen.add(id);
+          find(
+            ring[0],
+            "parent",
+            `cycle among parents: ${ring.join(" -> ")} -> ${ring[0]}`,
+          );
+        }
+        break;
+      }
+      path.push(key);
+      cur = by.get(`${cur.dir}/${cur.parent}`);
+    }
+  }
+
+  // A star satisfies every other rule and protects nothing.
+  for (const dir of TREES) {
+    const tree = all.filter((n) => n.dir === dir);
+    const root_ = tree.find((n) => n.isRoot);
+    if (!root_ || tree.length < 3) continue;
+    const on = tree.filter((n) => n.parent === root_.artefact).length;
+    if (on / tree.length > STAR_SHARE)
+      find(
+        dir,
+        "parent",
+        `${on} of ${tree.length} in ${dir} hang off ${root_.artefact}; that is a star, not a tree`,
+      );
+  }
+  return out;
+}
+
 /**
  * Write the pin of every trace that resolves, in place, changing nothing
  * else on the page. Nobody types a sha.
@@ -188,8 +338,10 @@ export function checkTraces(root) {
  */
 export function writePins(root) {
   for (const { dir, file } of PLACES)
-    for (const artefact of dirs(join(root, dir))) {
-      const path = join(root, dir, artefact, file);
+    for (const artefact of entries(root, dir, file)) {
+      const path = file
+        ? join(root, dir, artefact, file)
+        : join(root, dir, `${artefact}.md`);
       if (!existsSync(path)) continue;
       const text = readFileSync(path, "utf8");
       const trace = readTrace(text);

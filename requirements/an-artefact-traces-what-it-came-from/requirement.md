@@ -215,6 +215,11 @@ does not know.
   line order are honoured rather than superseded: every body line keeps its
   name, its place and its prose, and the frontmatter is added beside them
 - People: none
+- Superseded by: `a-tree-has-one-root`, in part. The kind table grew a
+  fourth row, `parent`, and this task's contract fixed the rows at three by
+  name. Moved to four, still named rather than counted. `parent` is also the
+  first row whose target depends on the artefact that declared it, so the
+  claim that a row says where a kind lives no longer holds for every row
 - Superseded by: `a-trace-pins-what-it-read`, in part. A trace's value grew
   from `<name>` to `<name>` or `<name>@<sha>`, so this task's criterion 6
   reads the name without its pin. Nothing else moved: the prose still carries
