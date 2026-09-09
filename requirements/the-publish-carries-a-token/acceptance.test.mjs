@@ -41,6 +41,15 @@ test("1. the run names the registry it signs in to, so the token it holds reache
     "the run sets node up without naming a registry, so it tags and cannot publish",
   );
   assert.match(named, /^https:\/\//, `the registry is not a url: ${named}`);
+  // And the scope, which is what sends a scoped name to that registry rather
+  // than to the default one. The asker's other repositories carry both.
+  const scope = w.match(/^\s*scope:\s*["']?(@[a-z0-9-]+)["']?\s*$/m)?.[1];
+  const owner = manifest().name.split("/")[0];
+  assert.equal(
+    scope,
+    owner,
+    `the run publishes under ${scope} and the package is named ${manifest().name}`,
+  );
 });
 
 test("2. the registry it signs in to is the registry the package publishes to", () => {

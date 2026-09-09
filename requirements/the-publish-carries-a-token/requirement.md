@@ -37,6 +37,16 @@ being the one the package publishes to, and by no token living in this tree.
   `packages: write # the package it publishes, and nothing else`. The token
   is in the environment and npm never looks for it, because the file that
   would point npm at it is never written.
+- The asker's other repositories answer the token question and answer it in
+  two parts. `khai`'s release workflow sets node up with
+  `registry-url: "https://npm.pkg.github.com"` and `scope: "@chbrain"`, and
+  publishes with `NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, which is the
+  built in token and is what this workflow already passes. Its `RELEASE_TOKEN`
+  is a personal access token used for the git side and not for npm: its own
+  comment says GitHub suppresses workflow runs on commits a `GITHUB_TOKEN`
+  authored, so a bot made version pull request would never fire CI. This tree
+  pushes a tag and no workflow triggers on one, so it needs the registry lines
+  and not the personal token.
 - The criterion that should have caught this is green.
   `the-engine-installs-by-name`'s third says "The release workflow publishes
   the version it tagged, after the tag, and the publish step runs only if the
@@ -46,9 +56,16 @@ being the one the package publishes to, and by no token living in this tree.
 
 ## Assumptions
 
-- The fix is one line in the workflow and the value of this task is the three
-  claims around it, not the line. `actions/setup-node` writes the file npm
-  reads when it is given a `registry-url`, and that is the whole mechanism.
+- The fix is two lines in the workflow and the value of this task is the
+  claims around them, not the lines. `actions/setup-node` writes the file npm
+  reads when it is given a `registry-url`, and a `scope` writes the mapping
+  that sends a scoped name to that registry rather than to the default one.
+  Both are what the asker's other repositories carry, and consistency with
+  them is worth more here than any argument for a different shape.
+- The personal access token those repositories hold is for the git side and
+  not for npm. This release pushes a tag and nothing in this tree triggers on
+  a tag, so the built in token is enough and a second secret would be one
+  more thing to expire. That changes the day a tag is meant to start a run.
 - No token belongs in this tree, in any form. The run's token is the
   workflow's own and lives for the length of one job. An `.npmrc` carrying a
   literal token is the fix a hurried reader would reach for and it is the one
@@ -72,9 +89,10 @@ being the one the package publishes to, and by no token living in this tree.
 
 ## Acceptance criteria
 
-1. The release run names the registry it signs in to, so the token it already
-   holds reaches npm; a run that sets node up without naming one is a
-   release that tags and cannot publish.
+1. The release run names the registry it signs in to and the scope it
+   publishes under, so the token it already holds reaches npm; a run that
+   sets node up without naming a registry is a release that tags and cannot
+   publish.
 2. The registry the run signs in to is the registry `package.json` publishes
    to, read from both and compared, so neither can drift from the other.
 3. No file in this tree carries a registry token or an authentication line
@@ -86,6 +104,10 @@ being the one the package publishes to, and by no token living in this tree.
 - Should the run prove it can publish before it tags, rather than after?
   Today a failed publish leaves a tag with no package behind it, which
   `the-engine-installs-by-name` left open and this task does not close.
+- Does this tree ever want the asker's `RELEASE_TOKEN` as well? It would be
+  needed the day a pushed tag is meant to start a workflow of its own, which
+  a token authored by the built in secret will not do. Nothing here needs it
+  and the answer belongs on the day something does.
 - Is `--dry-run` worth a step of its own before the tag? It would have caught
   this defect and it costs one command, and it is also a thing that can pass
   and then fail on the real call.
@@ -95,7 +117,7 @@ being the one the package publishes to, and by no token living in this tree.
 - Task: the-publish-carries-a-token
 - Criteria: 3; tests: 3 (equal)
 - Red run: `node --test requirements/the-publish-carries-a-token/acceptance.test.mjs`,
-  all three failing
+  two failing and the third green as a guard
 - Tests: `acceptance.test.mjs`, beside this file; the workflow and the
   manifest are read as text, and the tree is swept for a token
 - Open questions: 2, listed above
