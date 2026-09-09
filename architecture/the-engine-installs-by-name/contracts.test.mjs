@@ -72,7 +72,16 @@ test("2. what the package carries did not widen when private came off", () => {
 });
 
 test("3. the order in the workflow: the publish is after everything", () => {
-  const t = workflow("release.yml");
+  // Steps and not the file. A comment explaining what a step is for names
+  // the command it explains, and searching the whole text finds the
+  // explanation rather than the step: a comment above the tag saying what
+  // `npm publish` needs read as a publish happening before the tag.
+  // `the-release-runs-on-a-key`'s acceptance test learned this and this one
+  // had not.
+  const t = workflow("release.yml")
+    .split("\n")
+    .map((l) => (/^\s*#/.test(l) ? "" : l))
+    .join("\n");
   const at = (re) => {
     const i = t.search(re);
     assert.notEqual(i, -1, `the release workflow has no ${re}`);

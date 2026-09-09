@@ -64,16 +64,19 @@ test("2. the registry it signs in to is the registry the package publishes to", 
 });
 
 test("3. no file in this tree carries a token or an authentication line for one", () => {
-  const files = globSync("**/*", {
-    cwd: ROOT,
-    nodir: true,
-    exclude: (p) => /(^|[\\/])(\.git|node_modules)([\\/]|$)/.test(p),
-  });
+  // Two patterns, because `**/*` never matches a name beginning with a dot
+  // and every file this criterion is about begins with one. The first
+  // version of this test swept `**/*` alone and could not see a committed
+  // `.npmrc` at all: it passed while the thing it forbids sat in the tree.
+  const skip = (p) => /(^|[\\/])(\.git|node_modules)([\\/]|$)/.test(p);
+  const files = [
+    ...globSync("**/*", { cwd: ROOT, nodir: true, exclude: skip }),
+    ...globSync("**/.*", { cwd: ROOT, nodir: true, exclude: skip }),
+  ];
   // The file npm reads for a registry's credentials, anywhere in the tree.
-  // Read as a filename rather than as a line of text: the first version of
-  // this test swept every file for an auth line and matched the sentence in
-  // this comment describing one, which is prose answering a question about
-  // configuration.
+  // Read as a filename rather than as a line of text: an earlier version
+  // read every file for an auth line and matched the sentence describing
+  // one, which is prose answering a question about configuration.
   const configs = files.filter((rel) => /(^|[\\/])\.npmrc$/.test(rel));
   assert.deepEqual(
     configs,
