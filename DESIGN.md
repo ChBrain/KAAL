@@ -1,9 +1,19 @@
 # KAAL: Kai's Artificial Agent League
 
-_A design, not a build. Nothing here is implemented. It is the requirements
-stage of KAAL's first job, which is KAAL itself, and it is written to be sliced
-into execution briefs later. House rule in force from the start: no en-dash or
-em-dash in content; use `,` `;` `:` `()` or `--`._
+_The design, and it has been built. This page says what KAAL is meant to be;
+the tree says what it is, and where the two disagree the tree wins and this
+page is wrong. What is built is read from `SURFACE.md`, which fixes every
+command's promise, and from `npm test`, which runs every wall. What is not
+built yet is read from `kaal ledger`, which prints each move's standing and
+says plainly when a rung has no evidence. House rule in force from the start:
+no en-dash or em-dash in content; use `,` `;` `:` `()` or `--`._
+
+_This page opened for months with the sentence "a design, not a build,
+nothing here is implemented". It stayed there through eleven walls and a
+released version, and an outside review scored the repository from it on 8
+September 2026. A page that describes a tree goes stale in silence; nothing
+reads either of this league's two such pages against the tree, and that is
+the standing gap this correction does not close._
 
 ## 1. What KAAL is
 
