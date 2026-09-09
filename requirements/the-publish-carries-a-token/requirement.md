@@ -121,14 +121,49 @@ being the one the package publishes to, and by no token living in this tree.
 - Tests: `acceptance.test.mjs`, beside this file; the workflow and the
   manifest are read as text, and the tree is swept for a token
 - Open questions: 2, listed above
-- Status: open
+- Status: closed
 - Blocked on: nothing
 - Unblocks: 0.0.2, which is the first publish under the scoped name and would
-  fail at its last step without this
+  have failed at its last step without this
 - Supersedes: `the-engine-installs-by-name`, whose third criterion says the
-  workflow publishes and whose test reads only where the publish step sits.
-  It is widened here to ask whether the run could publish at all, which is
-  the same defect this league keeps finding one function at a time: the rule
-  is right, the reading never reaches it, and green means held and never
-  asked in the same word
+  workflow publishes and whose test read only where the publish step sits. It
+  is widened here to ask whether the run names a registry at all, which is
+  the part its own word `publishes` already promised. This task owns the
+  claim in full; that one keeps its order claim and gains the capability it
+  was always asserting. Its third contract test is superseded too, for a
+  different reason found by the hook: it read the workflow as text, so a
+  comment naming a command counted as the command
 - People: none
+
+## Build
+
+- Built: all three criteria, on
+  `requirement/the-publish-carries-a-token-build`
+- Landed: two lines in `.github/workflows/release.yml`, a `registry-url` and
+  a `scope` on the node setup, with the reason above them
+- Proved: four isolations, each on its own. The run naming no registry
+  reddens criteria 1 and 2 together, which is the criteria telling the truth:
+  with no registry named there is nothing for the second to compare. Naming
+  no scope reddens 1, naming a different registry reddens 2, and a committed
+  credentials file reddens 3
+- Found by the push hook, and it is the same defect twice in one build:
+  `the-engine-installs-by-name`'s third contract test searches the whole
+  workflow text for `npm publish`, and the comment I wrote above the node
+  setup explains what that command needs. The explanation sat before the tag,
+  so the test read a publish happening before a tag. It reads the steps now,
+  with comments stripped, which is what `the-release-runs-on-a-key`'s
+  acceptance test already does and says why. Proved by moving the publish
+  step above the tag for real and watching the same criterion redden
+- Found while building, and it is the worst kind: criterion 3 could not see
+  the file it forbids. It swept `globSync("**/*")`, which never matches a
+  name beginning with a dot, and every file that criterion is about begins
+  with one. A committed `.npmrc` carrying a token sat in the tree and the
+  test stayed green. It sweeps `**/.*` as well now, and both halves were
+  proved by putting the forbidden thing in the tree and watching it redden
+- Not needed and recorded: the asker's other repositories hold a
+  `RELEASE_TOKEN`, a personal access token for the git side, because GitHub
+  suppresses workflow runs on commits a `GITHUB_TOKEN` authored. This tree
+  pushes a tag and nothing here triggers on a tag, so the built in token is
+  enough. The day a tag is meant to start a run, that changes
+- Class: nothing a consumer notices moved (`kaal class . --against origin/main`,
+  run last, after the final edit). The workflow is not one of the three
