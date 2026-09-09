@@ -279,9 +279,12 @@ test("5. a proof its seat did not write is a finding naming the file, unless a s
         1,
         `${what} was edited by another seat and passed: ${out}`,
       );
-      assert.match(
-        out,
-        new RegExp(Object.keys(change)[0].replace(/[.*/]/g, "\\$&")),
+      // The path, looked for literally. Escaping one into a pattern is a
+      // list of characters somebody has to keep complete, and mine was
+      // missing the backslash, which is the one a path is most likely to
+      // carry. Nothing here needs a pattern.
+      assert.ok(
+        out.includes(Object.keys(change)[0]),
         `${what}: the file is not named: ${out}`,
       );
     });
