@@ -48,6 +48,13 @@ write unless the change is declared as a supersede.
   never chosen. Beside it a separate gate refuses a diff that carries source
   and test together, with the fix "split into separate PRs, tests first,
   source second".
+- The tester's own directory is mostly somebody else's implementation.
+  `tests/` holds 21 unit suites and, since the test tree landed, a strategy
+  and three plans. Seventeen of the 21 are named for a module directly beside
+  them: `tests/rules.test.mjs` for `bin/lib/rules.mjs`, and so on for
+  sixteen more. Four name no single module: `assess`, `witness`, `kaal` and
+  `judged`. One unit suite already lives beside its code, under
+  `skills/analyse/scripts/`.
 - `kaal class` already reads a diff rather than a tree: it takes
   `--against <ref>`, reports what moved, and answers that the question is not
   this tree's where no base ref resolves. A wall that reads a diff is not a
@@ -55,10 +62,25 @@ write unless the change is declared as a supersede.
 
 ## Assumptions
 
-- The seats are the four the league already has directories for: the analyst
-  owns `requirements/`, the architect owns `architecture/`, the tester owns
-  `tests/`, and the developer owns the code. Everything else in the tree is
-  owned by no seat and is not a crossing.
+- The seats are four and a case belongs to whoever delivers the thing it
+  tests, which the asker settled while this was being written: "the tester
+  defines the strategy and governs (read) the test plans, but analyst,
+  architect and coder do have their own test cases, close to what they
+  deliver ... test/ contains the test plans which POINT at the test cases,
+  but do not implement them there". So the analyst owns `requirements/`,
+  which is a requirement and its acceptance cases; the architect owns
+  `architecture/`, a drawing and its contract cases; the developer owns the
+  code and its unit cases beside it; and the tester owns `tests/`, which is
+  the strategy and the plans and nothing that runs.
+- That makes a build one seat, which is what makes this guard liveable. A
+  build lands code and the unit cases of that code, both the developer's,
+  and closes its own requirement's Handoff. Nothing else about it crosses.
+  The crossings that remain are the ones that should be refused: a build
+  that amends the drawing is handing work back to the architect and should
+  say so in a second diff.
+- Everything else in the tree is owned by no seat and is not a crossing:
+  `retros/`, `kaal/`, `skills/`, `SURFACE.md`, `AGENTS.md`, the workflows and
+  the config.
 - A build must be able to close the requirement it builds. The board already
   refuses an open task whose tests are all green, so a build that could not
   write its own Handoff would land red by construction. The Handoff and the
@@ -119,10 +141,17 @@ write unless the change is declared as a supersede.
 - Does the guard also create the branch, the way the sibling's does, so the
   lane is computed and never chosen? That is the half that helps a weaker
   model most, and it is a second command rather than a second criterion.
-- A build lands code, unit tests and a closed requirement. That is the
-  developer, the tester and one section of the analyst's page. Is the tester
-  a separate seat here, which makes every build two pull requests, or does
-  the developer own `tests/` for the purpose of this guard?
+- Answered while this was written, and the answer is neither of the two this
+  question offered: a case belongs to the seat that delivers what it tests,
+  and `tests/` holds plans that point rather than cases that run. The
+  assumption above carries it. What it leaves behind is a task and not a
+  question: 21 unit suites sit in the tester's directory today and belong
+  beside the code, and moving them is the developer's diff while the plan
+  that points at them is the tester's.
+- Does a rename count as a crossing? Moving a unit case from `tests/` to
+  `bin/lib/` deletes a tester path and adds a developer one, which is two
+  seats by the letter and one act by any reading. The sibling repository's
+  guard carries an `exemptRenames` flag for exactly this.
 - Should the guard refuse at the push hook, at the board, or both? The board
   is where every other wall lives; the hook is the only place that can stop a
   diff before it is public.
