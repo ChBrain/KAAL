@@ -13,7 +13,7 @@ What this plan proves is that every criterion a requirement states is true of th
 
 ## Suites
 
-Its suites live under `requirements/*/acceptance.test.mjs`, and today that matches 58 suites.
+Its suites live under `requirements/*/acceptance.test.mjs`, and today that matches 60 suites.
 
 ## Cases
 
