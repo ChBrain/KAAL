@@ -35,6 +35,12 @@ Place: this repository
   existed and made each of them a second root. Nobody could have written the
   `- Root because:` line earlier, and the fix is not a correction of the
   fixture but the fixture catching up with a criterion that moved twice.
+- A path read from `globSync` carries the platform's separator, and two of
+  my assertions matched `/^kaal\//`. Green on one runtime, red on the other,
+  and the board said 258 passing where it had said 260. One normaliser now
+  stands between every glob result and every split or match. This is the
+  second Windows failure in this league from the same family: the first was
+  a path built with `path.join` and printed in a finding.
 - The class was computed last again and it was right again. Three runs, three
   ways of getting it wrong before the rule stuck: from memory, from a
   measurement taken too early, and now from running it as the last thing.
@@ -51,6 +57,9 @@ Place: this repository
 
 ## Longed for
 
+- A check that no test splits or matches a path it did not normalise. Both
+  Windows failures this league has had were one line each and neither could
+  be seen on the runtime they were written on.
 - A command that lists the fixture roots a given wall runs on. Sixteen was a
   number I found by reddening tests one at a time, and it is the number that
   says what a new place costs.

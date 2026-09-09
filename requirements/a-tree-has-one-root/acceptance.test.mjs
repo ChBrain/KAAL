@@ -43,6 +43,10 @@ const DRAW_TEMPLATE = join(
   "references",
   "drawing.md",
 );
+// globSync returns the platform's separator, so every path read from it is
+// normalised before it is split or matched. Windows found this: two
+// assertions against /^kaal\// passed on one runtime and failed on another.
+const norm = (p) => p.replaceAll("\\", "/");
 const read = (rel) => readFileSync(join(ROOT, rel), "utf8");
 const drawings = () =>
   globSync("architecture/*/drawing.md", { cwd: ROOT }).sort();
@@ -82,7 +86,7 @@ test("1. parent is a kind, both templates offer it, and it never runs across", (
       const v = parentOf(read(p));
       assert.ok(
         globSync(`${dir}/*/`, { cwd: ROOT }).some(
-          (d) => d.replace(/\/$/, "").split("/").pop() === v,
+          (d) => norm(d).replace(/\/$/, "").split("/").pop() === v,
         ),
         `${p}: parent ${v} is not in the ${tree} tree`,
       );
@@ -194,7 +198,7 @@ test("6. a trunk in kaal/, and it is the only artefact declaring none", () => {
   );
   // It belongs to no tree, which is why all three can answer to it.
   assert.match(
-    roots[0],
+    norm(roots[0]),
     /^kaal\//,
     `the trunk is not under kaal/: ${roots[0]}`,
   );
@@ -218,7 +222,11 @@ test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {
     1,
     `expected one root and found ${roots.length}: ${roots.join(", ") || "none"}`,
   );
-  assert.match(roots[0], /^kaal\//, `the root is not the trunk: ${roots[0]}`);
+  assert.match(
+    norm(roots[0]),
+    /^kaal\//,
+    `the root is not the trunk: ${roots[0]}`,
+  );
   // Not a star either. Each tree is measured against its own root, and a
   // tree whose seat has not populated it yet has none, which is silence
   // rather than a shape.
@@ -228,7 +236,7 @@ test("7. this tree is one tree: rooted, acyclic, argued where it forks", () => {
   ]) {
     const treeRoot = files.find((p) => /^none$/i.test(parentOf(read(p)) ?? ""));
     if (!treeRoot) continue;
-    const name = treeRoot.split("/")[1];
+    const name = norm(treeRoot).split("/")[1];
     const on = files.filter((p) => parentOf(read(p)) === name).length;
     assert.ok(
       on <= files.length / 2,
