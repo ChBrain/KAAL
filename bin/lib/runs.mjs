@@ -17,6 +17,7 @@ import { join, dirname, posix } from "node:path";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { wallEnv } from "./gates.mjs";
+import { owes } from "./reviews.mjs";
 
 /** The fields a record carries, as they are written and as they are read. */
 const FIELDS = {
@@ -76,9 +77,18 @@ export const isFresh = (root, run) =>
  * red run carrying one is not delivered and says so; treating it as evidence
  * would make every unfinished task a regression, which is a lie in the
  * direction of alarm.
+ *
+ * A pin in this task's artefacts that nobody has read since the text under
+ * it moved counts the same way, and for the same reason: a green suite
+ * proved against text somebody still owes a reading of is evidence with a
+ * question mark on it. It is counted here, where the work is judged, and
+ * never on the board, because a red board stops the seat that cannot fix it.
+ * @param {string} root @param {object|null} run
+ * @param {number} pass @param {number} fail
+ * @param {string|null} [task] the task, where the record does not name it
  * @returns {{ word: string, ok: boolean, why?: string }}
  */
-export function verdict(root, run, pass, fail) {
+export function verdict(root, run, pass, fail, task = run?.task ?? null) {
   if (pass === 0 && fail === 0)
     return {
       word: "nothing ran",
@@ -88,6 +98,11 @@ export function verdict(root, run, pass, fail) {
   const fresh = isFresh(root, run);
   const stale = Boolean(run && !fresh);
   const staleWhy = "the record is stale: its suite has changed since";
+  const unread = task ? owes(root, task) : [];
+  const owedWhy = unread.length
+    ? `${unread.length} pin(s) await a review: ${unread.join("; ")}`
+    : null;
+  const also = (why) => [why, owedWhy].filter(Boolean).join("; ") || undefined;
   if (fail > 0)
     return fresh
       ? {
@@ -95,13 +110,21 @@ export function verdict(root, run, pass, fail) {
           ok: false,
           why: "a run on record passed this suite",
         }
-      : { word: "not delivered", ok: true, why: stale ? staleWhy : undefined };
-  return fresh
+      : { word: "not delivered", ok: true, why: also(stale ? staleWhy : null) };
+  // A green suite and a fresh record still leave the task undelivered while
+  // a reading is owed, which is the only teeth `review-needed` has.
+  return fresh && !owedWhy
     ? { word: "delivered", ok: true }
     : {
         word: "not delivered",
         ok: true,
-        why: stale ? staleWhy : "green, and no run has recorded it yet",
+        why: also(
+          stale
+            ? staleWhy
+            : fresh
+              ? null
+              : "green, and no run has recorded it yet",
+        ),
       };
 }
 

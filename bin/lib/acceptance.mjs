@@ -124,7 +124,7 @@ export function runJudged(files) {
     const req = requirementFor(file);
     const task = basename(dirname(req));
     const root = join(dirname(req), "..", "..");
-    const reported = verdict(root, readRun(root, task), pass, fail);
+    const reported = verdict(root, readRun(root, task), pass, fail, task);
     const v = judge(reported, readPeople(file));
     // The red tests by name, so a reader of the board elsewhere sees which
     // criterion failed and not only that one did.

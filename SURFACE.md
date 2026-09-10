@@ -84,8 +84,11 @@ A red suite is a regression if it ever passed and a task nobody has built if
 it never did, and the walls tell those apart by reading the record beside the
 run. A record whose suite has changed since counts as no record, because a
 pass against text that no longer exists says nothing about the text that is
-failing now. Takes a root, which may be a flag. Exits 0, 1 or 2
-(`a-task-is-delivered-by-its-run`).
+failing now. A pin in the task's own artefacts that nobody has read since the
+text under it moved counts the same way and is named in the reason, because a
+green suite proved against text somebody still owes a reading of is evidence
+with a question mark on it. Takes a root, which may be a flag. Exits 0, 1 or 2
+(`a-task-is-delivered-by-its-run`, `a-pin-says-who-cleared-it`).
 
 ## traces
 
@@ -96,11 +99,23 @@ table does not hold is a finding rather than a silence, and a requirement's
 pinned for each kind is the region a reader would go to: a requirement's
 `## Acceptance criteria`, and for a principle the whole file. A value is
 `<name>` or `<name>@<sha>`: a pin that no longer matches the region it names
-is a finding saying the text moved, which is a different finding in different
-words from a name that resolves to nothing, because one wants a rename and the
-other a reread. `--write` puts the pin on every trace it can resolve, changes
-nothing else on the page, and writes nothing on a second run; nobody types a
-sha. It also reads the shape the `parent` kind makes: one trunk under `kaal/`
+is reported as having moved, which is different wording from a name that
+resolves to nothing, because one wants a rename and the other a reread. Only
+the second is a finding. A pin whose region moved carries a review state, one
+of `current`, `review-needed`, `reviewed-no-impact` and `updated`, and a pin
+with nothing recorded beside it reads `current`. That is a line and never a
+failure: a tree mid handoff answers rather than refusing, because a red board
+stops the seat that cannot fix it, and what an unread pin costs is the task,
+under `runs`. The counts of all four are on the answer either way. A review is
+recorded in a `reviews:` block beside `traces:` in the same frontmatter, keyed
+`<kind>/<name>` and valued `<state>@<sha> by <who>: <why>`; only the two states
+a person leaves are ever written, a word outside the four is a finding naming
+it, and a clearance missing its person or its reason is a finding naming which
+is missing. A review counts only while the sha it names is the region's sha
+now, so a second move asks again. `--write` puts the pin on every trace it can
+resolve, changes nothing else on the page, and writes nothing on a second run;
+nobody types a sha. It advances a pin a review clears, never touches one
+awaiting a review, and says how many it left. It also reads the shape the `parent` kind makes: one trunk under `kaal/`
 and no other artefact declaring `none` without a `- Root because:` line in
 its Handoff, no cycle among parents, a drawing answering exactly one
 requirement, and no tree with more than **half** its artefacts hanging
@@ -120,7 +135,8 @@ frontmatter of `requirements/<task>/requirement.md`,
 region of each file a kind points at, and the `gates` list in
 `kaal.config.json`. Takes a root, which may be a flag. Exits 0, 1 or 2
 (`applies-here`, `an-artefact-traces-what-it-came-from`,
-`a-trace-pins-what-it-read`, `the-test-tree-is-written-down`).
+`a-trace-pins-what-it-read`, `a-pin-says-who-cleared-it`,
+`the-test-tree-is-written-down`).
 
 ## seats
 

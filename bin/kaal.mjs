@@ -38,6 +38,10 @@ import { runAcceptance, runContracts } from "./lib/acceptance.mjs";
 import { checkAgents } from "./lib/agents.mjs";
 import { checkDrawings } from "./lib/drawings.mjs";
 import { checkTraces, checkShape, writePins } from "./lib/traces.mjs";
+import {
+  report as reviewReport,
+  counts as reviewCounts,
+} from "./lib/reviews.mjs";
 import { checkPlans, writeCounts } from "./lib/plans.mjs";
 import { readRun, verdict, writeRuns } from "./lib/runs.mjs";
 import { rows as coverageRows, states } from "./lib/coverage.mjs";
@@ -99,15 +103,31 @@ if (cmd === "ledger") {
   // A root that may be a flag, the pair `class` and `retros` carry.
   const troot = arg && !arg.startsWith("-") ? arg : cwd;
   if (process.argv.includes("--write")) {
-    writePins(troot);
+    const left = writePins(troot);
     writeCounts(troot);
+    // What it did not do, because a tool that cleared a review would be
+    // recording that somebody read something when nobody did.
+    if (left) console.log(`traces: left ${left} pin(s) no review has cleared`);
   }
+  // A pin that moved is a line and never a finding. It is printed before the
+  // findings, on the way out rather than in the way, because a tree mid
+  // handoff is a fact about the tree and not a defect in it.
+  for (const line of reviewReport(troot)) console.log(line);
   findings = [
     ...checkTraces(troot),
     ...checkShape(troot),
     ...checkPlans(troot),
   ].map((f) => `${f.artefact}: ${f.kind}: ${f.message}`);
-  if (!findings.length) console.log("traces: every trace resolves");
+  // The counts whatever the answer, so a reader sees what is owed without
+  // asking a second question, and sees it on a red tree too.
+  const tally = reviewCounts(troot)
+    .map((r) => `${r.count} ${r.state}`)
+    .join(", ");
+  console.log(
+    findings.length
+      ? `traces: pins: ${tally}`
+      : `traces: every trace resolves; pins: ${tally}`,
+  );
 } else if (cmd === "seats") {
   // A root that may be a flag, the shape `class`, `traces` and `coverage`
   // carry, and the same base ref the class wall reads: a diff's lane is its
@@ -179,9 +199,11 @@ if (cmd === "ledger") {
       .sort();
     for (const task of tasks) {
       const run = readRun(rroot, task);
-      const v = verdict(rroot, run, 1, 0);
+      const v = verdict(rroot, run, 1, 0, task);
+      // The reason whatever the record, because a task with no record can
+      // still owe a reading and that is the half this report used to hide.
       console.log(
-        `runs: ${task}: ${run ? (v.word === "delivered" ? "on record" : (v.why ?? "no record")) : "no record"}`,
+        `runs: ${task}: ${v.word === "delivered" ? "on record" : (v.why ?? (run ? v.word : "no record"))}`,
       );
     }
   }
