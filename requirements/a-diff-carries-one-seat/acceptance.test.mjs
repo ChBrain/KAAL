@@ -64,7 +64,10 @@ function repo(branch, base, change) {
   put(root, { "kaal.config.json": JSON.stringify(config(), null, 2), ...base });
   git(root, "add", "-A");
   git(root, "commit", "--quiet", "-m", "base");
-  git(root, "checkout", "--quiet", "-b", branch);
+  // `-B` and not `-b`: one fixture branches to `main` itself, to prove the
+  // case the criterion's "carries a change" clause exists for, and `-b main`
+  // on main is a fatal error rather than a no-op.
+  git(root, "checkout", "--quiet", "-B", branch);
   put(root, change);
   return root;
 }
@@ -114,6 +117,13 @@ test("1. the config declares the seats, the lanes and the shared paths, each onc
     Array.isArray(c.shared) && c.shared.length,
     "kaal.config.json declares no shared paths",
   );
+  // A lane carrying no seat has to be able to change something, or the
+  // governance, skill, agent and eval lanes can change nothing at all.
+  for (const l of c.lanes.filter((l) => !l.seat))
+    assert.ok(
+      Array.isArray(l.allows) && l.allows.length,
+      `the lane ${l.pattern} carries no seat and allows nothing`,
+    );
   // And the tool says so rather than trusting the page, on both halves: two
   // seats claiming one path, and a lane claiming two seats.
   for (const [what, bad, named] of [
@@ -210,8 +220,8 @@ test("3. a path its lane does not allow is a finding, and a lane that allows eve
     },
   );
   // A path no seat owns at all, which the first specification called free and
-  // this one calls a finding unless it is shared. `deploy/` is owned by
-  // nobody and is not in the shared list.
+  // this one calls a finding unless the lane allows it or it is shared.
+  // `deploy/` is owned by nobody, allowed by no build lane, and not shared.
   scratch(
     "build/alpha",
     { "bin/kaal.mjs": "// base\n" },
@@ -222,6 +232,22 @@ test("3. a path its lane does not allow is a finding, and a lane that allows eve
       notUsage(out);
       assert.equal(r.status, 1, `an unowned path was free: ${out}`);
       assert.ok(out.includes("deploy/notes.md"), `not named: ${out}`);
+    },
+  );
+  // A lane's own allowed path, on a lane that carries no seat: governance
+  // changes `AGENTS.md`, which no seat owns and which the lane allows.
+  scratch(
+    "governance/lanes",
+    { "AGENTS.md": "# base\n" },
+    { "AGENTS.md": "# changed\n" },
+    (root) => {
+      const r = kaal("seats", root, "--against", "main");
+      notUsage(said(r));
+      assert.equal(
+        r.status,
+        0,
+        `a lane's own allowed path was refused: ${said(r)}`,
+      );
     },
   );
   // And the other way: a diff whose every path is the lane's seat's or
@@ -272,6 +298,17 @@ test("4. a branch matching no lane is a finding naming the branch and the lanes"
         );
     },
   );
+  // And the other side, which is why the criterion says "carries a change":
+  // the board runs on every push to `main`, `main` matches no lane, and
+  // after a merge there is nothing in the diff to place in one. The witness
+  // is that the command ran and read the branch, not that it stayed quiet.
+  scratch("main", { "bin/kaal.mjs": "// base\n" }, {}, (root) => {
+    const r = kaal("seats", root, "--against", "main");
+    const out = said(r);
+    notUsage(out);
+    assert.equal(r.status, 0, `a branch with no change was refused: ${out}`);
+    assert.ok(out.trim().length, "the command answered nothing at all");
+  });
 });
 
 test("5. a proof its seat did not write is a finding naming the file, unless a supersede is declared", () => {
