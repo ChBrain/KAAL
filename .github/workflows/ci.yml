@@ -25,6 +25,13 @@ on:
     - cron: "0 6 * * 1" # Mondays 06:00 UTC
 permissions:
   contents: read
+# The lane the seats wall reads. A checkout on a pull request leaves HEAD
+# detached at the merge ref, so git names no branch and the wall would answer
+# that the question is not this tree's on every pull request. The name the
+# league owns is read here and the provider's is read only here, so the engine
+# stays vendor agnostic and any runner can set the same one.
+env:
+  KAAL_BRANCH: ${{ github.head_ref || github.ref_name }}
 jobs:
   walls:
     runs-on: ubuntu-latest
