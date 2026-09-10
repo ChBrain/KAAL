@@ -166,11 +166,41 @@ export function crossings(list, lane, declaration) {
   };
 }
 
-/** The three shapes that are somebody's proof, by where they live. */
-const isProof = (p) =>
-  /^requirements\/[^/]+\/acceptance\.test\.mjs$/.test(p) ||
-  /^requirements\/[^/]+\/fixtures\//.test(p) ||
-  /^architecture\/[^/]+\/contracts\.test\.mjs$/.test(p);
+/**
+ * The three shapes that are somebody's proof: where each lives, whose it is
+ * to write, and the task it belongs to. The seat matters because the harm the
+ * ask named is a seat making a proof pass that another seat wrote, and not a
+ * seat writing its own. An analyst who may not write an acceptance test has
+ * no job left.
+ */
+const PROOFS = [
+  { re: /^requirements\/([^/]+)\/acceptance\.test\.mjs$/, seat: "analyst" },
+  { re: /^requirements\/([^/]+)\/fixtures\//, seat: "analyst" },
+  { re: /^architecture\/([^/]+)\/contracts\.test\.mjs$/, seat: "architect" },
+];
+const proofOf = (p) => {
+  for (const k of PROOFS) {
+    const m = p.match(k.re);
+    if (m) return { task: m[1], seat: k.seat };
+  }
+  return null;
+};
+
+/**
+ * Does this branch name this task? A branch is `<lane>/<topic>` and a topic
+ * is a task with whatever the person added to tell two diffs on one task
+ * apart, so `requirement/a-tree-has-one-root-amend` is that task's branch and
+ * `requirement/beta` is not `alpha`'s. The boundary is a dash and never a
+ * bare prefix: a task called `a-tree` must not reach `a-tree-has-one-root`.
+ * @param {string|null} branch @param {string} task
+ */
+export function namesTask(branch, task) {
+  const topic = String(branch ?? "")
+    .split("/")
+    .slice(1)
+    .join("/");
+  return topic === task || topic.startsWith(task + "-");
+}
 
 /**
  * A proof changed by a seat that did not write it, unless a requirement in
@@ -178,9 +208,15 @@ const isProof = (p) =>
  * a declaration and never a flag: the harm the ask named is the silence and
  * not the change, and a flag is silence with a keystroke. It excuses only
  * what it names, and it never excuses the crossing.
+ * A seat writing its own kind of proof, on the branch that names that proof's
+ * task, is the job and not the harm: the analyst writes acceptance tests and
+ * a requirement's fixtures, the architect writes a drawing's contract tests,
+ * and no other seat writes either. Where the caller says nothing about the
+ * lane, nothing is excused, which is what the contracts drive.
  * @param {string} root @param {string[]} list
+ * @param {{branch: string|null, lane: object|null}} [where] the lane and its branch
  */
-export function proofs(root, list) {
+export function proofs(root, list, where) {
   const declared = new Set();
   for (const p of list.filter((p) =>
     /^requirements\/[^/]+\/requirement\.md$/.test(p),
@@ -193,9 +229,21 @@ export function proofs(root, list) {
     for (const name of m[1].split(",").map((s) => s.trim().split("@")[0]))
       if (name && !/^(nothing|none)$/i.test(name)) declared.add(name);
   }
-  return {
-    findings: list
-      .filter((p) => isProof(p) && !declared.has(p.split("/")[1]))
-      .map((p) => `${p}: a proof its seat did not write`),
-  };
+  const findings = [];
+  for (const p of list) {
+    const proof = proofOf(p);
+    if (!proof || declared.has(proof.task)) continue;
+    if (where?.lane?.seat !== proof.seat) {
+      findings.push(`${p}: a proof its seat did not write`);
+      continue;
+    }
+    // The right seat on the wrong task: one analyst branch rewriting another
+    // task's criteria is one seat and two tasks, and it is the half of the
+    // ask about cheating rather than the half about accidents.
+    if (!namesTask(where.branch, proof.task))
+      findings.push(
+        `${p}: another task's proof, and no requirement here supersedes ${proof.task}`,
+      );
+  }
+  return { findings };
 }
