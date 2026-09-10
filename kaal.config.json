@@ -173,6 +173,11 @@
       "command": "node bin/kaal.mjs coverage",
       "fix": "nothing to fix: a coverage row is a fact about how far the work has got, and this wall cannot refuse",
       "show": true
+    },
+    {
+      "name": "seats",
+      "command": "node bin/kaal.mjs seats",
+      "fix": "split the diff or rename the branch to the lane it belongs to; never widen the declaration to let a diff through"
     }
   ]
 }
