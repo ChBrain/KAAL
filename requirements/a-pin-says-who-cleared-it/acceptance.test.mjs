@@ -62,15 +62,31 @@ const drawingAt = (root, task) =>
   join(root, "architecture", task, "drawing.md");
 const readAt = (root, task) => readFileSync(drawingAt(root, task), "utf8");
 
+/** A `reviews:` block put beside `traces:` in the same frontmatter. */
+const withReviews = (text, line) =>
+  text.replace(
+    /^---\n([\s\S]*?)\n---\n/,
+    (_, inner) => `---\n${inner}\nreviews:\n  ${line}\n---\n`,
+  );
+
 /**
- * A tree whose drawing pins a criteria region that has since moved, with the
- * pin's state appended. The sha is never written by hand: `--write` puts the
- * right one there against the text as it stands, and only then does the
- * requirement move underneath it. A sha computed in a test is a second
- * opinion about what a region is, and the tool's is the one that counts.
+ * A tree whose drawing pins a criteria region that has since moved, with
+ * `review` recorded beside the pin where one is given, keyed by the pin it
+ * is about. Beside it and never on it: a trace's value is a comma separated
+ * list and a reason wants commas, and two pins in the league's own tree are
+ * lists of four. `review-needed` is never written at all, because it is what
+ * a sha comparison says and a written one is a claim nobody checked, so a
+ * tree that owes a reading is a tree with no block in it.
+ *
+ * Neither sha is written by hand. The fixture pins the text as it will
+ * stand, reads that sha back off the pin the tool wrote, then pins the text
+ * as it stood and moves it forward again, so `SHA` in a review is the sha
+ * the region has now and the tool computed both. A sha computed in a test is
+ * a second opinion about what a region is, and the tool's is the one every
+ * wall reads.
  */
 const moved =
-  (state = "") =>
+  (review = "") =>
   (fn) =>
     scratch(
       {
@@ -78,6 +94,13 @@ const moved =
         "architecture/alpha/drawing.md": drawing("alpha", "alpha"),
       },
       (root) => {
+        const ahead = requirement("alpha", "\n1. It moved.\n");
+        put(root, { "requirements/alpha/requirement.md": ahead });
+        kaal("traces", root, "--write");
+        const now = readAt(root, "alpha").match(/alpha@([0-9a-f]{64})/)?.[1];
+        put(root, {
+          "requirements/alpha/requirement.md": requirement("alpha"),
+        });
         const w = kaal("traces", root, "--write");
         const pinned = readAt(root, "alpha");
         assert.match(
@@ -85,16 +108,15 @@ const moved =
           /alpha@[0-9a-f]{64}/,
           `the fixture never got a pin: ${said(w)}`,
         );
-        put(root, {
-          "requirements/alpha/requirement.md": requirement(
-            "alpha",
-            "\n1. It moved.\n",
-          ),
-        });
-        if (state)
+        assert.ok(now, "the fixture never learned the sha the text will have");
+        put(root, { "requirements/alpha/requirement.md": ahead });
+        if (review)
           writeFileSync(
             drawingAt(root, "alpha"),
-            pinned.replace(/(alpha@[0-9a-f]{64})/, `$1${state}`),
+            withReviews(
+              pinned,
+              `requirement/alpha: ${review.replace("SHA", now)}`,
+            ),
           );
         return fn(root);
       },
@@ -120,12 +142,7 @@ test("1. a pin carries a review state, and one written without a state reads cur
   );
   // The four words are the four: a state the league does not know is a
   // finding naming it, so a typo is never silently a fifth state.
-  moved(" review-needed")((root) => {
-    const bad = drawingAt(root, "alpha");
-    writeFileSync(
-      bad,
-      readFileSync(bad, "utf8").replace("review-needed", "reviewd"),
-    );
+  moved("reviewd@SHA by Kai: a word the table does not hold")((root) => {
     const r = kaal("traces", root);
     assert.equal(r.status, 1, `an unknown state passed: ${said(r)}`);
     assert.match(said(r), /reviewd/, `the state is not named: ${said(r)}`);
@@ -133,7 +150,7 @@ test("1. a pin carries a review state, and one written without a state reads cur
 });
 
 test("2. a moved pin is review-needed and not a failure, and a name resolving to nothing still is", () => {
-  moved(" review-needed")((root) => {
+  moved()((root) => {
     const r = kaal("traces", root);
     const out = said(r);
     notUsage(out);
@@ -154,7 +171,7 @@ test("2. a moved pin is review-needed and not a failure, and a name resolving to
       assert.equal(r.status, 1, `an unresolvable name passed: ${said(r)}`);
     },
   );
-  moved(" review-needed")((root) => {
+  moved()((root) => {
     put(root, { "architecture/beta/drawing.md": drawing("beta", "ghost") });
     const r = kaal("traces", root);
     const out = said(r);
@@ -166,7 +183,7 @@ test("2. a moved pin is review-needed and not a failure, and a name resolving to
 
 test("3. leaving review-needed names who and why, and one that does not is a finding", () => {
   for (const state of ["reviewed-no-impact", "updated"])
-    moved(` ${state} by Kai: the criterion that moved is not this seam's`)(
+    moved(`${state}@SHA by Kai: the criterion that moved is not this seam's`)(
       (root) => {
         const r = kaal("traces", root);
         notUsage(said(r));
@@ -178,11 +195,11 @@ test("3. leaving review-needed names who and why, and one that does not is a fin
       },
     );
   for (const [what, tail, wants] of [
-    ["neither", " reviewed-no-impact", /who|why/i],
-    ["no reason", " reviewed-no-impact by Kai", /why|reason/i],
+    ["neither", "reviewed-no-impact@SHA", /who|why/i],
+    ["no reason", "reviewed-no-impact@SHA by Kai", /why|reason/i],
     [
       "no person",
-      " reviewed-no-impact: it does not touch this seam",
+      "reviewed-no-impact@SHA: it does not touch this seam",
       /who|person/i,
     ],
   ])
@@ -200,7 +217,7 @@ test("3. leaving review-needed names who and why, and one that does not is a fin
 });
 
 test("4. traces --write never clears a review, and says how many it left", () => {
-  moved(" review-needed")((root) => {
+  moved()((root) => {
     // A second task with a bare pin, so this run has real work to do and the
     // untouched review is a fact about restraint rather than about idleness.
     put(root, {
@@ -228,7 +245,7 @@ test("4. traces --write never clears a review, and says how many it left", () =>
 test("5. a task carrying an unreviewed pin is not delivered", () => {
   // The report that judges a task reads the pin the way it reads a stale run
   // record: the work is not done while somebody still owes a reading.
-  moved(" review-needed")((root) => {
+  moved()((root) => {
     const r = kaal("runs", root);
     const out = said(r);
     notUsage(out);
@@ -249,7 +266,7 @@ test("6. the board says how many pins are in each state", () => {
   assert.ok(gate, `no gate runs traces: ${gates.map((g) => g.name)}`);
   // On a tree this test built, never on the league's own: the league is all
   // one state today, and its counts move whenever anything else lands.
-  const r = moved(" review-needed")((root) => kaal("traces", root));
+  const r = moved()((root) => kaal("traces", root));
   const out = said(r);
   notUsage(out);
   assert.equal(r.status, 0, `a tree with one review does not answer: ${out}`);
