@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { matches } from "./seats.mjs";
+import { matches, namesTask, proofs } from "./seats.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -70,4 +70,61 @@ test("every pattern this tree declares matches something it owns", () => {
       true,
       `the lane ${lane.pattern} matches no branch`,
     );
+});
+
+test("a branch names a task when the topic is it, or it and a dash", () => {
+  assert.equal(
+    namesTask("requirement/a-tree-has-one-root", "a-tree-has-one-root"),
+    true,
+  );
+  // Two diffs on one task need two branch names, so a topic carries what the
+  // person added to tell them apart.
+  assert.equal(
+    namesTask("requirement/a-tree-has-one-root-amend", "a-tree-has-one-root"),
+    true,
+  );
+  assert.equal(
+    namesTask("build/a-tree-has-one-root-build", "a-tree-has-one-root"),
+    true,
+  );
+  // The boundary is a dash and never a bare prefix: a shorter task must not
+  // reach a longer one that begins with its name.
+  assert.equal(namesTask("requirement/a-tree", "a-tree-has-one-root"), false);
+  assert.equal(namesTask("requirement/a-treehouse", "a-tree"), false);
+  assert.equal(namesTask("requirement/beta", "alpha"), false);
+  // No branch names nothing, which is the detached case, and it excuses
+  // nothing rather than everything.
+  assert.equal(namesTask(null, "alpha"), false);
+  assert.equal(namesTask("main", "alpha"), false);
+});
+
+test("a seat writing its own kind of proof on its own task is the job, and every other reading is a finding", () => {
+  const analyst = { branch: "requirement/alpha", lane: { seat: "analyst" } };
+  const architect = {
+    branch: "architecture/alpha",
+    lane: { seat: "architect" },
+  };
+  const developer = { branch: "build/alpha", lane: { seat: "developer" } };
+  const own = "requirements/alpha/acceptance.test.mjs";
+  const fixture = "requirements/alpha/fixtures/one/note.md";
+  const contract = "architecture/alpha/contracts.test.mjs";
+  // The analyst writes acceptance tests and a requirement's fixtures. This is
+  // the case that blocked every new requirement in this league.
+  assert.deepEqual(proofs(ROOT, [own, fixture], analyst).findings, []);
+  assert.deepEqual(proofs(ROOT, [contract], architect).findings, []);
+  // Another seat, same file: still the harm the ask named.
+  assert.equal(proofs(ROOT, [own], developer).findings.length, 1);
+  assert.equal(proofs(ROOT, [contract], analyst).findings.length, 1);
+  assert.equal(proofs(ROOT, [own], architect).findings.length, 1);
+  // The right seat on the wrong task, which is the other half, and it says
+  // which task a supersede would have to name.
+  const elsewhere = proofs(ROOT, [own], {
+    branch: "requirement/beta",
+    lane: { seat: "analyst" },
+  }).findings;
+  assert.equal(elsewhere.length, 1);
+  assert.match(elsewhere[0], /supersedes alpha/);
+  // And a caller that says nothing about the lane excuses nothing, which is
+  // what the contract tests drive and what this wall did before it could ask.
+  assert.equal(proofs(ROOT, [own]).findings.length, 1);
 });

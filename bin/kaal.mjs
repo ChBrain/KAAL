@@ -137,7 +137,7 @@ if (cmd === "ledger") {
     ];
   else {
     const crossed = crossings(diff.paths, where.lane, declaration);
-    const moved = proofs(sroot, diff.paths);
+    const moved = proofs(sroot, diff.paths, where);
     console.log(
       where.lane
         ? `lane ${where.lane.pattern} (${where.lane.seat ?? "no seat"})`
