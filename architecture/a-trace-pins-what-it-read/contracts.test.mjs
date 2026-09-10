@@ -104,11 +104,21 @@ test("2. the sha is of the region the row names, and of nothing else", async () 
   assert.equal(regionSha(dir, "requirement", "nobody-wrote-this"), null);
 });
 
-test("3. a stale pin and a dangling name are two findings in different words", async () => {
+test("3. a stale pin and a dangling name are reported in different words", async () => {
   const stale = kaal("traces", F("stale"));
   const out = said(stale);
   notUsage(out);
-  assert.equal(stale.status, 1, `a stale pin was allowed: ${out}`);
+  // The same assertion the acceptance test dropped in #157, carried here and
+  // missed: criterion 2 asks for the report and its words and says nothing
+  // about an exit code, and `a-pin-says-who-cleared-it` supersedes the
+  // criterion that made a stale pin a failure. It is a state with an owner
+  // there and its second criterion owns what this command exits with.
+  //
+  // It stayed invisible for a day because this task's run record went stale
+  // the same morning, so both walls read the suite as not delivered rather
+  // than regressed. One record per task, read by two walls, about one of the
+  // two suites, and a fresh record is the only thing that tells an unbuilt
+  // task from a broken one.
   for (const [what, re] of [
     ["the artefact", /alpha/],
     ["the kind", /requirement/],
@@ -128,8 +138,8 @@ test("3. a stale pin and a dangling name are two findings in different words", a
   const lines = both.split("\n").filter((l) => l.trim());
   const s = lines.filter((l) => /Acceptance criteria/.test(l));
   const d = lines.filter((l) => /a-principle-nobody-wrote/.test(l));
-  assert.equal(s.length, 1, `expected one pin finding: ${both}`);
-  assert.equal(d.length, 1, `expected one name finding: ${both}`);
+  assert.equal(s.length, 1, `expected one line about the pin: ${both}`);
+  assert.equal(d.length, 1, `expected one finding about the name: ${both}`);
   assert.match(s[0], /moved|changed|no longer/i, s[0]);
   assert.doesNotMatch(d[0], /moved|changed|no longer/i, d[0]);
 });
