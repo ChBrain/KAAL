@@ -7,6 +7,7 @@ import { readFileSync, existsSync, globSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { runGates } from "../../bin/lib/gates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -158,9 +159,28 @@ test("7. on this tree the rows agree with the tree counted independently", () =>
       new RegExp(`^\\s+requirement: ${t}(@|\\s*$)`, "m").test(d),
     ),
   ).length;
-  const recorded = tasks.filter((t) =>
-    existsSync(join(ROOT, "tests", "runs", `${t}.md`)),
-  ).length;
+  // A record that exists is not a record that counts. Criterion 1 says the
+  // tester's row counts a run on record that is still about the suite it
+  // names, and this counted every record on the disk, so it agreed with the
+  // row only while no suite had moved. It was written on a clean tree and it
+  // has been wrong since: any diff that touches an acceptance suite makes
+  // that suite's record stale and the two numbers part by one.
+  //
+  // Computed here rather than read from `runs.mjs`, because a second opinion
+  // is the whole point of an independent count. The sha is of the suite file
+  // as a whole, which is what a record names.
+  const shaOf = (p) =>
+    existsSync(p)
+      ? createHash("sha256").update(readFileSync(p)).digest("hex")
+      : null;
+  const recorded = tasks.filter((t) => {
+    const record = join(ROOT, "tests", "runs", `${t}.md`);
+    if (!existsSync(record)) return false;
+    const text = readFileSync(record, "utf8");
+    const named = text.match(/^- Suite: (.+)$/m)?.[1]?.trim();
+    const pinned = text.match(/^- Suite sha: (.+)$/m)?.[1]?.trim();
+    return Boolean(named && pinned && shaOf(join(ROOT, named)) === pinned);
+  }).length;
   assert.ok(tasks.length >= 60, `counted ${tasks.length} requirements`);
   assert.match(
     rowFor(out, "analyst"),
