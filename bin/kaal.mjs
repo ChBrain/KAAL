@@ -49,6 +49,7 @@ import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
 import { readSeats, laneOf, paths, crossings, proofs } from "./lib/seats.mjs";
+import { skillsIn, landingAt, copyInto } from "./lib/assemble.mjs";
 import { renderTarget } from "./lib/assess/target.mjs";
 import { refuseOutput } from "./lib/assess/paths.mjs";
 import { writeDocument } from "./lib/assess/output.mjs";
@@ -66,7 +67,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -171,6 +172,39 @@ if (cmd === "ledger") {
     ];
   }
   if (!findings.length) console.log("seats: this diff is one lane's");
+} else if (cmd === "assemble") {
+  // The one command a consumer of the package runs rather than a seat of the
+  // league. It reads the package it is standing in and writes into a tree it
+  // was pointed at, which is the opposite direction from every wall here, so
+  // it names what it wrote and writes nowhere else.
+  const dest = arg;
+  const only = process.argv.slice(4);
+  if (!dest) {
+    console.error(USAGE);
+    process.exit(1);
+  }
+  const found = skillsIn(cwd, only);
+  if (found.notApplicable) {
+    console.error(`assemble: not applicable here: ${found.notApplicable}`);
+    process.exit(2);
+  }
+  findings = found.findings ?? [];
+  if (!findings.length)
+    for (const { name, dir } of found.skills) {
+      const landing = landingAt(dest, name);
+      if (landing.findings) {
+        findings.push(...landing.findings);
+        continue;
+      }
+      const wrote = copyInto(dir, landing.path);
+      console.log(
+        `assemble: ${name}: ${wrote.length} file(s) to ${landing.path}`,
+      );
+    }
+  if (!findings.length)
+    console.log(
+      `assemble: ${found.skills.length} member(s) of the league are in ${dest}`,
+    );
 } else if (cmd === "coverage") {
   // A root that may be a flag, the shape `class`, `traces` and `runs` carry.
   // It answers or says the question is not this tree's, and never finds: a

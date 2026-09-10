@@ -214,6 +214,34 @@ which is the form the board runs. Takes a root. Exits 0, 1 and 2
 (`a-retro-names-what-it-read`, `the-board-counts-the-reads`,
 `nothing-passes-vacuously`).
 
+## assemble
+
+Puts the league into a consumer's tree: the one command here a consumer of the
+package runs rather than a seat of the league, and the only one that writes
+outward. Run from inside the installed package, `kaal assemble <directory>`
+writes every member the package carries into the directory named, one
+directory per member, and answers with what each wrote and how many members
+arrived. Naming members narrows it, because a consumer who said nothing asked
+for the method and being made to fetch it a member at a time is the assembly
+this package exists not to ask for; naming one that is not there is a finding
+naming the name and where it looked.
+
+It writes where it was told and nowhere else. The consumer names a parent and
+each member lands one directory inside it, because a destination taken as a
+leaf is one typo from writing over what was already there, and because a
+league arriving together needs one place to arrive at. A name that would leave
+the destination, carrying a separator or a parent, is a finding and never a
+path. Nothing is written when the package is installed: there is no hook and
+no install-time write, because a package is a guest in a consumer's tree in
+the same sense this league's own assessor is a guest in a tree it visits.
+
+Reads `skills/<name>/` under the working directory, never under the
+destination: the first argument is where a consumer wants the league, not
+where it is. A tree carrying no skills is not this question's tree at all, and
+that answer is the module's own rather than a copy of it. Takes a directory
+and any number of member names. Exits 0, 1 or 2
+(`an-install-carries-the-method`, `applies-here`).
+
 ## release
 
 Answers whether this tree may be released as a version: whether

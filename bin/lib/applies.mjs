@@ -12,6 +12,7 @@
 import { readdirSync, existsSync, statSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PLACES } from "./boundary.mjs";
+import { skillsIn } from "./assemble.mjs";
 
 /**
  * The commands that judge a tree against a league artefact. `fixtures` is not
@@ -37,6 +38,7 @@ export const GUARDED = [
   "runs",
   "coverage",
   "seats",
+  "assemble",
 ];
 
 const isDir = (p) => {
@@ -145,6 +147,15 @@ export function appliesHere(cmd, arg, cwd) {
       return childHas(join(cwd, "skills"), "fixtures")
         ? null
         : `no skills/<name>/fixtures/ under ${cwd}`;
+    case "assemble":
+      // Asked about the working directory whatever it was handed, the way
+      // `runner` and `release` are: the first argument is where a consumer
+      // wants the league, never where it is, and a reason naming a
+      // destination that does not exist yet would be a lie. The rule is the
+      // module's own rather than a copy of it, the way `boundary` reads the
+      // wall's list below: two answers to one question is one of them wrong
+      // the day the other moves.
+      return skillsIn(cwd).notApplicable ?? null;
     case "boundary":
       // The wall's own list, never a copy of it: it grew from one place to
       // two, and a copy would have been wrong in silence.
