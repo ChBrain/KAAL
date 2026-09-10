@@ -1,7 +1,9 @@
 ---
 traces:
-  requirement: a-diff-carries-one-seat@5ee681e3a46a65af292ad3a1e5e3bb89d0e22f0dce3f1eae1cf0e6b9ef483004
+  requirement: a-diff-carries-one-seat@b7e215328922a6fe111eeb268d1c2c6c952e6e747d9cd53e7b9da6436302bd01
   principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
+reviews:
+  requirement/a-diff-carries-one-seat: updated@b7e215328922a6fe111eeb268d1c2c6c952e6e747d9cd53e7b9da6436302bd01 by architect: criterion 5 gained a second excuse and seam 5 gained an input; the seam, its signature, the strategy row and the contract all moved with it
 ---
 
 # Drawing: a-diff-carries-one-seat
@@ -75,7 +77,7 @@ flowchart LR
   C[the branch, from git or the environment] -- "2 the lane" --> B
   D[git, against a base ref] -- "3 the diff" --> B
   B -- "4 the crossing" --> E[the lines and the findings]
-  F[the requirements in the diff] -- "5 the proof" --> B
+  F[the requirements in the diff, and the lane and its branch] -- "5 the proof" --> B
 ```
 
 One labelled edge per seam, numbered to match the list below; the parts are
@@ -105,12 +107,16 @@ and it carries nothing the list does not.
    path and the lane for every path the lane's seat does not own, the lane
    does not allow, and `shared` does not list. Owned by `seats.mjs` / the
    findings.
-5. the proof: in the paths and every requirement in the diff, out a finding
-   naming a changed acceptance test, requirement fixture or contract test,
-   and nothing where a requirement in the same diff declares a supersede of
-   the task that owns it. The finding names the file and not the seat,
-   because the reader needs the file. Owned by `seats.mjs` / the requirements
-   in the diff.
+5. the proof: in the paths, every requirement in the diff, and the lane with
+   the branch it was read from, out a finding naming a changed acceptance
+   test, requirement fixture or contract test, and nothing in two cases: the
+   lane's seat is the seat that writes that kind of proof and the branch
+   names that proof's task, or a requirement in the same diff declares a
+   supersede of the task that owns it. The lane is an input because the harm
+   is a different seat and not a changed proof, and a seam that cannot see
+   the seat cannot tell them apart. The finding names the file and not the
+   seat, because the reader needs the file. Owned by `seats.mjs` / the
+   requirements in the diff and the lane.
 
 ## Fixed and free
 
@@ -145,12 +151,18 @@ and it carries nothing the list does not.
 - Fixed: the escape excuses the proof rule and never the crossing. A build
   that must move another task's proof is doing analyst work, and a declared
   supersede makes that legitimate as an act without making it one lane.
+- Fixed: a seat writing its own kind of proof, on the branch that names that
+  proof's task, is not a finding at all, and needs no declaration. Criterion
+  5 and decision 6.
+- Fixed: a caller that says nothing about the lane is excused nothing. Seam 5
+  answers about the diff it was given, and a missing lane is not a lane that
+  permits. Decision 6.
 - Fixed: the seams are named functions, because a contract test drives a seam
   and cannot drive one that has no name. `bin/lib/seats.mjs` exports
   `readSeats(root)` for seam 1, `laneOf(root)` for seam 2,
   `paths(root, base)` for seam 3, `crossings(paths, lane, declaration)` for
-  seam 4, and `proofs(root, paths)` for seam 5. What is behind each of them
-  is the developer's.
+  seam 4, and `proofs(root, paths, where)` for seam 5, where `where` carries
+  the lane and the branch. What is behind each of them is the developer's.
 - Fixed: the fourteenth applicability entry names its own question rather
   than the file, the way `release` and `class` do, and the way `runs` and
   `coverage` had to learn four hours ago.
@@ -246,6 +258,33 @@ and it carries nothing the list does not.
 - Reopens if: a lane genuinely needs to exclude a path inside a path it
   allows, which is negation and which this cannot say.
 
+### A seat writing its own proof is the job, and the lane says which
+
+- Chosen: seam 5 takes the lane and its branch, and finds nothing where the
+  lane's seat writes that kind of proof and the branch names that proof's
+  task.
+- Not taken: excusing by kind alone, without reading the lane; excusing every
+  change inside the lane's own tree; a flag; leaving it to the supersede
+  declaration, which is what the first reading of criterion 5 did.
+- Because: the harm the ask named is a seat making a proof pass that another
+  seat wrote, and the first reading refused every seat, which refused the
+  analyst writing an acceptance test. An analyst who may not write one has no
+  job left, and every new requirement in this league was blocked for a day.
+  Kind alone would say nothing seam 4 does not, because the kinds and the
+  seats already line up in the tree: an acceptance test lives under
+  `requirements/` and a contract test under `architecture/`, so no seat
+  reaches another's kind without crossing a lane first. What this seam holds
+  that seam 4 cannot is the task: one analyst branch rewriting another task's
+  criteria is one seat and two tasks, and that is the half of the ask about
+  cheating rather than the half about accidents.
+- Bought: the shortest path, and it spent a little of the seam's
+  independence: seam 5 now reads what seam 2 answered, so a wrong lane is
+  wrong in two places. The contracts hand it a lane directly, which is what
+  keeps that from hiding.
+- Weighed against: the-two-goods, the-seat-owns-the-lens.
+- Reopens if: a kind of proof appears that two seats legitimately write, at
+  which point the seat is no longer the thing that decides.
+
 ### The plans are shared, and that is a debt with a name
 
 - Chosen: `tests/plans/*.md` in `shared`, so any lane may carry the count a
@@ -270,21 +309,27 @@ and it carries nothing the list does not.
 
 ## Test strategy
 
-| criterion | layer      | kind          | why                                                                                                                                              |
-| --------- | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1         | contract   | deterministic | Seam 1. The declaration read as data, a config claiming one path for two seats, and a lane carrying a list where a name belongs.                 |
-| 2         | contract   | deterministic | Seams 2 and 3. A scratch repository branched by name, one detached with the variable set and one detached without, and a ref that names nothing. |
-| 3         | contract   | deterministic | Seam 4. A path the seat owns, a path the lane allows, a shared path, a path nobody owns, and a path another seat owns.                           |
-| 4         | contract   | deterministic | Seam 2 again for the branch that matches no lane, with a change and without one, which is one function deciding both.                            |
-| 5         | contract   | deterministic | Seam 5. A proof changed with a supersede declared in the diff and without one.                                                                   |
-| 6         | acceptance | deterministic | The gate and its fix line are read from the config; there is no seam between a wall and the list it is named in.                                 |
-| 7         | acceptance | deterministic | `AGENTS.md` read against the config; a page agreeing with a file is not a seam either.                                                           |
-| none      | unit       | none          | The matcher, the one part with no seam of its own: a unit belongs to it and it is the developer's, named here so it is not forgotten.            |
-| none      | manual     | none          | Nothing here needs a person to look, and the one judgement, whether a supersede is honest, no wall reads.                                        |
+| criterion | layer      | kind          | why                                                                                                                                                            |
+| --------- | ---------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1         | contract   | deterministic | Seam 1. The declaration read as data, a config claiming one path for two seats, and a lane carrying a list where a name belongs.                               |
+| 2         | contract   | deterministic | Seams 2 and 3. A scratch repository branched by name, one detached with the variable set and one detached without, and a ref that names nothing.               |
+| 3         | contract   | deterministic | Seam 4. A path the seat owns, a path the lane allows, a shared path, a path nobody owns, and a path another seat owns.                                         |
+| 4         | contract   | deterministic | Seam 2 again for the branch that matches no lane, with a change and without one, which is one function deciding both.                                          |
+| 5         | contract   | deterministic | Seam 5. A proof changed with a supersede declared in the diff and without one; each seat on its own kind and on another's; and the right seat on another task. |
+| 6         | acceptance | deterministic | The gate and its fix line are read from the config; there is no seam between a wall and the list it is named in.                                               |
+| 7         | acceptance | deterministic | `AGENTS.md` read against the config; a page agreeing with a file is not a seam either.                                                                         |
+| none      | unit       | none          | The matcher, the one part with no seam of its own: a unit belongs to it and it is the developer's, named here so it is not forgotten.                          |
+| none      | manual     | none          | Nothing here needs a person to look, and the one judgement, whether a supersede is honest, no wall reads.                                                      |
 
 ## Handoff
 
 - Task: a-diff-carries-one-seat
+- Read again after the criteria moved a third time, and the reading changed
+  this page rather than clearing it: criterion 5 gained a second excuse and
+  seam 5 gained an input, so the seam, the picture's edge, the signature, the
+  strategy row and the contract all moved with it, and decision 6 says why
+  the excuse is the seat and the task rather than the kind. Recorded beside
+  the pin as `updated`, which is what a review is for
 - Seams: 5; contract tests: 5 (equal)
 - Red run: `node --test --test-timeout=60000 architecture/a-diff-carries-one-seat/contracts.test.mjs`,
   all five failing on `bin/lib/seats.mjs` not existing

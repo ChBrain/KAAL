@@ -300,6 +300,55 @@ test("5. the proof: a changed proof is a finding naming the file, unless a requi
       // list of characters somebody has to keep complete.
       assert.ok(f[0].includes(p), `${p} is not named: ${f[0]}`);
     });
+  // Each seat on its own kind of proof, on the branch that names that
+  // proof's task, which is the job and not the harm. This is the case that
+  // blocked every new requirement in this league: an analyst who may not
+  // write an acceptance test has none left.
+  scratch({ base }, (root) => {
+    const own = [
+      [
+        { branch: "requirement/alpha", lane: { seat: "analyst" } },
+        [
+          "requirements/alpha/acceptance.test.mjs",
+          "requirements/alpha/fixtures/one/note.md",
+        ],
+      ],
+      [
+        { branch: "architecture/alpha", lane: { seat: "architect" } },
+        ["architecture/alpha/contracts.test.mjs"],
+      ],
+    ];
+    for (const [where, files] of own)
+      assert.deepEqual(
+        proofs(root, files, where).findings ?? [],
+        [],
+        `${where.lane.seat} writing its own proof was refused: ${files}`,
+      );
+    // And every other reading of the same files is still a finding: another
+    // seat on this kind, and the right seat on another task.
+    for (const [where, file] of [
+      [
+        { branch: "build/alpha", lane: { seat: "developer" } },
+        "requirements/alpha/acceptance.test.mjs",
+      ],
+      [
+        { branch: "requirement/alpha", lane: { seat: "analyst" } },
+        "architecture/alpha/contracts.test.mjs",
+      ],
+      [
+        { branch: "requirement/beta", lane: { seat: "analyst" } },
+        "requirements/alpha/acceptance.test.mjs",
+      ],
+    ]) {
+      const f = proofs(root, [file], where).findings ?? [];
+      assert.equal(
+        f.length,
+        1,
+        `${where.branch} on ${file}: expected one finding, got ${JSON.stringify(f)}`,
+      );
+      assert.ok(f[0].includes(file), `the file is not named: ${f[0]}`);
+    }
+  });
   // The escape. It is a declaration, read from a requirement in the same
   // diff, and never a flag.
   scratch(
