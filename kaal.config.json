@@ -15,6 +15,98 @@
       "note": "The standard's own reference validator, run over skills/ by the ci workflow's standard job; re-pin with the spec."
     }
   },
+  "human": {
+    "gates": [
+      {
+        "seam": "requirements",
+        "act": "sets the ask",
+        "evidence": "the ask itself, in the requirement's opening line",
+        "recorded": "requirements/<task>/requirement.md"
+      },
+      {
+        "seam": "architecture",
+        "act": "approves the drawing before code is written",
+        "evidence": "the drawing with its seams, decisions and red contract tests",
+        "recorded": "the merge of the drawing's pull request"
+      },
+      {
+        "seam": "deployment",
+        "act": "gives the key for one release to one target",
+        "evidence": "a green board and the release plan",
+        "recorded": "the release record under deploy/releases/"
+      }
+    ]
+  },
+  "seats": [
+    {
+      "name": "analyst",
+      "owns": ["requirements/**"]
+    },
+    {
+      "name": "architect",
+      "owns": ["architecture/**"]
+    },
+    {
+      "name": "tester",
+      "owns": ["tests/**"]
+    },
+    {
+      "name": "developer",
+      "owns": ["bin/**", "SURFACE.md"]
+    }
+  ],
+  "lanes": [
+    {
+      "pattern": "requirement/*",
+      "seat": "analyst",
+      "allows": []
+    },
+    {
+      "pattern": "architecture/*",
+      "seat": "architect",
+      "allows": []
+    },
+    {
+      "pattern": "build/*",
+      "seat": "developer",
+      "allows": []
+    },
+    {
+      "pattern": "test/*",
+      "seat": "tester",
+      "allows": []
+    },
+    {
+      "pattern": "governance/*",
+      "seat": null,
+      "allows": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "README.md",
+        "kaal.config.json",
+        ".github/**",
+        "kaal/**",
+        "package.json",
+        "waivers/**"
+      ]
+    },
+    {
+      "pattern": "skill/*",
+      "seat": null,
+      "allows": ["skills/**"]
+    },
+    {
+      "pattern": "agent/*",
+      "seat": null,
+      "allows": ["agents/**"]
+    },
+    {
+      "pattern": "eval/*",
+      "seat": null,
+      "allows": ["evals/**"]
+    }
+  ],
+  "shared": ["retros/**", "tests/plans/*.md"],
   "gates": [
     {
       "name": "acceptance",
@@ -28,7 +120,7 @@
     },
     {
       "name": "units",
-      "command": "node --test tests/*.test.mjs skills/*/scripts/*.test.mjs",
+      "command": "node --test tests/*.test.mjs bin/lib/*.test.mjs skills/*/scripts/*.test.mjs",
       "fix": "fix the unit; never edit the test to pass"
     },
     {
@@ -82,27 +174,5 @@
       "fix": "nothing to fix: a coverage row is a fact about how far the work has got, and this wall cannot refuse",
       "show": true
     }
-  ],
-  "human": {
-    "gates": [
-      {
-        "seam": "requirements",
-        "act": "sets the ask",
-        "evidence": "the ask itself, in the requirement's opening line",
-        "recorded": "requirements/<task>/requirement.md"
-      },
-      {
-        "seam": "architecture",
-        "act": "approves the drawing before code is written",
-        "evidence": "the drawing with its seams, decisions and red contract tests",
-        "recorded": "the merge of the drawing's pull request"
-      },
-      {
-        "seam": "deployment",
-        "act": "gives the key for one release to one target",
-        "evidence": "a green board and the release plan",
-        "recorded": "the release record under deploy/releases/"
-      }
-    ]
-  }
+  ]
 }

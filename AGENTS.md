@@ -29,17 +29,24 @@ edit another seat's test to make it pass; hand it back to its owner.
 
 ## One pull request, one lane
 
-A seat declares the paths it may change, the lane is read off the diff,
-and one pull request is one lane. Branches are named by lane:
-`requirement/<task>` for a requirement with its drawing and build,
-`governance/<topic>` for the rest of the tree, `skill/<name>`,
-`agent/<name>`, `eval/<skill>-<fixture>`. A diff that crosses two lanes is
-two pull requests.
+A seat declares the paths it may change in `kaal.config.json`, the lane is
+read off the branch, and one pull request is one lane. A lane carries one
+seat or none, and nothing outside that seat's paths, the lane's own allowed
+paths, and the shared paths may travel in it.
+
+Four lanes carry a seat, one each: `requirement/<task>` the analyst,
+`architecture/<task>` the architect, `build/<task>` the developer,
+`test/<task>` the tester. Four carry none: `governance/<topic>` for the
+league's own contract, `skill/<name>`, `agent/<name>`,
+`eval/<skill>-<fixture>`. A diff that does not fit its lane is two pull
+requests, and the split is yours to make: nothing here widens a
+declaration to let a diff through.
 
 Every seat writes its own want and its own proof: the analyst a
 requirement and acceptance tests under `requirements/<task>/`, the
 architect a drawing and contract tests under `architecture/<task>/`, the
-developer code and unit tests. Every test is seen red before it is trusted
+tester the strategy and the plans under `tests/`, the
+developer code and unit tests beside it. Every test is seen red before it is trusted
 green. A closed task's red is a failure; an open task's red is reported.
 
 ## How a change lands
