@@ -122,6 +122,35 @@ region of each file a kind points at, and the `gates` list in
 (`applies-here`, `an-artefact-traces-what-it-came-from`,
 `a-trace-pins-what-it-read`, `the-test-tree-is-written-down`).
 
+## seats
+
+Answers whether this diff is one lane's. The lane comes from the branch and
+never from the diff: a lane read off a diff is whatever you changed, and there
+is nothing left for a guard to be wrong about. `kaal.config.json` declares
+`seats` as a name and the paths each owns, `lanes` as a branch pattern with
+the one seat it carries or none and the paths that lane allows besides its
+seat's, and `shared` as the paths any lane may change.
+
+It prints the lane it matched and one line beginning `seat ` for every seat
+the diff touches, and it finds three things. A path the lane's seat does not
+own, the lane does not allow and `shared` does not list, naming the path and
+the lane: deny by default, so a path nobody declared is refused rather than
+free. A branch that carries a change and matches no lane, naming the branch
+and every pattern; a branch carrying no change is an answer, because there is
+nothing to place. And a changed acceptance test, requirement fixture or
+drawing contract test, naming the file, unless a requirement in the same diff
+declares a supersede of the task that owns it. That escape is a declaration
+and never a flag, and it excuses the proof and never the lane.
+
+A rename is one act and comes back as the path it landed at, so moving a case
+beside its code is not two lanes. A file git has never seen is in the diff
+too, because a person is about to land it. Where HEAD names no branch, which
+is what a checkout on a pull request leaves, the branch is read from
+`KAAL_BRANCH`; where neither answers, the question is not this tree's, because
+a wall that does not run beats a wall that lies. Takes a root, which may be a
+flag, and `--against <ref>`, defaulting to the same base the class wall reads.
+Exits 0, 1 or 2 (`a-diff-carries-one-seat`).
+
 ## coverage
 
 Answers how much of what was asked each seat has answered, as one row per

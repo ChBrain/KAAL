@@ -2,9 +2,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { GUARDED, appliesHere } from "../bin/lib/applies.mjs";
+import { GUARDED, appliesHere } from "./applies.mjs";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const FOREIGN = join(
   ROOT,
   "requirements",
@@ -14,13 +14,14 @@ const FOREIGN = join(
 );
 const HALF = join(ROOT, "architecture", "applies-here", "fixtures", "half");
 
-test("the guarded commands are the thirteen that judge a tree against a league artefact", () => {
+test("the guarded commands are the fourteen that judge a tree against a league artefact", () => {
   // Ten until `an-artefact-traces-what-it-came-from` added `traces`, eleven
-  // until `a-task-is-delivered-by-its-run` added `runs`, and twelve until
-  // `a-seat-claims-what-it-covers` added `coverage`, all of which take a
-  // root and judge a tree against the league's own artefacts like the ten
-  // before them. Named rather than counted, so a command added by accident
-  // is still a red.
+  // until `a-task-is-delivered-by-its-run` added `runs`, twelve until
+  // `a-seat-claims-what-it-covers` added `coverage`, and thirteen until
+  // `a-diff-carries-one-seat` added `seats`, all of which take a root and
+  // judge a tree against the league's own artefacts like the ten before
+  // them. Named rather than counted, so a command added by accident is
+  // still a red.
   assert.deepEqual(GUARDED, [
     "ledger",
     "drawings",
@@ -35,6 +36,7 @@ test("the guarded commands are the thirteen that judge a tree against a league a
     "traces",
     "runs",
     "coverage",
+    "seats",
   ]);
 });
 

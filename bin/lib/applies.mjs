@@ -9,7 +9,7 @@
 // Applicability is per command, never per tree. A repository that adopted the
 // ledger and nothing else answers `ledger` and refuses `drawings`, which no
 // marker at the root could express.
-import { readdirSync, existsSync, statSync } from "node:fs";
+import { readdirSync, existsSync, statSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PLACES } from "./boundary.mjs";
 
@@ -36,6 +36,7 @@ export const GUARDED = [
   "traces",
   "runs",
   "coverage",
+  "seats",
 ];
 
 const isDir = (p) => {
@@ -72,6 +73,24 @@ export function appliesHere(cmd, arg, cwd) {
       return childHas(join(root, "architecture"), "drawing.md")
         ? null
         : `no architecture/<task>/drawing.md under ${root}`;
+    case "seats": {
+      // A root that may be a flag, and its own question rather than the file
+      // `gates` names: a tree may carry a board and have adopted no lanes,
+      // and two commands refusing in the same words tell a reader which file
+      // is missing and not which question died.
+      const tree = arg && !arg.startsWith("-") ? arg : cwd;
+      let lanes = [];
+      try {
+        lanes =
+          JSON.parse(readFileSync(join(tree, "kaal.config.json"), "utf8"))
+            .lanes ?? [];
+      } catch {
+        lanes = [];
+      }
+      return lanes.length
+        ? null
+        : `no lane to read a diff against: no lanes in kaal.config.json under ${tree}`;
+    }
     case "coverage": {
       // A tree that states no requirement has nothing for any seat to have
       // covered, and a report of four zeroes is not an answer.

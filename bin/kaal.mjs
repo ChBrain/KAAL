@@ -44,6 +44,7 @@ import { rows as coverageRows, states } from "./lib/coverage.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
+import { readSeats, laneOf, paths, crossings, proofs } from "./lib/seats.mjs";
 import { renderTarget } from "./lib/assess/target.mjs";
 import { refuseOutput } from "./lib/assess/paths.mjs";
 import { writeDocument } from "./lib/assess/output.mjs";
@@ -61,7 +62,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -107,6 +108,49 @@ if (cmd === "ledger") {
     ...checkPlans(troot),
   ].map((f) => `${f.artefact}: ${f.kind}: ${f.message}`);
   if (!findings.length) console.log("traces: every trace resolves");
+} else if (cmd === "seats") {
+  // A root that may be a flag, the shape `class`, `traces` and `coverage`
+  // carry, and the same base ref the class wall reads: a diff's lane is its
+  // lane against what it will merge into.
+  const sroot = arg && !arg.startsWith("-") ? arg : cwd;
+  const at = process.argv.indexOf("--against");
+  const base = at === -1 ? DEFAULT_BASE : process.argv[at + 1];
+  const declaration = readSeats(sroot);
+  const where = laneOf(sroot);
+  const diff = paths(sroot, base);
+  // Two questions can answer that they are not this tree's, and both exit 2
+  // rather than passing: a tree with no branch and no base ref has not been
+  // asked this question, and a wall that answered clean would be passing on
+  // a lane nobody declared.
+  const away = where.notApplicable ?? diff.notApplicable;
+  if (away) {
+    console.error(`seats: not applicable here: ${away}`);
+    process.exit(2);
+  }
+  // A branch nobody declared, carrying a change nobody can place. Silent
+  // here would be the vacuous pass: the diff may be one seat's and still
+  // belong to no lane at all.
+  if (!where.lane && diff.paths.length)
+    findings = [
+      ...declaration.findings,
+      `${where.branch}: matches no lane (${declaration.lanes.map((l) => l.pattern).join(", ")})`,
+    ];
+  else {
+    const crossed = crossings(diff.paths, where.lane, declaration);
+    const moved = proofs(sroot, diff.paths);
+    console.log(
+      where.lane
+        ? `lane ${where.lane.pattern} (${where.lane.seat ?? "no seat"})`
+        : `lane none: ${where.branch} carries no change to place`,
+    );
+    for (const line of crossed.lines) console.log(line);
+    findings = [
+      ...declaration.findings,
+      ...crossed.findings,
+      ...moved.findings,
+    ];
+  }
+  if (!findings.length) console.log("seats: this diff is one lane's");
 } else if (cmd === "coverage") {
   // A root that may be a flag, the shape `class`, `traces` and `runs` carry.
   // It answers or says the question is not this tree's, and never finds: a
