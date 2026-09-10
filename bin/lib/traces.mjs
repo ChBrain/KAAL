@@ -9,6 +9,7 @@ import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { writeFileSync } from "node:fs";
 import { parseFrontmatter } from "./frontmatter.mjs";
+import { readReviews, mayWrite } from "./reviews.mjs";
 
 /**
  * A kind, and where things of that kind live, relative to a root. A row per
@@ -168,6 +169,27 @@ const dirs = (d) =>
     : [];
 
 /**
+ * Every artefact in every place, the file it keeps its frontmatter in, and
+ * that file's text. One walk: three readers here were stepping through the
+ * same directories in the same order, the review wall would have been the
+ * fourth, and a fourth copy of a walk is a fourth place for one bug.
+ * @param {string} root
+ * @returns {{dir: string, artefact: string, path: string, text: string}[]}
+ */
+export function artefacts(root) {
+  const out = [];
+  for (const { dir, file, deep, not } of PLACES)
+    for (const artefact of entries(root, dir, file, deep, not)) {
+      const path = file
+        ? join(root, dir, artefact, file)
+        : join(root, dir, `${artefact}.md`);
+      if (!existsSync(path)) continue;
+      out.push({ dir, artefact, path, text: readFileSync(path, "utf8") });
+    }
+  return out;
+}
+
+/**
  * @param {string} root
  * @returns {{ artefact: string, kind: string, message: string }[]}
  */
@@ -175,101 +197,87 @@ export function checkTraces(root) {
   const out = [];
   const find = (artefact, kind, message) =>
     out.push({ artefact, kind, message });
-  for (const { dir, file, deep, not } of PLACES)
-    for (const artefact of entries(root, dir, file, deep, not)) {
-      const path = file
-        ? join(root, dir, artefact, file)
-        : join(root, dir, `${artefact}.md`);
-      if (!existsSync(path)) continue;
-      const text = readFileSync(path, "utf8");
-      const trace = readTrace(text);
-      if (trace === null) {
-        find(artefact, "traces", `no frontmatter block in ${dir}/${artefact}`);
+  for (const { dir, artefact, text } of artefacts(root)) {
+    const trace = readTrace(text);
+    if (trace === null) {
+      find(artefact, "traces", `no frontmatter block in ${dir}/${artefact}`);
+      continue;
+    }
+    if (!Object.keys(trace).length) {
+      find(artefact, "traces", `no traces map in ${dir}/${artefact}`);
+      continue;
+    }
+    // A review is recorded beside the traces and read by `reviews.mjs`. What
+    // it says about a pin is a state and never a finding; what is wrong with
+    // how it is written is a finding like any other, and it belongs on the
+    // wall that reads this page rather than in a second place to look.
+    for (const f of readReviews(text).findings) find(artefact, "reviews", f);
+    for (const [kind, value] of Object.entries(trace)) {
+      // Never a silence. A trace ignored for being unrecognised is a
+      // mistyped key that passes, which is the vacuous pass in a wall.
+      if (!KINDS[kind]) {
+        find(
+          artefact,
+          kind,
+          `no such kind; the table holds ${Object.keys(KINDS).join(", ")}`,
+        );
         continue;
       }
-      if (!Object.keys(trace).length) {
-        find(artefact, "traces", `no traces map in ${dir}/${artefact}`);
-        continue;
-      }
-      for (const [kind, value] of Object.entries(trace)) {
-        // Never a silence. A trace ignored for being unrecognised is a
-        // mistyped key that passes, which is the vacuous pass in a wall.
-        if (!KINDS[kind]) {
-          find(
-            artefact,
-            kind,
-            `no such kind; the table holds ${Object.keys(KINDS).join(", ")}`,
-          );
+      for (const { name } of splitTrace(value)) {
+        const where = KINDS[kind].where(name, { dir, artefact });
+        if (!existsSync(join(root, where))) {
+          find(artefact, kind, `${name} is not at ${where}`);
           continue;
         }
-        for (const { name, pin } of splitTrace(value)) {
-          const where = KINDS[kind].where(name, { dir, artefact });
-          if (!existsSync(join(root, where))) {
-            find(artefact, kind, `${name} is not at ${where}`);
-            continue;
-          }
-          // The name is there and what it says may not be. A different
-          // finding in different words: one wants a rename, this a reread.
-          if (pin && pin !== regionSha(root, kind, name, { dir, artefact }))
-            find(
-              artefact,
-              kind,
-              `${name} moved: its ${KINDS[kind].region ?? "whole file"} no longer matches the pin`,
-            );
-        }
-      }
-      // A drawing answers exactly one requirement: the edge that runs
-      // across, and the only rule here that is not about `parent`.
-      if (dir === "architecture") {
-        const answers = splitTrace(trace.requirement).length;
-        if (answers !== 1)
-          find(
-            artefact,
-            "requirement",
-            `answers ${answers} requirements; a drawing answers exactly one`,
-          );
-      }
-      // The prose must carry what the trace declares, read one direction
-      // only. The other way is finding a task name inside a sentence, which
-      // is the reason the block exists.
-      if (dir === "requirements") {
-        const line = text.match(/^- Supersedes: (.+)$/m)?.[1] ?? "";
-        for (const name of tracedNames(trace.supersedes))
-          if (!line.includes(name))
-            find(
-              artefact,
-              "supersedes",
-              `the Supersedes line does not mention ${name}`,
-            );
+        // The name is there and what it says may not be. That one is a
+        // state with an owner rather than a finding, and `reviews.mjs`
+        // reports it: the wall that refuses it is a wall that stops the
+        // seat which cannot fix it. What stays here is the name that
+        // resolves to nothing, which wants a rename and not a reread.
       }
     }
+    // A drawing answers exactly one requirement: the edge that runs
+    // across, and the only rule here that is not about `parent`.
+    if (dir === "architecture") {
+      const answers = splitTrace(trace.requirement).length;
+      if (answers !== 1)
+        find(
+          artefact,
+          "requirement",
+          `answers ${answers} requirements; a drawing answers exactly one`,
+        );
+    }
+    // The prose must carry what the trace declares, read one direction
+    // only. The other way is finding a task name inside a sentence, which
+    // is the reason the block exists.
+    if (dir === "requirements") {
+      const line = text.match(/^- Supersedes: (.+)$/m)?.[1] ?? "";
+      for (const name of tracedNames(trace.supersedes))
+        if (!line.includes(name))
+          find(
+            artefact,
+            "supersedes",
+            `the Supersedes line does not mention ${name}`,
+          );
+    }
+  }
   return out;
 }
 
 /** Every artefact, its place, and the parent it declares. */
 function nodes(root) {
-  const all = [];
-  for (const { dir, file, deep, not } of PLACES)
-    for (const artefact of entries(root, dir, file, deep, not)) {
-      const path = file
-        ? join(root, dir, artefact, file)
-        : join(root, dir, `${artefact}.md`);
-      if (!existsSync(path)) continue;
-      const text = readFileSync(path, "utf8");
-      const trace = readTrace(text) ?? {};
-      const raw = (trace.parent ?? "").trim();
-      all.push({
-        dir,
-        artefact,
-        text,
-        parent:
-          raw && !/^none$/i.test(raw)
-            ? (splitTrace(raw)[0]?.name ?? null)
-            : null,
-        isRoot: /^none$/i.test(raw),
-      });
-    }
-  return all;
+  return artefacts(root).map(({ dir, artefact, text }) => {
+    const trace = readTrace(text) ?? {};
+    const raw = (trace.parent ?? "").trim();
+    return {
+      dir,
+      artefact,
+      text,
+      parent:
+        raw && !/^none$/i.test(raw) ? (splitTrace(raw)[0]?.name ?? null) : null,
+      isRoot: /^none$/i.test(raw),
+    };
+  });
 }
 
 /**
@@ -354,40 +362,51 @@ export function checkShape(root) {
 
 /**
  * Write the pin of every trace that resolves, in place, changing nothing
- * else on the page. Nobody types a sha.
- * @param {string} root
+ * else on the page, and never clear a review. Nobody types a sha.
+ *
+ * It writes a pin where there is none and advances one whose review clears
+ * the sha the region has now, because a person reading the moved text is the
+ * act and carrying the sha forward afterwards is bookkeeping. It leaves a
+ * pin nobody has read exactly as it found it, and says how many it left: a
+ * tool that cleared those would be recording that somebody read something
+ * when nobody did.
+ * @param {string} root @returns {number} the pins it was told to leave
  */
 export function writePins(root) {
-  for (const { dir, file, deep, not } of PLACES)
-    for (const artefact of entries(root, dir, file, deep, not)) {
-      const path = file
-        ? join(root, dir, artefact, file)
-        : join(root, dir, `${artefact}.md`);
-      if (!existsSync(path)) continue;
-      const text = readFileSync(path, "utf8");
-      const trace = readTrace(text);
-      if (!trace || !Object.keys(trace).length) continue;
-      let out = text;
-      for (const [kind, value] of Object.entries(trace)) {
-        if (!KINDS[kind]) continue;
-        const pinned = splitTrace(value)
-          .map(({ name }) => {
-            // The declaring artefact, which `parent` reads and the other
-            // kinds ignore. Without it every parent was pinned from
-            // `requirements/<name>/requirement.md` whatever tree declared
-            // it: a name that resolved there was pinned to the wrong file
-            // and read back as moved for ever, and a name that did not was
-            // silently left bare.
-            const sha = regionSha(root, kind, name, { dir, artefact });
-            return sha ? `${name}@${sha}` : name;
-          })
-          .join(", ");
-        if (!pinned) continue;
-        out = out.replace(
-          new RegExp(`^(\\s+${kind}:).*$`, "m"),
-          `$1 ${pinned}`,
-        );
-      }
-      if (out !== text) writeFileSync(path, out);
+  let left = 0;
+  for (const { dir, artefact, path, text } of artefacts(root)) {
+    const trace = readTrace(text);
+    if (!trace || !Object.keys(trace).length) continue;
+    const { reviews } = readReviews(text);
+    let out = text;
+    for (const [kind, value] of Object.entries(trace)) {
+      if (!KINDS[kind]) continue;
+      let held = false;
+      const pinned = splitTrace(value)
+        .map(({ name, pin }) => {
+          // The declaring artefact, which `parent` reads and the other
+          // kinds ignore. Without it every parent was pinned from
+          // `requirements/<name>/requirement.md` whatever tree declared
+          // it: a name that resolved there was pinned to the wrong file
+          // and read back as moved for ever, and a name that did not was
+          // silently left bare.
+          const sha = regionSha(root, kind, name, { dir, artefact });
+          if (!sha) return name;
+          if (!mayWrite({ kind, name, pin }, sha, reviews)) {
+            left += 1;
+            held = true;
+            return pin ? `${name}@${pin}` : name;
+          }
+          return `${name}@${sha}`;
+        })
+        .join(", ");
+      // A line carrying one held pin is left whole. Rewriting the rest of it
+      // would change a page for a pin the tool was told not to touch, and a
+      // reader comparing the diff could not tell which it had done.
+      if (!pinned || held) continue;
+      out = out.replace(new RegExp(`^(\\s+${kind}:).*$`, "m"), `$1 ${pinned}`);
     }
+    if (out !== text) writeFileSync(path, out);
+  }
+  return left;
 }

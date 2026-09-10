@@ -4,6 +4,13 @@
 // with no value and nothing indented stays the empty string, so every reader
 // (skills, records, waivers, retros) sees what it always saw. One parser,
 // tested once, no dependency.
+//
+// A sub key may carry a slash, because a `reviews:` block is keyed by the pin
+// it is about and a pin is a kind and a name. Only sub keys: a top level key
+// with a slash in it is nothing this tree writes. Before this the pattern
+// matched no such key at all and the line was dropped without a word, which
+// is the worst of the three things a parser can do with a line it does not
+// understand.
 
 const value = (raw) =>
   /^".*"$/.test(raw) ? raw.slice(1, -1).replace(/\\"/g, '"') : raw;
@@ -19,7 +26,7 @@ export function parseFrontmatter(text) {
   const data = {};
   let open = null;
   for (const line of m[1].split(/\r?\n/)) {
-    const sub = open && line.match(/^\s+([A-Za-z_][\w-]*):\s*(.*)$/);
+    const sub = open && line.match(/^\s+([A-Za-z_][\w/-]*):\s*(.*)$/);
     if (sub) {
       if (data[open] === "") data[open] = {};
       data[open][sub[1]] = value(sub[2].trim());
