@@ -2,6 +2,11 @@
 // criterion. Surface only: `kaal seats`, the board's config, `AGENTS.md`, and
 // scratch git repositories built here, because a fixture that is a git
 // repository cannot be committed inside one.
+//
+// The lane comes from the branch, so every scratch repository is branched by
+// name before the change is written. A fixture that left the branch at main
+// would prove the guard reads a diff and say nothing about which lane it read
+// it against, which is the whole of what moved in this specification.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -46,11 +51,12 @@ const put = (root, files) => {
 };
 
 /**
- * A scratch repository: `base` committed, then `change` written over it and
- * left in the working tree, which is the state a person is in when they are
- * about to push. The caller removes it.
+ * A scratch repository: `base` committed on main, a branch called `branch`
+ * checked out, then `change` written over it and left in the working tree,
+ * which is the state a person is in when they are about to push. The caller
+ * removes it.
  */
-function repo(base, change) {
+function repo(branch, base, change) {
   const root = mkdtempSync(join(tmpdir(), "kaal-seats-"));
   git(root, "init", "--quiet", "-b", "main");
   git(root, "config", "user.email", "fixture@example.invalid");
@@ -58,78 +64,109 @@ function repo(base, change) {
   put(root, { "kaal.config.json": JSON.stringify(config(), null, 2), ...base });
   git(root, "add", "-A");
   git(root, "commit", "--quiet", "-m", "base");
+  git(root, "checkout", "--quiet", "-b", branch);
   put(root, change);
   return root;
 }
-const scratch = (base, change, fn) => {
-  const root = repo(base, change);
+const scratch = (branch, base, change, fn) => {
+  const root = repo(branch, base, change);
   try {
     return fn(root);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 };
-// A requirement page with the parts the seats question reads.
-const requirement = (
-  name,
-  criteria = "1. It holds.",
-  handoff = "- Status: open",
-) =>
+// A requirement page with the parts the seats question reads. No status
+// field: nothing in this tree has carried one since delivery became a report.
+const requirement = (name, criteria = "1. It holds.", extra = "") =>
   `---\ntraces:\n  supersedes: nothing\n---\n\n# Requirement: ${name}\n\n` +
-  `## Acceptance criteria\n\n${criteria}\n\n## Handoff\n\n- Task: ${name}\n${handoff}\n- People: none\n`;
+  `## Acceptance criteria\n\n${criteria}\n\n## Handoff\n\n- Task: ${name}\n${extra}- People: none\n`;
 
-test("1. each seat's paths are declared once in the config, and a path owned by two is a finding", () => {
-  const seats = config().seats;
-  assert.ok(Array.isArray(seats), "kaal.config.json declares no seats");
-  assert.ok(seats.length >= 4, `only ${seats.length} seats declared`);
-  for (const s of seats) {
+test("1. the config declares the seats, the lanes and the shared paths, each once", () => {
+  const c = config();
+  assert.ok(Array.isArray(c.seats), "kaal.config.json declares no seats");
+  assert.ok(c.seats.length >= 4, `only ${c.seats.length} seats declared`);
+  for (const s of c.seats) {
     assert.ok(s.name, `a seat has no name: ${JSON.stringify(s)}`);
     assert.ok(Array.isArray(s.owns) && s.owns.length, `${s.name} owns nothing`);
   }
-  const owned = seats.flatMap((s) => s.owns);
+  const owned = c.seats.flatMap((s) => s.owns);
   assert.equal(
     new Set(owned).size,
     owned.length,
-    `a glob is owned twice: ${owned.filter((g, i) => owned.indexOf(g) !== i)}`,
+    `a path is owned twice: ${owned.filter((g, i) => owned.indexOf(g) !== i)}`,
   );
-  // And the tool says so rather than trusting the page: two seats claiming
-  // one glob is the config being wrong, which is a finding and not a crash.
-  const twice = {
-    ...config(),
-    seats: [
-      { name: "analyst", owns: ["requirements/**"] },
-      { name: "architect", owns: ["requirements/**"] },
-    ],
-  };
-  scratch({ "a.md": "one" }, {}, (root) => {
-    writeFileSync(
-      join(root, "kaal.config.json"),
-      JSON.stringify(twice, null, 2),
+  assert.ok(Array.isArray(c.lanes), "kaal.config.json declares no lanes");
+  assert.ok(c.lanes.length >= 4, `only ${c.lanes.length} lanes declared`);
+  const names = new Set(c.seats.map((s) => s.name));
+  for (const l of c.lanes) {
+    assert.ok(l.pattern, `a lane has no pattern: ${JSON.stringify(l)}`);
+    // One seat or none. A lane carrying a list is the thing this task exists
+    // to make impossible, so the shape refuses it before the tool does.
+    assert.ok(
+      l.seat === null || l.seat === undefined || typeof l.seat === "string",
+      `the lane ${l.pattern} carries more than one seat: ${JSON.stringify(l.seat)}`,
     );
-    const r = kaal("seats", root, "--against", "main");
-    notUsage(said(r));
-    assert.equal(r.status, 1, `two seats owning one glob passed: ${said(r)}`);
-    assert.match(
-      said(r),
+    if (typeof l.seat === "string")
+      assert.ok(names.has(l.seat), `the lane ${l.pattern} names no known seat`);
+  }
+  assert.ok(
+    Array.isArray(c.shared) && c.shared.length,
+    "kaal.config.json declares no shared paths",
+  );
+  // And the tool says so rather than trusting the page, on both halves: two
+  // seats claiming one path, and a lane claiming two seats.
+  for (const [what, bad, named] of [
+    [
+      "two seats owning one path",
+      {
+        seats: [
+          { name: "analyst", owns: ["requirements/**"] },
+          { name: "architect", owns: ["requirements/**"] },
+        ],
+      },
       /requirements\/\*\*/,
-      `the glob is not named: ${said(r)}`,
-    );
-  });
+    ],
+    [
+      "a lane carrying two seats",
+      { lanes: [{ pattern: "both/*", seat: ["analyst", "architect"] }] },
+      /both\/\*/,
+    ],
+  ]) {
+    scratch("governance/x", { "a.md": "one" }, {}, (root) => {
+      writeFileSync(
+        join(root, "kaal.config.json"),
+        JSON.stringify({ ...config(), ...bad }, null, 2),
+      );
+      const r = kaal("seats", root, "--against", "main");
+      notUsage(said(r));
+      assert.equal(r.status, 1, `${what} passed: ${said(r)}`);
+      assert.match(said(r), named, `${what}: not named: ${said(r)}`);
+    });
+  }
 });
 
-test("2. it reads a diff against a base ref, names the seats it touches, and refuses a ref it cannot resolve", () => {
+test("2. it reads the branch and a diff against a base ref, and refuses a ref it cannot resolve", () => {
   scratch(
+    "build/alpha",
     { "bin/kaal.mjs": "// base\n" },
-    { "bin/kaal.mjs": "// changed\n", "tests/a.test.mjs": "// new\n" },
+    { "bin/kaal.mjs": "// changed\n", "bin/lib/one.mjs": "// new\n" },
     (root) => {
       const r = kaal("seats", root, "--against", "main");
       const out = said(r);
       notUsage(out);
-      // One line per seat, so a reader counts lines rather than parsing prose.
-      const lines = out
-        .split("\n")
-        .filter((l) => /\b(developer|tester)\b/.test(l));
-      assert.equal(lines.length, 2, `expected a line per seat and got: ${out}`);
+      // The lane it read, by name, so a reader never has to guess which
+      // declaration the finding was measured against.
+      assert.match(out, /build\/alpha|build\/\*/, `no lane is named: ${out}`);
+      // Counted on the line's own word and not on the seat's name: the
+      // lane line names its seat too, and a test that matched the name
+      // alone would count the lane as a seat. The stand-in found that.
+      const lines = out.split("\n").filter((l) => /^seat /.test(l));
+      assert.deepEqual(
+        lines,
+        ["seat developer"],
+        `expected one seat line for the one seat touched and got: ${out}`,
+      );
       // A base ref that names nothing is not this tree's question, on its
       // own exit code, so a caller reading the code never takes it for a pass.
       const nowhere = kaal("seats", root, "--against", "no-such-ref");
@@ -143,8 +180,11 @@ test("2. it reads a diff against a base ref, names the seats it touches, and ref
   );
 });
 
-test("3. a diff touching two seats is a finding naming both, and one path for each", () => {
+test("3. a path its lane does not allow is a finding, and a lane that allows every path is not", () => {
+  // A drawing on a build's branch. Another seat owns it, and the lane is what
+  // refuses it.
   scratch(
+    "build/alpha",
     {
       "bin/kaal.mjs": "// base\n",
       "architecture/alpha/drawing.md": "# base\n",
@@ -157,29 +197,42 @@ test("3. a diff touching two seats is a finding naming both, and one path for ea
       const r = kaal("seats", root, "--against", "main");
       const out = said(r);
       notUsage(out);
-      assert.equal(r.status, 1, `a diff across two seats passed: ${out}`);
-      assert.match(out, /\bdeveloper\b/, `the developer is not named: ${out}`);
-      assert.match(out, /\barchitect\b/, `the architect is not named: ${out}`);
-      assert.match(
-        out,
-        /bin\/kaal\.mjs/,
-        `no path is named for the developer: ${out}`,
+      assert.equal(r.status, 1, `a path outside the lane passed: ${out}`);
+      assert.ok(
+        out.includes("architecture/alpha/drawing.md"),
+        `the path is not named: ${out}`,
       );
       assert.match(
         out,
-        /architecture\/alpha\/drawing\.md/,
-        `no path is named for the architect: ${out}`,
+        /build\/alpha|build\/\*/,
+        `the lane is not named: ${out}`,
       );
     },
   );
-  // One seat is not a finding, whatever else the diff carries: a path no
-  // seat owns is nobody's crossing.
+  // A path no seat owns at all, which the first specification called free and
+  // this one calls a finding unless it is shared. `deploy/` is owned by
+  // nobody and is not in the shared list.
   scratch(
+    "build/alpha",
+    { "bin/kaal.mjs": "// base\n" },
+    { "bin/kaal.mjs": "// changed\n", "deploy/notes.md": "unowned\n" },
+    (root) => {
+      const r = kaal("seats", root, "--against", "main");
+      const out = said(r);
+      notUsage(out);
+      assert.equal(r.status, 1, `an unowned path was free: ${out}`);
+      assert.ok(out.includes("deploy/notes.md"), `not named: ${out}`);
+    },
+  );
+  // And the other way: a diff whose every path is the lane's seat's or
+  // shared is clean, whatever else it carries. A retro is shared and every
+  // seat writes one.
+  scratch(
+    "build/alpha",
     { "bin/kaal.mjs": "// base\n" },
     {
       "bin/kaal.mjs": "// changed\n",
-      "README.md": "unowned\n",
-      "retros/x.md": "unowned\n",
+      "retros/2026-01-01-code-first-use.md": "# Retrospective\n",
     },
     (root) => {
       const r = kaal("seats", root, "--against", "main");
@@ -187,63 +240,36 @@ test("3. a diff touching two seats is a finding naming both, and one path for ea
       assert.equal(
         r.status,
         0,
-        `one seat plus unowned paths was refused: ${said(r)}`,
+        `a lane's own path plus a shared one was refused: ${said(r)}`,
       );
     },
   );
 });
 
-test("4. a build may close the requirement it builds, and may not move its criteria", () => {
-  const base = {
-    "bin/kaal.mjs": "// base\n",
-    "requirements/alpha/requirement.md": requirement("alpha"),
-  };
+test("4. a branch matching no lane is a finding naming the branch and the lanes", () => {
   scratch(
-    base,
-    {
-      "bin/kaal.mjs": "// changed\n",
-      // The Handoff moved and the criteria did not: this is a build closing
-      // its own task, which every build in this league does.
-      "requirements/alpha/requirement.md": requirement(
-        "alpha",
-        "1. It holds.",
-        "- Status: closed",
-      ),
-    },
-    (root) => {
-      const r = kaal("seats", root, "--against", "main");
-      notUsage(said(r));
-      assert.equal(
-        r.status,
-        0,
-        `a build closing its own requirement was refused: ${said(r)}`,
-      );
-    },
-  );
-  scratch(
-    base,
-    {
-      "bin/kaal.mjs": "// changed\n",
-      // The criteria moved: that is the analyst's, and moving it beside the
-      // code that answers it is the thing this task exists to refuse.
-      "requirements/alpha/requirement.md": requirement(
-        "alpha",
-        "1. It holds differently.",
-      ),
-    },
+    "wip/whatever",
+    { "bin/kaal.mjs": "// base\n" },
+    { "bin/kaal.mjs": "// changed\n" },
     (root) => {
       const r = kaal("seats", root, "--against", "main");
       const out = said(r);
-      assert.equal(
-        r.status,
-        1,
-        `a build moving its own criteria passed: ${out}`,
+      notUsage(out);
+      // The diff itself is one seat and would pass under any lane. What is
+      // refused is the branch, so a guard that answered clean here would be
+      // passing on a declaration nobody made.
+      assert.equal(r.status, 1, `an unknown branch answered clean: ${out}`);
+      assert.ok(
+        out.includes("wip/whatever"),
+        `the branch is not named: ${out}`,
       );
-      assert.match(
-        out,
-        /Acceptance criteria/i,
-        `the section is not named: ${out}`,
-      );
+      const patterns = config().lanes ?? [];
+      assert.ok(patterns.length, "no lanes declared to be listed");
+      for (const l of patterns)
+        assert.ok(
+          out.includes(l.pattern),
+          `the lane ${l.pattern} is not offered: ${out}`,
+        );
     },
   );
 });
@@ -270,36 +296,44 @@ test("5. a proof its seat did not write is a finding naming the file, unless a s
       { "architecture/alpha/contracts.test.mjs": "// edited\n" },
     ],
   ]) {
-    scratch(base, { "bin/kaal.mjs": "// changed\n", ...change }, (root) => {
-      const r = kaal("seats", root, "--against", "main");
-      const out = said(r);
-      notUsage(out);
-      assert.equal(
-        r.status,
-        1,
-        `${what} was edited by another seat and passed: ${out}`,
-      );
-      // The path, looked for literally. Escaping one into a pattern is a
-      // list of characters somebody has to keep complete, and mine was
-      // missing the backslash, which is the one a path is most likely to
-      // carry. Nothing here needs a pattern.
-      assert.ok(
-        out.includes(Object.keys(change)[0]),
-        `${what}: the file is not named: ${out}`,
-      );
-    });
+    scratch(
+      "build/alpha",
+      base,
+      { "bin/kaal.mjs": "// changed\n", ...change },
+      (root) => {
+        const r = kaal("seats", root, "--against", "main");
+        const out = said(r);
+        notUsage(out);
+        assert.equal(
+          r.status,
+          1,
+          `${what} was edited by another seat and passed: ${out}`,
+        );
+        // The path, looked for literally. Escaping one into a pattern is a
+        // list of characters somebody has to keep complete, and mine was
+        // missing the backslash, which is the one a path is most likely to
+        // carry. Nothing here needs a pattern.
+        assert.ok(
+          out.includes(Object.keys(change)[0]),
+          `${what}: the file is not named: ${out}`,
+        );
+      },
+    );
   }
   // The escape, and it is a declaration rather than a flag: a requirement in
-  // the same diff says which task's claim moved, where the trace wall reads it.
+  // the same diff says which task's claim moved, where the trace wall reads
+  // it. The lane is the analyst's, because moving a proof is analyst work and
+  // the escape excuses the proof rule and never the lane.
   scratch(
+    "requirement/beta",
     base,
     {
-      "bin/kaal.mjs": "// changed\n",
       "requirements/alpha/acceptance.test.mjs": "// edited\n",
-      "requirements/beta/requirement.md":
-        `---\ntraces:\n  supersedes: alpha\n---\n\n# Requirement: beta\n\n` +
-        `## Acceptance criteria\n\n1. It holds.\n\n## Handoff\n\n- Task: beta\n- Status: closed\n` +
-        `- Supersedes: \`alpha\`, whose second criterion moved\n- People: none\n`,
+      "requirements/beta/requirement.md": requirement(
+        "beta",
+        "1. It holds.",
+        "- Supersedes: `alpha`, whose second criterion moved\n",
+      ).replace("supersedes: nothing", "supersedes: alpha"),
     },
     (root) => {
       const r = kaal("seats", root, "--against", "main");
@@ -309,7 +343,7 @@ test("5. a proof its seat did not write is a finding naming the file, unless a s
   );
 });
 
-test("6. the board runs it, and its fix says to split the diff", () => {
+test("6. the board runs it, and its fix says to split the diff or rename the branch", () => {
   const gate = config().gates.find((g) => /seats/.test(g.command ?? ""));
   assert.ok(
     gate,
@@ -320,29 +354,48 @@ test("6. the board runs it, and its fix says to split the diff", () => {
     /split/i,
     `the fix does not say to split: ${gate.fix}`,
   );
+  assert.match(
+    gate.fix ?? "",
+    /rename/i,
+    `the fix does not say to rename: ${gate.fix}`,
+  );
   // And it is not a wall that widens the declaration to go green.
   assert.doesNotMatch(
     gate.fix ?? "",
-    /add .*(seat|glob|own)/i,
+    /add .*(seat|lane|glob|own|shared)/i,
     `the fix invites widening: ${gate.fix}`,
   );
 });
 
-test("7. AGENTS.md names the same seats and no lane that carries more than one", () => {
+test("7. AGENTS.md names the same seats and lanes as the config, and no lane carrying two", () => {
   const page = agents();
-  const seats = config().seats;
+  const c = config();
   // Asserted rather than iterated: a missing declaration is criterion 1's
   // finding, and a test that throws on it is red for its own defect.
   assert.ok(
-    Array.isArray(seats),
+    Array.isArray(c.seats) && c.seats.length,
     "kaal.config.json declares no seats to compare against",
   );
-  for (const s of seats)
+  assert.ok(
+    Array.isArray(c.lanes) && c.lanes.length,
+    "kaal.config.json declares no lanes to compare against",
+  );
+  for (const s of c.seats)
     assert.match(
       page,
       new RegExp(`\\b${s.name}\\b`),
       `AGENTS.md does not name the seat ${s.name}`,
     );
+  for (const l of c.lanes) {
+    // The pattern's own prefix, because the page writes `requirement/<task>`
+    // where the config writes `requirement/*`, and the part that has to agree
+    // is the lane and not the placeholder.
+    const prefix = l.pattern.split("/")[0];
+    assert.ok(
+      page.includes(prefix + "/"),
+      `AGENTS.md does not name the lane ${l.pattern}`,
+    );
+  }
   // The page said a task's lane is "a requirement with its drawing and
   // build", which is three seats in one branch by definition.
   assert.doesNotMatch(
