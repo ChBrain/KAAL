@@ -59,6 +59,39 @@ is declared as a supersede.
   `--against <ref>`, reports what moved, and answers that the question is not
   this tree's where no base ref resolves. A wall that reads a diff is not a
   new kind of thing here.
+- This page waited on a pin, which is the run that specified the task after
+  it. Amending a criterion moves the region the drawing pins, and until
+  `a-pin-says-who-cleared-it` shipped that was two walls red on a file the
+  analyst may not touch, so this diff sat written and unlandable for a day.
+  Run today: the board answers fourteen walls green, `kaal traces` reports
+  `a-diff-carries-one-seat: requirement: a-diff-carries-one-seat moved: its
+Acceptance criteria no longer matches the pin; review-needed` and exits 0,
+  and `kaal runs` counts that pin against this task rather than against the
+  board. That is the first live use of the state, and this page is what it
+  was built for.
+- The guard refuses the analyst writing an acceptance test, which is the
+  analyst's whole job. Run on the first analyst diff after the wall landed,
+  branch `requirement/an-install-carries-the-method` carrying that task's own
+  requirement and its own acceptance tests, `kaal seats` answers
+  `requirements/an-install-carries-the-method/acceptance.test.mjs: a proof
+its seat did not write`, exit 1. Every new requirement in this league is
+  blocked until this moves, because a requirement and its proof are one
+  analyst diff by definition.
+- The three words that did it are "whatever else the diff touches", and this
+  page's own Goal says what was meant: "the seat which wrote a proof is not
+  the seat that made it pass". The harm is a different seat, and the criterion
+  named every seat.
+- The seat and the kind already line up in the tree, so the kind alone would
+  make this criterion say nothing criterion 3 does not: an acceptance test
+  and a requirement's fixtures live under `requirements/`, which is the
+  analyst's, and a contract test lives under `architecture/`, which is the
+  architect's, so no seat can reach another's kind without crossing a lane
+  first. What this criterion holds that criterion 3 cannot is the task: one
+  analyst branch rewriting another task's criteria is one seat and two tasks,
+  and it is the cheating half of the ask rather than the accident half.
+- A requirement page is not a proof to this wall, so amending a criterion is
+  an ordinary analyst diff. Checked before writing this one: `proofs` on
+  `requirements/a-diff-carries-one-seat/requirement.md` finds nothing.
 - The board is thirteen walls green today, and one of them, `coverage`,
   reports that the tester has no record for this task and the architect no
   drawing. Both are true and both are this task.
@@ -157,9 +190,12 @@ is declared as a supersede.
    an answer that the diff is clean; a branch carrying no change at all is an
    answer, because there is nothing to place in a lane.
 5. A diff that changes an acceptance test, a fixture under `requirements/`,
-   or a drawing's contract test is a finding naming the file, whatever else
-   the diff touches, unless a requirement in the same diff declares a
-   supersede of the task that owns it.
+   or a drawing's contract test is a finding naming the file, unless the
+   lane's seat is the seat that writes that kind of proof and the branch is
+   that proof's task's, or a requirement in the same diff declares a
+   supersede of the task that owns it. An acceptance test and a requirement's
+   fixtures are the analyst's to write; a drawing's contract tests are the
+   architect's; no other seat writes either.
 6. The board runs it, and the fix line says to split the diff or rename the
    branch, and never to widen the declaration.
 7. `AGENTS.md` names the same seats and the same lane patterns as the config,
@@ -226,7 +262,17 @@ is declared as a supersede.
 - Blocked on: nothing to specify
 - Unblocks: every future build, which is the point: this is the task that
   makes the accident that prompted it impossible rather than regrettable
-- Amended twice, not superseded: this page's criteria moved after its first
+- Amended a third time, and by its own wall: criterion 5 refused the analyst
+  writing an acceptance test on the first analyst diff after the wall landed.
+  It now excuses a proof whose kind the lane's seat writes and whose task the
+  branch names, and it still refuses every seat reaching another's kind and
+  every branch reaching another task's proof without a declared supersede.
+  The clause's own two cases land here, in this diff, because the build that
+  reads this criterion went in first: the analyst writing its own task's
+  acceptance test and its own fixtures answers 0, and one analyst branch
+  reaching another task's proof still answers 1 and names the file. Both were
+  seen red one at a time, each half of the clause taken out on its own
+- Amended twice before that, not superseded: this page's criteria moved after its first
   drawing was closed unbuilt, and no drawing pins them. The second amendment
   is the architect's handback and it is three clauses, all found by drawing
   against these criteria and none of them a widening: a lane declares the

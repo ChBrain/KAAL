@@ -378,6 +378,45 @@ test("5. a proof its seat did not write is a finding naming the file, unless a s
       assert.equal(r.status, 0, `a declared supersede was refused: ${said(r)}`);
     },
   );
+  // The seat that writes a kind of proof, on the branch that names that
+  // proof's task, is the job rather than the harm. This is the case that
+  // blocked every new requirement in this league for a day: an analyst
+  // cannot state a requirement without writing what proves it.
+  scratch(
+    "requirement/alpha-amend",
+    base,
+    {
+      "requirements/alpha/acceptance.test.mjs": "// edited\n",
+      "requirements/alpha/fixtures/one/note.md": "edited\n",
+    },
+    (root) => {
+      const r = kaal("seats", root, "--against", "main");
+      notUsage(said(r));
+      assert.equal(
+        r.status,
+        0,
+        `the analyst writing its own task's proof was refused: ${said(r)}`,
+      );
+    },
+  );
+  // And the right seat on the wrong task is still a finding, which is the
+  // cheating half of the ask rather than the accident half: one analyst
+  // branch rewriting another task's criteria is one seat and two tasks.
+  scratch(
+    "requirement/beta",
+    base,
+    { "requirements/alpha/acceptance.test.mjs": "// edited\n" },
+    (root) => {
+      const r = kaal("seats", root, "--against", "main");
+      const out = said(r);
+      notUsage(out);
+      assert.equal(r.status, 1, `another task's proof passed: ${out}`);
+      assert.ok(
+        out.includes("requirements/alpha/acceptance.test.mjs"),
+        `the file is not named: ${out}`,
+      );
+    },
+  );
 });
 
 test("6. the board runs it, and its fix says to split the diff or rename the branch", () => {
