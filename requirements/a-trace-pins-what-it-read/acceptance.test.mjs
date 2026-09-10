@@ -79,11 +79,19 @@ test("1. a value is a name or a name and a pin, and the table names the region",
   );
 });
 
-test("2. a pin that no longer matches is a finding naming what moved", () => {
+test("2. a pin that no longer matches is reported, naming what moved", () => {
   const r = kaal("traces", F("stale"));
   const out = said(r);
   notUsage(out);
-  assert.equal(r.status, 1, `a stale pin was allowed: ${out}`);
+  // What this criterion asks for is the report and its words. The exit code
+  // it never mentioned, and this test asserted it anyway: a stale pin was a
+  // failure only because criterion 6 said every pin in the tree is current,
+  // and `a-pin-says-who-cleared-it` supersedes that. A moved pin is a state
+  // with an owner there, and its criterion 2 owns what this command exits
+  // with. The criterion above is left exactly as it stands, because amending
+  // its text would move the region the architect's drawing pins, and a tree
+  // where that is a red board is the tree the superseding task exists to
+  // end.
   for (const [what, re] of [
     ["the artefact", /\bt\b/],
     ["the kind", /requirement/],
