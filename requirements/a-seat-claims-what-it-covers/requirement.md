@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: nothing
+  supersedes: gates-v1@bbde47849273fcbf9e940c26a48dd239e522eeb8c12f27c78ca4642141019668
 ---
 
 # Requirement: a-seat-claims-what-it-covers
@@ -120,5 +120,41 @@ cover, computed from the tree and the records every time it is asked.
 - Blocked on: nothing
 - Unblocks: the answer to how far this league actually is, which is a
   question the board has never been able to answer about itself
-- Supersedes: nothing
+- Supersedes: `gates-v1`, whose assumption fixes the board as printing one
+  line per wall and a summary. That held while every wall's answer was a
+  count of tests. This one's answer is its own output, so a wall may declare
+  that its line belongs on the board and add lines of its own while green.
+  `gates-v1` keeps everything else it says about the board: one runner, the
+  walls as data, and never a number a run did not make
 - People: none
+
+## Build
+
+- Built: all seven criteria, on
+  `requirement/a-seat-claims-what-it-covers-build`
+- Landed: `bin/lib/coverage.mjs`, new, holding the seats as a table and
+  rendering a row; `kaal coverage [root]` and its applicability; the
+  thirteenth gate; `bin/lib/gates.mjs` learning that a gate may declare its
+  own line belongs on the board; `SURFACE.md`
+- Proved: `node bin/kaal.mjs gates` green on thirteen walls, seven criteria,
+  five seams, thirteen units
+- The board now answers a question it has never been able to ask about
+  itself. Sixty-two stated, fifty-five answered by a drawing, fifty-nine
+  proved by a run on record, and the gaps named rather than counted
+- Found by a unit that counts refusals: `runs` and `coverage` read the same
+  file for two different questions and refused a foreign tree in the same
+  words, and the applicability unit asserts that no two commands give the
+  same reason. It has held that assertion since twelve commands ago and this
+  is the first time it fired. Each reason now names its question first, the
+  way `release` and `class` already had to
+- Superseded, both declared in the drawing before the build: criterion 6's
+  own test asked the config for a per gate `count` pattern, which nothing
+  reads and which could carry one number where the criterion asks for four,
+  so it asks for the flag decision 1 fixed and for the board actually
+  carrying the rows while green; and `gates-v1`'s assumption that the board
+  prints one line per wall, which held while every wall's answer was a count
+  of tests
+- No unit suite, and the drawing said so: the counting sits behind seams 1
+  and 2, and a unit of it would be the contract test with the seam removed
+- Class: surface moved, tool moved (`kaal class . --against origin/main`,
+  run last, after the final edit)

@@ -88,6 +88,10 @@ export function runGates(root, config = null) {
       ok: r.status === 0,
       count: count === undefined ? null : Number(count),
       fix: g.fix ?? null,
+      // A wall whose output is the answer says so, and the board carries its
+      // line whether or not it refused. A wall that cannot fail is a report,
+      // and a board that only speaks when refused cannot carry one.
+      show: g.show === true,
       status: r.status,
       output: (r.stdout ?? "").split(/\r?\n/).filter((l) => l.trim()),
     });
@@ -119,6 +123,7 @@ export function runGates(root, config = null) {
           ]
         : [
             `${x.ok ? "ok  " : "FAIL"} ${x.name}${x.count !== null ? ` (${x.count} passing)` : ""}${x.ok || !x.fix ? "" : `  fix: ${x.fix}`}${x.waiverNote ? `  [${x.waiverNote}]` : ""}`,
+            ...(x.show && x.ok ? x.output.map((l) => `  ${l}`) : []),
             ...(x.ok ? [] : x.output.map((l) => `  ${l}`)),
           ],
   );

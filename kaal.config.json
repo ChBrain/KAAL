@@ -75,6 +75,12 @@
       "name": "format",
       "command": "npx prettier --check .",
       "fix": "npx prettier --write . (npm install first if the formatter is missing)"
+    },
+    {
+      "name": "coverage",
+      "command": "node bin/kaal.mjs coverage",
+      "fix": "nothing to fix: a coverage row is a fact about how far the work has got, and this wall cannot refuse",
+      "show": true
     }
   ],
   "human": {

@@ -35,6 +35,7 @@ export const GUARDED = [
   "release",
   "traces",
   "runs",
+  "coverage",
 ];
 
 const isDir = (p) => {
@@ -71,13 +72,24 @@ export function appliesHere(cmd, arg, cwd) {
       return childHas(join(root, "architecture"), "drawing.md")
         ? null
         : `no architecture/<task>/drawing.md under ${root}`;
-    case "runs": {
-      // A root that may be a flag, and the same reading as `traces`: a tree
-      // with no requirement has no task whose delivery could be reported.
+    case "coverage": {
+      // A tree that states no requirement has nothing for any seat to have
+      // covered, and a report of four zeroes is not an answer.
       const tree = arg && !arg.startsWith("-") ? arg : cwd;
       return childHas(join(tree, "requirements"), "requirement.md")
         ? null
-        : `no requirements/<task>/requirement.md under ${tree}`;
+        : `nothing for a seat to cover: no requirements/<task>/requirement.md under ${tree}`;
+    }
+    case "runs": {
+      // A root that may be a flag, and the same reading as `traces`: a tree
+      // with no requirement has no task whose delivery could be reported.
+      // `coverage` reads the same file for a different question, so each
+      // names what it wanted first: two commands refusing in the same words
+      // tell a reader which file is missing and not which question died.
+      const tree = arg && !arg.startsWith("-") ? arg : cwd;
+      return childHas(join(tree, "requirements"), "requirement.md")
+        ? null
+        : `no task whose delivery could be reported: no requirements/<task>/requirement.md under ${tree}`;
     }
     case "traces": {
       // A root that may be a flag, the pair `class` and `retros` carry, and
