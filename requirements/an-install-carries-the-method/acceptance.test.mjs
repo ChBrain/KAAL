@@ -156,13 +156,13 @@ test("3. every command that refuses an empty tree answers when pointed at what w
   }
 });
 
-test("4. a consumer places a skill in one documented step, and following it puts the skill where they said", () => {
+test("4. a consumer places the method in one documented step, and following it puts every skill where they said", () => {
   const { pkg } = packed();
   const page = readFileSync(join(ROOT, "README.md"), "utf8");
   // The page names the step by name, so a reader can run it rather than
   // reconstruct it. Which shape the step takes is the drawing's.
   const named = page.match(/`kaal ([a-z-]+)[^`]*`/g) ?? [];
-  const step = named.find((m) => /install|place|adopt|carry/.test(m));
+  const step = named.find((m) => /assemble|install|place|adopt|carry/.test(m));
   assert.ok(
     step,
     `README.md names no step that places a skill: ${named.slice(0, 8)}`,
@@ -173,17 +173,26 @@ test("4. a consumer places a skill in one documented step, and following it puts
     const dest = join(into, "loaded");
     const r = spawnSync(
       process.execPath,
-      [join(ROOT, "bin", "kaal.mjs"), verb, "analyse", dest],
+      [join(ROOT, "bin", "kaal.mjs"), verb, dest],
       { cwd: pkg, encoding: "utf8" },
     );
     assert.equal(r.status, 0, `the step refused: ${said(r)}`);
-    const landed = join(dest, "analyse", "SKILL.md");
-    assert.ok(existsSync(landed), `nothing at ${landed}: ${said(r)}`);
-    assert.equal(
-      readFileSync(landed, "utf8"),
-      readFileSync(join(pkg, "skills", "analyse", "SKILL.md"), "utf8"),
-      "what landed is not what shipped",
+    // Every skill the package ships, not one of them. A consumer who has to
+    // ask a member at a time is assembling the league themselves, which is
+    // the thing this package exists not to ask for.
+    const shipped = globSync("skills/*/SKILL.md", { cwd: pkg }).map(
+      (p) => flat(p).split("/")[1],
     );
+    assert.ok(shipped.length > 1, `the package ships ${shipped.length} skills`);
+    for (const skill of shipped) {
+      const landed = join(dest, skill, "SKILL.md");
+      assert.ok(existsSync(landed), `nothing at ${landed}: ${said(r)}`);
+      assert.equal(
+        readFileSync(landed, "utf8"),
+        readFileSync(join(pkg, "skills", skill, "SKILL.md"), "utf8"),
+        `what landed for ${skill} is not what shipped`,
+      );
+    }
   } finally {
     rmSync(into, { recursive: true, force: true });
   }
