@@ -14,13 +14,15 @@ const FOREIGN = join(
 );
 const HALF = join(ROOT, "architecture", "applies-here", "fixtures", "half");
 
-test("the guarded commands are the fourteen that judge a tree against a league artefact", () => {
+test("the guarded commands are the fifteen that judge a tree against a league artefact", () => {
   // Ten until `an-artefact-traces-what-it-came-from` added `traces`, eleven
   // until `a-task-is-delivered-by-its-run` added `runs`, twelve until
   // `a-seat-claims-what-it-covers` added `coverage`, and thirteen until
   // `a-diff-carries-one-seat` added `seats`, all of which take a root and
   // judge a tree against the league's own artefacts like the ten before
-  // them. Named rather than counted, so a command added by accident is
+  // them. The fifteenth is `an-install-carries-the-method`'s, and it is the
+  // first that judges the tree it is standing in rather than one it was
+  // handed. Named rather than counted, so a command added by accident is
   // still a red.
   assert.deepEqual(GUARDED, [
     "ledger",
@@ -37,6 +39,7 @@ test("the guarded commands are the fourteen that judge a tree against a league a
     "runs",
     "coverage",
     "seats",
+    "assemble",
   ]);
 });
 
@@ -57,7 +60,7 @@ test("none applies to a tree that holds no league artefact, and each names what 
   // and `release` takes a version, so neither first argument is a path and
   // both are asked about the working directory. They are driven below, by
   // their cwd, and a foreign path handed to either is not a root.
-  const byCwd = ["runner", "release"];
+  const byCwd = ["runner", "release", "assemble"];
   const reasons = new Set();
   for (const cmd of GUARDED.filter((c) => !byCwd.includes(c))) {
     const why = appliesHere(cmd, FOREIGN, ROOT);
@@ -70,6 +73,22 @@ test("none applies to a tree that holds no league artefact, and each names what 
   assert.match(runner, /foreign/, "the runner's reason does not name the path");
   assert.doesNotMatch(runner, /analyse/, "the runner read a skill as a path");
   reasons.add(runner);
+  // The third of them, and the reason it exists: a consumer runs `assemble`
+  // inside the package and names a destination that does not exist yet, so
+  // reading that destination as a root would refuse for the wrong reason.
+  const assemble = appliesHere("assemble", join(FOREIGN, "wanted"), FOREIGN);
+  assert.ok(assemble, "assemble answered a foreign working directory");
+  assert.match(
+    assemble,
+    /foreign/,
+    "the assemble reason does not name the path",
+  );
+  assert.doesNotMatch(
+    assemble,
+    /wanted/,
+    "assemble read a destination as a root",
+  );
+  reasons.add(assemble);
   const release = appliesHere("release", "0.0.1", FOREIGN);
   assert.ok(release, "release answered a foreign working directory");
   assert.match(release, /foreign/, "the release reason does not name the path");
