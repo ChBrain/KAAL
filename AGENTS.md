@@ -34,19 +34,27 @@ read off the branch, and one pull request is one lane. A lane carries one
 seat or none, and nothing outside that seat's paths, the lane's own allowed
 paths, and the shared paths may travel in it.
 
-Four lanes carry a seat, one each: `requirement/<task>` the analyst,
+Six lanes carry a seat, one each, and they are declared in the order of
+the chain: `plan/<topic>` the manager, `requirement/<task>` the analyst,
 `architecture/<task>` the architect, `build/<task>` the developer,
-`test/<task>` the tester. Four carry none: `governance/<topic>` for the
-league's own contract, `skill/<name>`, `agent/<name>`,
-`eval/<skill>-<fixture>`. A diff that does not fit its lane is two pull
-requests, and the split is yours to make: nothing here widens a
+`test/<task>` the tester, `operate/<topic>` the operator. Four carry none:
+`governance/<topic>` for the league's own contract, `skill/<name>`,
+`agent/<name>`, `eval/<skill>-<fixture>`. A diff that does not fit its lane
+is two pull requests, and the split is yours to make: nothing here widens a
 declaration to let a diff through.
 
-Every seat writes its own want and its own proof: the analyst a
-requirement and acceptance tests under `requirements/<task>/`, the
-architect a drawing and contract tests under `architecture/<task>/`, the
-tester the strategy and the plans under `tests/`, the
-developer code and unit tests beside it. Every test is seen red before it is trusted
+Every seat writes its own want and its own proof: the manager the plans
+under `plan/`, the analyst a requirement and acceptance tests under
+`requirements/<task>/`, the architect a drawing and contract tests under
+`architecture/<task>/`, the tester the strategy and the plans under
+`tests/`, the developer code and unit tests beside it, the operator the
+release records under `deploy/`.
+
+A seat is a place as much as a name: each owns one tree and nothing else
+owns it. The manager orders work across the seats and writes none of their
+artefacts; the operator carries out the acts the tree cannot, and records
+what happened. Neither reaches into another seat's tree, and a plan that
+says what somebody else must do is still a plan and never their diff. Every test is seen red before it is trusted
 green. A closed task's red is a failure; an open task's red is reported.
 
 ## How a change lands

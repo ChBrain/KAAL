@@ -28,14 +28,19 @@ rung at a time on evidence, never on a claim.
 Five delivery skills and the loop that improves them, built by running the
 pipeline on itself.
 
-| skill       | seat       | want, and its proof                                                                     |
-| ----------- | ---------- | --------------------------------------------------------------------------------------- |
-| `analyse`   | analyst    | a task that can fail: goal, assumptions, constraints, criteria; acceptance tests        |
-| `architect` | architect  | the drawing: structure, seams, fixed and free, decisions; contract tests per seam       |
-| `code`      | developer  | the least code that turns the tests green; unit tests written first                     |
-| `operate`   | operator   | a release that holds: ship, smoke, rollback, with the human's key; deploy tests         |
-| `test`      | every seat | the discipline of the proof: red for the right reason, green on a stand-in, blind below |
-| `retro-4ls` | every use  | what was liked, learned, lacked, longed for; fed to the analyst as the next requirement |
+| skill       | seat      | want, and its proof                                                                     |
+| ----------- | --------- | --------------------------------------------------------------------------------------- |
+| `analyse`   | analyst   | a task that can fail: goal, assumptions, constraints, criteria; acceptance tests        |
+| `architect` | architect | the drawing: structure, seams, fixed and free, decisions; contract tests per seam       |
+| `code`      | developer | the least code that turns the tests green; unit tests written first                     |
+| `operate`   | operator  | a release that holds: ship, smoke, rollback, with the human's key; deploy tests         |
+| `test`      | tester    | the discipline of the proof: red for the right reason, green on a stand-in, blind below |
+| `retro-4ls` | every use | what was liked, learned, lacked, longed for; fed to the analyst as the next requirement |
+
+Six seats carry these, and the sixth has no skill written yet: the manager
+owns `plan/` and orders work across the other five, which is a discipline
+each of them already loads for its own lane. Until that skill exists the
+seat is carried by hand.
 
 Requirements drive architecture and acceptance tests. Architecture drives
 contract tests and code. Tests drive code. Code drives unit tests and
@@ -52,9 +57,14 @@ boundary, so it is a wall.
   `references/`, its `scripts/`, a `moves.json` ledger, and `fixtures/`.
   Follows the Agent Skills standard plus league policy: MIT, no vendor or
   runtime named, no consumer's vocabulary, no en-dash or em-dash.
-- **seat**: a place in the pipeline that a skill is carried in: analyst,
-  architect, developer, operator. The tester is not a seat; it is the
-  discipline every seat loads.
+- **seat**: a place in the pipeline that a skill is carried in, and a tree
+  that place owns: the manager `plan/`, the analyst `requirements/`, the
+  architect `architecture/`, the developer `bin/` and `SURFACE.md`, the
+  tester `tests/`, the operator `deploy/`. Six, declared once in
+  `kaal.config.json` and named again in `AGENTS.md`, in the order of the
+  chain. Nothing else owns a seat's tree, and the test discipline is a seat
+  and a discipline both: the tester owns the strategy and the plans, and
+  every seat writes its own proof.
 - **want and proof**: every seat's output. The want says what must be true;
   the proof is the test that fails when it is not, seen red before it is
   trusted and seen green on a throwaway stand-in before it is believed.
@@ -160,8 +170,11 @@ is a repository setting.
 DESIGN.md        the design: the rulings, and why
 skills/          the members
 agents/          the agents; Kaal first, the persona that drives KAAL
+plan/            the manager's plans, ordered across the seats
 requirements/    the analyst's wants and proofs, one task each
 architecture/    the architect's drawings and contracts, one task each
+tests/           the tester's strategy, plans and run records
+deploy/          the operator's release records, one release each
 retros/          the loop; archive/ holds what a requirement consumed
 evals/           eval records, the evidence for the Skill rung
 bin/             the league's own tool; never called by a skill

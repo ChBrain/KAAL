@@ -39,6 +39,10 @@
   },
   "seats": [
     {
+      "name": "manager",
+      "owns": ["plan/**"]
+    },
+    {
       "name": "analyst",
       "owns": ["requirements/**"]
     },
@@ -53,9 +57,18 @@
     {
       "name": "developer",
       "owns": ["bin/**", "SURFACE.md"]
+    },
+    {
+      "name": "operator",
+      "owns": ["deploy/**"]
     }
   ],
   "lanes": [
+    {
+      "pattern": "plan/*",
+      "seat": "manager",
+      "allows": []
+    },
     {
       "pattern": "requirement/*",
       "seat": "analyst",
@@ -74,6 +87,11 @@
     {
       "pattern": "test/*",
       "seat": "tester",
+      "allows": []
+    },
+    {
+      "pattern": "operate/*",
+      "seat": "operator",
       "allows": []
     },
     {
