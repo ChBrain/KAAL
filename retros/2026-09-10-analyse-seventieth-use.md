@@ -13,11 +13,15 @@ Place: this repository
   the acceptance test beside the drawing rather than from a red suite. Two
   merged artefacts disagreed about where a state is written and nothing in
   this tree would have said so until the build could satisfy neither.
-- The fixture now learns both shas from the tool. It pins the text as it will
-  stand, reads that sha back off the pin, pins the text as it stood, and moves
-  it forward again. Before this the clearance cases carried no sha at all, so
+- The fixture now learns the moved text's sha from the tool, on a tree built
+  for the purpose. Before this the clearance cases carried no sha at all, so
   they proved that a well formed review raises no finding and never that a
   review clears anything.
+- And the first way I wrote that failed for the right reason. It walked this
+  tree's own pin forward to read the sha off it, which the build then refused
+  to do, because refusing to walk an unread pin forward is the rule the case
+  is about. A fixture cannot use the behaviour it is there to disprove, and
+  finding that out cost one run rather than one review.
 
 ## Learned
 

@@ -62,6 +62,27 @@ const drawingAt = (root, task) =>
   join(root, "architecture", task, "drawing.md");
 const readAt = (root, task) => readFileSync(drawingAt(root, task), "utf8");
 
+/** The criteria region after it moves, which every case here moves it to. */
+const AHEAD = requirement("alpha", "\n1. It moved.\n");
+
+/**
+ * The sha of that region, computed by the tool on a tree built for the
+ * purpose. It cannot be read off the tree the case runs in: there the pin
+ * awaits a review and `--write` may no longer walk it forward, which is the
+ * rule the case is about.
+ */
+const shaAhead = () =>
+  scratch(
+    {
+      "requirements/alpha/requirement.md": AHEAD,
+      "architecture/alpha/drawing.md": drawing("alpha", "alpha"),
+    },
+    (root) => {
+      kaal("traces", root, "--write");
+      return readAt(root, "alpha").match(/alpha@([0-9a-f]{64})/)?.[1];
+    },
+  );
+
 /** A `reviews:` block put beside `traces:` in the same frontmatter. */
 const withReviews = (text, line) =>
   text.replace(
@@ -78,12 +99,11 @@ const withReviews = (text, line) =>
  * a sha comparison says and a written one is a claim nobody checked, so a
  * tree that owes a reading is a tree with no block in it.
  *
- * Neither sha is written by hand. The fixture pins the text as it will
- * stand, reads that sha back off the pin the tool wrote, then pins the text
- * as it stood and moves it forward again, so `SHA` in a review is the sha
- * the region has now and the tool computed both. A sha computed in a test is
- * a second opinion about what a region is, and the tool's is the one every
- * wall reads.
+ * No sha is written by hand. `SHA` in a review is the sha the moved text
+ * has, and the tool computes it, in a tree of its own: this tree's pin
+ * cannot be walked forward to learn it, because refusing to walk an unread
+ * pin forward is the rule being proved. A sha computed in a test is a second
+ * opinion about what a region is, and the tool's is the one every wall reads.
  */
 const moved =
   (review = "") =>
@@ -94,13 +114,6 @@ const moved =
         "architecture/alpha/drawing.md": drawing("alpha", "alpha"),
       },
       (root) => {
-        const ahead = requirement("alpha", "\n1. It moved.\n");
-        put(root, { "requirements/alpha/requirement.md": ahead });
-        kaal("traces", root, "--write");
-        const now = readAt(root, "alpha").match(/alpha@([0-9a-f]{64})/)?.[1];
-        put(root, {
-          "requirements/alpha/requirement.md": requirement("alpha"),
-        });
         const w = kaal("traces", root, "--write");
         const pinned = readAt(root, "alpha");
         assert.match(
@@ -108,9 +121,10 @@ const moved =
           /alpha@[0-9a-f]{64}/,
           `the fixture never got a pin: ${said(w)}`,
         );
-        assert.ok(now, "the fixture never learned the sha the text will have");
-        put(root, { "requirements/alpha/requirement.md": ahead });
-        if (review)
+        put(root, { "requirements/alpha/requirement.md": AHEAD });
+        if (review) {
+          const now = shaAhead();
+          assert.ok(now, "the fixture never learned the moved text's sha");
           writeFileSync(
             drawingAt(root, "alpha"),
             withReviews(
@@ -118,6 +132,7 @@ const moved =
               `requirement/alpha: ${review.replace("SHA", now)}`,
             ),
           );
+        }
         return fn(root);
       },
     );
