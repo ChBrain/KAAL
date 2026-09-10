@@ -70,10 +70,16 @@ skills` answers on this tree today. So a command aimed at an installed
   carry another repository's history.
 - A test never ships. It is nobody's method and it is the developer's proof,
   and it is in the tarball today only because a seat rule moved two files.
-- Placing a skill is the consumer's act and never the tool's. Nothing here
+- Placing the method is the consumer's act and never the tool's. Nothing here
   writes into a tree that did not ask, which is the guest rule this league
   already holds its own assessor to. So there is a step, and a person or a
   script they run takes it.
+- The step brings all of it by default. This page's own goal is that a
+  consumer wants the league and not half of it, and its first assumption is
+  that a sub-package is an option to take less and never an obligation to
+  assemble more. A step that placed one member at a time would be that
+  obligation with a command in front of it, so the default is everything and
+  naming less is the narrowing.
 - Where a skill lands is the consumer's runtime's business and not this
   package's. The standard this league pins says what a skill is; it does not
   say where a given runtime discovers one. So the step names a destination
@@ -115,9 +121,12 @@ skills` answers on this tree today. So a command aimed at an installed
    answer: a consumer's copy carries the method and not this league's
    evidence, so a wall that reads for evidence and reports its absence has
    answered the question it was asked.
-4. A consumer places a skill in one documented step: the page names it, and
-   following it in an empty project puts the named skill where the consumer
-   said, byte for byte the same as the package's.
+4. A consumer places the method in one documented step: the page names it,
+   and following it in an empty project puts every skill the package ships
+   where the consumer said, each byte for byte the same as the package's. A
+   consumer who wants less names what they want; a consumer who says nothing
+   gets the league, because being made to fetch it a member at a time is the
+   assembly this package exists not to ask for.
 5. The step writes nowhere the consumer did not name, and nothing writes
    without it: an empty project that installs the package and runs every
    command is unchanged except for what a package manager put in place.
