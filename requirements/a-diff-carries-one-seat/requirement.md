@@ -62,6 +62,27 @@ is declared as a supersede.
 - The board is thirteen walls green today, and one of them, `coverage`,
   reports that the tester has no record for this task and the architect no
   drawing. Both are true and both are this task.
+- A lane carrying no seat could change nothing. Handed back by the architect
+  before the drawing: the assumption below says governance, a skill, an agent
+  and an eval carry no seat, and the first two criteria then gave those lanes
+  only the shared paths. `AGENTS.md`, `kaal.config.json`, `skills/`,
+  `agents/` and `.github/` are owned by no seat, so under the criteria as
+  they first read, no lane in this tree could ever change one of them. A lane
+  now allows paths of its own beside its seat's.
+- And `main` is not a lane. Handed back with the clause above: the board runs
+  on every push to `main` as well as on every pull request, and `main`
+  matches no lane pattern, so criterion 4 as it first read turned every push
+  to `main` red. After a merge the diff against `origin/main` is empty, which
+  is the honest reading: a branch carrying no change has nothing to place in
+  a lane. Declaring `main` a lane was the other way out and it costs two
+  criteria, because a lane that deliberately allows nothing fails the clause
+  that every seatless lane allows something, and `AGENTS.md` would have to
+  name a lane nobody works in.
+- Seven of the last thirty commits that touched `kaal.config.json` are
+  builds, the most recent four hours ago. That is the habit this guard is
+  pointed at, and it is why the paths a lane allows are declared per lane
+  rather than pooled into `shared`: a list every lane may change is a list
+  the guard cannot defend.
 
 ## Assumptions
 
@@ -118,21 +139,23 @@ is declared as a supersede.
 ## Acceptance criteria
 
 1. `kaal.config.json` declares, once, `seats` as a name and the paths each
-   owns, `lanes` as a branch pattern and the one seat it carries or none, and
-   `shared` as the paths any lane may change; a path two seats own is a
-   finding naming the path, and a lane naming two seats is a finding naming
-   the lane.
+   owns, `lanes` as a branch pattern with the one seat it carries or none and
+   the paths that lane allows besides that seat's, and `shared` as the paths
+   any lane may change; a path two seats own is a finding naming the path,
+   and a lane naming two seats is a finding naming the lane.
 2. The command reads the branch it is on and a diff against a base ref, and
    prints one line naming the lane the branch matched and one line beginning
    `seat ` for every seat the diff touches; where the base ref names no commit
    it answers that the question is not this tree's.
-3. A changed path that is neither owned by the lane's seat nor listed in
-   `shared` is a finding naming that path and that lane, whether or not some
-   other seat owns it, and a diff every one of whose paths is allowed is not
-   a finding whatever else it carries.
-4. A branch whose name matches no lane is a finding naming the branch and
-   every lane pattern it could have matched, and never an answer that the
-   diff is clean.
+3. A changed path that is owned by no seat the lane carries, allowed by
+   nothing the lane itself allows, and listed in no shared path, is a finding
+   naming that path and that lane, whether or not some other seat owns it;
+   and a diff every one of whose paths is allowed is not a finding whatever
+   else it carries.
+4. A branch that carries a change and whose name matches no lane is a finding
+   naming the branch and every lane pattern it could have matched, and never
+   an answer that the diff is clean; a branch carrying no change at all is an
+   answer, because there is nothing to place in a lane.
 5. A diff that changes an acceptance test, a fixture under `requirements/`,
    or a drawing's contract test is a finding naming the file, whatever else
    the diff touches, unless a requirement in the same diff declares a
@@ -184,9 +207,16 @@ is declared as a supersede.
 - Seen red one at a time: each of the seven run alone as well as together,
   and each red on its own missing thing rather than on one shared
   precondition
-- Stand-in green: all seven, on a throwaway `seats` command, a config
-  carrying four seats, eight lanes and one shared path, a gate and a rewritten
-  lane sentence in `AGENTS.md`, then discarded from file copies
+- Stand-in green: all seven, twice. First on a throwaway `seats` command, a
+  config carrying four seats, eight lanes and one shared path, a gate and a
+  rewritten lane sentence in `AGENTS.md`. Again after the architect's
+  handback, on a config whose lanes carry allowed paths of their own, then
+  discarded from file copies
+- Found by the stand-in on the second pass, and it is a fixture defect of the
+  kind the skill names: the scratch repository always created its branch, and
+  one fixture branches to `main` itself to prove the case criterion 4's new
+  clause exists for. `-b main` on main is fatal rather than a no-op, so the
+  helper forces the branch instead
 - Found by the stand-in, which is why criterion 2 fixes a format: the test
   counted the seat lines by the seat's name, and the lane's own line names
   its seat too, so one seat read as two. A criterion that says one line per
@@ -196,8 +226,16 @@ is declared as a supersede.
 - Blocked on: nothing to specify
 - Unblocks: every future build, which is the point: this is the task that
   makes the accident that prompted it impossible rather than regrettable
-- Amended, not superseded: this page's criteria moved after its first drawing
-  was closed unbuilt, and no drawing pins them. What moved is three things.
+- Amended twice, not superseded: this page's criteria moved after its first
+  drawing was closed unbuilt, and no drawing pins them. The second amendment
+  is the architect's handback and it is three clauses, all found by drawing
+  against these criteria and none of them a widening: a lane declares the
+  paths it allows besides its seat's, because a lane carrying no seat could
+  otherwise change nothing at all; criterion 3 reads that third list before
+  it finds; and criterion 4 refuses an unknown branch that carries a change
+  rather than an unknown branch, because `main` is not a lane and the board
+  runs there too. Nothing else moved.
+- Amended once before that: What moved is three things.
   The lane now comes from the branch and not the diff, which criterion 2
   carries. A path no seat owns is now a finding rather than free, which
   criterion 3 carries and which is the old criterion 3 read the other way
