@@ -68,6 +68,22 @@ const CONFIG = JSON.stringify(
   null,
   2,
 );
+/**
+ * The same tree with a second wall, for the one case that needs two plans.
+ * Its command names a glob no case in these trees sits under, so the wall is
+ * a wall that runs tests and owes nothing else.
+ */
+const TWO_WALLS = JSON.stringify(
+  {
+    ...JSON.parse(CONFIG),
+    gates: [
+      ...JSON.parse(CONFIG).gates,
+      { name: "regression", command: "node --test bin/lib/*.test.mjs" },
+    ],
+  },
+  null,
+  2,
+);
 const CASE =
   "import { test } from 'node:test';\ntest('1. it holds', () => {});\n";
 /** A requirement, so the tree is one `kaal traces` has an answer about. */
@@ -241,11 +257,17 @@ test("5. a plan names suites and not a glob, and two plans may name one", () => 
       assert.equal(r.status, 1, `a plan carrying a glob passed: ${said(r)}`);
     },
   );
+  // Two plans, one suite, and a wall each. The wall is the other cardinality
+  // and `the-test-tree-is-written-down` closed it: a wall has one plan, and a
+  // fixture giving both plans the same wall would prove this criterion by
+  // reopening that one. So the tree grows a second gate, and what the two
+  // plans share is the suite and nothing else.
   scratch(
     {
       ...whole(),
+      "kaal.config.json": TWO_WALLS,
       "tests/plans/acceptance.md": plan("acceptance", ["alpha"]),
-      "tests/plans/regression.md": plan("acceptance", ["alpha"]),
+      "tests/plans/regression.md": plan("regression", ["alpha"]),
     },
     (root) => {
       const r = kaal("traces", root);
