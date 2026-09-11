@@ -1,9 +1,9 @@
 ---
 traces:
-  requirement: a-suite-names-its-cases@0cb994d4ed1604f94f3d1640aef2fdf017e18f203d2780caf3e1a17dc4a7a94b
+  requirement: a-suite-names-its-cases@7a9f8ad898a57d0ebd52e759e0dd6dff8412ea962c3388afecec3451ef6cd64c
   principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
 reviews:
-  requirement/a-suite-names-its-cases: updated@0cb994d4ed1604f94f3d1640aef2fdf017e18f203d2780caf3e1a17dc4a7a94b by architect: the criteria stopped saying how a trace is written and stopped naming the sha, so the seams that fixed a comma list are redrawn as a block and the pin moves with them
+  requirement/a-suite-names-its-cases: updated@7a9f8ad898a57d0ebd52e759e0dd6dff8412ea962c3388afecec3451ef6cd64c by architect: criterion 4 widened from a seat's tree to anything the board says owns a path, and seam 7 grew with it into owners and caseOwner; criterion 2 and 5 stopped saying how a trace is written, which is what seams 3, 4 and 5 now fix here
 ---
 
 # Drawing: a-suite-names-its-cases
