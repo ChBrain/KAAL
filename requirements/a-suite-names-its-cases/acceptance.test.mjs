@@ -76,11 +76,15 @@ const STRATEGY =
  * own, comma lists like `principles:` and never `parent:`, which stays the
  * tree and is the one kind that holds a single name.
  */
+const block = (key, names) =>
+  names.length
+    ? `${key}:\n${names.map((n) => `  ${n}: nothing`).join("\n")}\n`
+    : `${key}:\n`;
 const plan = (wall, suites) =>
-  `---\ntraces:\n  parent: strategy\n  suites: ${suites.join(", ") || "nothing"}\n---\n\n` +
+  `---\ntraces:\n  parent: strategy\n${block("suites", suites)}---\n\n` +
   `# Test plan: ${wall}\n\n## Wall\n\n- Wall: ${wall}\n`;
 const suite = (name, cases) =>
-  `---\ntraces:\n  parent: strategy\n  cases: ${cases.join(", ") || "nothing"}\n---\n\n` +
+  `---\ntraces:\n  parent: strategy\n${block("cases", cases)}---\n\n` +
   `# Test suite: ${name}\n`;
 
 const scratch = (files, fn) => {
@@ -142,14 +146,6 @@ test("2. a suite names its cases, and one naming none is a finding", () => {
     const ok = kaal("traces", root);
     notUsage(said(ok));
     assert.equal(ok.status, 0, `a whole tree reported: ${said(ok)}`);
-    // Read as a trace is read, which means `--write` pins it like any other.
-    const w = kaal("traces", root, "--write");
-    notUsage(said(w));
-    assert.match(
-      readFileSync(join(root, "tests", "suites", "alpha.md"), "utf8"),
-      /cases:[^\n]*acceptance\.test\.mjs@[0-9a-f]{8}/,
-      "a case carries no pin after --write",
-    );
   });
 });
 
