@@ -258,3 +258,16 @@ test("8. a lane, a promotion, or neither", async () => {
     assert.match(String(promo.promotion), /\boperator\b/);
   });
 });
+
+test("9. whether a red wall stops this target", async () => {
+  const binding = await need("targets.mjs", "binding");
+  // One answer and nothing else differs. A wall's colour is the same fact at
+  // both targets; this says whether the fact stops a merge.
+  assert.equal(binding("main"), true);
+  assert.equal(binding("release"), false);
+  // A target it does not know is bound, because the safe answer to a question
+  // about an unknown place is the strict one.
+  assert.equal(binding("production"), true);
+  assert.equal(binding(""), true);
+  assert.equal(binding(undefined), true);
+});

@@ -34,7 +34,17 @@ eval/*)` and exits 1. Every promotion would be refused by this repository's
   runs `npm test`, which is `node bin/kaal.mjs gates`, on the working tree
   whatever ref is being pushed. A wall standing red on `release` therefore
   cannot be pushed at all, which is the rule this task states being enforced
-  in the one direction it is not meant to hold.
+  in the one direction it is not meant to hold. This drawing named that and
+  built nothing for it; the analyst then made it criterion 9, and seam 9 is
+  this revision.
+- The deadlock is measurable and it is this drawing's own. Criterion 9 arrived
+  after this page was merged, so the strategy table was one row short and the
+  drawings wall answered `a-promotion-names-what-it-refuses: strategy: criteria
+not in the strategy table: 9`. The row is in `architecture/` and the criterion
+  is in `requirements/`, which is two lanes, and the board refuses either half
+  alone. This diff goes first because the wall reads a row for a criterion that
+  is not there yet and says nothing, and reads a criterion with no row and
+  refuses. The order exists; it is one way round and nothing says which.
 - `main` and `release` can move apart without either being wrong. `release` is
   three commits ahead today and a hotfix would put `main` ahead instead, and
   nothing in the tree reads the pair.
@@ -70,6 +80,7 @@ flowchart LR
   G["gates.mjs"] -- "6 the red walls" --> P
   P -- "7 every refusal, and the count" --> C
   S["seats.mjs"] -- "8 a lane, a promotion, or neither" --> C
+  T -- "9 whether a red wall stops this target" --> G
 ```
 
 1. `targets`: in nothing, out `TARGETS` (`["release", "main"]`, the order a
@@ -98,6 +109,9 @@ flowchart LR
 8. `laneOf(root)` gains a third answer: in a branch, out the lane, or the
    promotion and whose it is, or nothing. Owned by `seats.mjs` / the `seats`
    command.
+9. `binding(into)`: in the target a tree opens into, out whether a red wall
+   stops it. The board asks it once and exits by the answer. Owned by
+   `targets.mjs` / `gates.mjs` and `kaal.mjs`.
 
 ## Fixed and free
 
@@ -112,6 +126,9 @@ finding(s)`, by criteria 1 and 6.
 - Fixed: exit 2 where there is no promotion to judge, by criterion 7, and
   exit 2 from `seats` on a promotion, by criterion 8.
 - Fixed: the word `operator` is in the seat rule's answer, by criterion 8.
+- Fixed: the board exits 0 on a red wall where the target is `release` and 1
+  where it is `main`, and says how many are red either way, by criterion 9.
+  What a wall reports does not change: only whether the report stops a merge.
 - Free: how the verdicts are gathered, whether the board is run in process or
   by command, the order the findings are printed within a kind, and every
   name in the modules except the ones a contract calls.
@@ -184,21 +201,41 @@ finding(s)`, by criteria 1 and 6.
 - Weighed against: the-seat-owns-the-lens.
 - Reopens if: a promotion ever carries one seat's work and only one.
 
+### The board reports and the promotion refuses
+
+- Chosen: one seam, `binding(into)`, and the board exits by its answer. A
+  wall's colour, its lines and its waiver are untouched.
+- Not taken: a second board that runs fewer walls below `release`; a flag on
+  the hook; a list of walls that may be red.
+- Because: a wall's colour is a fact about the tree and the same fact at both
+  targets, so a design that changed what runs would make the two targets
+  disagree about what is true rather than about what stops a merge. The
+  smallest thing that can differ is the exit code, and the seat still sees
+  every red line it sees today. A list of walls that may be red was the other
+  candidate and is refused: it is a waiver with no person and no date, which
+  is the thing `waivers/` exists to make somebody sign.
+- Bought: one number differs and nothing else does, and it spent the ability
+  to be strict about some walls early.
+- Weighed against: the-two-goods.
+- Reopens if: one wall turns out to be worth refusing on every branch, which
+  would be the first evidence that the split is per wall and not per target.
+
 ### What this drawing does not fix, and whose it is
 
-- Chosen: name two gaps and build neither.
+- Chosen: name two gaps and build neither. One came back as criterion 9 and
+  is seam 9; this record is why it was not drawn the first time.
 - Not taken: widening the seams to cover them, which would be this drawing
   writing criteria.
-- Because: both are real, both were found by running, and neither is in the
-  eight criteria. The first is the pre-push hook, which runs the whole board
-  on every push and so enforces the strict gate on every branch: a wall
-  standing red on `release` cannot be pushed at all, which is this task's rule
-  holding in the one direction it is not meant to. The second is that `main`
-  can move without `release`, by a hotfix, and nothing reads the pair or says
-  which way the sync goes. A blocked seat says where and the owning seat says
-  what, so both are the analyst's.
-- Bought: the drawing answers its requirement, and it spent two things a
-  reader will want on the same day.
+- Because: both were real, both were found by running, and neither was in the
+  eight criteria. The first was the pre-push hook, which runs the whole board
+  on every push and so enforces the strict gate on every branch. The analyst
+  made it a criterion the same day and it is drawn now, which is the loop
+  working rather than the refusal being undone. The second is that `main` can
+  move without `release`, by a hotfix, and nothing reads the pair or says
+  which way the sync goes; it is named `a-target-that-moved-alone-says-so` and
+  it is a task, not a criterion of this one.
+- Bought: the drawing answers its requirement, and it spent a day on a thing
+  a reader wanted immediately.
 - Weighed against: the-seat-owns-the-lens.
 - Reopens if: either becomes a criterion.
 
@@ -214,6 +251,7 @@ finding(s)`, by criteria 1 and 6.
 | 6         | contract | deterministic | seam 7: four refusals and a count that matches                                                       |
 | 7         | contract | deterministic | seam 2: no promotion to judge                                                                        |
 | 8         | contract | deterministic | seam 8: a lane, a promotion, or neither                                                              |
+| 9         | contract | deterministic | seam 9: the same tree and the same red wall, asked at each target                                    |
 | none      | unit     | none          | the readers are sorts over answers this tree already gives, and a unit here would restate a contract |
 | none      | manual   | none          | nothing here reaches a screen or a person                                                            |
 
@@ -225,17 +263,19 @@ makes to anyone outside it.
 ## Handoff
 
 - Task: a-promotion-names-what-it-refuses
-- Seams: 8; contract tests: 8 (equal)
+- Seams: 9; contract tests: 9 (equal)
 - Red run: `node --test architecture/a-promotion-names-what-it-refuses/contracts.test.mjs`
 - Criteria served: seam 2 -> 1 and 7; seam 4 -> 2 and 3; seam 5 -> 4; seams 4
-  and 6 -> 5; seam 7 -> 6; seam 8 -> 8. Seams 1 and 3 serve the others
+  and 6 -> 5; seam 7 -> 6; seam 8 -> 8; seam 9 -> 9. Seams 1 and 3 serve the
+  others
 - Fixed for the developer: the two targets, the two gates and exactly what
   each refuses; the three finding kinds and the finding shape; the target line
   and the count line; that nothing stops at the first refusal; exit 2 for no
   promotion and for a promotion asked of the seat rule; the word `operator` in
   that answer
-- Build order, which is the asker's: seams 1, 2, 5 and 8 first and they are
-  the head wall, the piece asked for ahead of the rest. Seams 3, 4, 6 and 7
+- Build order, which is the asker's: seams 1, 2, 5, 8 and 9 first. They are
+  the head wall and the rung that puts it on a desk, and nothing else here can
+  be worked on comfortably until 9 lands. Seams 3, 4, 6 and 7
   after, and the task reads `not delivered` in between, which is the licence
   this task is about standing under the task that defines it
 - Blocked on: nothing. Two gaps are named in the decisions and both are the
