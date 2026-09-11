@@ -11,7 +11,7 @@ cases:
   architecture/a-pin-says-who-cleared-it/contracts.test.mjs: 13bdd6222bbbb0b1e0a12792a49e1d7717cd7561b45e8ef77d53bb7604c7db0d
   architecture/a-retro-names-what-it-read/contracts.test.mjs: 6b9c6a8c6f7b342773d3ee77340ab4fb0b97ea1299b783bd93ffcb6c049e39a2
   architecture/a-seat-claims-what-it-covers/contracts.test.mjs: ae37cd70c9f18811ab1351d5225577b4f786daad851417e0dc79a558bd34b89b
-  architecture/a-suite-names-its-cases/contracts.test.mjs: 61dea0bff88ca1b4aa06704225dfda61bd90999c299f9d99fedd16f2e6541672
+  architecture/a-suite-names-its-cases/contracts.test.mjs: 9a697e30ccc8206c1399cf2b1dc10bbc6d8f8c89d0157c6a512f3e953d3e5815
   architecture/a-task-is-delivered-by-its-run/contracts.test.mjs: a4903f8d7293cb76d6f27182b1b4aa6cb2a3779572074e6279f7bd071ed995d6
   architecture/a-task-names-its-people/contracts.test.mjs: 76a45ef8648e6683c8d40c848d389d45e3d5f58097362ee9c647cbdf420c7cc7
   architecture/a-trace-pins-what-it-read/contracts.test.mjs: 5cd6256856ff32e43c3d731c7bbede3fedeb8e0e191d7005b7c896e27fc97be9
@@ -61,6 +61,8 @@ cases:
   architecture/what-proves-a-build/contracts.test.mjs: 21a43f7a7c5a5d07582f88c204fe22200afd944cc585ea3286546ffc36356d1e
   architecture/where-a-skill-acts/contracts.test.mjs: 9c8d9e60462e5cac1cbac55d335fbb2ef4f2e6b774738fe2937f7774ea6f1482
   architecture/witness-a-tree/contracts.test.mjs: bd06703601ea869ff4c94923504726b6cada93f41426c6e46829ca86926003f0
+reviews:
+  cases/architecture/a-suite-names-its-cases/contracts.test.mjs: reviewed-no-impact@9a697e30ccc8206c1399cf2b1dc10bbc6d8f8c89d0157c6a512f3e953d3e5815 by tester: the drawing grew from seven seams to ten and two of them changed again after that, so the file moved four times today; every one was this task's own work and none of it changes which cases this suite names
 ---
 
 # Test suite: contracts

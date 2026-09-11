@@ -2,10 +2,10 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: ce78ff22de0cc3ec153c12b294901db573aa23f0f2e8c2170bc4c4b7579d4f0e
+  units: 42c8b1be17bb1a4c38cb16603e472c6e97a1edeb749d0acefaf84dd6968c4796
 reviews:
+  suites/units: reviewed-no-impact@42c8b1be17bb1a4c38cb16603e472c6e97a1edeb749d0acefaf84dd6968c4796 by tester: the suite recorded a read of a case that moved, which changes the suite's page and never which suites this plan uses; this is the second time today that one read cost two
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
-  suites/units: updated@ce78ff22de0cc3ec153c12b294901db573aa23f0f2e8c2170bc4c4b7579d4f0e by tester: the suite gained a sha on every case it names, which is `--write` filling the block this plan now points at
 ---
 
 # Test plan: units

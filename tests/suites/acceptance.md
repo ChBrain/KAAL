@@ -14,7 +14,7 @@ cases:
   requirements/a-requirement-shows-its-work/acceptance.test.mjs: 5f3b1db5516cae5c57695b1969e670d52792ea7d27d67a5e608968befe1e28ea
   requirements/a-retro-names-what-it-read/acceptance.test.mjs: 7dbb6bbe5ca2100e78a9813a342c67226f58f1be8326bc5923eb586096d07ad1
   requirements/a-seat-claims-what-it-covers/acceptance.test.mjs: cbed094d511194c31011f670f9bdea524bea6b28b53486d95162c20a2fa41726
-  requirements/a-suite-names-its-cases/acceptance.test.mjs: fb06cdd559ecaeebe19d8ff6e555cdf2f9fac853cc3e2764e63c4d64c6f9b289
+  requirements/a-suite-names-its-cases/acceptance.test.mjs: 78a1c258d3b7d76d45e89001d65ad4e382f2723d4e6c9dd66d1a9dd8fee76893
   requirements/a-task-is-delivered-by-its-run/acceptance.test.mjs: 2f714df65160c77fa1b4bf3ee09bd68e7a77453b6c3a7670ae14f0d81d541eb5
   requirements/a-task-names-its-people/acceptance.test.mjs: 48cab58695a03de78ddbaa22113e8af314e90fdbc420ceb4be9aa0ea64192230
   requirements/a-trace-pins-what-it-read/acceptance.test.mjs: d5e13c4db6a20c225c2acc2122f5acdd29d41c50bf7cc680120f7e5d13bae23a
@@ -68,6 +68,7 @@ cases:
   requirements/where-a-skill-acts/acceptance.test.mjs: 60832efd3c54d369a4f9062e02f51542250d5f93bb1f940a8d24b5f213eda555
   requirements/witness-a-tree/acceptance.test.mjs: 853bec795ceb60eb98fb6a91658f3d8def4a92ddfc74d532fe24cf6b602ef51d
 reviews:
+  cases/requirements/a-suite-names-its-cases/acceptance.test.mjs: reviewed-no-impact@78a1c258d3b7d76d45e89001d65ad4e382f2723d4e6c9dd66d1a9dd8fee76893 by tester: the criteria it proves were lifted twice, so it stopped asserting a comma list and stopped asserting a sha, and its fixtures moved to the block; it is the same case and this suite still covers it
   cases/requirements/the-test-tree-is-written-down/acceptance.test.mjs: reviewed-no-impact@79963dd650ca5dcfc030ca7404b7b56b1c615983961ba15cd978178d81c679d5 by tester: two of its cases stopped asserting a plan's glob and its count, which a-suite-names-its-cases supersedes; the case is the same case and this suite still covers it
 ---
 
