@@ -40,6 +40,20 @@ export const KINDS = {
     region: null,
     perArtefact: true,
   },
+  // The two edges of the test graph. Comma lists like `principles`, never
+  // single valued like `parent`, because a plan uses many suites and a suite
+  // is used by many plans, and neither excludes the other. Declared from
+  // above only: a suite never names its plans and a case never names its
+  // suites, so the cardinality falls out rather than being kept in sync.
+  suites: {
+    where: (name) => join("tests", "suites", `${name}.md`),
+    region: null,
+  },
+  // The one row whose name is already where it is. A case lives beside its
+  // requirement, its drawing or its code, four trees with no convention
+  // between them, so the value is the path and `where` has nothing to add.
+  // No region: a case is a file of tests and has no part that is not.
+  cases: { where: (name) => name, region: null },
   // No region: a principle is its claim and has no part that is not.
   principles: {
     where: (name) =>

@@ -97,7 +97,14 @@ resolves: one row per kind says where things of that kind live, a kind the
 table does not hold is a finding rather than a silence, and a requirement's
 `Supersedes:` prose must still mention each name its trace declares. What is
 pinned for each kind is the region a reader would go to: a requirement's
-`## Acceptance criteria`, and for a principle the whole file. A value is
+`## Acceptance criteria`, and the whole file for a principle, for a suite and
+for a case. Two of the kinds carry the test graph: a plan's `suites` names
+suite pages under `tests/suites/`, and a suite's `cases` names case files by
+their path from the root, because a case lives beside its requirement, its
+drawing or its code and no one convention reaches all three. Both are comma
+lists and neither is declared from the other end, so a plan may name many
+suites, a suite may be named by many plans, and a case may be named by many
+suites. A value is
 `<name>` or `<name>@<sha>`: a pin that no longer matches the region it names
 is reported as having moved, which is different wording from a name that
 resolves to nothing, because one wants a rename and the other a reread. Only
@@ -124,12 +131,13 @@ one number chosen without evidence, and the first tree to trip it is the
 evidence for changing it. A parent that is absent is never a finding: each
 seat populates its own tree. And it answers whether the test tree is written
 down: every wall whose command names a file ending in `.test.mjs` has one
-plan under `tests/plans/` that is about it, every plan is about a wall the
-board holds and names that wall's own globs, and a plan that states how many
-suites its globs match must state the number they match. Which end is missing
-is the finding's own kind, `plan` or `wall`, because a plan is usually named
-for its wall. A plan that states no number states no count, and `--write`
-rewrites a number that is there rather than inventing one. Reads the
+plan under `tests/plans/` that is about it, and every plan is about a wall the
+board holds. Which end is missing is the finding's own kind, `plan` or `wall`,
+because a plan is usually named for its wall. What a plan's globs match and
+what number it states are no longer read here: a plan picks suites, and a
+selection owns neither a place nor a count. `--write` still rewrites a number
+a plan carries rather than inventing one, and a plan carrying none is left
+alone. Reads the
 frontmatter of `requirements/<task>/requirement.md`,
 `architecture/<task>/drawing.md` and every `.md` page under `tests/`, the
 region of each file a kind points at, and the `gates` list in

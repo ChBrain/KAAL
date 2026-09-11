@@ -127,27 +127,14 @@ export function checkPlans(root) {
       );
       continue;
     }
-    const globs = globsOf(p.text);
-    if (globs.join(" ") !== gate.globs.join(" ")) {
-      find(
-        p.name,
-        `names the suites ${globs.join(", ") || "none"}, and the wall ${wall} runs ${gate.globs.join(", ")}`,
-      );
-      continue;
-    }
-    // A plan that states no number states no count, and a claim nobody
-    // made is not a claim that disagrees. It is the trace grammar's own
-    // rule: a name without a pin resolves, a pin that does not match is a
-    // finding. What makes the count true of this league is criterion 6,
-    // which reads the pages of this tree and not of every tree.
-    const said = countOf(p.text);
-    if (said === null) continue;
-    const found = suitesUnder(root, globs);
-    if (said !== found)
-      find(
-        p.name,
-        `says ${said} suites, and its globs match ${found}; rewrite it with --write`,
-      );
+    // A plan's globs and its stated count were this wall's other two
+    // questions and are neither's any more: a plan picks suites, and a
+    // selection owns no place and no number. Both answers move to the
+    // suites the plan names, which is the diff after the pages carry them;
+    // between the two, a plan's prose is nobody's business, which is the
+    // price of landing a change that spans two lanes without a red wall in
+    // the middle.
+    void gate;
   }
 
   // The wall's end of it, reported in its own words: which end is missing is
@@ -188,4 +175,114 @@ export function writeCounts(root) {
     written.push(p.name);
   }
   return written;
+}
+
+/** The place a suite lives in, beside the plans and below the same root. */
+export const SUITES = join("tests", "suites");
+
+/**
+ * The names in one trace field of a page's frontmatter, by the trace
+ * grammar's own rules: a comma list, a pin stripped, and `nothing` or `none`
+ * naming none. Read from the text rather than through the frontmatter parser
+ * because this module answers about pages the trace wall has not read yet.
+ * @param {string} text @param {string} key
+ */
+const listOf = (text, key) =>
+  (text.match(new RegExp(`^\\s+${key}:\\s*(.*)$`, "m"))?.[1] ?? "")
+    .split(",")
+    .map(
+      (x) =>
+        x
+          .trim()
+          .replace(/^[`'"]+|[`'".]+$/g, "")
+          .split("@")[0],
+    )
+    .filter((x) => x && !/^(nothing|none)$/i.test(x));
+
+/**
+ * One entry per suite page: its name and the cases it covers.
+ * @param {string} root
+ * @returns {{ name: string, cases: string[] }[]}
+ */
+export function suitePages(root) {
+  const d = join(root, SUITES);
+  if (!existsSync(d)) return [];
+  return readdirSync(d)
+    .filter((n) => n.endsWith(".md"))
+    .sort()
+    .map((n) => ({
+      name: n.slice(0, -3),
+      cases: listOf(readFileSync(join(d, n), "utf8"), "cases"),
+    }));
+}
+
+/**
+ * Why a case may not sit where it sits, or null where a seat owns it. Two
+ * answers and never one: `tests/` is refused before ownership is asked,
+ * because the tester owns `tests/**` and would otherwise answer that a case
+ * there is fine, which is the opposite of the rule.
+ * @param {string} path @param {{ name: string, owns?: string[] }[]} seats
+ * @returns {string | null}
+ */
+export function caseOwner(path, seats) {
+  if (path.startsWith("tests/"))
+    return `${path}: tests/ points at cases and does not hold them`;
+  const owned = (seats ?? []).some((s) =>
+    (s.owns ?? []).some((o) => path.startsWith(o.replace(/\*+$/, ""))),
+  );
+  return owned ? null : `${path}: no seat owns it`;
+}
+
+/**
+ * Every test file no suite names, under the top level directories the named
+ * cases reach and nowhere else. A tree no suite points into is not yet this
+ * wall's business, which is what keeps a fixture from being asked about the
+ * league's own trees.
+ * @param {string} root @param {Set<string>} named
+ * @returns {string[]}
+ */
+export function unnamed(root, named) {
+  const out = [];
+  for (const top of new Set([...named].map((c) => c.split("/")[0])))
+    for (const f of globSync(`${top}/**/*.test.mjs`, { cwd: root })) {
+      const rel = String(f).split(/[\\/]/).join("/");
+      if (!named.has(rel)) out.push(rel);
+    }
+  return [...new Set(out)].sort();
+}
+
+/**
+ * What a plan picks, and what it should not still be carrying. A glob in a
+ * plan's prose was the whole of its claim once and is a leftover now.
+ * @param {string} text
+ * @returns {{ names: string[], findings: string[] }}
+ */
+export function planSuites(text) {
+  const globs = globsOf(text);
+  return {
+    names: listOf(text, "suites"),
+    findings: globs.length
+      ? [`names a glob, ${globs[0]}; a plan names suites`]
+      : [],
+  };
+}
+
+/**
+ * How far each plan reaches: the suites it names that exist, and the cases
+ * those suites cover. Computed from the tree it is asked about, never
+ * carried in a page, because a number in a page is a number somebody
+ * rewrites.
+ * @param {string} root
+ * @returns {{ plan: string, suites: number, cases: number }[]}
+ */
+export function reach(root) {
+  const by = new Map(suitePages(root).map((s) => [s.name, s.cases.length]));
+  return planPages(root).map((p) => {
+    const names = planSuites(p.text).names.filter((n) => by.has(n));
+    return {
+      plan: p.name,
+      suites: names.length,
+      cases: names.reduce((n, s) => n + (by.get(s) ?? 0), 0),
+    };
+  });
 }
