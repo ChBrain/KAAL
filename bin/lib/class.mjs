@@ -17,10 +17,39 @@ export const ARTEFACTS = [
   { name: "skills", is: (p) => /^skills\/[^/]+\/SKILL\.md$/.test(p) },
 ];
 
-export const DEFAULT_BASE = "origin/main";
-
 const git = (root, ...args) =>
   spawnSync("git", ["-C", root, ...args], { encoding: "utf8" });
+
+/**
+ * The base a diff is judged against, which is the target it is opening into
+ * and never one fixed name. A lane opens into `release` and a promotion opens
+ * `release` into `main`, so a wall that always read `origin/main` would show a
+ * lane branch every other seat's merged work and call it many lanes. That is
+ * what it did the day `release` appeared.
+ *
+ * `KAAL_BASE` is the answer where the caller knows it, which in a gate is the
+ * pull request's own base. Where it does not, the targets are tried in the
+ * order a branch is likely to have come from, and a tree holding neither is
+ * answered by the caller: `class` says the question is not this tree's and
+ * `seats` has nothing to place.
+ * @param {string} root
+ */
+export function defaultBase(root) {
+  const said = process.env.KAAL_BASE?.trim();
+  if (said) return said;
+  return TARGETS.find((r) => resolves(root, r)) ?? DEFAULT_BASE;
+}
+
+/** The targets a branch opens into, in the order one is likely to have. */
+const TARGETS = ["origin/release", "origin/main"];
+
+/**
+ * The base where nothing narrows it at all: no caller said one and the tree
+ * holds neither target, which is a clone that has fetched nothing. The name
+ * is wider than what it now means and it stays until the unit that reads it
+ * moves beside this module, which is the tester's diff and not this one.
+ */
+export const DEFAULT_BASE = "origin/main";
 
 /** Does this ref name a commit in this tree? */
 export function resolves(root, ref) {
