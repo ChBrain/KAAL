@@ -3,7 +3,13 @@
 // the acceptance layer's job.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync, mkdtempSync, rmSync } from "node:fs";
+import {
+  readFileSync,
+  existsSync,
+  mkdtempSync,
+  rmSync,
+  globSync,
+} from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -34,10 +40,32 @@ test("1. a version a reader can judge", () => {
 
 test("2. what ships is what files names", () => {
   const m = manifest();
-  const files = m.files ?? [];
-  assert.ok(files.length > 0, "the manifest names nothing to ship");
+  const all = m.files ?? [];
+  assert.ok(all.length > 0, "the manifest names nothing to ship");
+  // An entry beginning `!` excludes rather than names, so it points at no
+  // path and asking whether it is here is asking the wrong question. This
+  // read every entry as a path and went red the day `files` first carried an
+  // exclusion, reporting that the manifest names something that is not
+  // there. The claim it makes is unchanged: what ships is what `files` names.
+  const files = all.filter((f) => !f.startsWith("!"));
+  const excluded = all.filter((f) => f.startsWith("!"));
+  assert.ok(files.length > 0, "the manifest names nothing but exclusions");
   for (const f of files)
     assert.ok(existsSync(join(ROOT, f)), `files names ${f}, which is not here`);
+  // And an exclusion has to exclude something, or it is a line nobody can
+  // use: a pattern matching nothing in the tree is as silent as a wrong one.
+  for (const f of excluded) {
+    const pattern = f.slice(1);
+    assert.match(
+      pattern,
+      /\S/,
+      `files carries a bare exclusion: ${JSON.stringify(f)}`,
+    );
+    assert.ok(
+      globSync(pattern, { cwd: ROOT }).length > 0,
+      `files excludes ${pattern}, which matches nothing here`,
+    );
+  }
   const named = Object.entries(commands(m));
   assert.ok(named.length > 0, "the manifest offers no command");
   for (const [name, path] of named) {
