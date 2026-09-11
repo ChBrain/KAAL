@@ -1,7 +1,9 @@
 ---
 traces:
-  requirement: the-engine-installs-by-name@bc49d25cc15c4fe432c5bba699a17667b7d39b91c89741955cd304c354894f92
+  requirement: the-engine-installs-by-name@7f42be034c0b78b7ebce3c72260082bbb12c3c7040a116a2359a5b22c55d62f7
   principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6
+reviews:
+  requirement/the-engine-installs-by-name: updated@7f42be034c0b78b7ebce3c72260082bbb12c3c7040a116a2359a5b22c55d62f7 by architect: criterion 2 moved the skills out of the league's working, so seam 2 lists bin, skills and agents and refuses seven directories where it refused six
 ---
 
 # Drawing: the-engine-installs-by-name
@@ -71,11 +73,15 @@ flowchart LR
    registry from the machine is a publish that can go somewhere nobody
    chose, and the manifest is the only place a consumer can read where this
    package comes from.
-2. **What the package carries.** `npm pack --dry-run` lists `bin/`, the
-   licence, the readme and the manifest, and nothing from the six
-   directories that hold the league's own working papers. Removing
-   `private` widens what a mistake can publish, and this is the seam that
-   says it did not.
+2. **What the package carries.** `npm pack --dry-run` lists `bin/`,
+   `skills/`, `agents/`, the licence, the readme and the manifest, and
+   nothing from the seven directories that hold the league's own working
+   papers, and no file named `.test.mjs`. The skills and the agent are the
+   method a consumer installs this for rather than the league's working,
+   which `an-install-carries-the-method` settles; they left that list and
+   `plan/` and `deploy/` joined it. Removing `private` widens what a mistake
+   can publish, and this is still the seam that says it did not: it widened
+   deliberately and this says by how much.
 3. **The order in the workflow.** The branch refusal, then the board, then
    `kaal release`, then the tag, then the publish. Each step is after the
    last and the publish is after all of them. Read from text, because

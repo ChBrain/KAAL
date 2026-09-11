@@ -1,7 +1,9 @@
 ---
 traces:
-  requirement: the-tag-installs-offline@40a65577ba6faeae4dc238ab75b9667aa4be1f05d81d15bd34b64f9c29eb94f6
+  requirement: the-tag-installs-offline@b5f31020fa42f845097460a3158e9a430e4c59196ef44d92b23433f23ff98c31
   principles: nothing
+reviews:
+  requirement/the-tag-installs-offline: reviewed-no-impact@b5f31020fa42f845097460a3158e9a430e4c59196ef44d92b23433f23ff98c31 by architect: criterion 2 names what the install carries and this drawing's two seams are the install-time scripts and the one named step; neither reads that list
 ---
 
 # Drawing: the-tag-installs-offline
