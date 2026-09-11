@@ -51,6 +51,17 @@ gates`, and the selection lives in `kaal.config.json` as globs inside gate
   re-run without a diff in somebody else's lane.
 - Counting what a suite layer would have to reach: 64 acceptance files, 58
   contract files and 25 unit files, 147 in all.
+- A comma list cannot carry them. Seeding the acceptance suite from what its
+  glob matches today is one line of 3,557 characters, and 7,782 once every
+  case carries a sha, because a trace value lives on one line. The parser
+  cannot hold a map instead: its sub key pattern is `[A-Za-z_][\w/-]*`, which
+  takes a slash and not a dot, so `acceptance.test.mjs` is not a key it reads.
+  The document meant to make the tree readable would be the least readable
+  file in it.
+- The tree has solved this once. A `reviews:` block sits beside `traces:` in
+  the same frontmatter, one entry to a line, keyed `<kind>/<name>`, and
+  getting it there took widening that same pattern by one character class so a
+  key could carry a slash.
 - The kind table is what stands in the way, and it says so plainly. A plan
   carrying `suites:` and a suite carrying `cases:` answer `no such kind; the
 table holds requirement, supersedes, parent, principles`, twice, and the tree
@@ -70,6 +81,19 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 
 ## Assumptions
 
+- How a trace is written, and that it carries a sha, are both the architect's
+  and neither is stated here. The asker's words: a comma list is an
+  architecture decision more than a requirement, and a sha answers a different
+  want along the lines of knowing precisely what you refer to and knowing when
+  it changed. That want is `a-trace-pins-what-it-read`, which is closed and
+  holds for every trace, so restating it here would be this task claiming
+  another task's criterion. What this task asks is only that a plan traces its
+  suites and a suite traces its cases. The runs below say what the grammar can
+  and cannot carry, which is evidence for the decision and not the decision.
+- The acceptance tests still have to write a fixture in some shape, so they
+  are written in the shape the drawing fixes and change with it. That is the
+  one place this task's proof touches a decision below its layer, and it is
+  named here rather than discovered by whoever changes the shape.
 - The two edges are declared from above and never from below: a plan names its
   suites and a suite names its cases, so neither a suite nor a case says what
   uses it. That is what makes the cardinality fall out rather than be
@@ -118,22 +142,20 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
    `tests/plans`, the suites under `tests/suites`, the runs under
    `tests/runs`, and the bugs. A reader who has only this page can say what
    belongs there and what does not.
-2. A suite is a document under `tests/suites/`, and it names its cases in a
-   trace field of its own, as a comma list of paths, read by `kaal traces` the
-   way every other trace is read and carrying a pin the same way. The field is
-   not `parent:`, which stays the tree. A suite naming no case is a finding
-   saying so.
+2. A suite is a document under `tests/suites/`, and it traces its cases, each
+   by its path. `kaal traces` reads them as it reads any trace and reports a
+   name that resolves to nothing. The trace is not `parent:`, which stays the
+   tree. A suite tracing no case is a finding saying so.
 3. A case path under `tests/` is a finding naming the path and saying that
    `tests/` points at cases and does not hold them. This holds whatever else
    is true of the path.
 4. A case path in no seat's tree is a finding naming the path and saying no
    seat owns it. The seats are read from `kaal.config.json` and this task
    declares no new ones.
-5. A plan names the suites it uses in a trace field of its own and no longer
-   a glob. Plan to suite and suite to case are both many to many and neither
-   excludes the other: one suite named by two plans is not a finding, one plan
-   naming two suites is not a finding, and one case named by two suites is not
-   a finding.
+5. A plan traces the suites it uses and no longer names a glob. Plan to suite and suite to case are both many to many
+   and neither excludes the other: one suite traced by two plans is not a
+   finding, one plan tracing two suites is not a finding, and one case traced
+   by two suites is not a finding.
 6. Every case a suite names exists, and every test file in the trees the
    suites reach is named by some suite; the board reports either way round,
    naming the case that is not there or the file no suite reaches.
@@ -171,13 +193,16 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
   the first two attempts were a shared red rather than seven proofs. The
   fixtures had no requirement, so `kaal traces` answered "not applicable here"
   six times, and then the fixture's own strategy page carried no root line
-- Stand-in green: all seven, twice. The first on a suite reader that read its
+- Stand-in green: all seven, three times. The first on a suite reader that read its
   cases out of prose, the second after the asker fixed the cardinality, on two
   rows in the kind table, a suite reader that reads the fields, a per plan
   count line on `kaal traces` and a five kinds section in the strategy page.
-  Both discarded from file copies. The second is what proves criterion 2's pin:
-  `traces --write` writes a sha onto a case exactly as it does onto any other
-  trace
+  Both discarded from file copies. The third was on the shape the measured
+  line forced: the parser widened by one character class so a key may carry a
+  dot, a kind read from a block of its own as well as from a line, and
+  `writePins` writing into a block entry by entry. All three discarded, and
+  every one of them proved criterion 2's pin: `traces --write` puts a sha on a
+  case exactly as it does on any other trace
 - Found by the stand-in and by running, twice, and both mine. Criterion 1's
   test read the five kinds as substrings and `re-runs` matched before
   `suites`, so it was red for a reason no wording of the page could fix; it
