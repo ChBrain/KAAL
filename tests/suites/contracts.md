@@ -55,7 +55,7 @@ cases:
   architecture/the-release-runs-on-a-key/contracts.test.mjs: 2932696894a7f10d220cea5516cf3caa77ec3bf22facaff43fa5f666e5d9edfd
   architecture/the-surface-is-written-down/contracts.test.mjs: 4588d9f99c44b0a251d4e03266bde5acc404256a6d3e286a672c8f76f3514cf9
   architecture/the-tag-installs-offline/contracts.test.mjs: 5c4ad0b7997640a889abcde85ad29dd6695766002505dc23572b7e61b7a1bb42
-  architecture/the-test-tree-is-written-down/contracts.test.mjs: f0bd4b706fb94e06c5ce843f10f7e223bde7845a0183fea29e88f998a8c74de9
+  architecture/the-test-tree-is-written-down/contracts.test.mjs: 4945f50f2a65f140f5a46a800b6daf519a123b6cf884af5cf2571934e4afa505
   architecture/waiver-v1/contracts.test.mjs: a79dbf0a088f757fb7652ca6c27da829f28ee9cf0db8a5076eac5bacfdfbec16
   architecture/what-a-closed-task-fixes/contracts.test.mjs: 24dca3c380545fcd18324f646cbe73f63e615854fe4cd34249c67d30a3f4e4f3
   architecture/what-proves-a-build/contracts.test.mjs: 21a43f7a7c5a5d07582f88c204fe22200afd944cc585ea3286546ffc36356d1e
@@ -63,6 +63,7 @@ cases:
   architecture/witness-a-tree/contracts.test.mjs: bd06703601ea869ff4c94923504726b6cada93f41426c6e46829ca86926003f0
 reviews:
   cases/architecture/a-suite-names-its-cases/contracts.test.mjs: reviewed-no-impact@9a697e30ccc8206c1399cf2b1dc10bbc6d8f8c89d0157c6a512f3e953d3e5815 by tester: the drawing grew from seven seams to ten and two of them changed again after that, so the file moved four times today; every one was this task's own work and none of it changes which cases this suite names
+  cases/architecture/the-test-tree-is-written-down/contracts.test.mjs: reviewed-no-impact@4945f50f2a65f140f5a46a800b6daf519a123b6cf884af5cf2571934e4afa505 by tester: its helper stopped reading a whole line and now reads the finding's artefact, because the counts line names every plan it reached; the four seams are the same four and this suite still covers them
 ---
 
 # Test suite: contracts
