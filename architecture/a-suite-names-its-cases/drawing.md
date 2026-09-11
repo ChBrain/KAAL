@@ -106,13 +106,15 @@ flowchart LR
    `none` yield none and a pin is stripped. A suite yielding no case is a
    finding naming the suite and saying it names no case. Owned by the plans
    module / the suite pages.
-7. `caseOwner(path, seats)`: in a case path and the seats declared in
-   `kaal.config.json`, out `null` where a seat owns it, and otherwise one of
-   exactly two findings: a path under `tests/` says `tests/` points at cases
-   and does not hold them, and any other unowned path says no seat owns it.
-   The first is checked before the second, because the tester owns `tests/**`
-   and would otherwise answer the wrong one. Owned by the plans module /
-   the board's config.
+7. what owns a case, in two halves. `owners(root)`: out every pattern the
+   board says owns a path, which is each seat's `owns` and each lane's
+   `allows`, because four lanes carry no seat and one of them holds the
+   skills. `caseOwner(path, owners)`: out `null` where one of them holds the
+   path, and otherwise one of exactly two findings: a path under `tests/` says
+   `tests/` points at cases and does not hold them, and any other unheld path
+   says nothing owns it. The first is checked before the second, because the
+   tester owns `tests/**` and would otherwise answer the wrong one. Owned by
+   the plans module / the board's config.
 8. `unnamed(root, named)`: in a root and the set of case paths some suite
    names, out every `*.test.mjs` under the top level directories that set
    reaches which no suite names. Only those directories: a tree no suite
@@ -144,7 +146,7 @@ flowchart LR
   and a path there would be four repeated segments.
 - Fixed: the edges are declared from above only. A suite never names its
   plans and a case never names its suites, which is decision 3.
-- Fixed: both findings of seam 4 name the path first, and the `tests/` one is
+- Fixed: both findings of seam 7 name the path first, and the `tests/` one is
   reached first. Criteria 3 and 4 each require their own sentence and a path
   under `tests/` satisfies both readings.
 - Fixed: `reach` prints whatever the findings say, because criterion 7 asks a
@@ -154,9 +156,9 @@ flowchart LR
   behind is a finding. Criterion 5.
 - Free: every word of a suite page below its frontmatter. The tester writes
   it and no criterion reads it.
-- Fixed: the plans module exports `suitePages`, `caseOwner`, `unnamed`,
-  `planSuites` and `reach`, under those names and with the shapes seams 6 to 10
-  give them. A seam a contract cannot call is a promise nobody holds, which is
+- Fixed: the plans module exports `suitePages`, `owners`, `caseOwner`,
+  `unnamed`, `planSuites` and `reach`, under those names and with the shapes
+  seams 6 to 10 give them. A seam a contract cannot call is a promise nobody holds, which is
   why the names are the contract and not a detail.
 - Free: everything inside those five. How a suite page is read, whether the
   tree walk is one glob or many, and what is cached between calls.
@@ -314,15 +316,20 @@ flowchart LR
   block, the widened key and `writePins` into a block are the three the
   measured line added
 - Red run: `node --test --test-timeout=60000 architecture/a-suite-names-its-cases/contracts.test.mjs`,
-  six of ten failing: seams 3, 4, 5, 6, 9 and 10, which are the block and the
-  readers that meet it
-- Green before the build, and named rather than hidden: seams 1, 2, 7 and 8.
+  one of ten failing: seam 7, which the widened criterion 4 moved from a
+  seat's tree to anything the board says owns a path. The other nine were red
+  in the redraw and are green in the build that followed it
+- Green before the build, and named rather than hidden: seams 1, 2 and 8.
   Their promises did not move when the writing did, and they were built in the
   diff before this one. Each is a guard now: seam 1 that a suite name still
   resolves under `tests/suites/`, seam 2 that a case path still resolves to
-  itself, seam 7 that `tests/` is refused before ownership is asked, and seam
-  8 that a tree no suite points into is not this wall's business
-- Stand-in green: all ten, on a throwaway widening of the sub key pattern, a
+  itself, and seam 8 that a tree no suite points into is not this wall's
+  business. Seam 7 is red again: it was green until the criterion it serves
+  widened from a seat's tree to anything the board says owns a path, and a
+  promise that grows is a promise that has to be kept a second time
+- Stand-in green: all ten again, on a throwaway `owners` reading the seats'
+  `owns` beside the lanes' `allows`, then discarded from file copies. And
+  before that, all ten on a throwaway widening of the sub key pattern, a
   reader that folds a block into the value shape, and a `writePins` that
   rewrites a block entry by entry, then discarded from file copies. It found
   two: contract 2 was still asserting seam 5's pin, which is now its own seam
