@@ -39,7 +39,7 @@ test("1. the name a registry resolves, and a registry the manifest declares", ()
   );
 });
 
-test("2. what the package carries did not widen when private came off", () => {
+test("2. what the package carries beyond the method did not widen when private came off", () => {
   const r = spawnSync("npm", ["pack", "--dry-run", "--json"], {
     cwd: ROOT,
     encoding: "utf8",
@@ -47,20 +47,32 @@ test("2. what the package carries did not widen when private came off", () => {
   });
   assert.equal(r.status, 0, `npm pack refused: ${r.stderr}`);
   const files = JSON.parse(r.stdout)[0].files.map((f) => f.path);
-  assert.ok(
-    files.some((f) => f.startsWith("bin/")),
-    `the tool is not in the package: ${files.join(", ")}`,
-  );
-  // The six directories that hold the league's own working papers. Read
-  // from `npm pack` and never from the manifest, because the manifest is
-  // the thing this task changed.
+  // The tool and the method it carries, each named on its own: a package
+  // shipping one of the three would pass an alternation.
+  for (const dir of ["bin", "skills", "agents"])
+    assert.ok(
+      files.some((f) => f.startsWith(`${dir}/`)),
+      `${dir}/ is not in the package: ${files.join(", ")}`,
+    );
+  // The directories that hold the league's own working papers. `skills` was
+  // among them and is not any more: `an-install-carries-the-method` settles
+  // that the skills are the method a consumer installs this for rather than
+  // this league's working, so it leaves the list and everything else stays,
+  // with `plan` and `deploy` joining since they did not exist when this was
+  // written. What this criterion protects is untouched, which is that coming
+  // off private widened nothing by accident; it widened deliberately and
+  // this says by how much.
+  //
+  // Read from `npm pack` and never from the manifest, because the manifest
+  // is the thing this task changed.
   for (const dir of [
     "requirements",
     "architecture",
     "retros",
     "evals",
-    "skills",
     "tests",
+    "plan",
+    "deploy",
   ]) {
     const leaked = files.filter((f) => f.startsWith(`${dir}/`));
     assert.deepEqual(
@@ -69,6 +81,13 @@ test("2. what the package carries did not widen when private came off", () => {
       `${dir}/ is in the package: ${leaked.join(", ")}`,
     );
   }
+  // A test is nobody's method and it is the developer's proof, so it ships
+  // from nowhere at all rather than from a directory this list could name.
+  assert.deepEqual(
+    files.filter((f) => f.endsWith(".test.mjs")),
+    [],
+    "a test is in the package",
+  );
 });
 
 test("3. the order in the workflow: the publish is after everything", () => {
