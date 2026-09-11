@@ -347,9 +347,14 @@ refused while the version's minor and major places are zero. A version whose
 minor or major place differs from the base's is refused on stderr naming both
 versions, because that raise is a human's act and not something this
 repository does to itself. It reads the tree as it stands, so what is not
-committed counts too. Takes a root and `--against <ref>`, which defaults to
-`origin/main`. A tree with no history, no `package.json`, or no such ref is
-not this question's. Exits 0, 1 or 2 (`a-change-declares-its-class`).
+committed counts too. Takes a root and `--against <ref>`. Where none is given
+the base is the target the diff opens into: `KAAL_BASE` where a caller says
+one, which in a gate is the pull request's own base, and otherwise the first
+of `origin/release` and `origin/main` the tree holds. A wall that always read
+`origin/main` would show a branch opened into `release` every other seat's
+merged work and call it many lanes. A tree with no history, no `package.json`,
+or no such ref is not this question's. Exits 0, 1 or 2
+(`a-change-declares-its-class`).
 
 ## acceptance
 

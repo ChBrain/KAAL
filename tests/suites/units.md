@@ -2,6 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
+  bin/lib/class.test.mjs: ef024a79fc7b69b3aa1ffa353a97ffefb2cd2d26fdd3c42c23746353005ab504
   bin/lib/applies.test.mjs: e1af6a2dde4b07ee7b85a2b1c8c06da3adf71f4a33b591460fcb3a65aa45ae9d
   bin/lib/frontmatter.test.mjs: d8f3afed85fa1b75d39bba4871e73a62b3b9f36191a9d4b7ee9ab47ce87e4413
   bin/lib/plans.test.mjs: bf5d1080c227b437ff5478376dbbc178ea04379000a3d9f449079f449c51eeca

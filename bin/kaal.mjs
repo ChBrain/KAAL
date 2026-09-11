@@ -59,7 +59,7 @@ import { render } from "./lib/witness/manifest.mjs";
 import { compare } from "./lib/witness/compare.mjs";
 import { renderRunner, runnerPath } from "./lib/runner.mjs";
 import {
-  DEFAULT_BASE,
+  defaultBase,
   resolves,
   changed,
   moved,
@@ -143,7 +143,7 @@ if (cmd === "ledger") {
   // lane against what it will merge into.
   const sroot = arg && !arg.startsWith("-") ? arg : cwd;
   const at = process.argv.indexOf("--against");
-  const base = at === -1 ? DEFAULT_BASE : process.argv[at + 1];
+  const base = at === -1 ? defaultBase(sroot) : process.argv[at + 1];
   const declaration = readSeats(sroot);
   const where = laneOf(sroot);
   const diff = paths(sroot, base);
@@ -466,7 +466,7 @@ if (cmd === "ledger") {
     process.exit(1);
   }
   const tree = arg && !arg.startsWith("-") ? arg : cwd;
-  const base = flag >= 0 ? rest[flag + 1] : DEFAULT_BASE;
+  const base = flag >= 0 ? rest[flag + 1] : defaultBase(tree);
   // A base that is not in this tree is the same answer as no history at all:
   // there is genuinely nothing to compare against, which is what exit 2 says.
   if (!resolves(tree, base)) {
