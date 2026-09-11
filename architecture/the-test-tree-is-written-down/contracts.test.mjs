@@ -27,8 +27,15 @@ const lines = (out) => out.split("\n").filter((l) => l.trim());
 // does not hold. Before `tests` is a place every fixture here reports the
 // same thing about `parent`, and an exit code alone would make each of these
 // green for a reason that has nothing to do with its seam.
+// Read from the artefact and not from the whole line. Every finding prints
+// `<artefact>: <kind>: <message>`, so the page it is about is the part before
+// the first colon, and the counts line names every plan it reached inside its
+// message. A helper reading the whole line would take one report as a finding
+// about each page in it, which is the tree's vocabulary answering for the
+// tree's behaviour.
+const artefactOf = (l) => (l.includes(":") ? l.slice(0, l.indexOf(":")) : l);
 const about = (out, name) =>
-  lines(out).filter((l) => new RegExp(`\\b${name}\\b`).test(l));
+  lines(out).filter((l) => new RegExp(`\\b${name}\\b`).test(artefactOf(l)));
 // The same, narrowed to one kind. Seams 2 to 4 read only their own findings,
 // so a break in the place beneath them reddens seam 1 and not all four: an
 // isolation that cannot fall alone answers nothing. The two kinds are the

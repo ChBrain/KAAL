@@ -9,7 +9,7 @@ traces:
 
 - Wall: units
 
-Its suites live under `tests/*.test.mjs`, and today that matches 1 suite.
+It uses the suites it names.
 
 ## Cases
 

@@ -52,6 +52,18 @@ reviews:
   `runGates`. It reads `kaal.config.json` inside `runGates` and exports no
   reader, so a second wall wanting the gate list either reads the file or
   changes `gates.mjs`.
+- Twelve of this drawing's fixture plan pages said where their suites live and
+  how many that matched, which was the grammar when they were written and is a
+  finding since `a-suite-names-its-cases` landed. A fixture is a tree frozen
+  at a date, and nothing asks whether the date has passed: these twelve went
+  red together, in one wall, three pull requests after the rule that overtook
+  them.
+- The contract helper read a report as a finding. `kaal traces` now says how
+  far each plan reaches, on a line that names every plan it reached, and
+  `about` filtered the whole line for the page's name. Seams 1 and 2 failed on
+  a page they were asking to be silent about, which was silent. Every finding
+  prints `<artefact>: <kind>: <message>`, so the helper now reads the part
+  before the first colon and the report cannot answer for a page again.
 - `skills/test/SKILL.md` describes itself as "the one skill every seat loads
   and no seat owns". `kaal/league.md`, merged since, makes the tester a seat
   who "owns the method". The two sentences disagree about whether there is a

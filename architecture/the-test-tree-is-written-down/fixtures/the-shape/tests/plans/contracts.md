@@ -9,7 +9,7 @@ traces:
 
 - Wall: contracts
 
-Its suites live under `architecture/*/contracts.test.mjs`, and today that matches 1 suite.
+It uses the suites it names.
 
 ## Cases
 
