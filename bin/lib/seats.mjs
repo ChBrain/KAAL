@@ -14,6 +14,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolves } from "./class.mjs";
+import { PROMOTION_FROM } from "./targets.mjs";
 
 const git = (root, ...args) =>
   spawnSync("git", ["-C", root, ...args], { encoding: "utf8" });
@@ -102,10 +103,17 @@ export function laneOf(root, env = process.env) {
       notApplicable:
         "no branch to read a lane from: HEAD names none and KAAL_BRANCH is unset",
     };
-  return {
-    branch,
-    lane: lanes.find((l) => matches(branch, l.pattern)) ?? null,
-  };
+  const lane = lanes.find((l) => matches(branch, l.pattern)) ?? null;
+  // A promotion is not a lane's diff. It carries every seat's work by design,
+  // so the question this rule asks has no true answer about it, and a lane
+  // holding everything would make the rule say yes where it means nothing.
+  if (!lane && branch === PROMOTION_FROM)
+    return {
+      branch,
+      lane: null,
+      promotion: "this is the promotion, and it is the operator's",
+    };
+  return { branch, lane };
 }
 
 /**
