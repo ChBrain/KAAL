@@ -5,4 +5,4 @@ traces:
 
 # Test plan: acceptance
 
-A fixture. Wall: `acceptance`. Suites live at `requirements/*/acceptance.test.mjs`. A case is a numbered test.
+A fixture. Wall: `acceptance`. It uses the suites it names. A case is a numbered test.
