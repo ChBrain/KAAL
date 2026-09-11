@@ -2,7 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
-  requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: 87c7edbed570dec56cfbd3e132a5be2c05365f4319d318cbcffa185e4d08bb21
+  requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: 369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273
   requirements/a-build-says-what-it-proved/acceptance.test.mjs: 54383c21e9d8f662016d28a06514c3302955b3f7eba9c1f16b62d8f0bdd9af89
   requirements/a-change-declares-its-class/acceptance.test.mjs: df9e4a66b61cf110f1696f748c08f7ffbd1b0b5fe14c0a9502eb94efdf9d6280
   requirements/a-decision-balances-two-goods/acceptance.test.mjs: 8e1ea235299090f8117c5882aa5d250cf4b3bac49d88e8103437066429020d8e
@@ -69,6 +69,7 @@ cases:
   requirements/where-a-skill-acts/acceptance.test.mjs: 60832efd3c54d369a4f9062e02f51542250d5f93bb1f940a8d24b5f213eda555
   requirements/witness-a-tree/acceptance.test.mjs: 853bec795ceb60eb98fb6a91658f3d8def4a92ddfc74d532fe24cf6b602ef51d
 reviews:
+  cases/requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: reviewed-no-impact@369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273 by analyst: the case gained its ninth, the one about the board judging by the target it opens into; it is the same case and this suite still covers it
   cases/requirements/a-suite-names-its-cases/acceptance.test.mjs: reviewed-no-impact@5a31cada2e3aac7cc19410a2318cf7ebc42347b9d15e787b41fa827bed087101 by tester: criterion 5's fixture gave its two plans one wall as well as one suite, which proved a cardinality the criterion does not claim; the fixture now gives each plan a wall of its own and the case is the same case this suite covers
   cases/requirements/the-test-tree-is-written-down/acceptance.test.mjs: reviewed-no-impact@79963dd650ca5dcfc030ca7404b7b56b1c615983961ba15cd978178d81c679d5 by tester: two of its cases stopped asserting a plan's glob and its count, which a-suite-names-its-cases supersedes; the case is the same case and this suite still covers it
 ---

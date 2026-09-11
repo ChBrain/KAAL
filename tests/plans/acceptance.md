@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 7cb6c2d8393d6fd83df8537da97b0df7efa3c8f6997cdf091b29d4d2ea447b65
+  acceptance: b53068623fd4ee2fd3f4696d3356a69add5c9ca71a9d16f64753a2622be58962
 reviews:
-  suites/acceptance: reviewed-no-impact@7cb6c2d8393d6fd83df8537da97b0df7efa3c8f6997cdf091b29d4d2ea447b65 by tester: the suite recorded a read of a case that moved, which changes the suite's page and never which suites this plan uses; the fourth, fifth and sixth times today, and `--write` advancing the pin is itself a seventh, because the sha a read names is the sha before the write that read clears
+  suites/acceptance: reviewed-no-impact@b53068623fd4ee2fd3f4696d3356a69add5c9ca71a9d16f64753a2622be58962 by analyst: the suite recorded a read of a case that gained a criterion, which changes the suite's page and never which suites this plan uses; `--write` advancing that pin is the same page moving again
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

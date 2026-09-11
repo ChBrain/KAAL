@@ -1,6 +1,6 @@
 ---
 traces:
-  parent: a-task-is-delivered-by-its-run
+  parent: a-task-is-delivered-by-its-run@6c0a9097801da0ddca38f3a29e4ae5a9a596c665e2ed2025d49a6de9a5e11439
   supersedes: nothing
 ---
 
@@ -35,6 +35,14 @@ suite names it` and the line that would name it is in the tester's tree, so
   the file and its naming are two lanes. The guard refuses them together, the
   board refuses either alone, and there are twenty-one more of these in the
   next item.
+- The rule this task states is enforced today in the one direction it is not
+  meant to hold. `.githooks/pre-push` runs `npm test`, which is `node
+bin/kaal.mjs gates`, on the working tree whatever ref is being pushed, so a
+  wall standing red on a lane branch cannot be pushed at all. Measured by
+  adding `bin/lib/runs.test.mjs` with no line naming it: the board answers
+  `suites: suite: bin/lib/runs.test.mjs: no suite names it` and the push is
+  refused. The seat that can fix it never gets to put it where anyone can see
+  it.
 - The board is fourteen walls and every one is offline. `node bin/kaal.mjs
 gates` runs with no network and reads only the tree, so a gate reading the
   branch a pull request is opened against needs nothing this tree does not
@@ -52,6 +60,12 @@ gates` runs with no network and reads only the tree, so a gate reading the
   tester's licence, it is correct, and it is the one verdict that may stand
   below the promotion and never above it. The asker's words: the tester may
   turn a target red and CI may not.
+- The board reports and the promotion refuses. That is the shape the asker's
+  rule takes once a red wall is allowed to stand somewhere: a wall's colour is
+  a fact about the tree and the same fact either way, and what changes between
+  the two targets is whether the fact stops a merge. A board that refused
+  everywhere would be the strict gate applied to every rung, which is what it
+  is today.
 - A red wall is placed the same way as a red verdict, and that is the asker's
   widening rather than this task's invention. What may stand on `release` is
   work in progress with an owner who can see it; what may reach `main` is
@@ -129,6 +143,12 @@ gates` runs with no network and reads only the tree, so a gate reading the
    this is a promotion and exits 2, rather than reporting that the branch
    matches no lane, and it says the promotion is the operator's. Every other
    branch is judged as it is today.
+9. `kaal gates` judges by the target the tree opens into, so the rule holds at
+   the desk as well as at the gate. Where that target is `release`, a red wall
+   is reported and the command exits 0, and how many walls are red is on the
+   answer; where it is `main`, a red wall fails as it does today. This is the
+   command the pre-push hook runs, so a seat can put a red wall where the seat
+   that can fix it sees it, which is the whole of what `release` is for.
 
 ## Open questions
 
@@ -143,16 +163,27 @@ gates` runs with no network and reads only the tree, so a gate reading the
   promotion leaves a branch somebody must clean up.
 - Should a promotion into `release` say what it would refuse at `main`, so a
   seat sees the strict gate before it is standing in front of it?
+- `main` can move without `release`, by a hotfix, and nothing in the tree
+  reads the pair or says which way the sync goes. The asker's shape is a pull
+  request from `main` into `release` where they are out of step. That is a
+  second task and not this one: this one judges a promotion that is being
+  asked for, and that one notices two targets that have drifted with nobody
+  asking anything. Named here so it is written down somewhere: `a-target-that-
+moved-alone-says-so`.
 
 ## Handoff
 
 - Task: a-promotion-names-what-it-refuses
-- Criteria: 8; tests: 8 (equal)
+- Criteria: 9; tests: 9 (equal)
 - Red run: `node --test requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs`
 - Tests: `acceptance.test.mjs`, beside this file, on scratch trees, because a
   promotion is asked about a tree and this tree is the one that would answer
   about itself
 - Open questions: 4, listed above
+- Amended after the drawing, which named this gap and refused to widen its
+  seams to cover it: a drawing that writes its own criteria is the architect
+  taking the analyst's seat. The drawing gains a seam for criterion 9 and that
+  is the architect's next diff
 - Built in the order the asker asked for, and criterion 4's first half is
   first: a wall refusing a pull request into `main` from anything but
   `release`. It needs criteria 1, 4, 7 and 8 and none of the others, it is the
