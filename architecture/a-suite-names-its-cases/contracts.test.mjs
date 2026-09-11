@@ -190,36 +190,55 @@ test("6. suitePages answers what each suite covers", async () => {
   );
 });
 
-test("7. caseOwner answers nothing, tests/, or no seat, in that order", async () => {
+test("7. owners answers what holds a path, and caseOwner answers in order", async () => {
+  const owners = await from("plans.mjs", "owners");
   const caseOwner = await from("plans.mjs", "caseOwner");
-  assert.equal(
-    caseOwner("requirements/a/acceptance.test.mjs", SEATS),
-    null,
-    "an owned case was refused",
-  );
-  const held = caseOwner("tests/thing.test.mjs", SEATS);
-  assert.ok(held, "a case under tests/ was allowed");
-  assert.match(
-    String(held),
-    /tests\/thing\.test\.mjs/,
-    "the answer never names the path",
-  );
-  assert.match(
-    String(held),
-    /points at|does not hold/i,
-    "a case under tests/ answered the wrong one of the two",
-  );
-  const nobody = caseOwner("nowhere/thing.test.mjs", SEATS);
-  assert.ok(nobody, "an unowned case was allowed");
-  assert.match(
-    String(nobody),
-    /nowhere\/thing\.test\.mjs/,
-    "the answer never names the path",
-  );
-  assert.match(
-    String(nobody),
-    /seat/i,
-    "the answer never says no seat owns it",
+  await scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        seats: [{ name: "analyst", owns: ["requirements/**"] }],
+        lanes: [
+          { pattern: "build/*", seat: "developer", allows: [] },
+          { pattern: "skill/*", seat: null, allows: ["skills/**"] },
+        ],
+      }),
+    },
+    (root) => {
+      const own = owners(root);
+      assert.ok(
+        own.includes("requirements/**"),
+        `a seat's owns is not an owner: ${own.join(", ")}`,
+      );
+      assert.ok(
+        own.includes("skills/**"),
+        `a seatless lane's allows is not an owner: ${own.join(", ")}`,
+      );
+      assert.equal(
+        caseOwner("requirements/a/acceptance.test.mjs", own),
+        null,
+        "a case a seat holds was refused",
+      );
+      assert.equal(
+        caseOwner("skills/analyse/scripts/count.test.mjs", own),
+        null,
+        "a case a seatless lane holds was refused",
+      );
+      const nobody = caseOwner("nowhere/thing.test.mjs", own);
+      assert.ok(nobody, "a case nothing holds was allowed");
+      assert.match(String(nobody), /nowhere\/thing\.test\.mjs/);
+      assert.match(
+        String(nobody),
+        /own/i,
+        "the answer never says nothing owns it",
+      );
+      // `tests/` is refused before ownership is asked: the tester owns it.
+      const held = caseOwner("tests/thing.test.mjs", ["tests/**"]);
+      assert.match(
+        String(held),
+        /points at|does not hold/i,
+        "a case under tests/ answered the wrong one of the two",
+      );
+    },
   );
 });
 
