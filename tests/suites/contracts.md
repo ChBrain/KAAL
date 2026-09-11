@@ -2,7 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
-  architecture/a-promotion-names-what-it-refuses/contracts.test.mjs: 39438c1858eda2ea21df282f600d86f3d07330dfc6eb9a896cc720b799303a12
+  architecture/a-promotion-names-what-it-refuses/contracts.test.mjs: fc050ed4efe2c13f6f2b4ee27a45ec655dfa62d787089da98d7a6fbf4f1bd807
   architecture/a-change-declares-its-class/contracts.test.mjs: 3c9174d8ae98e6576a750f2d6990c14f21f0fd4132335ef289c1be57ee50473e
   architecture/a-decision-balances-two-goods/contracts.test.mjs: e33ccd331eaa7f41c995c02667f25ae9686a8fa646f9653d24620561ac5b03c0
   architecture/a-diff-carries-one-seat/contracts.test.mjs: 7fc793642d094b050196eee4b94ee271e103cf21a29199091d634ff9d83e30f5
@@ -63,6 +63,7 @@ cases:
   architecture/where-a-skill-acts/contracts.test.mjs: 9c8d9e60462e5cac1cbac55d335fbb2ef4f2e6b774738fe2937f7774ea6f1482
   architecture/witness-a-tree/contracts.test.mjs: bd06703601ea869ff4c94923504726b6cada93f41426c6e46829ca86926003f0
 reviews:
+  cases/architecture/a-promotion-names-what-it-refuses/contracts.test.mjs: reviewed-no-impact@fc050ed4efe2c13f6f2b4ee27a45ec655dfa62d787089da98d7a6fbf4f1bd807 by architect: the drawing gained a ninth seam and the case gained the contract for it; it is the same case and this suite still covers it
   cases/architecture/a-suite-names-its-cases/contracts.test.mjs: reviewed-no-impact@9a697e30ccc8206c1399cf2b1dc10bbc6d8f8c89d0157c6a512f3e953d3e5815 by tester: the drawing grew from seven seams to ten and two of them changed again after that, so the file moved four times today; every one was this task's own work and none of it changes which cases this suite names
   cases/architecture/the-test-tree-is-written-down/contracts.test.mjs: reviewed-no-impact@4945f50f2a65f140f5a46a800b6daf519a123b6cf884af5cf2571934e4afa505 by tester: its helper stopped reading a whole line and now reads the finding's artefact, because the counts line names every plan it reached; the four seams are the same four and this suite still covers them
 ---

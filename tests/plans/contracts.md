@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  contracts: 0a12095c887a5aa489acfdf7df9e7c0f0b1d0fd546f0aa2d4a824534d558404b
+  contracts: 8fd4098373aa421406bdde27108e4d29e7c7e0edbd95bd40173b42bff77c2928
 reviews:
-  suites/contracts: reviewed-no-impact@0a12095c887a5aa489acfdf7df9e7c0f0b1d0fd546f0aa2d4a824534d558404b by architect: the suite gained the case this task's contracts are, and recorded a read of one whose line was written early; neither changes which suites this plan uses
+  suites/contracts: reviewed-no-impact@8fd4098373aa421406bdde27108e4d29e7c7e0edbd95bd40173b42bff77c2928 by architect: the suite recorded a read of a case that gained a contract, which changes the suite's page and never which suites this plan uses
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
