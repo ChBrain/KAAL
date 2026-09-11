@@ -2,6 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
+  architecture/a-promotion-names-what-it-refuses/contracts.test.mjs: 39438c1858eda2ea21df282f600d86f3d07330dfc6eb9a896cc720b799303a12
   architecture/a-change-declares-its-class/contracts.test.mjs: 3c9174d8ae98e6576a750f2d6990c14f21f0fd4132335ef289c1be57ee50473e
   architecture/a-decision-balances-two-goods/contracts.test.mjs: e33ccd331eaa7f41c995c02667f25ae9686a8fa646f9653d24620561ac5b03c0
   architecture/a-diff-carries-one-seat/contracts.test.mjs: 7fc793642d094b050196eee4b94ee271e103cf21a29199091d634ff9d83e30f5
