@@ -65,14 +65,28 @@ test("2. every kind is a row, an unknown kind is a finding, and nothing resolves
   const names = Array.isArray(KINDS)
     ? KINDS.map((k) => k.kind ?? k.name)
     : Object.keys(KINDS);
-  // Superseded in part by `a-tree-has-one-root`, which added `parent`: the
-  // first row whose target depends on the artefact that declared it. Named
-  // rather than counted, so a kind added by accident is still a red.
-  assert.deepEqual(
-    [...names].sort(),
-    ["parent", "principles", "requirement", "supersedes"],
-    `the table's rows are not the four kinds: ${names.join(", ")}`,
-  );
+  // Named rather than counted, so a kind added by accident is still a red.
+  // Two lists rather than one equality, because a kind arrives in a lane that
+  // is not this one: `a-tree-has-one-root` added `parent`, and
+  // `a-suite-names-its-cases` adds `suites` and `cases`. An equality here
+  // demands a row before the diff that writes it has landed, which turns a
+  // wall red on a tree that is only mid handoff. So: every row is one the
+  // league has agreed to, and the four this drawing itself fixed are there.
+  const AGREED = [
+    "requirement",
+    "supersedes",
+    "parent",
+    "principles",
+    "suites",
+    "cases",
+  ];
+  for (const n of names)
+    assert.ok(
+      AGREED.includes(n),
+      `the table holds a kind nobody agreed to: ${n}`,
+    );
+  for (const n of ["requirement", "supersedes", "parent", "principles"])
+    assert.ok(names.includes(n), `the table has lost the kind ${n}`);
   // A tree where everything resolves says nothing, including a kind valued
   // `nothing` and a drawing whose principle exists.
   assert.deepEqual(
