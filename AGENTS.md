@@ -59,11 +59,18 @@ green. A closed task's red is a failure; an open task's red is reported.
 
 ## How a change lands
 
-Branch from main, never from a branch that already carries something
+Branch from `release`, never from a branch that already carries something
 else, and name the branch by the lane of the diff. Make the change, run
 `npm test`, and push: the hook runs every wall before the push leaves the
 machine, and a push it refuses is not done. Open the pull request from that
-branch against main; the merge is the human's approval. Paste the board's
+branch against `release`; the merge is the human's approval.
+
+`release` is where the work happens and `main` is what a consumer installs.
+A wall may stand red on `release`, where the seat that can fix it can see it;
+no wall may stand red on the promotion to `main`, and a red one there is a
+block with an owner rather than a thing to wait out. The promotion is the
+operator's: `release` into `main`, one pull request, carrying every seat's
+work, which is why the rule that gives a diff one seat is not asked of it. Paste the board's
 lines in the pull request, and when you report a red, paste the `FAIL`
 line and the lines under it, never a count alone: a red nobody can see is
 a claim, not a finding. A pull request whose body describes commits that
