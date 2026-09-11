@@ -96,14 +96,18 @@ wall, and by the board reporting a wall with no plan or a plan with no wall.
 2. The strategy states that code answers tests, and that what cannot be
    tested cannot be built, because nobody would know whether it were true.
 3. One plan document per wall under `tests/plans/`, each naming its wall by
-   the name the board uses, where its suites live, and what a case is.
+   the name the board uses, the suites it uses, and what a case is. Where its
+   suites live was the third of those and is superseded: a plan picks a
+   selection and a selection owns no place.
 4. Every gate in `kaal.config.json` that runs tests has exactly one plan
    naming it, and every plan names a gate that exists; the board reports
    either way round, naming the wall or the plan.
 5. The strategy and the plans carry a `traces` block, and `kaal traces`
    reads them as it reads a requirement and a drawing.
-6. On this tree the board answers: three plans, three walls, and each plan's
-   count of suites agreeing with what its glob matches.
+6. On this tree the board answers: three plans and three walls. The second
+   half of this criterion asked each plan's count of suites to agree with what
+   its glob matches, and is superseded: a plan owns no count either, and what
+   it reaches is computed rather than written down.
 
 ## Open questions
 
@@ -151,6 +155,11 @@ wall, and by the board reporting a wall with no plan or a plan with no wall.
   always done and what criterion 2 makes the board report. It now asks for
   one trunk under `kaal/` and an argument on every other root, which is the
   whole criterion rather than half of it
+- Superseded in part by: `a-suite-names-its-cases`, on criterion 3's third
+  clause and criterion 6's second. Both were right while a plan owned a place
+  and a number; a plan that picks suites owns neither. The rest of both
+  criteria stands, and this task's own open question, whether a plan holds a
+  count that goes stale or a glob that does not, is answered by neither
 - People: none
 
 ## Build
