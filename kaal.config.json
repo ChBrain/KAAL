@@ -124,7 +124,7 @@
       "allows": ["evals/**"]
     }
   ],
-  "shared": ["retros/**", "tests/plans/*.md"],
+  "shared": ["retros/**", "tests/plans/*.md", "tests/suites/*.md"],
   "gates": [
     {
       "name": "acceptance",
