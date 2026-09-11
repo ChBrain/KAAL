@@ -1,7 +1,9 @@
 ---
 traces:
-  requirement: the-engine-is-installable@95ec4bb3baeac9088a41a22496e6d07b07bd123a25ec88427ce28ee4169b5397
+  requirement: the-engine-is-installable@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202
   principles: nothing
+reviews:
+  requirement/the-engine-is-installable: updated@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202 by architect: criterion 2 lets the method ship and excludes tests by pattern, so seam 2 now reads files as two languages, entries that name and entries that exclude
 ---
 
 # Drawing: the-engine-is-installable
@@ -42,9 +44,14 @@ flowchart LR
    the manifest on one side and by every reader of a version on the other:
    the class wall, a release tag, a consumer's lockfile.
 2. **what ships is what files names**: in, the manifest's `files` and `bin`;
-   out, every path either field names exists in the tree, and the file `bin`
-   points at is inside what `files` ships. Owned by the manifest and by npm's
-   packer, which will ship an entry point nobody can run without complaint.
+   out, every path either field names exists in the tree, every pattern
+   `files` excludes matches something in it, and the file `bin` points at is
+   inside what `files` ships. `files` is two languages in one list, entries
+   that name and entries beginning `!` that exclude, and a reader that takes
+   every entry for a path reports that the manifest names something which is
+   not there. An exclusion matching nothing is as silent as a wrong path, so
+   both halves are read. Owned by the manifest and by npm's packer, which
+   will ship an entry point nobody can run without complaint.
 3. **the command a consumer runs**: in, the manifest's `bin`; out, the file
    it names is a program: it starts with a shebang, and run from a directory
    that is not this tree it answers rather than failing on a path it expected
