@@ -11,7 +11,10 @@
     "kaal": "bin/kaal.mjs"
   },
   "files": [
-    "bin"
+    "bin",
+    "skills",
+    "agents",
+    "!**/*.test.mjs"
   ],
   "engines": {
     "node": ">=22"
