@@ -42,7 +42,7 @@ import {
   report as reviewReport,
   counts as reviewCounts,
 } from "./lib/reviews.mjs";
-import { checkPlans, writeCounts } from "./lib/plans.mjs";
+import { checkPlans, writeCounts, reach } from "./lib/plans.mjs";
 import { readRun, verdict, writeRuns } from "./lib/runs.mjs";
 import { rows as coverageRows, states } from "./lib/coverage.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
@@ -124,6 +124,13 @@ if (cmd === "ledger") {
   const tally = reviewCounts(troot)
     .map((r) => `${r.count} ${r.state}`)
     .join(", ");
+  // How far each plan reaches, whatever the findings say. A reader asking what
+  // is covered is most often asking on a red tree, and a count that only
+  // appears when everything is well is a count nobody sees when they need it.
+  const reached = reach(troot)
+    .map((r) => `${r.plan}: ${r.suites} suite(s), ${r.cases} case(s)`)
+    .join("; ");
+  if (reached) console.log(`traces: plans reach ${reached}`);
   console.log(
     findings.length
       ? `traces: pins: ${tally}`

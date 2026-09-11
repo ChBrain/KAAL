@@ -7,7 +7,14 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
-import { suitePages, caseOwner, unnamed, planSuites, reach } from "./plans.mjs";
+import {
+  suitePages,
+  owners,
+  caseOwner,
+  unnamed,
+  planSuites,
+  reach,
+} from "./plans.mjs";
 
 const put = (root, files) => {
   for (const [rel, text] of Object.entries(files)) {
@@ -91,23 +98,19 @@ test("suitePages answers nothing where the place does not exist", () => {
 });
 
 test("caseOwner reads an owns pattern with or without its stars", () => {
-  const seats = [
-    { name: "analyst", owns: ["requirements/**"] },
-    { name: "developer", owns: ["bin/"] },
-  ];
-  assert.equal(caseOwner("requirements/a/acceptance.test.mjs", seats), null);
-  assert.equal(caseOwner("bin/lib/a.test.mjs", seats), null);
-  assert.match(String(caseOwner("x/a.test.mjs", seats)), /no seat owns it/);
-  assert.match(String(caseOwner("x/a.test.mjs", [])), /no seat owns it/);
-  assert.match(String(caseOwner("x/a.test.mjs")), /no seat owns it/);
+  const own = ["requirements/**", "bin/"];
+  assert.equal(caseOwner("requirements/a/acceptance.test.mjs", own), null);
+  assert.equal(caseOwner("bin/lib/a.test.mjs", own), null);
+  assert.match(String(caseOwner("x/a.test.mjs", own)), /nothing owns it/);
+  assert.match(String(caseOwner("x/a.test.mjs", [])), /nothing owns it/);
+  assert.match(String(caseOwner("x/a.test.mjs")), /nothing owns it/);
 });
 
 test("caseOwner refuses tests/ before it asks who owns it", () => {
   // The tester owns `tests/**`, so asking ownership first answers that a case
   // there is fine, which is the opposite of the rule.
-  const seats = [{ name: "tester", owns: ["tests/**"] }];
   assert.match(
-    String(caseOwner("tests/a.test.mjs", seats)),
+    String(caseOwner("tests/a.test.mjs", ["tests/**"])),
     /points at cases and does not hold them/,
   );
 });
@@ -149,6 +152,43 @@ test("reach counts only the suites a plan names that are there", () => {
     },
     (root) => {
       assert.deepEqual(reach(root), [{ plan: "p", suites: 1, cases: 2 }]);
+    },
+  );
+});
+
+test("owners gathers a seat's owns and a lane's allows alike", () => {
+  scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        seats: [{ name: "analyst", owns: ["requirements/**"] }],
+        lanes: [
+          { pattern: "build/*", seat: "developer", allows: [] },
+          { pattern: "skill/*", seat: null, allows: ["skills/**"] },
+        ],
+      }),
+    },
+    (root) => {
+      assert.deepEqual(owners(root), ["requirements/**", "skills/**"]);
+    },
+  );
+});
+
+test("owners answers nothing where the config is missing or broken", () => {
+  scratch({ "x.md": "#\n" }, (root) => assert.deepEqual(owners(root), []));
+  scratch({ "kaal.config.json": "{ not json" }, (root) =>
+    assert.deepEqual(owners(root), []),
+  );
+});
+
+test("unnamed never asks for a file inside a fixtures directory", () => {
+  scratch(
+    {
+      "x/one.test.mjs": "//\n",
+      "x/fixtures/scratch/two.test.mjs": "//\n",
+      "x/deep/fixtures/three.test.mjs": "//\n",
+    },
+    (root) => {
+      assert.deepEqual(unnamed(root, new Set(["x/one.test.mjs"])), []);
     },
   );
 });
