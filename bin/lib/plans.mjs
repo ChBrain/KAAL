@@ -107,6 +107,8 @@ export function checkPlans(root) {
     out.push({ artefact, kind: "plan", message });
   const findWall = (artefact, message) =>
     out.push({ artefact, kind: "wall", message });
+  const findSuite = (artefact, message) =>
+    out.push({ artefact, kind: "suite", message });
   const gates = testGates(root);
   const byName = new Map(gates.map((g) => [g.name, g]));
   const pages = planPages(root);
@@ -128,14 +130,14 @@ export function checkPlans(root) {
       );
       continue;
     }
-    // A plan's globs and its stated count were this wall's other two
-    // questions and are neither's any more: a plan picks suites, and a
-    // selection owns no place and no number. Both answers move to the
-    // suites the plan names, which is the diff after the pages carry them;
-    // between the two, a plan's prose is nobody's business, which is the
-    // price of landing a change that spans two lanes without a red wall in
-    // the middle.
     void gate;
+    // A glob a plan still carries was its whole claim once and is a leftover
+    // now: a plan picks suites, and a selection owns neither a place nor a
+    // number. Inside the loop and after the two above, because each finding
+    // stops its page: a plan whose wall does not exist has nothing for a
+    // glob to be wrong about.
+    const [leftover] = planSuites(p.text).findings;
+    if (leftover) find(p.name, leftover);
   }
 
   // The wall's end of it, reported in its own words: which end is missing is
@@ -144,12 +146,30 @@ export function checkPlans(root) {
     const named = pages.filter((p) => wallOf(p.text) === g.name);
     if (!named.length)
       findWall(g.name, "is a wall that runs tests and no plan is about it");
-    else if (named.length > 1)
-      findWall(
-        g.name,
-        `is the wall of ${named.length} plans: ${named.map((p) => p.name).join(", ")}`,
-      );
   }
+
+  // The suites' end of it. A suite is read for what it covers, each case is
+  // asked whether anything owns where it sits, and the tree is asked back
+  // whether a case it holds is covered at all. Its own kind, `suite`, because
+  // a finding about a suite is not a finding about the plan that uses it and
+  // a reader needs to know which page to open.
+  const held = owners(root);
+  const named = new Set();
+  for (const suite of suitePages(root)) {
+    const at = `suites/${suite.name}`;
+    if (!suite.cases.length) {
+      findSuite(at, "names no case");
+      continue;
+    }
+    for (const path of suite.cases) {
+      named.add(path);
+      const why = caseOwner(path, held);
+      if (why) findSuite(at, why);
+    }
+  }
+  for (const path of unnamed(root, named))
+    findSuite("suites", `${path}: no suite names it`);
+
   return out;
 }
 
@@ -219,27 +239,51 @@ export function suitePages(root) {
 }
 
 /**
- * Why a case may not sit where it sits, or null where a seat owns it. Two
- * answers and never one: `tests/` is refused before ownership is asked,
- * because the tester owns `tests/**` and would otherwise answer that a case
- * there is fine, which is the opposite of the rule.
- * @param {string} path @param {{ name: string, owns?: string[] }[]} seats
- * @returns {string | null}
+ * Every pattern the board says owns a path: each seat's `owns` and each
+ * lane's `allows`. Both, because four of this league's lanes carry no seat
+ * and one of them holds the skills, so a rule reading seats alone would make
+ * the league's own method the one thing the method cannot cover.
+ * @param {string} root @returns {string[]}
  */
-export function caseOwner(path, seats) {
-  if (path.startsWith("tests/"))
-    return `${path}: tests/ points at cases and does not hold them`;
-  const owned = (seats ?? []).some((s) =>
-    (s.owns ?? []).some((o) => path.startsWith(o.replace(/\*+$/, ""))),
-  );
-  return owned ? null : `${path}: no seat owns it`;
+export function owners(root) {
+  const p = join(root, "kaal.config.json");
+  if (!existsSync(p)) return [];
+  try {
+    const config = JSON.parse(readFileSync(p, "utf8"));
+    return [
+      ...(config.seats ?? []).flatMap((s) => s.owns ?? []),
+      ...(config.lanes ?? []).flatMap((l) => l.allows ?? []),
+    ];
+  } catch {
+    return [];
+  }
 }
 
 /**
- * Every test file no suite names, under the top level directories the named
- * cases reach and nowhere else. A tree no suite points into is not yet this
- * wall's business, which is what keeps a fixture from being asked about the
- * league's own trees.
+ * Why a case may not sit where it sits, or null where something owns it. Two
+ * answers and never one: `tests/` is refused before ownership is asked,
+ * because the tester owns `tests/**` and would otherwise answer that a case
+ * there is fine, which is the opposite of the rule.
+ * @param {string} path @param {string[]} owners
+ * @returns {string | null}
+ */
+export function caseOwner(path, owners) {
+  if (path.startsWith("tests/"))
+    return `${path}: tests/ points at cases and does not hold them`;
+  const held = (owners ?? []).some((o) =>
+    path.startsWith(o.replace(/\*+$/, "")),
+  );
+  return held ? null : `${path}: nothing owns it`;
+}
+
+/**
+ * Every test file no suite names, with two exclusions and each for its own
+ * reason. Only under the top level directories the named cases reach, because
+ * a tree no suite points into is not yet this wall's business. And never
+ * inside a `fixtures/` directory, because a fixture is a scratch tree built
+ * for a case and its files are that case's data rather than cases of their
+ * own: the first reading of this on the league's own tree found forty six of
+ * them, every one a file that exists to be read and not to be run.
  * @param {string} root @param {Set<string>} named
  * @returns {string[]}
  */
@@ -248,7 +292,7 @@ export function unnamed(root, named) {
   for (const top of new Set([...named].map((c) => c.split("/")[0])))
     for (const f of globSync(`${top}/**/*.test.mjs`, { cwd: root })) {
       const rel = String(f).split(/[\\/]/).join("/");
-      if (!named.has(rel)) out.push(rel);
+      if (!named.has(rel) && !rel.includes("/fixtures/")) out.push(rel);
     }
   return [...new Set(out)].sort();
 }

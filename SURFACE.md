@@ -139,7 +139,13 @@ evidence for changing it. A parent that is absent is never a finding: each
 seat populates its own tree. And it answers whether the test tree is written
 down: every wall whose command names a file ending in `.test.mjs` has one
 plan under `tests/plans/` that is about it, and every plan is about a wall the
-board holds. Which end is missing is the finding's own kind, `plan` or `wall`,
+board holds. It reads the suites too, under their own kind `suite`: a suite
+naming no case, a case sitting where nothing the board declares owns it, a
+case under `tests/`, which points at cases and does not hold them, and a test
+file under a tree the suites reach that no suite names. A file inside a
+`fixtures/` directory is never asked for, because a fixture is a scratch tree
+built for a case. And it says how far each plan reaches, in suites and in
+cases, on its own line and whatever the findings say. Which end is missing is the finding's own kind, `plan` or `wall`,
 because a plan is usually named for its wall. What a plan's globs match and
 what number it states are no longer read here: a plan picks suites, and a
 selection owns neither a place nor a count. `--write` still rewrites a number
