@@ -9,7 +9,7 @@ traces:
 
 - Wall: acceptance
 
-Its suites live under `requirements/*/acceptance.test.mjs`, and today that matches 0 suites.
+It uses the suites it names.
 
 ## Cases
 

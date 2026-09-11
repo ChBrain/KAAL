@@ -2,42 +2,50 @@
 
 Self-diagnosis: drawn from session context. Not a human-reported retro.
 
-Period: the sixty-eighth use of the architect skill, reading the two criteria
-of `a-suite-names-its-cases` that widened underneath its own drawing,
+Period: the sixty-eighth use of the architect skill, bringing this drawing's
+twelve fixtures and its contract helper up to the tree they run in,
 11 September 2026.
 Place: this repository
 
 ## Liked
 
-- The read is one line because the drawing had already moved. Criterion 4
-  widened and seam 7 grew with it in the same hour; criteria 2 and 5 stopped
-  saying how a trace is written and seams 3, 4 and 5 picked that up. The pin
-  is confirming work rather than requesting it.
+- The four seams fell apart for three different reasons and each said which.
+  Two on a helper reading a report, one on a rule that had gone missing, one
+  on prose a later rule overtook. A suite that had gone red as one thing would
+  have cost a day.
+- Nothing here changed a seam or a contract's promise. Twelve fixtures say
+  what the tree says now, and the helper reads a finding where it used to read
+  a line, which is the same question asked of the right text.
 
 ## Learned
 
-- This pin was caused by my own chain rather than by another seat, and it is
-  the third time today. The architect asked for a widening, the analyst wrote
-  it, and the architect then owed itself a read of the sentence it had asked
-  for. With one person in six seats that reads as bookkeeping; with six people
-  it is the only thing that tells the architect the sentence actually changed
-  in the way that was agreed. The ceremony is not for me.
-- Four pins came out of one task's chain and every one of them was true. None
-  was noise, and the one that felt most like noise, a suite reading a case it
-  still names, is the one the whole suite layer was built to produce.
+- A fixture is a tree frozen at a date and nothing asks whether the date has
+  passed. Twelve of them went red together, three pull requests after the rule
+  that overtook them, and the same thing happened in the analyst's tree two
+  days ago with nine. That is twenty-one pages in one week, found twice by the
+  same accident.
+- A report that names pages is indistinguishable from a finding about them,
+  to any helper that reads whole lines. `kaal traces` gained a line saying how
+  far each plan reaches, and two seams began passing or failing on a sentence
+  that was not about them. The shape was always there to read: every finding
+  is `<artefact>: <kind>: <message>`, and the artefact is the part before the
+  first colon.
+- This drawing's suite was the only thing that knew the wall rule had been
+  deleted, and it could not say so, because its task's record is stale and a
+  red suite with no record is an answer. The architect's contract was right
+  and mute for three days.
 
 ## Lacked
 
-- Nothing tells a seat that a pin it is about to owe is one it asked for. A
-  pin from another seat's edit and a pin from the edit you requested read
-  identically, and only the second is bookkeeping.
+- A pass that runs the board over each fixture root. Twenty-one overtaken
+  pages in a week is a rule the tree could apply to itself, and every one of
+  them was found by a suite going red for a reason its seam is not about.
 
 ## Longed for
 
-- A review a seat can write when it asks for a change rather than when the
-  change arrives, so that the request and the reading are one act.
-
-Tensions weighed: none. Nothing was chosen; this records a reading.
+- A fixture that carries the date of the tree it was built for, so a rule
+  landing after it can say which fixtures it overtook rather than waiting to
+  be tripped over.
 
 Feeds: architect
-Read: analyse
+Read: code
