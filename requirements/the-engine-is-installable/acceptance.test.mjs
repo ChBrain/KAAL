@@ -78,7 +78,7 @@ test("1. the manifest declares a version, and it is in its patch place", () => {
   assert.equal(minor, "0", `minor place is ${minor} in ${version}`);
 });
 
-test("2. what the tool ships is the tool", () => {
+test("2. what the tool ships is the tool and the method it carries", () => {
   const packed = npm(["pack", "--dry-run", "--json", "--ignore-scripts"], ROOT);
   assert.equal(packed.status, 0, `npm pack: ${said(packed)}`);
   const files = JSON.parse(packed.stdout)[0].files.map((f) => f.path);
@@ -87,14 +87,22 @@ test("2. what the tool ships is the tool", () => {
   // npm puts these three in every tarball whatever the manifest says, and an
   // MIT tool shipping without its licence would be the worse outcome.
   const always = ["package.json", "LICENSE", "README.md"];
+  const ships = ["bin/", "skills/", "agents/"];
   const stray = files.filter(
-    (p) => !always.includes(p) && !p.startsWith("bin/"),
+    (p) => !always.includes(p) && !ships.some((d) => p.startsWith(d)),
   );
   assert.deepEqual(
     stray,
     [],
     `the tarball carries the league's working: ${stray}`,
   );
+  // And the method is actually there, or a package that shipped nothing but
+  // the tool would satisfy the line above by carrying less.
+  for (const d of ships)
+    assert.ok(
+      files.some((p) => p.startsWith(d)),
+      `the tarball carries nothing under ${d}`,
+    );
   // Named on their own as well, because the criterion names them and a
   // future `files` entry could let one back in without failing the line above.
   for (const d of [
@@ -102,14 +110,21 @@ test("2. what the tool ships is the tool", () => {
     "architecture/",
     "retros/",
     "evals/",
-    "fixtures/",
-    "skills/",
+    "tests/",
+    "plan/",
+    "deploy/",
   ])
     assert.deepEqual(
       files.filter((p) => p.startsWith(d)),
       [],
       `the tarball carries ${d}`,
     );
+  // A test is nobody's method and it is the developer's proof.
+  assert.deepEqual(
+    files.filter((p) => p.endsWith(".test.mjs")),
+    [],
+    "the tarball carries a test",
+  );
 });
 
 test("3. the installed tool answers on the command line", () => {

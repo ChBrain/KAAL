@@ -46,7 +46,7 @@ test("1. the package has a name a consumer can ask for, and a registry of its ow
   );
 });
 
-test("2. what the package carries is unchanged", () => {
+test("2. what the package carries beyond the method is unchanged", () => {
   const r = spawnSync("npm", ["pack", "--dry-run", "--json"], {
     cwd: ROOT,
     encoding: "utf8",
@@ -55,19 +55,23 @@ test("2. what the package carries is unchanged", () => {
   assert.equal(r.status, 0, `npm pack refused: ${r.stderr}`);
   const files = JSON.parse(r.stdout)[0].files.map((f) => f.path);
   assert.ok(files.length, "the package carries nothing");
-  assert.ok(
-    files.some((f) => f.startsWith("bin/")),
-    `the tool is not in the package: ${files.join(", ")}`,
-  );
-  // The six the offline install refuses, each on its own: an alternation
-  // passes on a package that carries five of them.
+  // The tool and the method it carries, each on its own: a package that
+  // shipped one of the three would pass an alternation.
+  for (const d of ["bin/", "skills/", "agents/"])
+    assert.ok(
+      files.some((f) => f.startsWith(d)),
+      `${d} is not in the package: ${files.join(", ")}`,
+    );
+  // The seven the offline install refuses, each on its own: an alternation
+  // passes on a package that carries six of them.
   for (const d of [
     "requirements/",
     "architecture/",
     "retros/",
     "evals/",
-    "skills/",
     "tests/",
+    "plan/",
+    "deploy/",
   ])
     assert.ok(
       !files.some((f) => f.startsWith(d)),

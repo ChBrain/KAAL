@@ -87,7 +87,7 @@ test("1. installed from a git URL with no registry in reach, the tool answers on
   }
 });
 
-test("2. the git install brings one package, and it is the tool and nothing of the league's working", () => {
+test("2. the git install brings one package, and it is the tool with the method and nothing of the league's working", () => {
   const scratch = mkdtempSync(join(tmpdir(), "kaal-tag-alone-"));
   try {
     const consumer = installedFromGit(scratch);
@@ -111,17 +111,21 @@ test("2. the git install brings one package, and it is the tool and nothing of t
     // The one package this test just found, not the name again: what is
     // read is what was installed.
     const inside = readdirSync(join(tree, ...packages[0].split("/")));
-    assert.ok(
-      inside.includes("bin"),
-      `no bin/ in the installed tool: ${inside}`,
-    );
+    // The tool and the method it carries, each on its own: an install with
+    // one of the three would pass an alternation.
+    for (const d of ["bin", "skills", "agents"])
+      assert.ok(
+        inside.includes(d),
+        `no ${d}/ in what was installed: ${inside}`,
+      );
     for (const d of [
       "requirements",
       "architecture",
       "retros",
       "evals",
-      "skills",
       "tests",
+      "plan",
+      "deploy",
     ])
       assert.ok(!inside.includes(d), `the installed tool carries ${d}/`);
   } finally {

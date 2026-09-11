@@ -91,10 +91,15 @@ what changes when the artefact stops being a ref.
 1. `package.json` names `@chbrain/kaal`, is not private, and declares the
    registry it publishes to, so a publish cannot resolve one from the
    machine that runs it.
-2. What the package carries is unchanged: `npm pack --dry-run` lists
-   `bin/`, the licence, the readme and the manifest, and nothing under
-   `requirements/`, `architecture/`, `retros/`, `evals/`, `skills/` or
-   `tests/`.
+2. What the package carries beyond the method is unchanged: `npm pack
+--dry-run` lists `bin/`, `skills/`, `agents/`, the licence, the readme and
+   the manifest, and nothing under `requirements/`, `architecture/`,
+   `retros/`, `evals/`, `tests/`, `plan/` or `deploy/`. Amended by
+   `an-install-carries-the-method`, which moved the skills out of this list
+   because they are the method rather than the league's working. The
+   protection this criterion carries, that coming off private widened nothing
+   by accident, is unchanged: it widened deliberately and this says by how
+   much.
 3. The release workflow publishes the version it tagged, after the tag, and
    the publish step runs only if the branch check, the board and
    `kaal release` have all passed.
