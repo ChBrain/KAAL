@@ -4,7 +4,7 @@ traces:
 suites:
   units: e769e8c06e1f006cb56278c13b72f6e940735ff6ab44497d0574d7febe49d589
 reviews:
-  suites/units: reviewed-no-impact@e769e8c06e1f006cb56278c13b72f6e940735ff6ab44497d0574d7febe49d589 by architect: the suite gained the case this task's contracts are, and recorded a read of one whose line was written early; neither changes which suites this plan uses
+  suites/units: reviewed-no-impact@e769e8c06e1f006cb56278c13b72f6e940735ff6ab44497d0574d7febe49d589 by analyst: the suite gained the case beside the base reader, which is a case this plan's wall already ran by its glob; which suites this plan uses is unchanged
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

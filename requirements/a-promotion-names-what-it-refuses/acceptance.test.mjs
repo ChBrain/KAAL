@@ -371,3 +371,40 @@ test("8. a promotion is not a lane's diff, and the seat rule says so", () => {
     );
   });
 });
+
+test("9. the board judges by the target the tree opens into", () => {
+  // The same tree, the same red wall, asked twice. This is the command the
+  // pre-push hook runs, so it is where the rule reaches a desk.
+  const board = (root, base) =>
+    spawnSync(process.execPath, [join(ROOT, "bin", "kaal.mjs"), "gates"], {
+      encoding: "utf8",
+      cwd: root,
+      env: { ...process.env, KAAL_BASE: base, KAAL_BRANCH: "build/x" },
+    });
+  scratch(
+    { ...DELIVERED },
+    (root) => {
+      const rel = board(root, "origin/release");
+      const relOut = said(rel);
+      notUsage(relOut);
+      assert.equal(rel.status, 0, `a red wall stopped a desk push: ${relOut}`);
+      // Reported and not silent: a seat that cannot see it cannot fix it.
+      assert.match(relOut, /\bloud\b/, `the red wall is not named: ${relOut}`);
+      assert.match(
+        relOut,
+        /\b1\b[^\n]*\bwall/,
+        `the answer does not count the red walls: ${relOut}`,
+      );
+      const main = board(root, "origin/main");
+      const mainOut = said(main);
+      assert.equal(main.status, 1, `a red wall reached main: ${mainOut}`);
+    },
+    { red: true },
+  );
+  // And a green board is green at either target, so the difference is the
+  // red wall and never the asking.
+  scratch({ ...DELIVERED }, (root) => {
+    for (const base of ["origin/release", "origin/main"])
+      assert.equal(board(root, base).status, 0, said(board(root, base)));
+  });
+});
