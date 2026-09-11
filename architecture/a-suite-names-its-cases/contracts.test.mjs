@@ -41,10 +41,26 @@ const scratch = async (files, fn) => {
   }
 };
 const CASE = "import { test } from 'node:test';\ntest('a', () => {});\n";
+/** A kind as a block: one entry to a line, keyed by the name. */
+const block = (key, value) => {
+  // `nothing` is how a line says none; a block says it by holding no entry.
+  const entries =
+    value && !/^(nothing|none)$/i.test(value) ? value.split(", ") : [];
+  return (
+    `${key}:\n` +
+    entries
+      .map((e) => {
+        const [n, sha] = e.split("@");
+        return `  ${n}: ${sha ?? "nothing"}`;
+      })
+      .join("\n") +
+    (entries.length ? "\n" : "")
+  );
+};
 const suite = (cases) =>
-  `---\ntraces:\n  parent: strategy\n  cases: ${cases}\n---\n\n# Test suite\n`;
+  `---\ntraces:\n  parent: strategy\n${block("cases", cases)}---\n\n# Test suite\n`;
 const plan = (wall, suites, tail = "") =>
-  `---\ntraces:\n  parent: strategy\n  suites: ${suites}\n---\n\n` +
+  `---\ntraces:\n  parent: strategy\n${block("suites", suites)}---\n\n` +
   `# Test plan: ${wall}\n\n## Wall\n\n- Wall: ${wall}\n${tail}`;
 const SEATS = [
   { name: "analyst", owns: ["requirements/**"] },
@@ -66,7 +82,7 @@ test("1. the suites kind resolves a name under tests/suites", async () => {
   );
 });
 
-test("2. the cases kind resolves a path to itself, and it pins", async () => {
+test("2. the cases kind resolves a path to itself", async () => {
   const KINDS = await from("traces.mjs", "KINDS");
   assert.ok(KINDS.cases, "the kind table holds no cases row");
   const p = "requirements/alpha/acceptance.test.mjs";
@@ -77,27 +93,81 @@ test("2. the cases kind resolves a path to itself, and it pins", async () => {
     p,
     "a case path does not resolve to itself",
   );
+});
+
+test("3. a kind written as a block reads as a list would", async () => {
+  const readTrace = await from("traces.mjs", "readTrace");
+  const splitTrace = await from("traces.mjs", "splitTrace");
+  const sha = "a".repeat(64);
+  const asBlock = readTrace(
+    `---\ntraces:\n  parent: strategy\ncases:\n  x/one.test.mjs: ${sha}\n  x/two.test.mjs: nothing\n---\n`,
+  );
+  const asList = readTrace(
+    `---\ntraces:\n  parent: strategy\n  cases: x/one.test.mjs@${sha}, x/two.test.mjs\n---\n`,
+  );
+  assert.deepEqual(
+    splitTrace(asBlock.cases).map((e) => e.name),
+    splitTrace(asList.cases).map((e) => e.name),
+    "a block and a list name different things",
+  );
+  assert.equal(
+    splitTrace(asBlock.cases)[0].pin,
+    sha,
+    "a block entry's sha is not its pin",
+  );
+  assert.deepEqual(
+    splitTrace(
+      readTrace(`---\ntraces:\n  parent: none\ncases:\n---\n`).cases ?? "",
+    ),
+    [],
+    "an empty block named something",
+  );
+});
+
+test("4. a frontmatter sub key may carry a dot", async () => {
+  const parseFrontmatter = await from("frontmatter.mjs", "parseFrontmatter");
+  const { data } = parseFrontmatter(
+    `---\ncases:\n  requirements/a/acceptance.test.mjs: nothing\n---\nbody\n`,
+  );
+  assert.deepEqual(
+    Object.keys(data.cases ?? {}),
+    ["requirements/a/acceptance.test.mjs"],
+    "a key with a dot was dropped in silence",
+  );
+  const { data: d2 } = parseFrontmatter(
+    `---\nreviews:\n  requirement/alpha: current\ntraces:\n  parent: none\n---\n`,
+  );
+  assert.deepEqual(Object.keys(d2.reviews ?? {}), ["requirement/alpha"]);
+  assert.deepEqual(d2.traces, { parent: "none" });
+});
+
+test("5. writePins writes a sha onto each entry's own line", async () => {
   const writePins = await from("traces.mjs", "writePins");
   await scratch(
     {
       "kaal/league.md": "---\ntraces:\n  parent: none\n---\n\n# Scratch\n",
       "tests/strategy.md":
         "---\ntraces:\n  parent: none\n---\n\n# Test strategy\n\n## Root\n\n- Root because: root.\n",
-      "tests/suites/alpha.md": suite(p),
-      [p]: CASE,
+      "tests/suites/alpha.md": suite("requirements/a/acceptance.test.mjs"),
+      "requirements/a/acceptance.test.mjs": CASE,
     },
     (root) => {
       writePins(root);
-      assert.match(
-        readFileSync(join(root, "tests", "suites", "alpha.md"), "utf8"),
-        /cases:[^\n]*acceptance\.test\.mjs@[0-9a-f]{8}/,
-        "a case carries no pin after writePins",
+      const text = readFileSync(
+        join(root, "tests", "suites", "alpha.md"),
+        "utf8",
       );
+      assert.match(
+        text,
+        /^ {2}requirements\/a\/acceptance\.test\.mjs: [0-9a-f]{64}$/m,
+        `no sha on the entry's own line: ${text}`,
+      );
+      assert.doesNotMatch(text, /^cases:.+$/m, "the block became a line");
     },
   );
 });
 
-test("3. suitePages answers what each suite covers", async () => {
+test("6. suitePages answers what each suite covers", async () => {
   const suitePages = await from("plans.mjs", "suitePages");
   await scratch(
     {
@@ -120,7 +190,7 @@ test("3. suitePages answers what each suite covers", async () => {
   );
 });
 
-test("4. caseOwner answers nothing, tests/, or no seat, in that order", async () => {
+test("7. caseOwner answers nothing, tests/, or no seat, in that order", async () => {
   const caseOwner = await from("plans.mjs", "caseOwner");
   assert.equal(
     caseOwner("requirements/a/acceptance.test.mjs", SEATS),
@@ -153,7 +223,7 @@ test("4. caseOwner answers nothing, tests/, or no seat, in that order", async ()
   );
 });
 
-test("5. unnamed answers the files no suite names, only where suites reach", async () => {
+test("8. unnamed answers the files no suite names, only where suites reach", async () => {
   const unnamed = await from("plans.mjs", "unnamed");
   await scratch(
     {
@@ -175,7 +245,7 @@ test("5. unnamed answers the files no suite names, only where suites reach", asy
   );
 });
 
-test("6. planSuites answers a plan's suites, and a glob left behind is refused", async () => {
+test("9. planSuites answers a plan's suites, and a glob left behind is refused", async () => {
   const planSuites = await from("plans.mjs", "planSuites");
   assert.deepEqual(
     planSuites(plan("acceptance", "alpha, beta")).names,
@@ -200,7 +270,7 @@ test("6. planSuites answers a plan's suites, and a glob left behind is refused",
   );
 });
 
-test("7. reach answers one row per plan with its suites and cases", async () => {
+test("10. reach answers one row per plan with its suites and cases", async () => {
   const reach = await from("plans.mjs", "reach");
   await scratch(
     {
