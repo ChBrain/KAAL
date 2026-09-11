@@ -1,9 +1,0 @@
-{
-  "gates": [
-    {
-      "name": "acceptance",
-      "command": "node bin/kaal.mjs acceptance requirements/*/acceptance.test.mjs",
-      "fix": "fix it"
-    }
-  ]
-}

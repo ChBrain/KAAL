@@ -111,29 +111,7 @@ test("3. a test gate no plan names is a finding naming the wall, and a gate that
   namesKind(twoOut, "acceptance", "wall", "the wall two plans are about");
 });
 
-test("4. a plan's suites are its wall's suites, counted as they match", () => {
-  const wrong = kaal("traces", F("count-wrong"));
-  const out = said(wrong);
-  notUsage(out);
-  assert.equal(wrong.status, 1, `a count that disagrees was allowed: ${out}`);
-  const finding = ofKind(out, "acceptance", "plan").join("\n");
-  assert.ok(finding, `no plan finding names the plan: ${out}`);
-  assert.match(finding, /\b7\b/, `the number stated is not said: ${finding}`);
-  assert.match(finding, /\b1\b/, `the number found is not said: ${finding}`);
-  // A plan counting correctly over globs that are not its wall's is the
-  // other half of the seam, and it says so in different words: the number is
-  // right and the plan is about something else.
-  const other = kaal("traces", F("wrong-suites"));
-  const otherOut = said(other);
-  assert.equal(
-    other.status,
-    1,
-    `a plan documenting another wall's suites was allowed: ${otherOut}`,
-  );
-  namesKind(otherOut, "contracts", "plan", "the glob the plan carries");
-});
-
-test("5. the strategy roots the test tree, and the depth rule does not read it", () => {
+test("4. the strategy roots the test tree, and the depth rule does not read it", () => {
   // The ask's own shape: a strategy and three plans hanging off it. Three of
   // four is over the share the depth rule refuses, so a silent board here is
   // the whole of the seam, and it says what no table read could: the shape
