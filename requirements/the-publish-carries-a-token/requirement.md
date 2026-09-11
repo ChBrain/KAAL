@@ -1,6 +1,8 @@
 ---
 traces:
-  supersedes: the-engine-installs-by-name@bc49d25cc15c4fe432c5bba699a17667b7d39b91c89741955cd304c354894f92
+  supersedes: the-engine-installs-by-name@7f42be034c0b78b7ebce3c72260082bbb12c3c7040a116a2359a5b22c55d62f7
+reviews:
+  supersedes/the-engine-installs-by-name: reviewed-no-impact@7f42be034c0b78b7ebce3c72260082bbb12c3c7040a116a2359a5b22c55d62f7 by analyst: this supersedes that task's third criterion, the one about publishing, and what moved is its second, the one about what the package carries
 ---
 
 # Requirement: the-publish-carries-a-token

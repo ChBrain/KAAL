@@ -1,6 +1,9 @@
 ---
 traces:
-  supersedes: security-v1@58da36a958c75bdeadf9e058ccc8441e4ab568e1b76001efd8ae81bb2dddd322, the-engine-is-installable@95ec4bb3baeac9088a41a22496e6d07b07bd123a25ec88427ce28ee4169b5397, the-release-runs-on-a-key@83c1dfad60d4c78de8f0cd9569ac7386ae877218b217348a5ddc00d992902045, the-tag-installs-offline@40a65577ba6faeae4dc238ab75b9667aa4be1f05d81d15bd34b64f9c29eb94f6
+  supersedes: security-v1@58da36a958c75bdeadf9e058ccc8441e4ab568e1b76001efd8ae81bb2dddd322, the-engine-is-installable@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202, the-release-runs-on-a-key@83c1dfad60d4c78de8f0cd9569ac7386ae877218b217348a5ddc00d992902045, the-tag-installs-offline@b5f31020fa42f845097460a3158e9a430e4c59196ef44d92b23433f23ff98c31
+reviews:
+  supersedes/the-engine-is-installable: updated@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202 by analyst: its criterion moved after this said it was unchanged, so the clause now says what moved and why what this superseded, the reading, is untouched by it
+  supersedes/the-tag-installs-offline: reviewed-no-impact@b5f31020fa42f845097460a3158e9a430e4c59196ef44d92b23433f23ff98c31 by analyst: what this superseded is that task reading the installed tree one directory deep, and what moved there is the list of directories it must not carry
 ---
 
 # Requirement: the-engine-installs-by-name
@@ -165,8 +168,12 @@ what changes when the artefact stops being a ref.
   Found by the build, both by a wall going red: `the-engine-is-installable`
   read the installed tree one directory deep, so a scope reads as the
   package and `@chbrain` answered where `kaal` used to. Its criterion, that
-  the install brings nothing with it, is unchanged; the reading is widened
-  to name packages rather than directories. And `the-release-runs-on-a-key`
+  the install brings nothing with it, was unchanged then and has moved since:
+  `an-install-carries-the-method` settles that the skills and the agent are
+  the method rather than the league's working, so the install brings those
+  and nothing else. What this task superseded is untouched by that, because
+  what it superseded is the reading, widened to name packages rather than
+  directories, and a package is a package whatever it carries. And `the-release-runs-on-a-key`
   listed `packages: write` among the writes the release run has no business
   holding, which was true of a run that only tagged. The list keeps the
   four writes the run still has no business with, and what every write owes

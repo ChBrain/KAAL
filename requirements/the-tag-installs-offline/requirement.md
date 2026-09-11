@@ -1,6 +1,8 @@
 ---
 traces:
-  supersedes: the-engine-is-installable@95ec4bb3baeac9088a41a22496e6d07b07bd123a25ec88427ce28ee4169b5397
+  supersedes: the-engine-is-installable@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202
+reviews:
+  supersedes/the-engine-is-installable: reviewed-no-impact@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202 by analyst: this supersedes one claim of that task's drawing's third decision, about install-lifecycle scripts, and what moved is its second criterion
 ---
 
 # Requirement: the-tag-installs-offline
