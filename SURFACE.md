@@ -138,8 +138,10 @@ one number chosen without evidence, and the first tree to trip it is the
 evidence for changing it. A parent that is absent is never a finding: each
 seat populates its own tree. And it answers whether the test tree is written
 down: every wall whose command names a file ending in `.test.mjs` has one
-plan under `tests/plans/` that is about it, and every plan is about a wall the
-board holds. It reads the suites too, under their own kind `suite`: a suite
+plan under `tests/plans/` that is about it, no more and no fewer, and every
+plan is about a wall the board holds. Two plans about one wall is a finding
+naming the wall and both pages, because the pair is the fault and neither page
+is wrong on its own. It reads the suites too, under their own kind `suite`: a suite
 naming no case, a case sitting where nothing the board declares owns it, a
 case under `tests/`, which points at cases and does not hold them, and a test
 file under a tree the suites reach that no suite names. A file inside a
