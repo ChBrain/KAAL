@@ -72,6 +72,13 @@ table holds requirement, supersedes, parent, principles`, twice, and the tree
 - Only `parent:` is single valued. `principles:` has always been a comma list
   resolving to many files, so the grammar is already a graph and n:m needs no
   new shape, only new rows.
+- Criterion 5's own fixture proved the wrong cardinality. Two plans naming one
+  suite is what the criterion says, and the fixture gave the two plans the
+  same wall as well, which is the other cardinality entirely and one this page
+  says still stands: `the-test-tree-is-written-down` closed it, and its
+  criteria 1, 2, 4 and 5 are not superseded here. The fixture passed anyway,
+  because the rule about it had been dropped from the board and nothing said
+  so. A proof that needs a rule to be absent is a proof of the absence.
 - The trace wall already treats anything under `tests/` as an artefact. A
   suite page written without a frontmatter block answered `suites/alpha:
 traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
