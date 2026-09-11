@@ -108,8 +108,13 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 - No test case belongs in `tests/` at all. The asker said cases are pointed at
   from there and never written there, and the tester writes no cases of its
   own, so the rule is the whole directory rather than a list of exceptions.
-- A case path belongs to the seat whose tree holds it, read from the seats
-  declared in `kaal.config.json`. This task adds no new notion of ownership.
+- A case belongs wherever `kaal.config.json` already says something owns it:
+  a seat's `owns` or a lane's `allows`. This task adds no new notion of
+  ownership and reads both of the two that exist. The asker's open question
+  about the units plan's third glob is answered by running rather than by
+  choosing: `skills/analyse/scripts/count.test.mjs` is a unit of a skill's own
+  script, it sits in the `skill/*` lane, and a rule that read seats alone
+  would make the league's own method the one thing the method cannot cover.
 - The twenty-one moving is a separate task. It is two lanes in one change and
   the guard refuses that, so it cannot be part of this diff and is named in
   the handoff instead.
@@ -151,9 +156,10 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 3. A case path under `tests/` is a finding naming the path and saying that
    `tests/` points at cases and does not hold them. This holds whatever else
    is true of the path.
-4. A case path in no seat's tree is a finding naming the path and saying no
-   seat owns it. The seats are read from `kaal.config.json` and this task
-   declares no new ones.
+4. A case path nothing owns is a finding naming the path and saying so. A
+   seat's tree owns a path and so does a lane's `allows`, because four of this
+   league's lanes carry no seat and one of them holds the skills. Both are
+   read from `kaal.config.json` and this task declares neither.
 5. A plan traces the suites it uses and no longer names a glob. Plan to suite and suite to case are both many to many
    and neither excludes the other: one suite traced by two plans is not a
    finding, one plan tracing two suites is not a finding, and one case traced
@@ -181,9 +187,11 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 - Do `standard`, `runners` and the other checks that run no tests belong to a
   suite? They belong to no plan today and that was left open when the plans
   were written.
-- Where does the units plan's third glob go? `skills/*/scripts/*.test.mjs`
-  matches one file, and whether a skill's script is the developer's tree or
-  the skill lane's is a question this task's criterion 4 will ask out loud.
+- Answered by running, and kept because the answer is evidence. The units
+  plan's third glob matches `skills/analyse/scripts/count.test.mjs`, criterion
+  4 asked it out loud as this task said it would, and the answer is the skill
+  lane's: a case sits where something owns it, and a lane that carries no seat
+  still carries an `allows`.
 
 ## Handoff
 
@@ -195,7 +203,7 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
   the first two attempts were a shared red rather than seven proofs. The
   fixtures had no requirement, so `kaal traces` answered "not applicable here"
   six times, and then the fixture's own strategy page carried no root line
-- Stand-in green: all seven, three times. The first on a suite reader that read its
+- Stand-in green: all seven, four times. The first on a suite reader that read its
   cases out of prose, the second after the asker fixed the cardinality, on two
   rows in the kind table, a suite reader that reads the fields, a per plan
   count line on `kaal traces` and a five kinds section in the strategy page.
@@ -203,8 +211,10 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
   line forced: the parser widened by one character class so a key may carry a
   dot, a kind read from a block of its own as well as from a line, and
   `writePins` writing into a block entry by entry. All three discarded, and
-  every one of them proved criterion 2's pin: `traces --write` puts a sha on a
-  case exactly as it does on any other trace
+  every one of them proved criterion 2's pin. The fourth was on the owners:
+  `caseOwner` reading a lane's `allows` beside a seat's `owns`, with the
+  findings wired and the counts on the line, and it is the one that proves the
+  witness in criterion 4's second half
 - Found by the stand-in and by running, twice, and both mine. Criterion 1's
   test read the five kinds as substrings and `re-runs` matched before
   `suites`, so it was red for a reason no wording of the page could fix; it

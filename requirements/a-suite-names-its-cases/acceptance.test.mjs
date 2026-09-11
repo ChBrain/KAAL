@@ -57,6 +57,12 @@ const CONFIG = JSON.stringify(
       { name: "developer", owns: ["bin/**"] },
       { name: "tester", owns: ["tests/**"] },
     ],
+    // Four of this league's lanes carry no seat and one of them holds the
+    // skills, so a lane's `allows` owns a path exactly as a seat's tree does.
+    lanes: [
+      { pattern: "build/*", seat: "developer", allows: [] },
+      { pattern: "skill/*", seat: null, allows: ["skills/**"] },
+    ],
     shared: [],
   },
   null,
@@ -174,7 +180,7 @@ test("3. a case under tests/ is a finding", () => {
   );
 });
 
-test("4. a case in no seat's tree is a finding", () => {
+test("4. a case nothing owns is a finding, and a lane owns as a seat does", () => {
   scratch(
     {
       ...whole(),
@@ -184,13 +190,34 @@ test("4. a case in no seat's tree is a finding", () => {
     (root) => {
       const r = kaal("traces", root);
       notUsage(said(r));
-      assert.equal(r.status, 1, `a case owned by nobody passed: ${said(r)}`);
+      assert.equal(r.status, 1, `a case nobody owns passed: ${said(r)}`);
       assert.match(
         said(r),
         /nowhere\/thing\.test\.mjs/,
         "the finding never names the path",
       );
-      assert.match(said(r), /seat/i, "the finding never says no seat owns it");
+      assert.match(said(r), /own/i, "the finding never says nothing owns it");
+    },
+  );
+  // The witness: a seatless lane's `allows` owns a path, so a case there is
+  // no finding. Without this the rule reads as `a seat's tree` and the
+  // league's own skills are the one thing the method cannot cover.
+  scratch(
+    {
+      ...whole(),
+      "tests/suites/alpha.md": suite("alpha", [
+        "skills/analyse/scripts/count.test.mjs",
+      ]),
+      "skills/analyse/scripts/count.test.mjs": CASE,
+    },
+    (root) => {
+      const r = kaal("traces", root);
+      notUsage(said(r));
+      assert.equal(
+        r.status,
+        0,
+        `a case a seatless lane allows was refused: ${said(r)}`,
+      );
     },
   );
 });
