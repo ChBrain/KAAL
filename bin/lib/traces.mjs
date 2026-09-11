@@ -151,8 +151,32 @@ export function readTrace(text) {
     return null;
   }
   const t = data.traces;
-  return t && typeof t === "object" ? t : {};
+  const out = t && typeof t === "object" ? { ...t } : {};
+  // A kind may also be written as a block of its own beside `traces:`, one
+  // entry to a line, keyed by the name and valued by its sha. One grammar and
+  // two writings: a kind picks the one its length needs, because a comma list
+  // lives on a line and a line does not hold sixty five paths. The block is
+  // folded into the value shape here, so every reader below this point sees
+  // what it always saw and none of them learns a second grammar.
+  //
+  // A kind written both ways in one page is the block, because a block is
+  // what the page shows a reader. An empty block names nothing, the way
+  // `nothing` on a line does.
+  for (const [kind, value] of Object.entries(data))
+    if (KINDS[kind])
+      out[kind] =
+        value && typeof value === "object"
+          ? Object.entries(value)
+              .map(([name, sha]) =>
+                PIN.test(String(sha)) ? `${name}@${sha}` : name,
+              )
+              .join(", ")
+          : "";
+  return out;
 }
+
+/** A value that is a sha rather than a word: `nothing` is not a pin. */
+const PIN = /^[0-9a-f]{8,}$/;
 
 /**
  * The names a kind's value carries, with the two liberties `Feeds:` and
@@ -421,10 +445,28 @@ export function writePins(root) {
           return `${name}@${sha}`;
         })
         .join(", ");
-      // A line carrying one held pin is left whole. Rewriting the rest of it
-      // would change a page for a pin the tool was told not to touch, and a
-      // reader comparing the diff could not tell which it had done.
+      // A line carrying one held pin is left whole, and so is a block. In
+      // both cases rewriting the rest would change a page for a pin the tool
+      // was told not to touch, and a reader comparing the diff could not tell
+      // which it had done.
       if (!pinned || held) continue;
+      // A block is written entry by entry, because each entry is its own
+      // line and the whole point of the block is that a reader reads them
+      // one at a time.
+      if (new RegExp(`^${kind}:\\s*$`, "m").test(out)) {
+        for (const entry of pinned.split(", ")) {
+          const at = entry.indexOf("@");
+          if (at === -1) continue;
+          const name = entry
+            .slice(0, at)
+            .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          out = out.replace(
+            new RegExp(`^(  ${name}:).*$`, "m"),
+            `$1 ${entry.slice(at + 1)}`,
+          );
+        }
+        continue;
+      }
       out = out.replace(new RegExp(`^(\\s+${kind}:).*$`, "m"), `$1 ${pinned}`);
     }
     if (out !== text) writeFileSync(path, out);

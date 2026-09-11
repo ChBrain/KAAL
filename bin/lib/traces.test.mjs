@@ -3,7 +3,7 @@
 // holding here rather than in each wall that calls it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { splitTrace } from "./traces.mjs";
+import { splitTrace, readTrace } from "./traces.mjs";
 
 const names = (v) => splitTrace(v).map((e) => e.name);
 
@@ -36,4 +36,47 @@ test("splitTrace names nothing for nothing, none, empty and absent", () => {
 
 test("splitTrace drops a trailing stop, which prose puts on a sentence", () => {
   assert.deepEqual(names("alpha."), ["alpha"]);
+});
+
+test("readTrace folds a kind written as a block into the value shape", () => {
+  const sha = "a".repeat(64);
+  const t = readTrace(
+    `---\ntraces:\n  parent: strategy\ncases:\n  x/one.test.mjs: ${sha}\n  x/two.test.mjs: nothing\n---\n`,
+  );
+  assert.equal(t.parent, "strategy", "the line form stopped being read");
+  assert.deepEqual(
+    splitTrace(t.cases).map((e) => e.name),
+    ["x/one.test.mjs", "x/two.test.mjs"],
+  );
+  assert.equal(
+    splitTrace(t.cases)[0].pin,
+    sha,
+    "a block entry's sha is not its pin",
+  );
+  assert.equal(splitTrace(t.cases)[1].pin, null, "`nothing` became a pin");
+});
+
+test("readTrace reads an empty block as naming nothing", () => {
+  assert.deepEqual(
+    splitTrace(readTrace("---\ntraces:\n  parent: none\ncases:\n---\n").cases),
+    [],
+  );
+});
+
+test("readTrace takes the block where a page carries both writings", () => {
+  // A block is what the page shows a reader, so it is what the tree means.
+  const t = readTrace(
+    "---\ntraces:\n  parent: none\n  cases: x/line.test.mjs\ncases:\n  x/block.test.mjs: nothing\n---\n",
+  );
+  assert.deepEqual(
+    splitTrace(t.cases).map((e) => e.name),
+    ["x/block.test.mjs"],
+  );
+});
+
+test("a key that is no kind is left alone, block or not", () => {
+  const t = readTrace(
+    "---\ntraces:\n  parent: none\nreviews:\n  requirement/alpha: current\n---\n",
+  );
+  assert.equal(t.reviews, undefined, "a reviews block was read as a trace");
 });

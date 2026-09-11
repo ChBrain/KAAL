@@ -188,10 +188,18 @@ export const SUITES = join("tests", "suites");
  * because this module answers about pages the trace wall has not read yet.
  * @param {string} text @param {string} key
  */
-const listOf = (text, key) =>
-  splitTrace(text.match(new RegExp(`^\\s+${key}:\\s*(.*)$`, "m"))?.[1]).map(
-    (e) => e.name,
+const listOf = (text, key) => {
+  // A block of its own, one entry to a line, or a comma list on a line
+  // inside `traces:`. The block is read first, because a page carrying both
+  // shows a reader the block.
+  const block = text.match(
+    new RegExp(`^${key}:\\s*$([\\s\\S]*?)^(?=\\S|---)`, "m"),
   );
+  if (block) return [...block[1].matchAll(/^ {2}(\S+?):/gm)].map((m) => m[1]);
+  return splitTrace(
+    text.match(new RegExp(`^\\s+${key}:\\s*(.*)$`, "m"))?.[1],
+  ).map((e) => e.name);
+};
 
 /**
  * One entry per suite page: its name and the cases it covers.
