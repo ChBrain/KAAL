@@ -1,7 +1,9 @@
 ---
 traces:
-  requirement: a-suite-names-its-cases@3b1e2eecbc88e7c0d04a64541a357d0ad03af0a815020555edf30ea67b9d3c79
+  requirement: a-suite-names-its-cases@0cb994d4ed1604f94f3d1640aef2fdf017e18f203d2780caf3e1a17dc4a7a94b
   principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
+reviews:
+  requirement/a-suite-names-its-cases: updated@0cb994d4ed1604f94f3d1640aef2fdf017e18f203d2780caf3e1a17dc4a7a94b by architect: the criteria stopped saying how a trace is written and stopped naming the sha, so the seams that fixed a comma list are redrawn as a block and the pin moves with them
 ---
 
 # Drawing: a-suite-names-its-cases
@@ -63,11 +65,14 @@ and `kaal traces` keeps folding both sets of findings into one line.
 flowchart LR
   P["plan page"] -- "1 suites kind" --> K["kind table"]
   S["suite page"] -- "2 cases kind" --> K
-  S -- "3 suitePages" --> M["plans module"]
-  C["kaal.config.json"] -- "4 caseOwner" --> M
-  T["the tree"] -- "5 unnamed" --> M
-  P -- "6 planSuites" --> M
-  M -- "7 reach" --> O["kaal traces output"]
+  S -- "3 a kind as a block" --> R["the trace reader"]
+  R -- "4 a key may carry a dot" --> F["the frontmatter parser"]
+  R -- "5 writePins into a block" --> S
+  S -- "6 suitePages" --> M["plans module"]
+  C["kaal.config.json"] -- "7 caseOwner" --> M
+  T["the tree"] -- "8 unnamed" --> M
+  P -- "9 planSuites" --> M
+  M -- "10 reach" --> O["kaal traces output"]
 ```
 
 1. `suites` kind: in a name from a plan's `suites:` trace, out
@@ -78,37 +83,62 @@ flowchart LR
    that same path unchanged; resolution, the finding for a path that is not
    there, and the pin are all the trace wall's, unchanged. Owned by the kind
    table / the suite page.
-3. `suitePages(root)`: in a root, out one entry per `tests/suites/*.md` with
+3. a kind written as a block: in a page's frontmatter, a top level key whose
+   name is a kind, holding one entry to a line keyed by the name and valued by
+   its sha, out the same entries a comma list inside `traces:` would give. One
+   grammar and two writings: a kind picks the writing its length needs, and
+   `nothing` on a line inside `traces:` and an empty block mean the same. A
+   kind written both ways in one page is the block, because a block is what
+   the page shows a reader. Owned by the trace reader / the pages.
+4. a key may carry a dot: in the frontmatter parser's sub key, out a key of
+   `[A-Za-z_][\w/.-]*` where it was `[A-Za-z_][\w/-]*`, so a case path is a
+   key it reads rather than a line it drops in silence. This is a change to a
+   reader four seats share, so it is a seam for every reader of it: the
+   skills, the records, the waivers, the retros and the reviews block all keep
+   the behaviour they have, and the only thing that changes is which keys are
+   read rather than dropped. Owned by `frontmatter.mjs` / every caller.
+5. `writePins` into a block: in a page carrying a kind as a block, out that
+   page with a sha on each entry's own line and nothing else moved; a block
+   holding one pin a review has not cleared is left whole, exactly as a line
+   is. Owned by `traces.mjs` / the pages.
+6. `suitePages(root)`: in a root, out one entry per `tests/suites/*.md` with
    its name and its cases, read through the trace grammar so `nothing` and
    `none` yield none and a pin is stripped. A suite yielding no case is a
    finding naming the suite and saying it names no case. Owned by the plans
    module / the suite pages.
-4. `caseOwner(path, seats)`: in a case path and the seats declared in
+7. `caseOwner(path, seats)`: in a case path and the seats declared in
    `kaal.config.json`, out `null` where a seat owns it, and otherwise one of
    exactly two findings: a path under `tests/` says `tests/` points at cases
    and does not hold them, and any other unowned path says no seat owns it.
    The first is checked before the second, because the tester owns `tests/**`
    and would otherwise answer the wrong one. Owned by the plans module /
    the board's config.
-5. `unnamed(root, named)`: in a root and the set of case paths some suite
+8. `unnamed(root, named)`: in a root and the set of case paths some suite
    names, out every `*.test.mjs` under the top level directories that set
    reaches which no suite names. Only those directories: a tree no suite
    points into is not yet this wall's business. Owned by the plans module /
    the tree.
-6. `planSuites(text)`: in a plan page's text, out `{ names, findings }`: the
+9. `planSuites(text)`: in a plan page's text, out `{ names, findings }`: the
    suite names its `suites:` trace holds, and one finding naming any glob left
    in its prose.
    Two plans naming one suite, one plan naming many, and one case named by
    many suites are each silence. Owned by the plans module / the plan pages.
-7. `reach(root)`: in a root, out one row per plan with the count of suites it
-   names and the count of cases those suites cover, printed by `kaal traces`
-   on its own line whatever the findings say. Owned by the plans module /
-   `kaal.mjs`.
+10. `reach(root)`: in a root, out one row per plan with the count of suites it
+    names and the count of cases those suites cover, printed by `kaal traces`
+    on its own line whatever the findings say. Owned by the plans module /
+    `kaal.mjs`.
 
 ## Fixed and free
 
 - Fixed: the two kind names, `suites` and `cases`, because a plan and a suite
   are written by hand and a reader types the key. Fixed by criteria 2 and 5.
+- Fixed: both edges are written as a block, one entry to a line, keyed by the
+  name and valued by its sha. Not because the criteria say so, they no longer
+  say anything about it, but because a comma list cannot carry sixty five
+  paths on one line and a reader meeting two shapes for one relation learns
+  the shape rather than the relation.
+- Fixed: the widened sub key is `[A-Za-z_][\w/.-]*` and nothing else moves in
+  that parser. Every other reader of it keeps exactly the behaviour it has.
 - Fixed: `cases` names a repo relative path and `suites` names a bare suite
   name. Criterion 2 says a case is named as a path; a suite lives in one place
   and a path there would be four repeated segments.
@@ -125,7 +155,7 @@ flowchart LR
 - Free: every word of a suite page below its frontmatter. The tester writes
   it and no criterion reads it.
 - Fixed: the plans module exports `suitePages`, `caseOwner`, `unnamed`,
-  `planSuites` and `reach`, under those names and with the shapes seams 3 to 7
+  `planSuites` and `reach`, under those names and with the shapes seams 6 to 10
   give them. A seam a contract cannot call is a promise nobody holds, which is
   why the names are the contract and not a detail.
 - Free: everything inside those five. How a suite page is read, whether the
@@ -136,6 +166,50 @@ flowchart LR
   kinds and the three places, which criterion 1 fixes.
 
 ## Decisions
+
+### A kind is written as a block where a list will not fit
+
+- Chosen: a kind may be written as a top level block beside `traces:`, one
+  entry to a line, as well as a comma list inside it, and both read the same.
+  Both edges of the test graph use the block.
+- Not taken: a comma list for both, which is what the first draft of this
+  drawing fixed; a comma list for `suites` and a block for `cases`, each
+  picking by length; cases in the page's body, outside the trace grammar
+  entirely, which was the third option put to the asker.
+- Because: the list does not fit. Seeding the acceptance suite from its own
+  glob is 3,557 characters on one line and 7,782 once the shas are on, and
+  the page that was meant to make the tree readable would be the least
+  readable file in it. Letting each edge pick its own writing is worse than
+  either: a plan and a suite are the same relation and a reader who meets two
+  shapes learns the shapes. And leaving the grammar would cost the pin, the
+  review state and the finding for a name that resolves to nothing, all of
+  which this tree already has and none of which anyone would rebuild.
+- Bought: keeping choices open, at the price of the shortest path. A second
+  writing is a second thing to read, to test and to keep, and the shortest
+  path was one line per kind for ever. What it buys is that a kind can grow
+  past what a line holds without anybody having to leave the grammar, which is
+  the door the first draft closed without noticing it was a door.
+- Weighed against: `the-two-goods`.
+- Reopens if: a third writing is wanted, which would mean the grammar is being
+  asked to carry something a key and a value cannot.
+
+### The parser is widened rather than worked around
+
+- Chosen: the frontmatter sub key pattern gains a dot, so a case path is a key.
+- Not taken: keying a case by something without a dot, a name or an index, with
+  the path as the value; parsing the block outside the shared parser.
+- Because: the tree did this once already, for `reviews:`, and the slash it
+  added then is the same character class this adds a dot to. A key that is not
+  the path means every reader joins two halves to learn what a line is about,
+  and a parser beside the parser is the second grammar this whole task exists
+  to refuse.
+- Bought: the shortest path, and it spends a little of the other: a widened
+  key reads more lines than before, so a line that was silently dropped in
+  some other page may now be read. That is an improvement and it is still a
+  change nobody asked for, which is why the seam names every reader.
+- Weighed against: `the-two-goods`, `the-seat-owns-the-lens`.
+- Reopens if: a page wants a key the pattern still refuses, which today means
+  a space or a colon.
 
 ### The two edges are rows in the kind table
 
@@ -220,31 +294,44 @@ flowchart LR
 
 ## Test strategy
 
-| criterion | layer     | kind          | why                                                                                                                                       |
-| --------- | --------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 1         | contract  | none          | the strategy page is prose with no seam under it; the acceptance test reads the page and there is nothing to promise                      |
-| 2         | contract  | deterministic | seams 2 and 3: the kind resolves and pins, and the reader answers what a suite covers                                                     |
-| 3         | contract  | deterministic | seam 4, the first of its two findings                                                                                                     |
-| 4         | contract  | deterministic | seam 4, the second                                                                                                                        |
-| 5         | contract  | deterministic | seams 1 and 6: the kind resolves a suite name, and a glob left in a plan is a finding                                                     |
-| 6         | contract  | deterministic | seam 2 for the case that is not there, seam 5 for the file no suite names                                                                 |
-| 7         | contract  | deterministic | seam 7                                                                                                                                    |
-| all       | unit      | deterministic | the developer's, beside the modules, for the grammar edges a seam never mentions: an empty field, a pin stripped, a path with a backslash |
-| all       | manual    | none          | every criterion reaches a command or a file, so nothing here needs a person                                                               |
-| all       | harnessed | none          | nothing here is a judgement; the whole of it is verification, which the strategy page says is the only thing a wall may hold              |
+| criterion | layer     | kind          | why                                                                                                                                                                       |
+| --------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1         | contract  | none          | the strategy page is prose with no seam under it; the acceptance test reads the page and there is nothing to promise                                                      |
+| 2         | contract  | deterministic | seams 2, 3, 4, 5 and 6: the kind resolves, a block reads as a list, a key may carry a dot, a sha lands on an entry's own line, and the reader answers what a suite covers |
+| 3         | contract  | deterministic | seam 7, the first of its two findings                                                                                                                                     |
+| 4         | contract  | deterministic | seam 7, the second                                                                                                                                                        |
+| 5         | contract  | deterministic | seams 1 and 9: the kind resolves a suite name, and a glob left in a plan is a finding                                                                                     |
+| 6         | contract  | deterministic | seam 2 for the case that is not there, seam 8 for the file no suite names                                                                                                 |
+| 7         | contract  | deterministic | seam 10                                                                                                                                                                   |
+| all       | unit      | deterministic | the developer's, beside the modules, for the grammar edges a seam never mentions: an empty field, a pin stripped, a path with a backslash                                 |
+| all       | manual    | none          | every criterion reaches a command or a file, so nothing here needs a person                                                                                               |
+| all       | harnessed | none          | nothing here is a judgement; the whole of it is verification, which the strategy page says is the only thing a wall may hold                                              |
 
 ## Handoff
 
 - Task: a-suite-names-its-cases
-- Seams: 7; contract tests: 7 (equal)
+- Seams: 10; contract tests: 10 (equal). Seven and seven when this landed; the
+  block, the widened key and `writePins` into a block are the three the
+  measured line added
 - Red run: `node --test --test-timeout=60000 architecture/a-suite-names-its-cases/contracts.test.mjs`,
-  all seven failing on the two kinds and the four answers the plans module
-  does not give yet
-- Stand-in green: all seven, on a throwaway kind table pair and a throwaway
-  suite reader, then discarded from file copies
-- Criteria served: seam 1 to criterion 5; seam 2 to criteria 2 and 6; seam 3
-  to criterion 2; seam 4 to criteria 3 and 4; seam 5 to criterion 6; seam 6 to
-  criterion 5; seam 7 to criterion 7
+  six of ten failing: seams 3, 4, 5, 6, 9 and 10, which are the block and the
+  readers that meet it
+- Green before the build, and named rather than hidden: seams 1, 2, 7 and 8.
+  Their promises did not move when the writing did, and they were built in the
+  diff before this one. Each is a guard now: seam 1 that a suite name still
+  resolves under `tests/suites/`, seam 2 that a case path still resolves to
+  itself, seam 7 that `tests/` is refused before ownership is asked, and seam
+  8 that a tree no suite points into is not this wall's business
+- Stand-in green: all ten, on a throwaway widening of the sub key pattern, a
+  reader that folds a block into the value shape, and a `writePins` that
+  rewrites a block entry by entry, then discarded from file copies. It found
+  two: contract 2 was still asserting seam 5's pin, which is now its own seam
+  with its own contract, and a fixture wrote a case literally called `nothing`,
+  because a block says none by holding no entry and a line says it with a word
+- Criteria served: seam 1 to criterion 5; seam 2 to criteria 2 and 6; seams 3,
+  4 and 5 to criteria 2 and 5, which ask only that the edges are traced and
+  leave the writing here; seam 6 to criterion 2; seam 7 to criteria 3 and 4;
+  seam 8 to criterion 6; seam 9 to criterion 5; seam 10 to criterion 7
 - Fixed for the developer: the two kind names; `cases` holds paths and
   `suites` holds names; the edges are declared from above only; seam 4 reaches
   its `tests/` finding before its unowned one; `reach` prints on a red tree
