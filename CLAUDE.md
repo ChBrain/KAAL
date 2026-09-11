@@ -12,6 +12,13 @@ tester, `operate/` the operator. Four carry none:
 `governance/`, `skill/`, `agent/`, `eval/`. Pick the lane first, then the
 name, and split rather than widen when the diff does not fit.
 
+## Where a branch comes from
+
+Claude offers `main` by default and this repository works on `release`. Cut
+the branch from `release`, open the pull request against `release`, and never
+open one against `main`: that one is the promotion, it is the operator's, and
+it carries every seat's work at once.
+
 ---
 
 **Now read [AGENTS.md](AGENTS.md).** It is this repository's contract, it
