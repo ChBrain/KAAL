@@ -1,6 +1,11 @@
 ---
 traces:
-  parent: strategy@768288f9e1505f9808f14387940e6774a2f7facfde762963e43262d308452e8a
+  parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
+suites:
+  units: ce78ff22de0cc3ec153c12b294901db573aa23f0f2e8c2170bc4c4b7579d4f0e
+reviews:
+  parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
+  suites/units: updated@ce78ff22de0cc3ec153c12b294901db573aa23f0f2e8c2170bc4c4b7579d4f0e by tester: the suite gained a sha on every case it names, which is `--write` filling the block this plan now points at
 ---
 
 # Test plan: units
@@ -13,7 +18,7 @@ What this plan proves is that the code does what its author meant, below every s
 
 ## Suites
 
-Its suites live under `tests/*.test.mjs`, `bin/lib/*.test.mjs` and `skills/*/scripts/*.test.mjs`, and today that matches 27 suites.
+It uses the `units` suite, which names its cases by path. A plan picks suites; it owns neither the place they live nor how many there are, and both were once written here.
 
 ## Cases
 

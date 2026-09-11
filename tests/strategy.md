@@ -8,6 +8,31 @@ traces:
 This league tests in three places because three different things want
 proving, and each of them can be wrong while the other two are right.
 
+## What `tests/` holds
+
+Five kinds and no sixth, and every one of them is a document about testing
+rather than a test.
+
+**The strategy** is this page: why the league tests the way it does.
+
+**The plans** under `tests/plans/` each pick what a wall re-runs. A plan owns a
+selection and so owns neither a place nor a count, which is why it names the
+suites it uses and nothing else.
+
+**The suites** under `tests/suites/` each name their cases by path. A suite
+points at a case and never holds one, so no case lives here: an acceptance case
+sits with its requirement, a contract case with its drawing, a unit case with
+its code. A plan may use many suites and a suite may be used by many plans, and
+neither excludes the other.
+
+**The runs** under `tests/runs/` are the evidence a suite passed, one record per
+task, carrying the sha of what it ran so the record goes stale when the suite
+moves.
+
+**The bugs** are the evidence a case failed, naming the seat that owns the
+earliest place it can be fixed. A bug blocks the retest of the case it is
+about.
+
 ## Two questions, and both of them are testing
 
 The tester keeps two questions apart, and most arguments about quality are
