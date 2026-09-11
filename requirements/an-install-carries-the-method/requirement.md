@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: the-engine-is-installable, the-engine-installs-by-name, the-tag-installs-offline
+  supersedes: the-engine-is-installable@b13b54f1bb81f410bb870315d32de8eae315b6f8b64dbe050fee8ab9d771e202, the-engine-installs-by-name@7f42be034c0b78b7ebce3c72260082bbb12c3c7040a116a2359a5b22c55d62f7, the-tag-installs-offline@b5f31020fa42f845097460a3158e9a430e4c59196ef44d92b23433f23ff98c31
 ---
 
 # Requirement: an-install-carries-the-method
