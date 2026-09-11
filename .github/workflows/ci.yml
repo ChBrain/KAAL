@@ -1,5 +1,6 @@
 name: ci
-# Every wall the league has, on every pull request and every push to main,
+# Every wall the league has, on every pull request and every push to a
+# target, which is main and release,
 # under the one command the hook runs locally. Local green and CI green are
 # the same command by construction. Two platforms and two
 # runtimes: `walls` is the required check and keeps its name;
@@ -20,7 +21,7 @@ name: ci
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, release]
   schedule:
     - cron: "0 6 * * 1" # Mondays 06:00 UTC
 permissions:
@@ -30,15 +31,21 @@ permissions:
 # that the question is not this tree's on every pull request. The name the
 # league owns is read here and the provider's is read only here, so the engine
 # stays vendor agnostic and any runner can set the same one.
+# And the target the diff opens into. There are two now and a wall that
+# assumed one showed a branch opened into `release` every other seat's merged
+# work and called it many lanes. On a pull request this is its own base; on a
+# push there is nothing to open into, so the walls that read it are told
+# nothing and fall back to what the tree holds.
 env:
   KAAL_BRANCH: ${{ github.head_ref || github.ref_name }}
+  KAAL_BASE: ${{ github.base_ref && format('origin/{0}', github.base_ref) || '' }}
 jobs:
   walls:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # origin/main, for the class wall
+          fetch-depth: 0 # the targets, for the walls that read a base
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -56,7 +63,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # origin/main, for the class wall
+          fetch-depth: 0 # the targets, for the walls that read a base
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -68,7 +75,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # origin/main, for the class wall
+          fetch-depth: 0 # the targets, for the walls that read a base
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -83,7 +90,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # origin/main, for the class wall
+          fetch-depth: 0 # the targets, for the walls that read a base
       - uses: actions/setup-node@v7
         with:
           node-version: 22
