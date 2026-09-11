@@ -87,7 +87,16 @@ pass against text that no longer exists says nothing about the text that is
 failing now. A pin in the task's own artefacts that nobody has read since the
 text under it moved counts the same way and is named in the reason, because a
 green suite proved against text somebody still owes a reading of is evidence
-with a question mark on it. Takes a root, which may be a flag. Exits 0, 1 or 2
+with a question mark on it. A record that counts as none says how old the
+pass behind it is, read from the date the record carries and never from how
+long the suite has been moving, which nothing here records. The age is said
+and never judged: a wall that reddened past some number of days would redden
+`main` on a branch nobody touched.
+
+Without `--write` it opens no suite at all. It reads the records and the pins
+and says which of the two a task is missing, so a task with no record reads
+`no record` and nothing about whether its suite would pass. Takes a root,
+which may be a flag. Exits 0, 1 or 2
 (`a-task-is-delivered-by-its-run`, `a-pin-says-who-cleared-it`).
 
 ## traces
