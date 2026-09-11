@@ -13,7 +13,7 @@ What this plan proves is that the code does what its author meant, below every s
 
 ## Suites
 
-Its suites live under `tests/*.test.mjs`, `bin/lib/*.test.mjs` and `skills/*/scripts/*.test.mjs`, and today that matches 26 suites.
+Its suites live under `tests/*.test.mjs`, `bin/lib/*.test.mjs` and `skills/*/scripts/*.test.mjs`, and today that matches 27 suites.
 
 ## Cases
 

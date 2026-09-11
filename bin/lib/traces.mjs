@@ -75,20 +75,27 @@ const region = (text, title) =>
  * `<name>@<sha>` both parse; `nothing` yields no entries at all.
  * @param {string | undefined} value
  */
+const bare = (s) => s.replace(/^[`'"]+|[`'".]+$/g, "");
+
 export function splitTrace(value) {
   return (
     (value ?? "")
       .split(",")
-      .map((s) => s.trim().replace(/^[`\'"]+|[`\'".]+$/g, ""))
+      .map((s) => s.trim())
       // `none` and `nothing` both name nothing. The trace grammar said
       // `nothing` and the parent's criterion says `none`, and two words for
-      // one idea in one grammar is a trap rather than a nicety.
-      .filter((s) => s && !/^(nothing|none)$/i.test(s))
+      // one idea in one grammar is a trap rather than a nicety. Read before
+      // the quotes come off, because a word in backticks means the same word.
+      .filter((s) => bare(s) && !/^(nothing|none)$/i.test(bare(s)))
       .map((s) => {
         const at = s.indexOf("@");
+        // The name and the pin are cut apart first and stripped second. The
+        // other order leaves a backtick on the name of `` `x`@sha ``, because
+        // the closing quote is no longer at the end of the string once a pin
+        // follows it, and the name then resolves to nothing for ever.
         return at === -1
-          ? { name: s, pin: null }
-          : { name: s.slice(0, at), pin: s.slice(at + 1) };
+          ? { name: bare(s), pin: null }
+          : { name: bare(s.slice(0, at)), pin: bare(s.slice(at + 1)) };
       })
   );
 }

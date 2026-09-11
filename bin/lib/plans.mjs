@@ -15,6 +15,7 @@ import {
   globSync,
 } from "node:fs";
 import { join } from "node:path";
+import { splitTrace } from "./traces.mjs";
 
 /** The place the plans live in, below the test tree's own root page. */
 export const PLANS = join("tests", "plans");
@@ -188,16 +189,9 @@ export const SUITES = join("tests", "suites");
  * @param {string} text @param {string} key
  */
 const listOf = (text, key) =>
-  (text.match(new RegExp(`^\\s+${key}:\\s*(.*)$`, "m"))?.[1] ?? "")
-    .split(",")
-    .map(
-      (x) =>
-        x
-          .trim()
-          .replace(/^[`'"]+|[`'".]+$/g, "")
-          .split("@")[0],
-    )
-    .filter((x) => x && !/^(nothing|none)$/i.test(x));
+  splitTrace(text.match(new RegExp(`^\\s+${key}:\\s*(.*)$`, "m"))?.[1]).map(
+    (e) => e.name,
+  );
 
 /**
  * One entry per suite page: its name and the cases it covers.

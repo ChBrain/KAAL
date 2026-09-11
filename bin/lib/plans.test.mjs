@@ -34,6 +34,10 @@ test("suitePages reads a pin, a backtick and a comma list as the grammar does", 
       "tests/suites/a.md": suite("x/one.test.mjs@" + "a".repeat(64)),
       "tests/suites/b.md": suite("`x/two.test.mjs`"),
       "tests/suites/c.md": suite("x/three.test.mjs, x/four.test.mjs"),
+      // Both at once, which is the case that was wrong and was then removed
+      // from this file rather than fixed. A closing backtick is no longer at
+      // the end of the string once a pin follows it.
+      "tests/suites/d.md": suite("`x/five.test.mjs`@" + "e".repeat(64)),
     },
     (root) => {
       const by = new Map(suitePages(root).map((s) => [s.name, s.cases]));
@@ -51,6 +55,11 @@ test("suitePages reads a pin, a backtick and a comma list as the grammar does", 
         by.get("c"),
         ["x/three.test.mjs", "x/four.test.mjs"],
         "a comma list was not split",
+      );
+      assert.deepEqual(
+        by.get("d"),
+        ["x/five.test.mjs"],
+        "a backticked and pinned name kept its backtick",
       );
     },
   );
