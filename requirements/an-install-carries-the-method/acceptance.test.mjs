@@ -24,6 +24,22 @@ import { spawnSync } from "node:child_process";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const said = (r) =>
   `${r.error ? `${r.error.message}: ` : ""}${r.stdout ?? ""}${r.stderr ?? ""}`;
+const WIN = process.platform === "win32";
+// npm is a shell script on one platform and a batch file on the other, and
+// node has refused to spawn a batch file without a shell since it was found
+// to be an injection, so npm always goes through one. A shell splits on
+// spaces, so anything that is not a bare word or a flag is quoted; a
+// temporary directory's path is the one argument here that can carry a space.
+// The three suites that pack before this one each learned it separately; this
+// one spawned a bare `npm` and every criterion under it failed on Windows for
+// a spawn that never started.
+const quote = (a) => (/^[-a-z]+$/.test(a) ? a : `"${a}"`);
+const npm = (args) =>
+  spawnSync(WIN ? "npm.cmd" : "npm", args.map(quote), {
+    cwd: ROOT,
+    encoding: "utf8",
+    shell: true,
+  });
 const kaal = (...args) =>
   spawnSync(process.execPath, [join(ROOT, "bin", "kaal.mjs"), ...args], {
     encoding: "utf8",
@@ -37,16 +53,14 @@ let PACKED = null;
 const packed = () => {
   if (PACKED) return PACKED;
   const out = mkdtempSync(join(tmpdir(), "kaal-pack-"));
-  const r = spawnSync(
-    "npm",
-    ["pack", "--pack-destination", out, "--ignore-scripts"],
-    { cwd: ROOT, encoding: "utf8" },
-  );
+  const r = npm(["pack", "--pack-destination", out, "--ignore-scripts"]);
   assert.equal(r.status, 0, `npm pack: ${said(r)}`);
   const tgz = globSync("*.tgz", { cwd: out }).map((f) => join(out, f));
   assert.equal(tgz.length, 1, `expected one tarball, got ${tgz.length}`);
   const dir = join(out, "unpacked");
   mkdirSync(dir, { recursive: true });
+  // tar is an executable on both platforms, so it needs no shell, and
+  // without one neither path needs quoting.
   const x = spawnSync("tar", ["-xzf", tgz[0], "-C", dir], {
     encoding: "utf8",
   });
