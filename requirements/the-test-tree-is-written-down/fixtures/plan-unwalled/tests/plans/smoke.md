@@ -5,4 +5,4 @@ traces:
 
 # Test plan: smoke
 
-A fixture. Wall: `smoke`. Suites live at `tests/smoke/*.test.mjs`. A case is a numbered test.
+A fixture. Wall: `smoke`. It uses the suites it names. A case is a numbered test.
