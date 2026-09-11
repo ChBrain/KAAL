@@ -65,11 +65,15 @@ nothing of the league's own working.
 
 1. `package.json` declares a `version`, and its minor and its major place
    are both zero.
-2. What the tool ships is the tool: `npm pack --dry-run` lists files under
-   `bin/`, the manifest, and the licence and readme npm carries whatever a
-   package says, and nothing else; in particular nothing under
-   `requirements/`, `architecture/`, `retros/`, `evals/`, `fixtures/` or
-   `skills/`.
+2. What the tool ships is the tool and the method it carries: `npm pack
+--dry-run` lists files under `bin/`, `skills/` and `agents/`, the manifest,
+   and the licence and readme npm carries whatever a package says, and nothing
+   else; in particular nothing under `requirements/`, `architecture/`,
+   `retros/`, `evals/`, `tests/`, `plan/` or `deploy/`, and no test. Amended
+   by `an-install-carries-the-method`: the skills were listed here as the
+   league's own working, and they are the method a consumer installs this for.
+   What this criterion protects is unchanged, which is that a consumer's tree
+   does not gain another repository's history.
 3. The packed tool installed into an empty project, offline, leaves an
    executable named `kaal` that prints the usage line on exit 1 when it is
    given nothing it knows.

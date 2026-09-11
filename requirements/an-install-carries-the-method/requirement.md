@@ -1,6 +1,6 @@
 ---
 traces:
-  supersedes: nothing
+  supersedes: the-engine-is-installable, the-engine-installs-by-name, the-tag-installs-offline
 ---
 
 # Requirement: an-install-carries-the-method
@@ -175,5 +175,15 @@ skills` answers on this tree today. So a command aimed at an installed
 - Unblocks: the 0.0.2 release, which without this cuts a tag on a package
   that cannot do its job; and the `kaal-` carve-outs after it, which need
   something to carve out of
-- Supersedes: nothing
+- Supersedes: one clause each in `the-engine-is-installable`, `the-engine-installs-by-name` and `the-tag-installs-offline`, the clause in each that lists `skills/` among the directories the package must not carry
+  All three were written when the skills were part of the league's own
+  working, and this task settles that they are the method a consumer installs
+  this for. So `skills/` leaves all three lists and every other name in them
+  stays: no requirements, no architecture, no retros, no evals, no tests, and
+  now no `plan/` or `deploy/` either. What those three tasks were protecting
+  is untouched, which is that a consumer's tree does not gain another
+  repository's history. The third was found by running the whole board
+  against the whole chain before pushing any of it, rather than by reading:
+  two were visible from the manifest change alone and the third needed a git
+  install in a scratch tree, which only the board does
 - People: none

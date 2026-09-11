@@ -69,8 +69,12 @@ pre-push hook it has always had.
    named `kaal` under `node_modules/.bin` that prints the usage line on
    exit 1 when given nothing it knows.
 2. That install adds exactly one package, and what it installed holds
-   `bin/` and nothing under `requirements/`, `architecture/`, `retros/`,
-   `evals/`, `skills/` or `tests/`.
+   `bin/`, `skills/` and `agents/`, and nothing under `requirements/`,
+   `architecture/`, `retros/`, `evals/`, `tests/`, `plan/` or `deploy/`.
+   Amended by `an-install-carries-the-method`, which settles that the skills
+   and the agent are the method a consumer installs this for rather than this
+   league's working. What this criterion protects is unchanged: one package,
+   and none of another repository's history inside it.
 3. The board in `AGENTS.md` names exactly one step that wires the pre-push
    hook, and a fresh clone of this repository, after that step with no
    registry in reach, has `core.hooksPath` set to `.githooks`.
