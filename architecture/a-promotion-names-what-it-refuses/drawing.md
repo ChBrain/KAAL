@@ -1,8 +1,10 @@
 ---
 traces:
   parent: a-task-is-delivered-by-its-run@5de44d81cbebda3770f735e179acfdca2de7ce038055809b0dfbe1bf55711d43
-  requirement: a-promotion-names-what-it-refuses@857e17305ada76b356d08fbce31a1072eb173265a710d59a09970d738c0009c3
+  requirement: a-promotion-names-what-it-refuses@2e02dacbabe671269ffa9bdeb2b8d865eda06966156cb9eead725806be6cef45
   principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
+reviews:
+  requirement/a-promotion-names-what-it-refuses: updated@2e02dacbabe671269ffa9bdeb2b8d865eda06966156cb9eead725806be6cef45 by architect: the criterion this drawing already carries a seam for is now on the page. Seam 9 was drawn against criterion 9 while it was in review, which is the only order the drawings wall allows, and this read is that order catching up rather than a criterion moving underneath a seam
 ---
 
 # Drawing: a-promotion-names-what-it-refuses
