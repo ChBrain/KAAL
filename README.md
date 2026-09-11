@@ -108,11 +108,16 @@ boundary, so it is a wall.
 
 ## Using a skill
 
-Copy a skill directory into the place your runtime discovers skills from, or
-load it by path where your runtime allows it. Everything the skill needs is
-inside the directory; nothing in KAAL is required at the consumer's side. A
-wiring script that keeps consumers' copies equal to the league's is a later
-job; until then, the copy is by hand and so is the drift.
+From inside the installed package, `kaal assemble <directory>` writes every
+member of the league into the directory you name, one directory each. Name
+fewer and you get fewer: `kaal assemble <directory> analyse architect`. It
+writes where you said and nowhere else, and nothing is written when you
+install: placing the method is your act, not the package's.
+
+Everything a skill needs is inside its directory; nothing in KAAL is required
+at the consumer's side, so where you point it is your runtime's business and
+not this package's. A wiring script that keeps consumers' copies equal to the
+league's is a later job; until then, the drift is by hand.
 
 To run a skill on one of its fixtures by hand, `kaal runner <skill>
 <fixture>` prints the two prompts and the record's frontmatter from the tree,
