@@ -104,7 +104,12 @@ their path from the root, because a case lives beside its requirement, its
 drawing or its code and no one convention reaches all three. Both are comma
 lists and neither is declared from the other end, so a plan may name many
 suites, a suite may be named by many plans, and a case may be named by many
-suites. A value is
+suites. A kind is written one of two ways
+and both mean the same: a line inside `traces:` whose value is a comma list,
+or a block of its own beside `traces:`, one entry to a line, keyed by the name
+and valued by its sha. A kind picks the writing its length needs, an empty
+block names nothing the way `nothing` on a line does, and a page carrying both
+is read by its block. A value is
 `<name>` or `<name>@<sha>`: a pin that no longer matches the region it names
 is reported as having moved, which is different wording from a name that
 resolves to nothing, because one wants a rename and the other a reread. Only
@@ -121,7 +126,9 @@ it, and a clearance missing its person or its reason is a finding naming which
 is missing. A review counts only while the sha it names is the region's sha
 now, so a second move asks again. `--write` puts the pin on every trace it can
 resolve, changes nothing else on the page, and writes nothing on a second run;
-nobody types a sha. It advances a pin a review clears, never touches one
+nobody types a sha. A block is written entry by entry, on each entry's own
+line, and a block holding one pin no review has cleared is left whole exactly
+as a line is. It advances a pin a review clears, never touches one
 awaiting a review, and says how many it left. It also reads the shape the `parent` kind makes: one trunk under `kaal/`
 and no other artefact declaring `none` without a `- Root because:` line in
 its Handoff, no cycle among parents, a drawing answering exactly one

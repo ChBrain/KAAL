@@ -32,3 +32,25 @@ test("a sub key may carry a slash, and a top level key may not", () => {
   assert.equal(top["a/b"], undefined, "a top level slash key was read");
   assert.equal(top.c, "two");
 });
+
+test("a sub key may carry a dot, which a case path always does", () => {
+  const { data } = parseFrontmatter(
+    "---\ncases:\n  requirements/a/acceptance.test.mjs: nothing\n  bin/lib/plans.test.mjs: " +
+      "a".repeat(64) +
+      "\n---\nbody\n",
+  );
+  assert.deepEqual(Object.keys(data.cases), [
+    "requirements/a/acceptance.test.mjs",
+    "bin/lib/plans.test.mjs",
+  ]);
+});
+
+test("a top level key still carries neither a slash nor a dot", () => {
+  // Only sub keys were widened. A top level key with either in it is nothing
+  // this tree writes, and a line that is not a key is skipped as it always was.
+  const { data } = parseFrontmatter(
+    "---\na.b: one\ntraces:\n  parent: none\n---\n",
+  );
+  assert.equal(data["a.b"], undefined);
+  assert.deepEqual(data.traces, { parent: "none" });
+});
