@@ -41,9 +41,10 @@ import { checkTraces, checkShape, writePins } from "./lib/traces.mjs";
 import {
   report as reviewReport,
   counts as reviewCounts,
+  owes,
 } from "./lib/reviews.mjs";
 import { checkPlans, writeCounts, reach } from "./lib/plans.mjs";
-import { readRun, verdict, writeRuns } from "./lib/runs.mjs";
+import { readRun, isFresh, staleWhy, writeRuns } from "./lib/runs.mjs";
 import { rows as coverageRows, states } from "./lib/coverage.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
@@ -240,11 +241,26 @@ if (cmd === "ledger") {
       .sort();
     for (const task of tasks) {
       const run = readRun(rroot, task);
-      const v = verdict(rroot, run, 1, 0, task);
       // The reason whatever the record, because a task with no record can
       // still owe a reading and that is the half this report used to hide.
+      const unread = owes(rroot, task);
+      const owed = unread.length
+        ? `${unread.length} pin(s) await a review: ${unread.join("; ")}`
+        : null;
+      // No verdict here, and no counts: this path opens no suite. It used to
+      // borrow one by calling `verdict` with one pass and no failures, and a
+      // task with no record then read `green, and no run has recorded it
+      // yet`, which is a wall's sentence about a suite it had run. `push-v1`
+      // is red and read green for as long as that stood.
+      const said = !run
+        ? "no record"
+        : run.why
+          ? run.why
+          : !isFresh(rroot, run)
+            ? staleWhy(run)
+            : (owed ?? "on record");
       console.log(
-        `runs: ${task}: ${v.word === "delivered" ? "on record" : (v.why ?? (run ? v.word : "no record"))}`,
+        `runs: ${task}: ${said === owed ? owed : [said, owed].filter(Boolean).join("; ")}`,
       );
     }
   }
