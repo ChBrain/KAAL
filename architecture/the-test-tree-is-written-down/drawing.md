@@ -94,8 +94,7 @@ flowchart LR
   A[the four pages under tests/] -- "1 place" --> B[PLACES in traces.mjs]
   A -- "2 plan names its wall" --> C[plans.mjs]
   D[kaal.config.json] -- "3 wall wants its plan" --> C
-  A -- "4 suites counted" --> C
-  A -- "5 the strategy roots the tree" --> E[checkShape in traces.mjs]
+  A -- "4 the strategy roots the tree" --> E[checkShape in traces.mjs]
 ```
 
 One labelled edge per seam, numbered to match the list below; the parts are
@@ -122,17 +121,7 @@ and it carries nothing the list does not.
    plan is usually named for its wall, so `acceptance` the page and
    `acceptance` the wall would otherwise print the same prefix and mean
    different things. Owned by `plans.mjs` / `kaal.config.json`.
-4. suites counted: in a plan page's backticked globs and its stated number
-   of suites, and the root, out nothing when the globs together match that
-   number, and a finding naming the plan, the number stated and the number
-   found when they do not; and out the number rewritten when asked to write.
-   A page that states no number states no count and is not a finding, which
-   is the trace grammar's own rule that a name without a pin resolves. What
-   makes the count true of this league is criterion 6, which reads this
-   tree's pages and not every tree's. A plan whose globs are not its wall's
-   globs is the same finding in different words, naming both. Owned by
-   `plans.mjs` / the page.
-5. the strategy roots the tree: in the four pages' `parent` values, out one
+4. the strategy roots the tree: in the four pages' `parent` values, out one
    root carrying its argument and three children of it, no cycle, and no
    depth finding. Owned by `checkShape` / the pages.
 
@@ -147,9 +136,11 @@ and it carries nothing the list does not.
   there: a gate owes a plan when its command carries an argument ending in
   `.test.mjs`. Criterion 4 fixes the both ways report and decision 5 fixes
   the predicate.
-- Fixed: a plan names its globs in backticks and says how many suites they
-  match, in the body and not the frontmatter, and the number is written by a
-  flag. Criterion 6 fixes the agreement and the grammar its test reads.
+- Superseded: a plan named its globs in backticks and stated how many
+  suites they matched. `a-suite-names-its-cases` moves both to the suites a
+  plan names, so the seam that held them is gone rather than changed, and its
+  decision below is reopened rather than deleted, because a decision is
+  history.
 - Fixed: the plan rules live in their own module and `checkTraces` and
   `checkShape` keep the finding lists they return today. Decision 4, and the
   fifty third code retro, which cost four closed contracts to learn it.
@@ -214,7 +205,7 @@ and it carries nothing the list does not.
   sharpest: the depth rule has never read a real tree, and once it does, an
   exemption written while it read nothing is owed a fresh argument.
 
-### A plan's suite count is written, not kept
+### A plan's suite count is written, not kept (reopened)
 
 - Chosen: a plan names its globs in backticks and states how many suites
   they match, in prose; `--write` rewrites the number as it rewrites a
@@ -222,6 +213,11 @@ and it carries nothing the list does not.
 - Not taken: no count, with the board reporting what the globs matched; a
   count kept by hand; a pin on the glob itself, `<glob>@<n>`, which is what
   this drawing chose the first time.
+- Reopened by: `a-suite-names-its-cases`, which supersedes criteria 3 and 6 of
+  this task. A plan picks suites, and a selection owns neither a place nor a
+  number, so both halves of this record are answered by neither of its
+  options. The record stays because a reader of the seam list will ask why a
+  count was ever in a page.
 - Because: criterion 6 asks the plan's count to agree with what its glob
   matches, so the count is in the page, and its acceptance test reads a
   backticked glob and a number before the word suites. The analyst's own
@@ -285,21 +281,22 @@ and it carries nothing the list does not.
 
 ## Test strategy
 
-| criterion | layer      | kind          | why                                                                                                                               |
-| --------- | ---------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| 1         | acceptance | deterministic | The strategy naming three plans and what motivates each is prose in a page; a test reads the page and no seam carries it.         |
-| 2         | acceptance | deterministic | The same: a sentence the strategy must hold, read from the page.                                                                  |
-| 3         | contract   | deterministic | Seam 2. A plan page's declared wall is read, and a plan naming nothing the config holds is a finding.                             |
-| 4         | contract   | deterministic | Seams 2 and 3, kept apart on purpose: one finding names the plan and the other names the wall.                                    |
-| 5         | contract   | deterministic | Seam 1. A page under `tests/` is an artefact the trace wall reads, or it is not, and a fixture says which.                        |
-| 6         | contract   | deterministic | Seam 4 for the counts, seam 3 for the three and three; the board's answer on this tree is the acceptance test.                    |
-| none      | unit       | none          | Every rule here is a seam between a page and the config, and a unit test of one would be the contract test with the seam removed. |
-| none      | manual     | none          | Nothing here needs a person to look. The one judgement, whether a root's argument is any good, the board never reads.             |
+| criterion | layer      | kind          | why                                                                                                                                   |
+| --------- | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| 1         | acceptance | deterministic | The strategy naming three plans and what motivates each is prose in a page; a test reads the page and no seam carries it.             |
+| 2         | acceptance | deterministic | The same: a sentence the strategy must hold, read from the page.                                                                      |
+| 3         | contract   | deterministic | Seam 2. A plan page's declared wall is read, and a plan naming nothing the config holds is a finding.                                 |
+| 4         | contract   | deterministic | Seams 2 and 3, kept apart on purpose: one finding names the plan and the other names the wall.                                        |
+| 5         | contract   | deterministic | Seam 1. A page under `tests/` is an artefact the trace wall reads, or it is not, and a fixture says which.                            |
+| 6         | contract   | deterministic | Seam 3 for the three and three; the board's answer on this tree is the acceptance test. The counts half was seam 4 and is superseded. |
+| none      | unit       | none          | Every rule here is a seam between a page and the config, and a unit test of one would be the contract test with the seam removed.     |
+| none      | manual     | none          | Nothing here needs a person to look. The one judgement, whether a root's argument is any good, the board never reads.                 |
 
 ## Handoff
 
 - Task: the-test-tree-is-written-down
-- Seams: 5; contract tests: 5 (equal)
+- Seams: 4; contract tests: 4 (equal). Five and five when this landed; the
+  counts seam is superseded by `a-suite-names-its-cases`
 - Red run: `node --test architecture/the-test-tree-is-written-down/contracts.test.mjs`,
   all five failing. Stand-in green: all five, on a scratch `plans.mjs` with
   `tests` in `PLACES`, the loose place branch in `KINDS.parent.where` and the
