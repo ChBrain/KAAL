@@ -249,6 +249,11 @@ test("8. unnamed answers the files no suite names, only where suites reach", asy
       "requirements/a/acceptance.test.mjs": CASE,
       "requirements/b/acceptance.test.mjs": CASE,
       "elsewhere/c.test.mjs": CASE,
+      // A scratch tree built for a case. Its files are that case's data and
+      // never cases of their own, and on the league's own tree the first
+      // reading of this seam found forty six of them.
+      "requirements/a/fixtures/scratch/requirements/t/acceptance.test.mjs":
+        CASE,
     },
     (root) => {
       const out = unnamed(
@@ -259,6 +264,10 @@ test("8. unnamed answers the files no suite names, only where suites reach", asy
         out,
         ["requirements/b/acceptance.test.mjs"],
         `expected only the unnamed file under a reached tree, got ${out.join(", ")}`,
+      );
+      assert.ok(
+        !out.some((p) => p.includes("/fixtures/")),
+        `a fixture was asked to be named: ${out.join(", ")}`,
       );
     },
   );

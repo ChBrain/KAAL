@@ -117,9 +117,14 @@ flowchart LR
    the plans module / the board's config.
 8. `unnamed(root, named)`: in a root and the set of case paths some suite
    names, out every `*.test.mjs` under the top level directories that set
-   reaches which no suite names. Only those directories: a tree no suite
-   points into is not yet this wall's business. Owned by the plans module /
-   the tree.
+   reaches which no suite names, and never one inside a `fixtures/` directory.
+   Two exclusions and each for its own reason. Only those top level
+   directories, because a tree no suite points into is not yet this wall's
+   business. And never a fixture, because a fixture is a scratch tree built
+   for a case and its files are that case's data rather than cases of their
+   own: on this tree the first reading found forty six of them, and every one
+   would have asked a suite to name a file that exists to be read and not to
+   be run. Owned by the plans module / the tree.
 9. `planSuites(text)`: in a plan page's text, out `{ names, findings }`: the
    suite names its `suites:` trace holds, and one finding naming any glob left
    in its prose.
@@ -162,6 +167,10 @@ flowchart LR
   why the names are the contract and not a detail.
 - Free: everything inside those five. How a suite page is read, whether the
   tree walk is one glob or many, and what is cached between calls.
+- Fixed: a path with a `fixtures/` segment is never a case, whoever is asking.
+  The tree already keeps that distinction, in the seats guard's proof table
+  where `requirements/*/fixtures/**` is the analyst's own proof, and seam 8
+  reads it rather than inventing one.
 - Free: the order of the findings in the output, and whether a suite's
   findings are grouped. No criterion reads order.
 - Free: the prose of the strategy page's new section beyond naming the five
@@ -316,15 +325,17 @@ flowchart LR
   block, the widened key and `writePins` into a block are the three the
   measured line added
 - Red run: `node --test --test-timeout=60000 architecture/a-suite-names-its-cases/contracts.test.mjs`,
-  one of ten failing: seam 7, which the widened criterion 4 moved from a
-  seat's tree to anything the board says owns a path. The other nine were red
-  in the redraw and are green in the build that followed it
-- Green before the build, and named rather than hidden: seams 1, 2 and 8.
+  two of ten failing: seam 7, which the widened criterion 4 moved from a
+  seat's tree to anything the board says owns a path, and seam 8, which now
+  excludes a fixture. The other eight were red in the redraw and are green in
+  the build that followed it
+- Green before the build, and named rather than hidden: seams 1 and 2.
   Their promises did not move when the writing did, and they were built in the
   diff before this one. Each is a guard now: seam 1 that a suite name still
   resolves under `tests/suites/`, seam 2 that a case path still resolves to
-  itself, and seam 8 that a tree no suite points into is not this wall's
-  business. Seam 7 is red again: it was green until the criterion it serves
+  itself. Seam 8 has joined seam 7 in going red again, for the same kind of
+  reason: its promise grew when the first reading of it on this tree asked
+  forty six fixtures to be named by a suite. Seam 7 is red because: it was green until the criterion it serves
   widened from a seat's tree to anything the board says owns a path, and a
   promise that grows is a promise that has to be kept a second time
 - Stand-in green: all ten again, on a throwaway `owners` reading the seats'
