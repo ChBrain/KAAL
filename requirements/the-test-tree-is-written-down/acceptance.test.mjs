@@ -89,7 +89,10 @@ test("3. one plan per wall, each naming its wall, its suites and a case", () => 
     const t = plan(p);
     const name = p.replace(/\.md$/, "");
     assert.match(t, new RegExp(`\\b${name}\\b`), `${p} does not name its wall`);
-    assert.match(t, /\.test\.mjs/, `${p} does not say where its suites live`);
+    // Where its suites live is superseded by `a-suite-names-its-cases`: a
+    // plan picks a selection and a selection owns no place. What is left of
+    // the clause is that it names the suites it uses.
+    assert.match(t, /\bsuites?\b/i, `${p} does not name the suites it uses`);
     assert.match(t, /case/i, `${p} does not say what a case is`);
   }
 });
@@ -129,25 +132,19 @@ test("5. the strategy and the plans are artefacts the trace wall reads", () => {
   assert.equal(r.status, 0, `the league's own traces are red: ${said(r)}`);
 });
 
-test("6. each plan's count of suites agrees with what its glob matches", () => {
+test("6. on this tree the board answers three plans and three walls", () => {
   const testGates = gates().filter((g) => plans().includes(`${g.name}.md`));
   assert.ok(
     testGates.length >= 3,
     `only ${testGates.length} gates have a plan`,
   );
-  for (const g of testGates) {
-    const t = plan(`${g.name}.md`);
-    const globs = [...t.matchAll(/`([^`]*\*[^`]*\.test\.mjs)`/g)].map(
-      (m) => m[1],
-    );
-    assert.ok(globs.length, `${g.name}.md names no glob for its suites`);
-    const found = globs.flatMap((p) => globSync(p, { cwd: ROOT })).length;
-    const said = Number(t.match(/(\d+)\s+suite/)?.[1]);
-    assert.ok(Number.isInteger(said), `${g.name}.md does not count its suites`);
-    assert.equal(
-      said,
-      found,
-      `${g.name}.md says ${said} suites and its glob matches ${found}`,
-    );
-  }
+  // The count half of this criterion is superseded by
+  // `a-suite-names-its-cases`: a plan owns no number either, and what it
+  // reaches is computed from the suites it names rather than written down.
+  // What remains is the pairing, which is this criterion read on this tree.
+  assert.deepEqual(
+    testGates.map((g) => `${g.name}.md`).sort(),
+    plans().sort(),
+    "the plans and the walls that run tests are not the same set",
+  );
 });

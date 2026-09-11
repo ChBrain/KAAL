@@ -1,6 +1,8 @@
 ---
 traces:
-  supersedes: the-test-tree-is-written-down@ac8c1dd740ac54d37b21875f28d113278f099a6487c8d3249287ec00b393ffe1
+  supersedes: the-test-tree-is-written-down@dc2bb6963da0284f6111ceaac7a91a95de6b9666c6463636d58986733eafa3ea
+reviews:
+  supersedes/the-test-tree-is-written-down: updated@dc2bb6963da0284f6111ceaac7a91a95de6b9666c6463636d58986733eafa3ea by analyst: the two clauses this task supersedes now say so on that task's own page, which is the supersede being carried out rather than a criterion moving underneath it
 ---
 
 # Requirement: a-suite-names-its-cases
