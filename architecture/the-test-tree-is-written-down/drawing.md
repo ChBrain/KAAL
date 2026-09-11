@@ -1,8 +1,10 @@
 ---
 traces:
   parent: a-tree-has-one-root@6a481bbf330998342534ce7ba387ab8bc28ba6533ca2491a157ae97b878b7901
-  requirement: the-test-tree-is-written-down@ac8c1dd740ac54d37b21875f28d113278f099a6487c8d3249287ec00b393ffe1
+  requirement: the-test-tree-is-written-down@dc2bb6963da0284f6111ceaac7a91a95de6b9666c6463636d58986733eafa3ea
   principles: the-two-goods@8bbe15706c3edcd63d0d050af9782c063cd585e1ec436d2314fa0003dfaa8cb6, the-seat-owns-the-lens@e1ab0650fc88dc8e1e16347fc8b14b236f1c57b94e50bfdf3f62aa4ec0d6d070
+reviews:
+  requirement/the-test-tree-is-written-down: reviewed-no-impact@dc2bb6963da0284f6111ceaac7a91a95de6b9666c6463636d58986733eafa3ea by architect: criterion 3 lost the clause about where a plan's suites live and criterion 6 lost its count, which is the supersede this drawing already answered by withdrawing the counts seam; nothing left in the picture reads either clause
 ---
 
 # Drawing: the-test-tree-is-written-down
