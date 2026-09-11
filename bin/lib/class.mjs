@@ -9,6 +9,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+import { BASES } from "./targets.mjs";
 
 /** The order is the order the report prints, so a reader sees one list twice. */
 export const ARTEFACTS = [
@@ -37,11 +38,8 @@ const git = (root, ...args) =>
 export function defaultBase(root) {
   const said = process.env.KAAL_BASE?.trim();
   if (said) return said;
-  return TARGETS.find((r) => resolves(root, r)) ?? DEFAULT_BASE;
+  return BASES.find((r) => resolves(root, r)) ?? DEFAULT_BASE;
 }
-
-/** The targets a branch opens into, in the order one is likely to have. */
-const TARGETS = ["origin/release", "origin/main"];
 
 /**
  * The base where nothing narrows it at all: no caller said one and the tree
@@ -49,7 +47,7 @@ const TARGETS = ["origin/release", "origin/main"];
  * is wider than what it now means and it stays until the unit that reads it
  * moves beside this module, which is the tester's diff and not this one.
  */
-export const DEFAULT_BASE = "origin/main";
+export const DEFAULT_BASE = BASES.at(-1);
 
 /** Does this ref name a commit in this tree? */
 export function resolves(root, ref) {

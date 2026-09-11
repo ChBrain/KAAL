@@ -45,6 +45,8 @@ import {
 } from "./lib/reviews.mjs";
 import { checkPlans, writeCounts, reach } from "./lib/plans.mjs";
 import { readRun, isFresh, staleWhy, writeRuns } from "./lib/runs.mjs";
+import { binding } from "./lib/targets.mjs";
+import { asked, promote } from "./lib/promote.mjs";
 import { rows as coverageRows, states } from "./lib/coverage.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
@@ -68,7 +70,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | promote [root] [--into <target>] [--from <head>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -154,6 +156,13 @@ if (cmd === "ledger") {
   const away = where.notApplicable ?? diff.notApplicable;
   if (away) {
     console.error(`seats: not applicable here: ${away}`);
+    process.exit(2);
+  }
+  // And the third: a promotion carries every seat's work by design, so the
+  // question this rule asks has no true answer about it. The exit is 2 and
+  // not 0, because a clean answer would read as a diff that is one lane's.
+  if (where.promotion) {
+    console.error(`seats: not applicable here: ${where.promotion}`);
     process.exit(2);
   }
   // A branch nobody declared, carrying a change nobody can place. Silent
@@ -485,10 +494,58 @@ if (cmd === "ledger") {
   if (!artefacts.length) console.log("class: nothing a consumer notices moved");
   process.exit(0);
 } else if (cmd === "gates") {
-  const g = runGates(arg ?? cwd);
+  const groot = arg && !arg.startsWith("-") ? arg : cwd;
+  const g = runGates(groot);
   for (const l of g.lines) console.log(l);
   console.log(g.summary);
-  process.exit(g.ok ? 0 : 1);
+  // The board reports and the promotion refuses. A wall's colour is the same
+  // fact at both targets; what differs is whether the fact stops a merge.
+  // Below the promotion a seat is still working and can see the red; above it
+  // a consumer installs, so nothing red passes. The target is the one the
+  // tree opens into, which is the same reading the lane rule takes.
+  // Told and never guessed. Asking the tree which refs it holds would make a
+  // fixture inside this clone inherit this clone's targets and be judged
+  // leniently for having a parent, and it made `waiver-v1` green on a red
+  // board the first time this was written. No answer is the strict answer.
+  const into = (process.env.KAAL_BASE ?? "").replace(/^origin\//, "").trim();
+  if (!g.ok && !binding(into)) {
+    // The count in its own words, because the summary's numbers are the walls
+    // there are and the walls that failed, and a reader of this line wants
+    // the second said as what it is.
+    const red = (g.results ?? []).filter((x) => !x.ok && !x.waived).length;
+    console.log(
+      `gates: ${into} takes this: ${red} red wall(s), each a block with an owner`,
+    );
+  }
+  process.exit(g.ok || !binding(into) ? 0 : 1);
+} else if (cmd === "promote") {
+  // Whether this tree may reach the target it is asked about, and everything
+  // that refuses it. Nothing stops at the first: a gate that did would turn
+  // one merge into four.
+  const proot = arg && !arg.startsWith("-") ? arg : cwd;
+  const what = asked(process.argv.slice(2));
+  if (what.usage) {
+    console.error(`promote: ${what.usage}`);
+    process.exit(1);
+  }
+  if (what.why) {
+    console.error(`promote: not applicable here: ${what.why}`);
+    process.exit(2);
+  }
+  console.log(`promote: into ${what.into}`);
+  const r = promote(proot, what);
+  for (const f of r.findings)
+    console.log(`${f.artefact}: ${f.kind}: ${f.message}`);
+  console.log(
+    `promote: ${r.red} red wall(s) on the board` +
+      (binding(what.into) ? "" : `, which ${what.into} takes`),
+  );
+  console.log(
+    r.count
+      ? `promote: into ${what.into}: ${r.count} finding(s)`
+      : `promote: into ${what.into}: nothing refuses this`,
+  );
+  process.exit(r.count ? 1 : 0);
 } else {
   console.error(USAGE);
   process.exit(1);

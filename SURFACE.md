@@ -306,8 +306,31 @@ because a skill name is not a path. Exits 0, 1 or 2 (`eval-runner`,
 
 Runs every wall in `kaal.config.json` in order, all of them even after one
 fails, and ends on one exit code. A wall that cannot run is a failure and
-never a skip. Takes a root. Exits 0, 1 or 2 (`gates-v1`, `gates-v2`,
-`nothing-passes-vacuously`).
+never a skip. What it reports does not depend on where the tree is going, and
+whether the report stops a merge does: a red wall fails where the tree opens
+into `main` and is reported and passed where it opens into `release`, which is
+the target read the same way the lane rule reads it. Below the promotion a
+seat is still working and can see the red; above it a consumer installs. A red
+wall that passes is a block with an owner and never a licence, and the answer
+says so on its own line. Takes a root. Exits 0, 1 or 2 (`gates-v1`, `gates-v2`,
+`nothing-passes-vacuously`, `a-promotion-names-what-it-refuses`).
+
+## promote
+
+Answers whether this tree may reach the target it is asked about, and names
+everything that refuses it. Two targets and two gates: reaching `release`
+refuses a task whose verdict is `regressed` or `nothing ran`, a claim that was
+true and is not; reaching `main` refuses those and `not delivered` as well,
+which is the one a tester is allowed to leave standing. `main` takes a head of
+`release` and nothing else; `release` takes a head that is a lane the config
+holds, and never another target. A red wall refuses `main` and is counted
+without refusing `release`. Every refusal is said before it exits, because a
+gate that stopped at the first would turn one merge into four, and the last
+line counts them. A finding is `<artefact>: <kind>: <message>` with the kinds
+`verdict`, `head` and `wall`. Takes a root, `--into <target>` and
+`--from <head>`, and reads `KAAL_BASE` and `KAAL_BRANCH` where it is given
+neither; a target it does not know is usage. Exits 0, 1 or 2
+(`a-promotion-names-what-it-refuses`).
 
 ## fixtures
 
