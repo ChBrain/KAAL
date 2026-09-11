@@ -71,16 +71,17 @@ const REQUIREMENT = (name) =>
 const STRATEGY =
   "---\ntraces:\n  parent: none\n---\n\n# Test strategy\n\nOne wall runs tests here.\n\n" +
   "## Root\n\n- Root because: it is the test tree's own root.\n";
-/** A plan as this task wants one: it names suites and never a glob. */
+/**
+ * A plan and a suite as this task wants them: the edges are traces of their
+ * own, comma lists like `principles:` and never `parent:`, which stays the
+ * tree and is the one kind that holds a single name.
+ */
 const plan = (wall, suites) =>
-  `---\ntraces:\n  parent: strategy\n---\n\n# Test plan: ${wall}\n\n` +
-  `## Wall\n\n- Wall: ${wall}\n\n## Suites\n\nIt uses ${suites
-    .map((s) => `\`${s}\``)
-    .join(" and ")}.\n`;
-/** A suite as this task wants one: it names its cases, each by path. */
+  `---\ntraces:\n  parent: strategy\n  suites: ${suites.join(", ") || "nothing"}\n---\n\n` +
+  `# Test plan: ${wall}\n\n## Wall\n\n- Wall: ${wall}\n`;
 const suite = (name, cases) =>
-  `---\ntraces:\n  parent: strategy\n---\n\n# Test suite: ${name}\n\n` +
-  `## Cases\n\n${cases.map((c) => `- \`${c}\``).join("\n") || "None."}\n`;
+  `---\ntraces:\n  parent: strategy\n  cases: ${cases.join(", ") || "nothing"}\n---\n\n` +
+  `# Test suite: ${name}\n`;
 
 const scratch = (files, fn) => {
   const root = mkdtempSync(join(tmpdir(), "kaal-suite-"));
@@ -126,10 +127,12 @@ test("2. a suite names its cases, and one naming none is a finding", () => {
     (root) => {
       const r = kaal("traces", root);
       notUsage(said(r));
+      // Not `/case/i`: today an unknown kind answers `cases: no such kind`,
+      // which carries the word and says nothing about the criterion.
       assert.match(
         said(r),
-        /case/i,
-        `the finding never says what is missing: ${said(r)}`,
+        /no case/i,
+        `the finding never says the suite names no case: ${said(r)}`,
       );
       assert.match(said(r), /alpha/, "the finding never names the suite");
       assert.equal(r.status, 1, `a suite naming no case passed: ${said(r)}`);
@@ -139,6 +142,14 @@ test("2. a suite names its cases, and one naming none is a finding", () => {
     const ok = kaal("traces", root);
     notUsage(said(ok));
     assert.equal(ok.status, 0, `a whole tree reported: ${said(ok)}`);
+    // Read as a trace is read, which means `--write` pins it like any other.
+    const w = kaal("traces", root, "--write");
+    notUsage(said(w));
+    assert.match(
+      readFileSync(join(root, "tests", "suites", "alpha.md"), "utf8"),
+      /cases:[^\n]*acceptance\.test\.mjs@[0-9a-f]{8}/,
+      "a case carries no pin after --write",
+    );
   });
 });
 
@@ -194,7 +205,7 @@ test("5. a plan names suites and not a glob, and two plans may name one", () => 
       ...whole(),
       "tests/plans/acceptance.md":
         plan("acceptance", ["alpha"]) +
-        "\nIts suites live under `requirements/*/acceptance.test.mjs`.\n",
+        "\n## Suites\n\nIts suites live under `requirements/*/acceptance.test.mjs`.\n",
     },
     (root) => {
       const r = kaal("traces", root);

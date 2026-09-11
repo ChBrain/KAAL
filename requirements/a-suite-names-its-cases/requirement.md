@@ -51,6 +51,14 @@ gates`, and the selection lives in `kaal.config.json` as globs inside gate
   re-run without a diff in somebody else's lane.
 - Counting what a suite layer would have to reach: 64 acceptance files, 58
   contract files and 25 unit files, 147 in all.
+- The kind table is what stands in the way, and it says so plainly. A plan
+  carrying `suites:` and a suite carrying `cases:` answer `no such kind; the
+table holds requirement, supersedes, parent, principles`, twice, and the tree
+  still exits 1 on the plan's missing glob underneath. So the two edges are a
+  kind table entry each and nothing more exotic.
+- Only `parent:` is single valued. `principles:` has always been a comma list
+  resolving to many files, so the grammar is already a graph and n:m needs no
+  new shape, only new rows.
 - The trace wall already treats anything under `tests/` as an artefact. A
   suite page written without a frontmatter block answered `suites/alpha:
 traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
@@ -62,6 +70,11 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 
 ## Assumptions
 
+- The two edges are declared from above and never from below: a plan names its
+  suites and a suite names its cases, so neither a suite nor a case says what
+  uses it. That is what makes the cardinality fall out rather than be
+  enforced, and it is the asker's own shape, `Plan n:m Suite n:m Case` with no
+  mutually exclusive concept anywhere in it.
 - A suite document is written by the tester, because selecting and grouping
   what is re-run is the method and the method is the tester's. The cases it
   names stay the property of the seat whose tree they sit in, which is the
@@ -79,6 +92,11 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 
 - `tests/` holds five kinds and no sixth: strategy, plans, suites, runs, bugs.
   From the ask, and bugs are their own task.
+- `parent:` stays the tree and carries none of this. It is the one trace kind
+  that is single valued, so a suite reached by three plans cannot be expressed
+  by it, and the test tree's own root stays the strategy. The asker's words:
+  the cardinality here may differ from the tree in requirements and
+  architecture, so it needs its own field.
 - A case is a reference and never a copy. A suite names where a case is; it
   does not hold the case, restate it, or wrap it.
 - The three walls that run tests keep running the same cases. This task moves
@@ -100,18 +118,22 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
    `tests/plans`, the suites under `tests/suites`, the runs under
    `tests/runs`, and the bugs. A reader who has only this page can say what
    belongs there and what does not.
-2. A suite is a document under `tests/suites/`, and it names its cases, each
-   as a path. `kaal` reads a suite as it reads a plan, and a suite naming no
-   case is a finding saying so.
+2. A suite is a document under `tests/suites/`, and it names its cases in a
+   trace field of its own, as a comma list of paths, read by `kaal traces` the
+   way every other trace is read and carrying a pin the same way. The field is
+   not `parent:`, which stays the tree. A suite naming no case is a finding
+   saying so.
 3. A case path under `tests/` is a finding naming the path and saying that
    `tests/` points at cases and does not hold them. This holds whatever else
    is true of the path.
 4. A case path in no seat's tree is a finding naming the path and saying no
    seat owns it. The seats are read from `kaal.config.json` and this task
    declares no new ones.
-5. A plan names the suites it uses and no longer a glob, and one suite named
-   by two plans is not a finding: the layer carries the many to one that a
-   plan over a selection needs.
+5. A plan names the suites it uses in a trace field of its own and no longer
+   a glob. Plan to suite and suite to case are both many to many and neither
+   excludes the other: one suite named by two plans is not a finding, one plan
+   naming two suites is not a finding, and one case named by two suites is not
+   a finding.
 6. Every case a suite names exists, and every test file in the trees the
    suites reach is named by some suite; the board reports either way round,
    naming the case that is not there or the file no suite reaches.
@@ -144,19 +166,26 @@ traces: no frontmatter block in tests/suites/alpha`, so a suite carries a
 - Task: a-suite-names-its-cases
 - Criteria: 7; tests: 7 (equal)
 - Red run: `node --test --test-timeout=60000 requirements/a-suite-names-its-cases/acceptance.test.mjs`,
-  all seven failing, each on its own reason: the strategy never says bugs, and
-  six findings that no wall produces
+  all seven failing, each on its own reason
 - Seen red one at a time: each of the seven run alone as well as together, and
   the first two attempts were a shared red rather than seven proofs. The
   fixtures had no requirement, so `kaal traces` answered "not applicable here"
   six times, and then the fixture's own strategy page carried no root line
-- Stand-in green: all seven, on a throwaway suite reader in
-  `bin/lib/plans.mjs`, a per plan count line on `kaal traces`, and a five
-  kinds section in the strategy page, then discarded from file copies
-- Found by the stand-in, once, and mine: criterion 1's test read the five
-  kinds as substrings and `re-runs` matched before `suites`, so it was red for
-  the wrong reason and would have stayed red however the page was written. The
-  criterion now reads the three kinds that have a place by their place
+- Stand-in green: all seven, twice. The first on a suite reader that read its
+  cases out of prose, the second after the asker fixed the cardinality, on two
+  rows in the kind table, a suite reader that reads the fields, a per plan
+  count line on `kaal traces` and a five kinds section in the strategy page.
+  Both discarded from file copies. The second is what proves criterion 2's pin:
+  `traces --write` writes a sha onto a case exactly as it does onto any other
+  trace
+- Found by the stand-in and by running, twice, and both mine. Criterion 1's
+  test read the five kinds as substrings and `re-runs` matched before
+  `suites`, so it was red for a reason no wording of the page could fix; it
+  now reads the three kinds that have a place by their place. And criterion
+  2's test asserted `/case/i` on the finding, which the tree answers today
+  with `cases: no such kind`, so it passed on a message about the kind table
+  and said nothing about the criterion; it now asks for the sentence the
+  criterion states
 - Tests: `acceptance.test.mjs`, beside this file, on scratch trees, because
   the tests directory is the thing this task changes and a case that read it
   would be reading the answer it is asking for
