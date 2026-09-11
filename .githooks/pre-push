@@ -13,4 +13,16 @@
 # fails; it is a recorded decision in architecture/gates-v1 with a reopen
 # condition, and it is not for skipping the walls. The way past a red wall is
 # a recorded waiver in waivers/, never --no-verify.
+# Where this push is going, because the board is told its target and never
+# guesses one. A lane branch opens into release, release opens into main, and
+# anything else is judged strictly: no answer is the strict answer.
+if [ -z "$KAAL_BASE" ]; then
+  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  case "$branch" in
+  release) KAAL_BASE=origin/main ;;
+  main | HEAD | "") KAAL_BASE=origin/main ;;
+  *) KAAL_BASE=origin/release ;;
+  esac
+  export KAAL_BASE
+fi
 ${KAAL_TEST_COMMAND:-npm test}

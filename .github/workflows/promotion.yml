@@ -1,0 +1,31 @@
+name: promotion
+# The gate `main` has and `release` does not. Every wall runs on both targets
+# under ci.yml; this is the thing that only a promotion is asked. It refuses a
+# task whose verdict is `regressed`, `nothing ran` or `not delivered`, a head
+# that is not `release`, and any red wall, and it names every one of them
+# before it exits.
+#
+# Its own workflow rather than a job with a condition: a job skipped by a
+# condition reports as a check that passed, and a gate that reports success
+# where it did not run is the vacuous pass this league has a wall about.
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+env:
+  KAAL_BRANCH: ${{ github.head_ref || github.ref_name }}
+  KAAL_BASE: ${{ github.base_ref && format('origin/{0}', github.base_ref) || '' }}
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the targets, for the walls that read a base
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node bin/kaal.mjs promote
