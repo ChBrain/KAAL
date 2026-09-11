@@ -73,6 +73,44 @@ export const isFresh = (root, run) =>
   );
 
 /**
+ * How old the evidence is, in whole days, read from the date the record
+ * carries. Never how long it has been stale: nothing in this tree records
+ * when a suite moved, and the number a reader can act on is the age of the
+ * last pass either way. A record whose date does not parse has no age, which
+ * is a silence and not a zero.
+ */
+export const daysOld = (run, today = new Date()) => {
+  const t = Date.parse(`${run?.ran}T00:00:00Z`);
+  if (Number.isNaN(t)) return null;
+  const now = Date.UTC(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate(),
+  );
+  return Math.max(0, Math.round((now - t) / 86400000));
+};
+
+/**
+ * Why a stale record does not count, and how old the pass behind it is. The
+ * age is said and never judged: a wall that reddened past some number of days
+ * would redden `main` on a branch nobody touched, and what turns `main` red
+ * is CI's to answer for. One day stale and three months stale read the same
+ * before this, and the second is a suite nobody has run since.
+ */
+export const staleWhy = (run) => {
+  const d = daysOld(run);
+  const how =
+    d === null
+      ? null
+      : d === 0
+        ? "recorded today"
+        : d === 1
+          ? "the pass on record is 1 day old"
+          : `the pass on record is ${d} days old`;
+  return `the record is stale: its suite has changed since${how ? `, and ${how}` : ""}`;
+};
+
+/**
  * One of four words, and whether it fails. A stale record is no record, so a
  * red run carrying one is not delivered and says so; treating it as evidence
  * would make every unfinished task a regression, which is a lie in the
@@ -97,7 +135,6 @@ export function verdict(root, run, pass, fail, task = run?.task ?? null) {
     };
   const fresh = isFresh(root, run);
   const stale = Boolean(run && !fresh);
-  const staleWhy = "the record is stale: its suite has changed since";
   const unread = task ? owes(root, task) : [];
   const owedWhy = unread.length
     ? `${unread.length} pin(s) await a review: ${unread.join("; ")}`
@@ -110,7 +147,11 @@ export function verdict(root, run, pass, fail, task = run?.task ?? null) {
           ok: false,
           why: "a run on record passed this suite",
         }
-      : { word: "not delivered", ok: true, why: also(stale ? staleWhy : null) };
+      : {
+          word: "not delivered",
+          ok: true,
+          why: also(stale ? staleWhy(run) : null),
+        };
   // A green suite and a fresh record still leave the task undelivered while
   // a reading is owed, which is the only teeth `review-needed` has.
   return fresh && !owedWhy
@@ -120,7 +161,7 @@ export function verdict(root, run, pass, fail, task = run?.task ?? null) {
         ok: true,
         why: also(
           stale
-            ? staleWhy
+            ? staleWhy(run)
             : fresh
               ? null
               : "green, and no run has recorded it yet",
