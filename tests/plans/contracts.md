@@ -1,6 +1,11 @@
 ---
 traces:
-  parent: strategy@768288f9e1505f9808f14387940e6774a2f7facfde762963e43262d308452e8a
+  parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
+suites:
+  contracts: 5b50023478b895928c942c140c85bd7ed4f9302d8b50891b02888f50a5abb32e
+reviews:
+  parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
+  suites/contracts: updated@5b50023478b895928c942c140c85bd7ed4f9302d8b50891b02888f50a5abb32e by tester: the suite gained a sha on every case it names, which is `--write` filling the block this plan now points at
 ---
 
 # Test plan: contracts
@@ -13,7 +18,7 @@ What this plan proves is that every seam a drawing fixes still holds. It is writ
 
 ## Suites
 
-Its suites live under `architecture/*/contracts.test.mjs`, and today that matches 59 suites.
+It uses the `contracts` suite, which names its cases by path. A plan picks suites; it owns neither the place they live nor how many there are, and both were once written here.
 
 ## Cases
 
