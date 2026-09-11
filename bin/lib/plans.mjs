@@ -146,6 +146,15 @@ export function checkPlans(root) {
     const named = pages.filter((p) => wallOf(p.text) === g.name);
     if (!named.length)
       findWall(g.name, "is a wall that runs tests and no plan is about it");
+    // The other way round, and the finding names the wall rather than either
+    // page: two plans about one wall are a pair, and neither of the two is
+    // wrong on its own. A refactor dropped this branch once, and nothing said
+    // so, because the suite that guards it was red for want of a record.
+    else if (named.length > 1)
+      findWall(
+        g.name,
+        `is the wall of ${named.length} plans: ${named.map((p) => p.name).join(", ")}`,
+      );
   }
 
   // The suites' end of it. A suite is read for what it covers, each case is

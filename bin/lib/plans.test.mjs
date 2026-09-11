@@ -8,6 +8,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import {
+  checkPlans,
   suitePages,
   owners,
   caseOwner,
@@ -189,6 +190,34 @@ test("unnamed never asks for a file inside a fixtures directory", () => {
     },
     (root) => {
       assert.deepEqual(unnamed(root, new Set(["x/one.test.mjs"])), []);
+    },
+  );
+});
+
+test("checkPlans names the wall where two plans are about it, and neither plan", () => {
+  scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        gates: [{ name: "units", command: "node --test tests/*.test.mjs" }],
+      }),
+      "tests/plans/first.md":
+        "---\ntraces:\n  parent: strategy\n---\n\n# Test plan: first\n\n- Wall: units\n",
+      "tests/plans/second.md":
+        "---\ntraces:\n  parent: strategy\n---\n\n# Test plan: second\n\n- Wall: units\n",
+    },
+    (root) => {
+      // The pair is the fault, so the finding is of kind `wall` and carries
+      // both page names in one sentence. A finding of kind `plan` here would
+      // be an accusation against a page that is right on its own.
+      const walls = checkPlans(root).filter((f) => f.kind === "wall");
+      assert.equal(walls.length, 1);
+      assert.equal(walls[0].artefact, "units");
+      assert.match(walls[0].message, /\bfirst\b/);
+      assert.match(walls[0].message, /\bsecond\b/);
+      assert.deepEqual(
+        checkPlans(root).filter((f) => f.kind === "plan"),
+        [],
+      );
     },
   );
 });
