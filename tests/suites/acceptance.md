@@ -8,6 +8,7 @@ cases:
   requirements/a-build-says-what-it-proved/acceptance.test.mjs: 54383c21e9d8f662016d28a06514c3302955b3f7eba9c1f16b62d8f0bdd9af89
   requirements/a-change-declares-its-class/acceptance.test.mjs: df9e4a66b61cf110f1696f748c08f7ffbd1b0b5fe14c0a9502eb94efdf9d6280
   requirements/a-decision-balances-two-goods/acceptance.test.mjs: 8e1ea235299090f8117c5882aa5d250cf4b3bac49d88e8103437066429020d8e
+  requirements/a-dependency-update-comes-through-release/acceptance.test.mjs: 407b0b6fd6a7e2d3a617d8d45b635b68bd7d939b4fc33c3d393b55d110e0ad2c
   requirements/a-diff-carries-one-seat/acceptance.test.mjs: d461c0e538a9315216faabe685a3962299cb8f0642cf3ba7d5c9036d967c8d38
   requirements/a-drawing-fixes-more-than-structure/acceptance.test.mjs: e9af3a318b21cf4940f3d2b2e2838362f41ba277e322c37f7bb2ae12887c2a5b
   requirements/a-drawing-shows-its-ground/acceptance.test.mjs: a3e9bbdba779b5aa48d9ccf85d59f3a0870b6565b175be174fe76dfb44a3ab47
