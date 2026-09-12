@@ -143,6 +143,11 @@
       "fix": "fix the unit; never edit the test to pass"
     },
     {
+      "name": "regression",
+      "command": "node bin/kaal.mjs regression",
+      "fix": "fix the case, or take its suite out of tests/plans/regression.md and say in the diff what stopped being a promise"
+    },
+    {
       "name": "rules",
       "command": "node bin/kaal.mjs check",
       "fix": "obey the skill rules (name, description, MIT, budget, depth, no vendor, no dash)"
