@@ -12,7 +12,7 @@ Place: this repository
   task's own fixtures directory since the task was written, and the case read
   the league's tree instead.
 - It failed honestly. The assertion said `push-v1 has a record, so it is not
-  the unfinished task this reads`, which named the whole problem in one line
+the unfinished task this reads`, which named the whole problem in one line
   and cost nothing to diagnose.
 
 ## Learned
