@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 7e05ba944f2cadaf58b6f53a63fa1b648210d74dcc1e98bc93ef8580c8096111
+  acceptance: 2c7a95f977a278e07e19c3e95daf08ca3a339270e0cfa082a4d27b2d1af7cfdd
 reviews:
-  suites/acceptance: reviewed-no-impact@7e05ba944f2cadaf58b6f53a63fa1b648210d74dcc1e98bc93ef8580c8096111 by analyst: the suite gained the case for the task that gives a red case an owner; which suites this plan uses is unchanged and no case was taken out of it
+  suites/acceptance: reviewed-no-impact@2c7a95f977a278e07e19c3e95daf08ca3a339270e0cfa082a4d27b2d1af7cfdd by analyst: the suite gained the case for the task that lets a wall decline to judge without failing; which suites this plan uses is unchanged and no case was taken out of it
 ---
 
 # Test plan: regression
