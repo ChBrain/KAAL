@@ -45,7 +45,7 @@ cases:
   requirements/nothing-stale/acceptance.test.mjs: 16f692bdd47856c60d3cd094bf8b4e1a1780bce04fc9d2a3047b9e2e2084221f
   requirements/pointed-elsewhere/acceptance.test.mjs: 51bf6fbec7cbbc698fbae9e2f1b5cb5f0b220f1359a6a73d00d614bf2f551f97
   requirements/public-v1/acceptance.test.mjs: cea8a8ef43195c5776143a84637be26230053e50e22c4af8672c33b3e8e3c4e6
-  requirements/push-v1/acceptance.test.mjs: 071a7cd104e32affad545efc562d1588daf7a11376a4896b9f01a6334691c067
+  requirements/push-v1/acceptance.test.mjs: 6bf2ce06a489bf8df6d253887a698c4f54021ecaa2de06b0c597e522c8a404f1
   requirements/read-before-drawing/acceptance.test.mjs: 532f144db7778851451191203d390fcdfd81c5004f3121753c396a5240539955
   requirements/red-for-the-right-reason/acceptance.test.mjs: 5b1643cab9eb1a55af8ce9786d9182a920a080374dba35c63b0d8b37e77ebbf8
   requirements/security-v1/acceptance.test.mjs: 52b8e0a552bf37fed7dc3e06bc9233d2984b4e8a11c5bedcfdb476c6963a4615
@@ -69,6 +69,7 @@ cases:
   requirements/where-a-skill-acts/acceptance.test.mjs: 60832efd3c54d369a4f9062e02f51542250d5f93bb1f940a8d24b5f213eda555
   requirements/witness-a-tree/acceptance.test.mjs: 853bec795ceb60eb98fb6a91658f3d8def4a92ddfc74d532fe24cf6b602ef51d
 reviews:
+  cases/requirements/push-v1/acceptance.test.mjs: reviewed-no-impact@6bf2ce06a489bf8df6d253887a698c4f54021ecaa2de06b0c597e522c8a404f1 by analyst: its fifth case stopped reading a test file as a script and stopped fixing where a script's test lives; the case is the same case and this suite still covers it
   cases/requirements/status-v1/acceptance.test.mjs: reviewed-no-impact@0cf49af1968edadee4db9a8876cc00017771390d82884d90f9c5057af5f4454f by analyst: its fourth case stopped reading `push-v1` out of the league's own tree and reads the `open-red` fixture instead; the case is the same case and this suite still covers it
   cases/requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: reviewed-no-impact@369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273 by analyst: the case gained its ninth, the one about the board judging by the target it opens into; it is the same case and this suite still covers it
   cases/requirements/a-suite-names-its-cases/acceptance.test.mjs: reviewed-no-impact@5a31cada2e3aac7cc19410a2318cf7ebc42347b9d15e787b41fa827bed087101 by tester: criterion 5's fixture gave its two plans one wall as well as one suite, which proved a cardinality the criterion does not claim; the fixture now gives each plan a wall of its own and the case is the same case this suite covers

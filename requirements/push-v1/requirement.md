@@ -74,9 +74,11 @@ stands on each rung above human for a reason on disk.
    `fixtures/bad-skill/`, whose one skill names a vendor.
 4. `node bin/kaal.mjs retros` exits 0 and prints one line per skill with its
    count of unconsumed retros.
-5. Every script under `bin/` has a test under `tests/`, and every script
-   under a skill's `scripts/` has a test beside it, each asserting a failure
-   on bad input.
+5. Every script under `bin/` and every script under a skill's `scripts/` has
+   a test asserting a failure on bad input. A test file is not a script and is
+   never counted as one. Where that test lives is not fixed here: beside the
+   script or in the tree the units wall runs, and which of those is the tests'
+   own plan's business.
 6. At least one ledger move stands at rung `script`, naming a script under
    its own skill's `scripts/` directory that its `SKILL.md` calls, and a test
    that exists and passes.

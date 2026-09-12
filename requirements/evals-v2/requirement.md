@@ -1,6 +1,8 @@
 ---
 traces:
-  supersedes: push-v1@cd52c37170763eda3069d20b62a6dd4b25360468f92a265bcb32fa99e51517ed
+  supersedes: push-v1@9862ad13549e7ea50b3f1f964510641b5ebd7f55b32a6f4e5189728c476cda77
+reviews:
+  supersedes/push-v1: reviewed-no-impact@9862ad13549e7ea50b3f1f964510641b5ebd7f55b32a6f4e5189728c476cda77 by analyst: what moved in that task's criteria is its fifth, which stopped counting a test file as a script and stopped fixing where a script's test lives; what this task supersedes is untouched by either
 ---
 
 # Requirement: evals-v2
