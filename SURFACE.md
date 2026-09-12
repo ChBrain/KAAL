@@ -318,7 +318,13 @@ into `main` and is reported and passed where it opens into `release`, which is
 the target read the same way the lane rule reads it. Below the promotion a
 seat is still working and can see the red; above it a consumer installs. A red
 wall that passes is a block with an owner and never a licence, and the answer
-says so on its own line. A standing bug is counted in the same sentence and
+says so on its own line. A wall answering 2, which is this engine's code for
+`the question is not this tree's`, is neither: it is printed `n/a` with what
+it said beneath, carries no fix hint because there is nothing to fix, is
+counted in the summary as not applicable, and does not keep the board from
+green. A waiver filed over one is unused rather than spent, because there was
+no red to waive. Everything that is not 0 and not 2 is a failure, so a command
+that cannot run is one without being asked about. A standing bug is counted in the same sentence and
 read here rather than as a wall of its own, because a wall can be waived and a
 bug may not be: the board does not answer green while one stands, whatever
 every wall on it says. Takes a root. Exits 0, 1 or 2 (`gates-v1`, `gates-v2`,
