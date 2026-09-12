@@ -84,11 +84,22 @@ test("5. every script, in bin/ or in a skill's scripts/, has a test asserting a 
   const failing = /status,?\s*1|\.throws|rejects|toBe\(1\)|equal\(.*1\)/;
   const pairs = [];
   const bin = join(ROOT, "bin");
+  // A test file is not a script. The skills half has always said so; this
+  // half did not, and the day a unit moved beside the command it read that
+  // unit as a script wanting a unit of its own.
   if (existsSync(bin))
-    for (const s of readdirSync(bin).filter((f) => f.endsWith(".mjs")))
+    for (const s of readdirSync(bin).filter(
+      (f) => f.endsWith(".mjs") && !f.endsWith(".test.mjs"),
+    ))
       pairs.push([
         join(bin, s),
-        join(ROOT, "tests", basename(s, ".mjs") + ".test.mjs"),
+        // Beside the script, or in the tree the units wall runs. Which of the
+        // two is the tests' own plan's business and this criterion does not
+        // hold an opinion: it held one, `tests/`, and the units are moving.
+        [
+          join(bin, basename(s, ".mjs") + ".test.mjs"),
+          join(ROOT, "tests", basename(s, ".mjs") + ".test.mjs"),
+        ],
       ]);
   for (const n of skills()) {
     const dir = join(ROOT, "skills", n, "scripts");
@@ -96,11 +107,15 @@ test("5. every script, in bin/ or in a skill's scripts/, has a test asserting a 
     for (const s of readdirSync(dir).filter(
       (f) => f.endsWith(".mjs") && !f.endsWith(".test.mjs"),
     ))
-      pairs.push([join(dir, s), join(dir, basename(s, ".mjs") + ".test.mjs")]);
+      pairs.push([
+        join(dir, s),
+        [join(dir, basename(s, ".mjs") + ".test.mjs")],
+      ]);
   }
   assert.ok(pairs.length >= 1, "no scripts anywhere");
-  for (const [s, t] of pairs) {
-    assert.ok(existsSync(t), `${s}: no test`);
+  for (const [s, homes] of pairs) {
+    const t = homes.find((h) => existsSync(h));
+    assert.ok(t, `${s}: no test at ${homes.join(" or ")}`);
     assert.ok(
       failing.test(readFileSync(t, "utf8")),
       `${s}: test asserts no failure`,
