@@ -318,7 +318,10 @@ into `main` and is reported and passed where it opens into `release`, which is
 the target read the same way the lane rule reads it. Below the promotion a
 seat is still working and can see the red; above it a consumer installs. A red
 wall that passes is a block with an owner and never a licence, and the answer
-says so on its own line. Takes a root. Exits 0, 1 or 2 (`gates-v1`, `gates-v2`,
+says so on its own line. A standing bug is counted in the same sentence and
+read here rather than as a wall of its own, because a wall can be waived and a
+bug may not be: the board does not answer green while one stands, whatever
+every wall on it says. Takes a root. Exits 0, 1 or 2 (`gates-v1`, `gates-v2`,
 `nothing-passes-vacuously`, `a-promotion-names-what-it-refuses`).
 
 ## regression
@@ -332,6 +335,21 @@ again once per case, because the runner flattens several files into one stream
 of test names and never says which file a name came from, so the answer can
 name the case that broke. Takes a root. Exits 0 or 1
 (`a-plan-picks-its-suites`).
+
+## bugs
+
+Answers what is blocked and whose it is: one line per standing bug naming the
+case it is about and the lane that owns the earliest place it can be fixed.
+A bug is a page under `tests/bugs/`, one per case, carrying `Case`, `Wall`,
+`Seen` and `Lane`, each on its own line; it is the inverse of a run record,
+which is the evidence a suite passed, and it clears when the case goes green
+rather than when anyone decides it has. A page that lacks a field, names a
+lane `kaal.config.json` does not hold, is about a case no suite names, or is
+about a case that passes, is a finding on the trace wall and holds nothing
+back: a bug that is not well formed is not yet a bug. No wall writes one,
+because recording is the act of the seat that proves. Takes a root. Exits 0
+where nothing is blocked and 1 while a bug stands
+(`a-bug-names-where-it-can-be-fixed`).
 
 ## promote
 
@@ -402,7 +420,12 @@ or no such ref is not this question's. Exits 0, 1 or 2
 Runs the acceptance tests it is given and judges them by each requirement's
 status: an open task's red is reported, a closed task's red is a failure, and
 an open task that is all green is told to close, and a handoff with no
-`People` line is refused. Each file runs without the target this tree is
+`People` line is refused. A case a standing bug is about is not run: the line
+says `not run` and why, and the entry carries no verdict and no counts, so a
+wall's numbers are over the cases it judged. That is not a skip, because the
+red is recorded, owned and named on the board, and the tree is declining to
+ask a question whose answer is already written down. Each file runs without
+the target this tree is
 judged by: `KAAL_BASE` is cleared before a case starts, because a case builds
 a tree of its own and asks the engine about that one, and a board it spawns
 would otherwise read whether this tree's redness is binding. A case that wants

@@ -6,6 +6,7 @@
 // the same reason.
 import { readFileSync, existsSync } from "node:fs";
 import { parseFrontmatter } from "./frontmatter.mjs";
+import { standing } from "./bugs.mjs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
@@ -142,9 +143,20 @@ export function runGates(root, config = null) {
             ...(x.ok ? [] : x.output.map((l) => `  ${l}`)),
           ],
   );
+  // A standing bug is never a licence. Read here and not as a wall of its
+  // own, because a wall can be waived and a bug may not be: the board does
+  // not answer green whatever every wall on it says, which a gate could not
+  // promise, since a gate makes the board red only by being red itself.
+  //
+  // The count is printed in the summary rather than left implicit, because
+  // the sentence a reader has trusted since the board was built now has a
+  // fourth term and a silent one would be worse than a longer line.
+  const bugs = standing(root);
+  lines.push(...bugs);
+  const clear = ok && bugs.length === 0;
   const summary =
     gates.length === 0
       ? "red: no walls declared in kaal.config.json"
-      : `${ok ? "green" : "red"}: ${gates.length} wall(s), ${failed} failing, ${waived} waived`;
-  return { ok, results, lines, summary };
+      : `${clear ? "green" : "red"}: ${gates.length} wall(s), ${failed} failing, ${waived} waived${bugs.length ? `, ${bugs.length} blocked` : ""}`;
+  return { ok: clear, results, lines, summary };
 }

@@ -55,6 +55,7 @@ import {
 import { readRun, isFresh, staleWhy, writeRuns } from "./lib/runs.mjs";
 import { binding } from "./lib/targets.mjs";
 import { asked, promote } from "./lib/promote.mjs";
+import { checkBugs, standing } from "./lib/bugs.mjs";
 import { rows as coverageRows, states } from "./lib/coverage.mjs";
 import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
@@ -78,7 +79,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | promote [root] [--into <target>] [--from <head>] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | bugs [root] | promote [root] [--into <target>] [--from <head>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -133,6 +134,11 @@ if (cmd === "ledger") {
     // that plan alone, because it is the one whose selection protects a
     // target, and a tree with no such plan is asked nothing.
     ...unrunnable(troot, "regression"),
+    // What is wrong with each bug page. The last of its checks runs the case
+    // the page is about, which no other reader on this wall does: a bug is
+    // cleared by its case going green and never by a person deciding it has,
+    // and nothing but a run can tell the tree which.
+    ...checkBugs(troot),
   ].map((f) => `${f.artefact}: ${f.kind}: ${f.message}`);
   // The counts whatever the answer, so a reader sees what is owed without
   // asking a second question, and sees it on a red tree too.
@@ -474,11 +480,24 @@ if (cmd === "ledger") {
   if (findings.length) process.exit(1);
 } else if (cmd === "acceptance" || cmd === "contracts") {
   const run = cmd === "acceptance" ? runAcceptance : runContracts;
-  const a = run(process.argv.slice(3));
+  const a = run(process.argv.slice(3), cwd);
   for (const l of a.lines) console.log(l);
   console.log(a.summary);
   console.log(`# pass ${a.passed}`);
   process.exit(a.ok ? 0 : 1);
+} else if (cmd === "bugs") {
+  // What is blocked, and whose it is. The board asks the same reader, so the
+  // two can never disagree about what stands; this is the same answer for a
+  // person, with an exit code so a caller can ask without reading prose.
+  const broot = arg && !arg.startsWith("-") ? arg : cwd;
+  const lines = standing(broot);
+  for (const l of lines) console.log(l);
+  console.log(
+    lines.length
+      ? `bugs: ${lines.length} case(s) blocked`
+      : "bugs: nothing is blocked",
+  );
+  process.exit(lines.length ? 1 : 0);
 } else if (cmd === "class") {
   // What class of change this is: which of the three artefacts a consumer can
   // notice moved, and whether the version rose past the place this repository
