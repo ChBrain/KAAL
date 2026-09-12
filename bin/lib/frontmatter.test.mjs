@@ -1,7 +1,9 @@
-// Units for the one thing the parser learned when the `reviews:` block
-// arrived. The rest of its cases are in `tests/frontmatter.test.mjs`, where
-// they were written and where they stay: a unit belongs beside the code it
-// tests and moving somebody else's file is somebody else's diff.
+// Units for the parser. The first three arrived with the parser and lived in
+// the tester's tree over the developer's code until item 2 of `plan/0.0.2.md`
+// brought them here; the rest are what it learned when the `reviews:` block
+// arrived. The header here used to say the first three stayed where they were
+// written, because moving somebody else's file was somebody else's diff. The
+// suites are shared now and it is one diff.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { parseFrontmatter } from "./frontmatter.mjs";
@@ -53,4 +55,25 @@ test("a top level key still carries neither a slash nor a dot", () => {
   );
   assert.equal(data["a.b"], undefined);
   assert.deepEqual(data.traces, { parent: "none" });
+});
+
+test("parses key: value lines, unquoted and double quoted, and returns the body", () => {
+  const { data, body } = parseFrontmatter(
+    '---\nname: x\ndescription: "a b"\nlicense: MIT\n---\n\n# X\n',
+  );
+  assert.deepEqual(data, { name: "x", description: "a b", license: "MIT" });
+  assert.equal(body.trim(), "# X");
+});
+
+test("throws on text with no frontmatter fences", () => {
+  assert.throws(() => parseFrontmatter("# no fences\n"), /frontmatter/);
+});
+
+test("reads one level of map under a key with no value, and keeps an empty value empty", () => {
+  const { data } = parseFrontmatter(
+    '---\nname: x\nmetadata:\n  author: k\n  version: "1"\nwhy:\nlicense: MIT\n---\n',
+  );
+  assert.deepEqual(data.metadata, { author: "k", version: "1" });
+  assert.equal(data.why, "");
+  assert.equal(data.license, "MIT");
 });
