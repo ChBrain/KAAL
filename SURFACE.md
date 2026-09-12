@@ -402,13 +402,18 @@ or no such ref is not this question's. Exits 0, 1 or 2
 Runs the acceptance tests it is given and judges them by each requirement's
 status: an open task's red is reported, a closed task's red is a failure, and
 an open task that is all green is told to close, and a handoff with no
-`People` line is refused. Takes files or globs. Exits 0
+`People` line is refused. Each file runs without the target this tree is
+judged by: `KAAL_BASE` is cleared before a case starts, because a case builds
+a tree of its own and asks the engine about that one, and a board it spawns
+would otherwise read whether this tree's redness is binding. A case that wants
+a target says so itself. Takes files or globs. Exits 0
 or 1 (`status-v1`, `status-v2`).
 
 ## contracts
 
 Runs the contract tests it is given and judges them by each drawing's task,
-the same way, reading the status from the task's requirement. Takes files or
+the same way, reading the status from the task's requirement, and clearing the
+target for the same reason. Takes files or
 globs. Exits 0 or 1 (`status-v2`).
 
 ## What this page does not say

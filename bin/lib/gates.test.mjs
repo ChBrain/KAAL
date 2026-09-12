@@ -4,7 +4,7 @@ import { join, dirname } from "node:path";
 import { mkdtempSync, symlinkSync, copyFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { runGates, wallEnv, readWaiver } from "./gates.mjs";
+import { runGates, wallEnv, caseEnv, readWaiver } from "./gates.mjs";
 
 const F = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -155,4 +155,31 @@ test("a failing wall's own lines follow its FAIL line, indented; a green wall's 
     "FAIL loud  fix: read it",
     "  what the wall saw",
   ]);
+});
+
+test("a wall keeps the target this tree is judged by, and a case does not", () => {
+  // The two are not the same question. A wall is about this tree and is told
+  // its target so it never guesses one, so `class` and `seats` would lose
+  // theirs if it went. A case builds a tree of its own and asks the engine
+  // about that one, and where it spawns a board, this variable decides
+  // whether that board's redness is binding: an inherited one silently
+  // changes the exit code the case is asserting about. Eight cases across six
+  // files were red in CI and green on a desk for exactly that.
+  const told = { KAAL_BASE: "origin/release" };
+  assert.equal(wallEnv(told).KAAL_BASE, "origin/release");
+  assert.equal(caseEnv(told).KAAL_BASE, undefined);
+  // And a case still gets everything a wall clears, because it is a wall's
+  // environment and one thing further: the same marker, the same reporter
+  // rule, and the runner's own context gone.
+  assert.equal(caseEnv(told).KAAL_GATES, "1");
+  assert.equal(caseEnv().NODE_TEST_CONTEXT, undefined);
+  assert.equal(
+    caseEnv({ NODE_OPTIONS: "--test-reporter=spec" }).NODE_OPTIONS,
+    undefined,
+  );
+  // The branch is not cleared. The seats wall reads it, no case that spawns a
+  // board reads it back, and a sweep of every case file in the tree found it
+  // turns nothing red. Clearing what is not leaking would be a rule nobody
+  // can point at a failure for.
+  assert.equal(caseEnv({ KAAL_BRANCH: "build/x" }).KAAL_BRANCH, "build/x");
 });

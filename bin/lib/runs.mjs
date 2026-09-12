@@ -16,7 +16,7 @@ import {
 import { join, dirname, posix } from "node:path";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import { wallEnv } from "./gates.mjs";
+import { caseEnv } from "./gates.mjs";
 import { owes } from "./reviews.mjs";
 
 /** The fields a record carries, as they are written and as they are read. */
@@ -188,7 +188,7 @@ export function writeRuns(root) {
       ["--test", "--test-reporter=tap", join(root, path)],
       {
         encoding: "utf8",
-        env: wallEnv(),
+        env: caseEnv(),
         stdio: ["ignore", "pipe", "inherit"],
       },
     );

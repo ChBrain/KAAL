@@ -10,7 +10,7 @@ cases:
   bin/lib/boundary.test.mjs: 21805bb1235da8291a6d7b90202d9521a962c648ee5d3729bd540ce577bd303b
   bin/lib/drawings.test.mjs: 079777f6386638984bc3e7a0bfe17d3be96996b81bf0f9c766c4c5bfb7702b59
   bin/lib/fixtures.test.mjs: 2a8ea7a93a27bad4b899367c69769b0edb626cd14bc068b3ef587ba4aa42fb32
-  bin/lib/gates.test.mjs: f20722f234a1d0aea854fc1ba5600b7d8a17189c637587b0969f2d2c38fa0ccf
+  bin/lib/gates.test.mjs: 5bdbac99ccf61d96c6e565ba3c6823079b6d162962da484511fc21467dbb9922
   bin/lib/judged.test.mjs: ea777763ffd7e7b2f2eb8c7cf277406a5c901e6f7783100f1db2655603b8f7f7
   bin/lib/ledger.test.mjs: 48e25762907d1efb6aca7894edb8be6ef6e024e9c12f798ce7ae9c78e307f000
   bin/lib/record.test.mjs: 94c65431a35229599623306a9a8f969c46c49b32a73e8e6cd742ccabb7c03d8d
@@ -29,6 +29,7 @@ cases:
   bin/lib/traces.test.mjs: d4ac671061589837bdb523380a618ffb57e6afda593c36a52a499f688d9a2b60
   skills/analyse/scripts/count.test.mjs: 94d67a0b353f913eeeb965147cb104528985fd431edcb6c4daba014ef917d774
 reviews:
+  cases/bin/lib/gates.test.mjs: reviewed-no-impact@5bdbac99ccf61d96c6e565ba3c6823079b6d162962da484511fc21467dbb9922 by developer: it gained the unit that keeps the target this tree is judged by out of a case while leaving it in a wall; the case is the same case and this suite still covers it
   cases/bin/lib/promote.test.mjs: reviewed-no-impact@554a18dbf817385ea43d23af1a298c7e1b2f28eba3767d92a4e554d3ff291c4c by developer: the line naming this case was written before its last unit, the one about reading a ref where a person types one; it is the same case and this suite still covers it
   cases/bin/lib/plans.test.mjs: reviewed-no-impact@69defc474a56283f459ae82991432cbc4e20ff58db1cdceac1e439819cbe524d by developer: it gained five units, for the two readers a plan's selection needs, the line the board prints about it, and the two scopes that keep the new rule off the three walls that glob their own files; the case is the same case and this suite still covers it
 ---

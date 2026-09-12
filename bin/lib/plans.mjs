@@ -17,7 +17,7 @@ import {
 import { join } from "node:path";
 import { splitTrace } from "./traces.mjs";
 import { spawnSync } from "node:child_process";
-import { wallEnv } from "./gates.mjs";
+import { caseEnv } from "./gates.mjs";
 
 /** The place the plans live in, below the test tree's own root page. */
 export const PLANS = join("tests", "plans");
@@ -92,14 +92,16 @@ export function unrunnable(root, plan) {
  */
 export function runCases(root, paths) {
   if (!paths.length) return { ok: false, cases: 0, red: [] };
-  // `wallEnv` clears the runner's own marker. Without it a run started from
+  // `caseEnv` clears the runner's own marker. Without it a run started from
   // inside `node --test` reports as a subtest of its parent and exits 0
-  // whatever happened, which is green on nothing.
+  // whatever happened, which is green on nothing. It clears the target this
+  // tree is judged by for the same reason: a case asks about the tree it
+  // built, and a board it spawns must not read this one's.
   const run = (files) =>
     spawnSync(process.execPath, ["--test", "--test-reporter=tap", ...files], {
       cwd: root,
       encoding: "utf8",
-      env: wallEnv(),
+      env: caseEnv(),
     });
   if (run(paths).status === 0)
     return { ok: true, cases: paths.length, red: [] };
