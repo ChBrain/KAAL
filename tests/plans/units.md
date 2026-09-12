@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: c277f2ec56b9eb6c1dbfae87e9afb5c6c42e17827ecdd9fbc9945cfbbbc9e0da
+  units: 72dcf49e41a8fdf2627a7ca3d0e4408b5babbc499907043d1754fde13384e989
 reviews:
-  suites/units: reviewed-no-impact@c277f2ec56b9eb6c1dbfae87e9afb5c6c42e17827ecdd9fbc9945cfbbbc9e0da by developer: three of the cases this suite names grew, because the units that tested the same modules from the tester's tree were merged into them; which suites this plan uses is unchanged
+  suites/units: reviewed-no-impact@72dcf49e41a8fdf2627a7ca3d0e4408b5babbc499907043d1754fde13384e989 by developer: the suite gained the two units that sit beside the directories they test, `assess/` and `witness/`; which suites this plan uses is unchanged
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

@@ -2,6 +2,8 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
+  bin/lib/assess.test.mjs: 070942b1d71b1c48da3396b750ec633c739b4e08b3ed297241dc7032d3f10c80
+  bin/lib/witness.test.mjs: a97933f824563a295a6f8c117c2667ba122316e2c86e0da63a03b638a0ef1495
   bin/lib/acceptance.test.mjs: dad6cb7a571aa219ca2bc5d1ecbfaed81fd8cac23e99573e7213e04bc6c5dfae
   bin/lib/agents.test.mjs: e44a7e5ae36f023e4f72fceea82c514279c6d5185f74e34b3155eaf13acddc4c
   bin/lib/boundary.test.mjs: 21805bb1235da8291a6d7b90202d9521a962c648ee5d3729bd540ce577bd303b
