@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: b53068623fd4ee2fd3f4696d3356a69add5c9ca71a9d16f64753a2622be58962
+  acceptance: f15391c2e75dfd4571b1af2387646694668f5f18ea70432039bccf3f07dd12e4
 reviews:
-  suites/acceptance: reviewed-no-impact@b53068623fd4ee2fd3f4696d3356a69add5c9ca71a9d16f64753a2622be58962 by analyst: the suite recorded a read of a case that gained a criterion, which changes the suite's page and never which suites this plan uses; `--write` advancing that pin is the same page moving again
+  suites/acceptance: reviewed-no-impact@f15391c2e75dfd4571b1af2387646694668f5f18ea70432039bccf3f07dd12e4 by analyst: the suite recorded a read of a case that moved onto fixed ground, which changes the suite's page and never which suites this plan uses; `--write` advancing that pin moves the same page again
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
