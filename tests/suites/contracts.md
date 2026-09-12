@@ -2,6 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
+  architecture/a-bug-names-where-it-can-be-fixed/contracts.test.mjs: 7c272160dd0d2c2fe76ce602d579e33f9eca11aab5918dc5d739da75aa78bd48
   architecture/a-plan-picks-its-suites/contracts.test.mjs: 61737cd7ae490abdb81a046b71d2735ca2bd7eac3ca00bb444193136f8f79c1d
   architecture/a-promotion-names-what-it-refuses/contracts.test.mjs: fc050ed4efe2c13f6f2b4ee27a45ec655dfa62d787089da98d7a6fbf4f1bd807
   architecture/a-change-declares-its-class/contracts.test.mjs: 3c9174d8ae98e6576a750f2d6990c14f21f0fd4132335ef289c1be57ee50473e
