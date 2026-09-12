@@ -1,7 +1,9 @@
 ---
 traces:
-  requirement: push-v1@cd52c37170763eda3069d20b62a6dd4b25360468f92a265bcb32fa99e51517ed
+  requirement: push-v1@9862ad13549e7ea50b3f1f964510641b5ebd7f55b32a6f4e5189728c476cda77
   principles: nothing
+reviews:
+  requirement/push-v1: reviewed-no-impact@9862ad13549e7ea50b3f1f964510641b5ebd7f55b32a6f4e5189728c476cda77 by architect: the fifth criterion stopped counting a test file as a script and stopped fixing where a script's test lives. This drawing draws the ledger, the record and the workflow; it owns no seam about where a test file sits, so neither clause reaches a seam here
 ---
 
 # Drawing: push-v1
