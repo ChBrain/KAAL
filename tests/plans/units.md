@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: faca719e1a925b10ec5c6ca6b3b29404a3d705cad864c0631016bee43f1cb25e
+  units: 01b8b7b24cab0b04e377f0ea0ec85ccee0aa7683632f890817ca6bb133557f0b
 reviews:
-  suites/units: reviewed-no-impact@faca719e1a925b10ec5c6ca6b3b29404a3d705cad864c0631016bee43f1cb25e by developer: the suite gained the one case that is about the command rather than a module, which this plan's wall does not yet run; which suites this plan uses is unchanged and the gate is governance's
+  suites/units: reviewed-no-impact@01b8b7b24cab0b04e377f0ea0ec85ccee0aa7683632f890817ca6bb133557f0b by developer: the suite re-pinned one case it already names, the units beside `plans.mjs`; which suites this plan uses is unchanged and no case was added to or taken from it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

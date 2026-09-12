@@ -156,7 +156,13 @@ case under `tests/`, which points at cases and does not hold them, and a test
 file under a tree the suites reach that no suite names. A file inside a
 `fixtures/` directory is never asked for, because a fixture is a scratch tree
 built for a case. And it says how far each plan reaches, in suites and in
-cases, on its own line and whatever the findings say. Which end is missing is the finding's own kind, `plan` or `wall`,
+cases, on its own line and whatever the findings say, and where a `regression`
+plan exists it names every case that plan reaches by path, because a reader
+asking what is protected is asking about one plan and wants the paths rather
+than a number. A case that plan reaches which a wall may not run, which today
+means a path under `evals/`, is a finding naming it: a model's reading cannot
+be re-run to the same answer twice, so it is evidence and never a gate. A plan
+naming no suite is a finding in the words a suite naming no case uses. Which end is missing is the finding's own kind, `plan` or `wall`,
 because a plan is usually named for its wall. What a plan's globs match and
 what number it states are no longer read here: a plan picks suites, and a
 selection owns neither a place nor a count. `--write` still rewrites a number
@@ -314,6 +320,18 @@ seat is still working and can see the red; above it a consumer installs. A red
 wall that passes is a block with an owner and never a licence, and the answer
 says so on its own line. Takes a root. Exits 0, 1 or 2 (`gates-v1`, `gates-v2`,
 `nothing-passes-vacuously`, `a-promotion-names-what-it-refuses`).
+
+## regression
+
+Runs the cases the `regression` plan reaches and nothing else, and says how
+many it ran. The selection is read from `tests/plans/regression.md` and the
+suites it names, so what is re-run to protect a target changes with a diff in
+`tests/` and in no other lane. A plan reaching no case is red and says so: a
+selection that runs nothing is not a selection that passed. A red run is asked
+again once per case, because the runner flattens several files into one stream
+of test names and never says which file a name came from, so the answer can
+name the case that broke. Takes a root. Exits 0 or 1
+(`a-plan-picks-its-suites`).
 
 ## promote
 
