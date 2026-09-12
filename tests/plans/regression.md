@@ -2,7 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 78a55754b367fbf7236df34a8e96c334e50f6cb7f532bae41e57308a7b54e630
+  acceptance: 7e05ba944f2cadaf58b6f53a63fa1b648210d74dcc1e98bc93ef8580c8096111
+reviews:
+  suites/acceptance: reviewed-no-impact@7e05ba944f2cadaf58b6f53a63fa1b648210d74dcc1e98bc93ef8580c8096111 by analyst: the suite gained the case for the task that gives a red case an owner; which suites this plan uses is unchanged and no case was taken out of it
 ---
 
 # Test plan: regression

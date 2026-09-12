@@ -2,6 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
+  requirements/a-bug-names-where-it-can-be-fixed/acceptance.test.mjs: df8f6eb1b8cba9586f31a138242f49826fd02464affbd5fdc84e9d6c40c319b0
   requirements/a-plan-picks-its-suites/acceptance.test.mjs: 907f180b481e77dfc96826d75828fa2a6cd73736295d783644c7185266269d93
   requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: 369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273
   requirements/a-build-says-what-it-proved/acceptance.test.mjs: 54383c21e9d8f662016d28a06514c3302955b3f7eba9c1f16b62d8f0bdd9af89
