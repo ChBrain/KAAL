@@ -22,6 +22,7 @@ cases:
   requirements/a-task-names-its-people/acceptance.test.mjs: 48cab58695a03de78ddbaa22113e8af314e90fdbc420ceb4be9aa0ea64192230
   requirements/a-trace-pins-what-it-read/acceptance.test.mjs: d5e13c4db6a20c225c2acc2122f5acdd29d41c50bf7cc680120f7e5d13bae23a
   requirements/a-tree-has-one-root/acceptance.test.mjs: b4ebddad4ff867640f125009ffeaf292d1d13979e1ebca032fbad184e49d2725
+  requirements/a-wall-that-does-not-apply-reports/acceptance.test.mjs: a5b40fc764187ca3cb2bb07c6bf852a56ed76a54a168d443d0ae5e2b90bf44b9
   requirements/a-wall-reads-one-format/acceptance.test.mjs: 5cc239a668bdd2e253fa8302ba7b908d7684e74642af4655c1580baf3aab21a8
   requirements/agent-v1/acceptance.test.mjs: c898aa3f7916cf496335811bc43c49a6bcccb675440bb6012d1e9c14e0a1f112
   requirements/an-architect-names-its-principles/acceptance.test.mjs: afda6f768fb7c10d2a1112c657479743614843252d1d485b538e4cbcb1868373
