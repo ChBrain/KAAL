@@ -29,6 +29,7 @@ cases:
   bin/lib/seats.test.mjs: e772a35dafa54dbc9e1851c8d5247074393239dbbbb9308d2d018023b2510871
   bin/lib/traces.test.mjs: d4ac671061589837bdb523380a618ffb57e6afda593c36a52a499f688d9a2b60
   skills/analyse/scripts/count.test.mjs: 94d67a0b353f913eeeb965147cb104528985fd431edcb6c4daba014ef917d774
+  skills/retro-4ls/scripts/name.test.mjs: 42530f977a5c3759545e97c834d96b229a752f24510716527c598c53930bcadc
 reviews:
   cases/bin/lib/gates.test.mjs: reviewed-no-impact@5bdbac99ccf61d96c6e565ba3c6823079b6d162962da484511fc21467dbb9922 by developer: it gained the unit that keeps the target this tree is judged by out of a case while leaving it in a wall; the case is the same case and this suite still covers it
   cases/bin/lib/promote.test.mjs: reviewed-no-impact@554a18dbf817385ea43d23af1a298c7e1b2f28eba3767d92a4e554d3ff291c4c by developer: the line naming this case was written before its last unit, the one about reading a ref where a person types one; it is the same case and this suite still covers it
