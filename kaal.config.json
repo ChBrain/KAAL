@@ -139,7 +139,7 @@
     },
     {
       "name": "units",
-      "command": "node --test tests/*.test.mjs bin/lib/*.test.mjs skills/*/scripts/*.test.mjs",
+      "command": "node --test bin/*.test.mjs bin/lib/*.test.mjs skills/*/scripts/*.test.mjs",
       "fix": "fix the unit; never edit the test to pass"
     },
     {
