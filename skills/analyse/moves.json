@@ -4,10 +4,10 @@
   "moves": [
     {
       "name": "count the ask into tasks",
-      "rung": "nlp",
-      "candidate": "skill",
+      "rung": "skill",
+      "candidate": null,
       "script": null,
-      "test": null
+      "test": "evals/analyse/adversarial-scope"
     },
     {
       "name": "write the goal",
