@@ -10,7 +10,6 @@ import { spawnSync } from "node:child_process";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..");
 const F = join(HERE, "fixtures");
-const INSIDE = process.env.KAAL_GATES === "1";
 const kaal = (...args) =>
   spawnSync("node", [join(ROOT, "bin", "kaal.mjs"), ...args], {
     cwd: ROOT,
@@ -87,25 +86,24 @@ test("3. the acceptance wall runs kaal acceptance over the requirements glob", (
   );
 });
 
-test("4. the board is green while push-v1 is unfinished with its manual step undone", () => {
+test("4. an unfinished task reads not delivered and does not fail the wall", () => {
   // Superseded by `a-task-is-delivered-by-its-run`, and it is the same claim
   // asked of the report. It used to read `- Status: open` from the page;
   // there is no page to ask, so it asks the tree: a task nobody has proved
   // has no record, and a red suite with no record is work in progress rather
   // than a failure. That is the whole of what this criterion ever said.
-  assert.ok(
-    !existsSync(join(ROOT, "tests", "runs", "push-v1.md")),
-    "push-v1 has a record, so it is not the unfinished task this reads",
-  );
-  const r = kaal(
-    "acceptance",
-    join(ROOT, "requirements", "push-v1", "acceptance.test.mjs"),
-  );
+  //
+  // On fixed ground, which is a rule this case used to break. It read
+  // `push-v1` out of the league's own tree because that task happened to be
+  // unfinished, and the day two models passed a fixture and somebody
+  // recorded the run, the case went red for a reason that has nothing to do
+  // with the criterion. An unfinished task is a shape, and `open-red` is a
+  // fixture of that shape that no later day can finish.
+  const r = kaal("acceptance", fixture("open-red"));
   assert.match(
     r.stdout,
     /not delivered/,
     `an unfinished task did not read as not delivered: ${r.stdout}`,
   );
   assert.equal(r.status, 0, `an unfinished task failed the wall: ${r.stdout}`);
-  if (!INSIDE) assert.equal(kaal("gates").status, 0, "the board is red");
 });

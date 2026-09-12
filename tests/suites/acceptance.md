@@ -52,7 +52,7 @@ cases:
   requirements/skills-v1/acceptance.test.mjs: f28ed33346b28f2212ec87c7551dea0494bfc908c41aa253a4bbb8d5267b3d86
   requirements/standard-v1/acceptance.test.mjs: acc888757fa26ff42c95fb721728ed9c8d5052682e2b7975e292bb045de91e7c
   requirements/standard-v2/acceptance.test.mjs: 110cf793f4690b3c737dc591b0cdc5357ea45d20fd3e12dbece527c25abffc65
-  requirements/status-v1/acceptance.test.mjs: 5cb9cc99c1546973e47c225f99d713d3737436daa5de2c537707b0a2d0f84d39
+  requirements/status-v1/acceptance.test.mjs: 0cf49af1968edadee4db9a8876cc00017771390d82884d90f9c5057af5f4454f
   requirements/status-v2/acceptance.test.mjs: e417e967840a9cf5a14284021162f92893d67ff273105647e5b402bb4782d78f
   requirements/the-board-counts-the-reads/acceptance.test.mjs: 8c6a00039b3d35ab40fee3ff6d8f30eaa95f3767ef69116166a9ea20e53a931e
   requirements/the-board-runs-on-two-runtimes/acceptance.test.mjs: b3afd3f6dd641d696bc7c05140fb5382c76f03b85dc789dbde96feabf5f87582
@@ -69,6 +69,7 @@ cases:
   requirements/where-a-skill-acts/acceptance.test.mjs: 60832efd3c54d369a4f9062e02f51542250d5f93bb1f940a8d24b5f213eda555
   requirements/witness-a-tree/acceptance.test.mjs: 853bec795ceb60eb98fb6a91658f3d8def4a92ddfc74d532fe24cf6b602ef51d
 reviews:
+  cases/requirements/status-v1/acceptance.test.mjs: reviewed-no-impact@0cf49af1968edadee4db9a8876cc00017771390d82884d90f9c5057af5f4454f by analyst: its fourth case stopped reading `push-v1` out of the league's own tree and reads the `open-red` fixture instead; the case is the same case and this suite still covers it
   cases/requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: reviewed-no-impact@369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273 by analyst: the case gained its ninth, the one about the board judging by the target it opens into; it is the same case and this suite still covers it
   cases/requirements/a-suite-names-its-cases/acceptance.test.mjs: reviewed-no-impact@5a31cada2e3aac7cc19410a2318cf7ebc42347b9d15e787b41fa827bed087101 by tester: criterion 5's fixture gave its two plans one wall as well as one suite, which proved a cardinality the criterion does not claim; the fixture now gives each plan a wall of its own and the case is the same case this suite covers
   cases/requirements/the-test-tree-is-written-down/acceptance.test.mjs: reviewed-no-impact@79963dd650ca5dcfc030ca7404b7b56b1c615983961ba15cd978178d81c679d5 by tester: two of its cases stopped asserting a plan's glob and its count, which a-suite-names-its-cases supersedes; the case is the same case and this suite still covers it
