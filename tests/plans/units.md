@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: 075f0d29347ecc413418b4abd34463c98bff19cbd1311d35f94d41732c1119ad
+  units: c30c6f10eb926caad1d50a2bdf255e1da106cc1f504bb2eb23684b8ca6dfb2ec
 reviews:
-  suites/units: reviewed-no-impact@075f0d29347ecc413418b4abd34463c98bff19cbd1311d35f94d41732c1119ad by developer: the suite gained the case beside the promotion's readers and recorded a read of it; which suites this plan uses is unchanged
+  suites/units: reviewed-no-impact@c30c6f10eb926caad1d50a2bdf255e1da106cc1f504bb2eb23684b8ca6dfb2ec by developer: the suite gained the fifteen units that moved beside the modules they import, which are the same cases this plan's wall already ran from the tester's tree; which suites this plan uses is unchanged
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
