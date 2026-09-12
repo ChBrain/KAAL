@@ -24,14 +24,14 @@ cases:
   bin/lib/class.test.mjs: ff1fa58ceee2c20195804a66a926aac3db75a37ea7750d5eade3097cb99b2b0a
   bin/lib/applies.test.mjs: e1af6a2dde4b07ee7b85a2b1c8c06da3adf71f4a33b591460fcb3a65aa45ae9d
   bin/lib/frontmatter.test.mjs: a07fbaa3c06ef21461d7d54bd2589246bdeb92f50dc55ffb84216a0459036db2
-  bin/lib/plans.test.mjs: 69defc474a56283f459ae82991432cbc4e20ff58db1cdceac1e439819cbe524d
+  bin/lib/plans.test.mjs: 472302669bc52102929e2e344dd731fd83cfda7e93d544f9b3ee7b26c24b4e49
   bin/lib/seats.test.mjs: e772a35dafa54dbc9e1851c8d5247074393239dbbbb9308d2d018023b2510871
   bin/lib/traces.test.mjs: d4ac671061589837bdb523380a618ffb57e6afda593c36a52a499f688d9a2b60
   skills/analyse/scripts/count.test.mjs: 94d67a0b353f913eeeb965147cb104528985fd431edcb6c4daba014ef917d774
 reviews:
   cases/bin/lib/gates.test.mjs: reviewed-no-impact@5bdbac99ccf61d96c6e565ba3c6823079b6d162962da484511fc21467dbb9922 by developer: it gained the unit that keeps the target this tree is judged by out of a case while leaving it in a wall; the case is the same case and this suite still covers it
   cases/bin/lib/promote.test.mjs: reviewed-no-impact@554a18dbf817385ea43d23af1a298c7e1b2f28eba3767d92a4e554d3ff291c4c by developer: the line naming this case was written before its last unit, the one about reading a ref where a person types one; it is the same case and this suite still covers it
-  cases/bin/lib/plans.test.mjs: reviewed-no-impact@69defc474a56283f459ae82991432cbc4e20ff58db1cdceac1e439819cbe524d by developer: it gained five units, for the two readers a plan's selection needs, the line the board prints about it, and the two scopes that keep the new rule off the three walls that glob their own files; the case is the same case and this suite still covers it
+  cases/bin/lib/plans.test.mjs: reviewed-no-impact@472302669bc52102929e2e344dd731fd83cfda7e93d544f9b3ee7b26c24b4e49 by developer: it gained the two units for a count read out of a pin, one on the reader and one on the writer that corrupted a page; the case is the same case and this suite still covers it
 ---
 
 # Test suite: units

@@ -534,3 +534,46 @@ test("testGates does not read a globbing gate's subcommand as a plan it names", 
     },
   );
 });
+
+test("countOf reads a plan's prose and never its frontmatter", () => {
+  // A pin is a sha and a sha ends in a digit as often as not. The line after
+  // a plan's `parent` pin is the `suites:` block, so the text holds
+  // `1\nsuites:`, and a count pattern whose separator crosses a line reads
+  // that digit as the number the plan states. Every plan page in this league
+  // answered 1 that way, and not one of them states a count at all: a plan
+  // owns a selection, and a selection owns neither a place nor a count.
+  const page = (extra = "") =>
+    "---\ntraces:\n  parent: strategy@abc1\nsuites:\n  units: a\n---\n\n" +
+    `# Test plan: units\n\n- Wall: units\n${extra}`;
+  assert.equal(countOf(page()), null);
+  // And where a plan's prose does state one, it is still read.
+  assert.equal(countOf(page("\nIt uses 3 suites.\n")), 3);
+});
+
+test("writeCounts does not rewrite a page whose only digit is in a pin", () => {
+  // The corruption this guards: the replacement collapsed the newline the
+  // pattern had matched, so the sha lost its last character and the `suites:`
+  // key was pulled onto the pin's line. Every line below shifted up by one
+  // and the page still parsed, so no wall said a word.
+  const pin = "a".repeat(63) + "1";
+  const text =
+    `---\ntraces:\n  parent: strategy@${pin}\nsuites:\n  units: a\n---\n\n` +
+    "# Test plan: units\n\n- Wall: units\n";
+  scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        gates: [{ name: "units", command: "node bin/kaal.mjs units" }],
+      }),
+      "tests/plans/units.md": text,
+    },
+    (root) => {
+      writeCounts(root);
+      const after = readFileSync(
+        join(root, "tests", "plans", "units.md"),
+        "utf8",
+      );
+      assert.equal(after, text, "the page was rewritten");
+      assert.match(after, new RegExp(`parent: strategy@${pin}$`, "m"));
+    },
+  );
+});
