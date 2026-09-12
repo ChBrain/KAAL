@@ -17,6 +17,8 @@ import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import {
   checkPlans,
+  unrunnable,
+  reached,
   countOf,
   globsOf,
   planPages,
@@ -419,4 +421,116 @@ test("both directions are reported, and neither in the other's words", () => {
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("testGates reads a plan's name out of a command, and only a plan that is there", () => {
+  scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        gates: [
+          { name: "regression", command: "node bin/kaal.mjs regression" },
+          { name: "nonesuch", command: "node bin/kaal.mjs nonesuch" },
+          { name: "format", command: "npx prettier --check ." },
+        ],
+      }),
+      "tests/plans/regression.md":
+        "---\ntraces:\n  parent: strategy\n---\n\n# Test plan: regression\n\n- Wall: regression\n",
+    },
+    (root) => {
+      // A gate owes a plan when it names one that exists. A gate naming a word
+      // no plan answers to runs no test and owes nothing, which is the same
+      // answer a gate with no glob has always had.
+      assert.deepEqual(
+        testGates(root).map((g) => g.name),
+        ["regression"],
+      );
+    },
+  );
+});
+
+test("unrunnable reads the prefix and not the word", () => {
+  // `evals/` is a place. A case whose path merely contains the letters, in a
+  // directory named for them further down, is a case like any other.
+  scratch(
+    {
+      "tests/plans/regression.md":
+        "---\ntraces:\n  parent: strategy\n  suites: a\n---\n\n# Test plan: regression\n\n- Wall: regression\n",
+      "tests/suites/a.md": suite("evals/x/y.md, bin/evals/z.test.mjs"),
+    },
+    (root) => {
+      const f = unrunnable(root, "regression");
+      assert.equal(f.length, 1, JSON.stringify(f));
+      assert.match(f[0].message, /evals\/x\/y\.md/);
+    },
+  );
+});
+
+test("reached says so where a plan reaches nothing, rather than an empty list", () => {
+  scratch(
+    {
+      "tests/plans/regression.md":
+        "---\ntraces:\n  parent: strategy\n  suites: gone\n---\n\n# Test plan: regression\n\n- Wall: regression\n",
+    },
+    (root) => {
+      // A suite the plan names that is not there leaves it reaching nothing,
+      // and a line reading `reaches:` with nothing after it is a line a reader
+      // has to guess at.
+      assert.match(reached(root, "regression"), /reaches no case/);
+    },
+  );
+});
+
+test("checkPlans asks for a suite where the gate names the plan, and nowhere else", () => {
+  // The rule is about a wall that runs what a plan picks. A gate that globs
+  // its own files says what it runs without reading a plan at all, and asking
+  // it for a selection would be a finding against three walls that never had
+  // one. A refactor that widens this back turns another seat's cases red.
+  const page = (wall) =>
+    `---\ntraces:\n  parent: strategy\n---\n\n# Test plan: ${wall}\n\n- Wall: ${wall}\n`;
+  scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        gates: [
+          { name: "units", command: "node --test tests/*.test.mjs" },
+          { name: "regression", command: "node bin/kaal.mjs regression" },
+        ],
+      }),
+      "tests/plans/units.md": page("units"),
+      "tests/plans/regression.md": page("regression"),
+    },
+    (root) => {
+      assert.deepEqual(
+        checkPlans(root)
+          .filter((f) => f.message === "names no suite")
+          .map((f) => f.artefact),
+        ["regression"],
+      );
+    },
+  );
+});
+
+test("testGates does not read a globbing gate's subcommand as a plan it names", () => {
+  // The three gates that glob their files spell a subcommand that is also the
+  // name of the plan about them. Reading that as a reference gave those walls
+  // a selection they never had, and turned a fixture of another seat's red.
+  scratch(
+    {
+      "kaal.config.json": JSON.stringify({
+        gates: [
+          {
+            name: "acceptance",
+            command:
+              "node bin/kaal.mjs acceptance requirements/*/acceptance.test.mjs",
+          },
+        ],
+      }),
+      "tests/plans/acceptance.md":
+        "---\ntraces:\n  parent: strategy\n---\n\n# Test plan: acceptance\n\n- Wall: acceptance\n",
+    },
+    (root) => {
+      const [g] = testGates(root);
+      assert.equal(g.plan, undefined);
+      assert.deepEqual(g.globs, ["requirements/*/acceptance.test.mjs"]);
+    },
+  );
 });

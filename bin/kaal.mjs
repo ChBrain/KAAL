@@ -43,7 +43,15 @@ import {
   counts as reviewCounts,
   owes,
 } from "./lib/reviews.mjs";
-import { checkPlans, writeCounts, reach } from "./lib/plans.mjs";
+import {
+  checkPlans,
+  writeCounts,
+  reach,
+  reached as reachedBy,
+  unrunnable,
+  casesOf,
+  runCases,
+} from "./lib/plans.mjs";
 import { readRun, isFresh, staleWhy, writeRuns } from "./lib/runs.mjs";
 import { binding } from "./lib/targets.mjs";
 import { asked, promote } from "./lib/promote.mjs";
@@ -70,7 +78,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | promote [root] [--into <target>] [--from <head>] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | promote [root] [--into <target>] [--from <head>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -121,6 +129,10 @@ if (cmd === "ledger") {
     ...checkTraces(troot),
     ...checkShape(troot),
     ...checkPlans(troot),
+    // A case the regression plan reaches that a wall may not run. Asked of
+    // that plan alone, because it is the one whose selection protects a
+    // target, and a tree with no such plan is asked nothing.
+    ...unrunnable(troot, "regression"),
   ].map((f) => `${f.artefact}: ${f.kind}: ${f.message}`);
   // The counts whatever the answer, so a reader sees what is owed without
   // asking a second question, and sees it on a red tree too.
@@ -134,6 +146,11 @@ if (cmd === "ledger") {
     .map((r) => `${r.plan}: ${r.suites} suite(s), ${r.cases} case(s)`)
     .join("; ");
   if (reached) console.log(`traces: plans reach ${reached}`);
+  // And what the regression plan protects, case by case. The counts above say
+  // how far each plan reaches and this says where: a reader asking what is
+  // protected is asking about one plan and wants the paths, not a number.
+  if (reach(troot).some((r) => r.plan === "regression"))
+    console.log(reachedBy(troot, "regression"));
   console.log(
     findings.length
       ? `traces: pins: ${tally}`
@@ -493,6 +510,20 @@ if (cmd === "ledger") {
   for (const a of artefacts) console.log(`class: ${a} moved`);
   if (!artefacts.length) console.log("class: nothing a consumer notices moved");
   process.exit(0);
+} else if (cmd === "regression") {
+  // The wall the regression plan is about: it runs the cases that plan
+  // reaches and nothing else, and the plan is the only place the selection
+  // is written. A plan reaching no case is red rather than vacuously green.
+  const rroot2 = arg && !arg.startsWith("-") ? arg : cwd;
+  const cases = casesOf(rroot2, "regression");
+  const r = runCases(rroot2, cases);
+  for (const f of r.red) console.log(`regression: case: ${f} is red`);
+  console.log(
+    r.cases
+      ? `regression: ran ${r.cases} case(s) the plan reaches`
+      : "regression: the plan reaches no case, so nothing ran",
+  );
+  process.exit(r.ok ? 0 : 1);
 } else if (cmd === "gates") {
   const groot = arg && !arg.startsWith("-") ? arg : cwd;
   const g = runGates(groot);

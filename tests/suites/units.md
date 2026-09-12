@@ -24,13 +24,13 @@ cases:
   bin/lib/class.test.mjs: ff1fa58ceee2c20195804a66a926aac3db75a37ea7750d5eade3097cb99b2b0a
   bin/lib/applies.test.mjs: e1af6a2dde4b07ee7b85a2b1c8c06da3adf71f4a33b591460fcb3a65aa45ae9d
   bin/lib/frontmatter.test.mjs: a07fbaa3c06ef21461d7d54bd2589246bdeb92f50dc55ffb84216a0459036db2
-  bin/lib/plans.test.mjs: 1ab584c4d087f66be7ca5c13e5308c6a73ea2a2ffd711be2ed88481d18432452
+  bin/lib/plans.test.mjs: 69defc474a56283f459ae82991432cbc4e20ff58db1cdceac1e439819cbe524d
   bin/lib/seats.test.mjs: e772a35dafa54dbc9e1851c8d5247074393239dbbbb9308d2d018023b2510871
   bin/lib/traces.test.mjs: d4ac671061589837bdb523380a618ffb57e6afda593c36a52a499f688d9a2b60
   skills/analyse/scripts/count.test.mjs: 94d67a0b353f913eeeb965147cb104528985fd431edcb6c4daba014ef917d774
 reviews:
   cases/bin/lib/promote.test.mjs: reviewed-no-impact@554a18dbf817385ea43d23af1a298c7e1b2f28eba3767d92a4e554d3ff291c4c by developer: the line naming this case was written before its last unit, the one about reading a ref where a person types one; it is the same case and this suite still covers it
-  cases/bin/lib/plans.test.mjs: reviewed-no-impact@bf5d1080c227b437ff5478376dbbc178ea04379000a3d9f449079f449c51eeca by tester: it gained the unit that holds the wall rule a refactor dropped; the case is the same case and this suite still covers it
+  cases/bin/lib/plans.test.mjs: reviewed-no-impact@69defc474a56283f459ae82991432cbc4e20ff58db1cdceac1e439819cbe524d by developer: it gained five units, for the two readers a plan's selection needs, the line the board prints about it, and the two scopes that keep the new rule off the three walls that glob their own files; the case is the same case and this suite still covers it
 ---
 
 # Test suite: units

@@ -16,6 +16,8 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { splitTrace } from "./traces.mjs";
+import { spawnSync } from "node:child_process";
+import { wallEnv } from "./gates.mjs";
 
 /** The place the plans live in, below the test tree's own root page. */
 export const PLANS = join("tests", "plans");
@@ -41,6 +43,86 @@ const COUNT = /(\d+)\s+suite/;
  * this league's three and the narrower reading finds only the third.
  * @param {string} root
  */
+/**
+ * The cases a plan reaches, through the suites it names: each once, because a
+ * case two of its suites name is one case, and sorted, so the answer is the
+ * same twice. A suite the plan names that is not there is walked past; the
+ * trace wall is what reports a name resolving to nothing.
+ * @param {string} root @param {string} plan
+ */
+export function casesOf(root, plan) {
+  const page = planPages(root).find((p) => p.name === plan);
+  if (!page) return [];
+  const want = new Set(planSuites(page.text).names);
+  const out = new Set();
+  for (const s of suitePages(root))
+    if (want.has(s.name)) for (const c of s.cases) out.add(c);
+  return [...out].sort();
+}
+
+/**
+ * A case this plan reaches that a wall may not run. Today that is a path
+ * under `evals/`: a model's reading cannot be re-run to the same answer
+ * twice, so it is evidence and never a gate. Asked about one plan and never
+ * about the tree, because that is the scope the criterion has; whether it
+ * should be wider is the analyst's.
+ * @param {string} root @param {string} plan
+ */
+export function unrunnable(root, plan) {
+  return casesOf(root, plan)
+    .filter((c) => c.startsWith("evals/"))
+    .map((c) => ({
+      artefact: `plans/${plan}`,
+      kind: "plan",
+      message: `reaches ${c}, which is a model's reading and never a case`,
+    }));
+}
+
+/**
+ * Run these cases and say what came back. Nothing to run is not a run that
+ * passed: a selection reaching no case is the vacuous green this league has a
+ * task about, so it answers red with a count of nothing.
+ *
+ * Asked once over all of them, and again file by file only where that failed.
+ * The runner flattens several files into one stream of test names and never
+ * says which file a name came from, so the fast answer and the exact answer
+ * are two different runs, and the exact one is only ever wanted when
+ * something is already wrong.
+ * @param {string} root @param {string[]} paths
+ */
+export function runCases(root, paths) {
+  if (!paths.length) return { ok: false, cases: 0, red: [] };
+  // `wallEnv` clears the runner's own marker. Without it a run started from
+  // inside `node --test` reports as a subtest of its parent and exits 0
+  // whatever happened, which is green on nothing.
+  const run = (files) =>
+    spawnSync(process.execPath, ["--test", "--test-reporter=tap", ...files], {
+      cwd: root,
+      encoding: "utf8",
+      env: wallEnv(),
+    });
+  if (run(paths).status === 0)
+    return { ok: true, cases: paths.length, red: [] };
+  return {
+    ok: false,
+    cases: paths.length,
+    red: paths.filter((f) => run([f]).status !== 0),
+  };
+}
+
+/**
+ * The line the board prints about what a plan protects, each case by its
+ * path, so a reader sees the selection without opening the plan, its suites
+ * and the cases in turn.
+ * @param {string} root @param {string} plan
+ */
+export function reached(root, plan) {
+  const cases = casesOf(root, plan);
+  return cases.length
+    ? `traces: ${plan} reaches: ${cases.join(", ")}`
+    : `traces: ${plan} reaches no case`;
+}
+
 export function testGates(root) {
   const p = join(root, "kaal.config.json");
   if (!existsSync(p)) return [];
@@ -51,14 +133,29 @@ export function testGates(root) {
     return [];
   }
   return (config.gates ?? [])
-    .map((g) => ({
-      name: g.name,
-      globs: (g.command ?? "")
-        .split(/\s+/)
-        .filter((a) => SUITE.test(a))
-        .sort(),
-    }))
-    .filter((g) => g.globs.length);
+    .map((g) => {
+      const words = (g.command ?? "").split(/\s+/);
+      const globs = words.filter((a) => SUITE.test(a)).sort();
+      return {
+        name: g.name,
+        globs,
+        // The second shape. A gate whose command names a plan runs what that
+        // plan picks, which is a wall that runs tests as much as a glob is,
+        // and the plans wall's rule is about walls that run tests. Read from
+        // the command rather than declared in a field beside it, because a
+        // field would put the pairing back in the lane this is moving it out
+        // of. Asked only of a gate carrying no glob: a gate that globs its
+        // files says what it runs without reading a plan at all, and the
+        // three that do carry a subcommand spelled like the plan about them,
+        // which this would otherwise read as a reference.
+        plan: globs.length
+          ? undefined
+          : words.find((a) =>
+              existsSync(join(root, "tests", "plans", `${a}.md`)),
+            ),
+      };
+    })
+    .filter((g) => g.globs.length || g.plan);
 }
 
 /** Every plan page, named by its file and read whole. @param {string} root */
@@ -130,14 +227,24 @@ export function checkPlans(root) {
       );
       continue;
     }
-    void gate;
     // A glob a plan still carries was its whole claim once and is a leftover
     // now: a plan picks suites, and a selection owns neither a place nor a
     // number. Inside the loop and after the two above, because each finding
     // stops its page: a plan whose wall does not exist has nothing for a
     // glob to be wrong about.
     const [leftover] = planSuites(p.text).findings;
-    if (leftover) find(p.name, leftover);
+    if (leftover) {
+      find(p.name, leftover);
+      continue;
+    }
+    // A plan picking nothing protects nothing, in the words a suite naming no
+    // case already answers. Asked of a plan whose gate names it and not of
+    // every plan: a gate that globs its files says what it runs on its own,
+    // and a gate that names a plan runs what that plan picks and nothing
+    // else, so an empty selection there is a wall over nothing. Which plans
+    // those are is read off the gate and never written down a second time.
+    if (gate.plan === p.name && !planSuites(p.text).names.length)
+      find(p.name, "names no suite");
   }
 
   // The wall's end of it, reported in its own words: which end is missing is
