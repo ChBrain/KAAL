@@ -209,7 +209,14 @@ the back door.
 The cadence is after every use of a skill: each real use ends with a
 self-diagnosis retro on that use, so the skill learns at the rate it is used
 and not at the rate someone remembers to ask. Retros accumulate; they are not
-acted on one by one. Each is filed under `retros/` and ends with the line
+acted on one by one. Each is filed under `retros/` at the name
+`scripts/name.mjs <skill> [root]` computes, which prints the path and the
+ordinal so the page and its `Period:` line come from one reading of what is
+already there. Never count the uses by hand: the number lives in the filename
+and in the line inside it, no wall reads either, and a number carried in
+someone's head is the only thing keeping two retros apart. This league holds
+two that both claim the fiftieth use of the code skill, and came within a
+filename of two more in one afternoon. Each ends with the line
 `Feeds: <skill>`. Beneath it, `Read: <skill>, <skill>` names every skill whose
 rules this run followed and which is not the one the retro feeds, so a skill
 that every seat reads and no seat files against stops being invisible; omit
