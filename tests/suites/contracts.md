@@ -19,6 +19,7 @@ cases:
   architecture/a-task-names-its-people/contracts.test.mjs: 76a45ef8648e6683c8d40c848d389d45e3d5f58097362ee9c647cbdf420c7cc7
   architecture/a-trace-pins-what-it-read/contracts.test.mjs: 5cd6256856ff32e43c3d731c7bbede3fedeb8e0e191d7005b7c896e27fc97be9
   architecture/a-tree-has-one-root/contracts.test.mjs: 0afed07e30607df07d68188a7fb01d6342e00f91e39eb1815bb2ebe79d87de0a
+  architecture/a-wall-that-does-not-apply-reports/contracts.test.mjs: da7b63a0d34969b830d656bb0d7e720c215426f810bd7c6ce08508a58720a799
   architecture/a-wall-reads-one-format/contracts.test.mjs: f8ef28a214cb4e16471a03145c574f45b1f24e29fd63837f3c2518840a577b3a
   architecture/agent-v1/contracts.test.mjs: 79ba9f76c7e904ca71f5b179c29090e609cf81bcc7c9156cdecc35ea29d72506
   architecture/an-architect-names-its-principles/contracts.test.mjs: 5141da3c75655f1d34dbd05b8edda3a22778ef8a82eebf0acd023d688e7916f1
