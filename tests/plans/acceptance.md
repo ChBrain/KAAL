@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: f4a45505e8d6892045c5904f3938813ac9e7d842b9299ec45cedde169d66ee3a
+  acceptance: 78a55754b367fbf7236df34a8e96c334e50f6cb7f532bae41e57308a7b54e630
 reviews:
-  suites/acceptance: reviewed-no-impact@f4a45505e8d6892045c5904f3938813ac9e7d842b9299ec45cedde169d66ee3a by analyst: the suite recorded a read of a case whose fifth stopped counting a test file as a script, which changes the suite's page and never which suites this plan uses
+  suites/acceptance: reviewed-no-impact@78a55754b367fbf7236df34a8e96c334e50f6cb7f532bae41e57308a7b54e630 by analyst: the suite gained the case for the task that gives a plan a selection of its own; which suites this plan uses is unchanged
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
