@@ -34,6 +34,21 @@ export function wallEnv(base = process.env) {
   return env;
 }
 
+// A case's environment is a wall's minus the target this tree is judged by.
+// A wall is about this tree and is told its target so it never guesses one,
+// which is why `wallEnv` keeps it; a case builds a tree of its own in a
+// scratch directory and asks the engine about that one, so the same variable
+// reaching it is an answer to a question it never asked. Where the case spawns
+// a board, KAAL_BASE decides whether that board's redness is binding, so an
+// inherited one silently changes the exit code the case is asserting about.
+// It is the same sentence the marker above carries: a nested run must not
+// inherit the runner's own declaration. A case that wants a target sets one.
+export function caseEnv(base = process.env) {
+  const env = wallEnv(base);
+  delete env.KAAL_BASE;
+  return env;
+}
+
 // A waiver is a human's act, recorded: waivers/<wall>.md with wall, who, why
 // and until. It never hides a red: the wall still runs and its line says
 // waived, with who and why; an expired or incomplete waiver counts for

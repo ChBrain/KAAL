@@ -1,8 +1,9 @@
 // The acceptance wall with a report. Nobody writes down whether a task was
 // delivered: the run just made and the run on record say so between them, in
 // one of four words. Regressed and nothing ran are failures; delivered and
-// not delivered are answers. Each test file runs under wallEnv, so the
-// verdict does not depend on the caller.
+// not delivered are answers. Each test file runs under caseEnv, so the
+// verdict depends neither on the caller nor on the target this tree is
+// judged by: a case builds its own tree and asks about that one.
 //
 // A drawing's verdict is its task's. That is not a special case bolted on:
 // the wall that judged drawings has always read the requirement whose task
@@ -11,7 +12,7 @@
 import { readFileSync, existsSync, globSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { spawnSync } from "node:child_process";
-import { wallEnv } from "./gates.mjs";
+import { caseEnv } from "./gates.mjs";
 import { readRun, verdict } from "./runs.mjs";
 
 /**
@@ -89,7 +90,7 @@ export function runJudged(files) {
   for (const file of expand(files)) {
     // The reporter is named and not inherited: node 22 prints TAP when this
     // output is piped and node 24 prints spec, both by default and both
-    // correctly, and the two patterns below read one of them. `wallEnv`
+    // correctly, and the two patterns below read one of them. `caseEnv`
     // clears any reporter from the environment, because a named one does not
     // beat an inherited one, it joins it and node then refuses the pair.
     const r = spawnSync(
@@ -97,7 +98,7 @@ export function runJudged(files) {
       ["--test", "--test-reporter=tap", file],
       {
         encoding: "utf8",
-        env: wallEnv(),
+        env: caseEnv(),
         stdio: ["ignore", "pipe", "inherit"],
       },
     );
