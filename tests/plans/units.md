@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: 72dcf49e41a8fdf2627a7ca3d0e4408b5babbc499907043d1754fde13384e989
+  units: faca719e1a925b10ec5c6ca6b3b29404a3d705cad864c0631016bee43f1cb25e
 reviews:
-  suites/units: reviewed-no-impact@72dcf49e41a8fdf2627a7ca3d0e4408b5babbc499907043d1754fde13384e989 by developer: the suite gained the two units that sit beside the directories they test, `assess/` and `witness/`; which suites this plan uses is unchanged
+  suites/units: reviewed-no-impact@faca719e1a925b10ec5c6ca6b3b29404a3d705cad864c0631016bee43f1cb25e by developer: the suite gained the one case that is about the command rather than a module, which this plan's wall does not yet run; which suites this plan uses is unchanged and the gate is governance's
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
