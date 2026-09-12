@@ -16,6 +16,7 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { splitTrace } from "./traces.mjs";
+import { parseFrontmatter } from "./frontmatter.mjs";
 import { spawnSync } from "node:child_process";
 import { caseEnv } from "./gates.mjs";
 
@@ -29,8 +30,32 @@ const SUITE = /\.test\.mjs$/;
  * and a bare path in a sentence is a path a sentence happens to contain.
  */
 const GLOB = /`([^`]*\*[^`]*\.test\.mjs)`/g;
-/** The number a plan states, which is a count of suites and says so. */
-const COUNT = /(\d+)\s+suite/;
+/**
+ * The number a plan states, which is a count of suites and says so. Read from
+ * the plan's prose and never from its frontmatter, and the separator is a
+ * space and never a line.
+ *
+ * A pin is a sha and a sha ends in a digit as often as not. The line after a
+ * plan's `parent` pin is the `suites:` block, so every page here holds
+ * `1\nsuites:`, and a pattern whose `\s` crossed a line read that digit as
+ * the number the plan stated: all three plans answered 1 and not one of them
+ * states a count at all. The writer then replaced what it had matched,
+ * collapsing the newline, so the sha lost its last character and the
+ * `suites:` key was pulled onto the pin's line. Every line below shifted up
+ * by one, the page still parsed, and no wall said a word.
+ */
+const COUNT = /(\d+)[ \t]+suite/;
+/** A page's prose, which is everything below the frontmatter block. */
+const prose = (text) => {
+  try {
+    return parseFrontmatter(text).body;
+  } catch {
+    // A page with no block is all prose. The trace wall is what reports that,
+    // and a reader that threw here would make this one's answer depend on a
+    // rule it does not hold.
+    return text;
+  }
+};
 
 /**
  * The gates that owe a plan, each with the globs it runs, sorted so two
@@ -186,7 +211,7 @@ export const globsOf = (text) =>
   [...text.matchAll(GLOB)].map((m) => m[1]).sort();
 /** What a plan says its globs match, or null where it says no number. */
 export const countOf = (text) => {
-  const n = text.match(COUNT)?.[1];
+  const n = prose(text).match(COUNT)?.[1];
   return n === undefined ? null : Number(n);
 };
 /** What they match now. A glob is read from the root, never from the cwd. */
@@ -308,7 +333,10 @@ export function writeCounts(root) {
     if (globs.join(" ") !== gate.globs.join(" ")) continue;
     const found = suitesUnder(root, globs);
     if (countOf(p.text) === found) continue;
-    const next = p.text.replace(COUNT, `${found} suite`);
+    // The replacement is made in the prose and put back below the block, so a
+    // page whose only digit before the word is inside a pin is left whole.
+    const body = prose(p.text);
+    const next = p.text.replace(body, body.replace(COUNT, `${found} suite`));
     if (next === p.text) continue;
     writeFileSync(p.path, next);
     written.push(p.name);
