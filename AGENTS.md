@@ -53,7 +53,17 @@ release records under `deploy/`.
 A seat is a place as much as a name: each owns one tree and nothing else
 owns it. The manager orders work across the seats and writes none of their
 artefacts; the operator carries out the acts the tree cannot, and records
-what happened. Neither reaches into another seat's tree, and a plan that
+what happened.
+
+An idea is not yet work, and it reaches the manager through the analyst. A
+thing anybody noticed, a defect a run turned up, a want somebody said out
+loud, goes to the analyst first, who judges it: it becomes a requirement with
+a proof, or it is refused with the reason. Only what survives that reaches the
+manager, who says which release it belongs to. Priorities are the manager's
+and nobody else's, and a seat that puts its own find straight into a plan has
+taken two seats at once. This is a rule about ideas and never about blocks: a
+blocked seat names its block where it stands, and the manager picks that up as
+it is. Neither reaches into another seat's tree, and a plan that
 says what somebody else must do is still a plan and never their diff. Every test is seen red before it is trusted
 green. A closed task's red is a failure; an open task's red is reported.
 
