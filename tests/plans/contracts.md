@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  contracts: 8fd4098373aa421406bdde27108e4d29e7c7e0edbd95bd40173b42bff77c2928
+  contracts: 2cb6b1a140e06448bcc16c3f1333b4d58e16bb8573b4b190e55ee1a3e0633876
 reviews:
-  suites/contracts: reviewed-no-impact@8fd4098373aa421406bdde27108e4d29e7c7e0edbd95bd40173b42bff77c2928 by architect: the suite recorded a read of a case that gained a contract, which changes the suite's page and never which suites this plan uses
+  suites/contracts: reviewed-no-impact@2cb6b1a140e06448bcc16c3f1333b4d58e16bb8573b4b190e55ee1a3e0633876 by architect: the suite gained the case for the drawing that gives a plan a selection of its own; which suites this plan uses is unchanged
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
