@@ -13,6 +13,7 @@ import { readFileSync, existsSync, globSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { spawnSync } from "node:child_process";
 import { caseEnv } from "./gates.mjs";
+import { blocked } from "./bugs.mjs";
 import { readRun, verdict } from "./runs.mjs";
 
 /**
@@ -70,24 +71,40 @@ export function readPeople(testFile) {
  * (sh) or not (cmd.exe), and the files must be the same, in the same order.
  * @param {string[]} patterns @returns {string[]}
  */
-export function expand(patterns) {
-  return patterns.flatMap((p) => (/[*?[]/.test(p) ? globSync(p).sort() : [p]));
+export function expand(patterns, at = process.cwd()) {
+  return patterns.flatMap((p) =>
+    /[*?[]/.test(p) ? globSync(p, { cwd: at }).sort() : [p],
+  );
 }
 
-/** @param {string[]} files */
-export function runAcceptance(files) {
-  return runJudged(files);
+/** @param {string[]} files @param {string} [at] */
+export function runAcceptance(files, at) {
+  return runJudged(files, at);
 }
 
-/** @param {string[]} files */
-export function runContracts(files) {
-  return runJudged(files);
+/** @param {string[]} files @param {string} [at] */
+export function runContracts(files, at) {
+  return runJudged(files, at);
 }
 
 /** One judged runner for both walls: the verdict table lives once. */
-export function runJudged(files) {
+export function runJudged(files, at = process.cwd()) {
   const results = [];
-  for (const file of expand(files)) {
+  // The tree these files sit in, honoured all the way down: the glob is
+  // expanded against it and every case is run in it. A runner handed a root
+  // and a relative path that looked in the caller's directory would find
+  // nothing and answer nothing passing, which reads as a counting bug rather
+  // than a path one. It cannot be called `root`: that name is bound below to
+  // the tree a requirement's own path resolves to.
+  const held = blocked(at);
+  for (const file of expand(files, at)) {
+    // A case a standing bug is about is not run here. That is not a skip: the
+    // red is recorded, owned and named on the board, and this is the tree
+    // declining to ask a question whose answer is already written down.
+    if (held.has(file)) {
+      results.push({ blocked: file });
+      continue;
+    }
     // The reporter is named and not inherited: node 22 prints TAP when this
     // output is piped and node 24 prints spec, both by default and both
     // correctly, and the two patterns below read one of them. `caseEnv`
@@ -97,6 +114,7 @@ export function runJudged(files) {
       process.execPath,
       ["--test", "--test-reporter=tap", file],
       {
+        cwd: at,
         encoding: "utf8",
         env: caseEnv(),
         stdio: ["ignore", "pipe", "inherit"],
@@ -140,22 +158,33 @@ export function runJudged(files) {
       ...v,
     });
   }
-  const ok = results.length > 0 && results.every((x) => x.ok);
-  const lines = results.flatMap((x) => [
-    `${x.label.padEnd(16)} ${x.name} (${x.pass} passing, ${x.fail} failing)` +
-      // Why, where the verdict has one. A task reading not delivered because
-      // its record is stale and one reading not delivered because nobody has
-      // recorded it are the same word and different work, and the reader
-      // needs to know which.
-      (x.why ? `: ${x.why}` : ""),
-    ...(x.ok && !x.fail ? [] : x.red.map((l) => `  ${l}`)),
-  ]);
+  // The entries that were judged. A blocked case carries no verdict, no
+  // counts and no label: the four words are about a suite against its record
+  // and none of them is about a case nobody ran. Counting it as passing is
+  // the vacuous green this league has a task about, and counting it as
+  // failing reports the red the board already names, which is the point of
+  // filing a bug undone.
+  const judged = results.filter((x) => !x.blocked);
+  const ok = results.length > 0 && judged.every((x) => x.ok);
+  const lines = results.flatMap((x) =>
+    x.blocked
+      ? [`not run          ${x.blocked}: a standing bug blocks it`]
+      : [
+          `${x.label.padEnd(16)} ${x.name} (${x.pass} passing, ${x.fail} failing)` +
+            // Why, where the verdict has one. A task reading not delivered
+            // because its record is stale and one reading not delivered
+            // because nobody has recorded it are the same word and different
+            // work, and the reader needs to know which.
+            (x.why ? `: ${x.why}` : ""),
+          ...(x.ok && !x.fail ? [] : x.red.map((l) => `  ${l}`)),
+        ],
+  );
   const summary =
     results.length === 0
       ? "red: no requirement files given"
-      : `${ok ? "green" : "red"}: ${results.length} requirement(s), ${results.filter((x) => !x.ok).length} failing`;
+      : `${ok ? "green" : "red"}: ${judged.length} requirement(s), ${judged.filter((x) => !x.ok).length} failing`;
   // The count the board reads: the runner's own convention, `# pass N`, N the
   // tests that passed across every file run, printed last by the commands.
-  const passed = results.reduce((n, x) => n + x.pass, 0);
+  const passed = judged.reduce((n, x) => n + x.pass, 0);
   return { ok, results, lines, summary, passed };
 }
