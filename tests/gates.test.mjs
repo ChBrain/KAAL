@@ -69,24 +69,17 @@ test("a failing node --test wall stays red even when the runner itself runs unde
     wallEnv({ NODE_OPTIONS: "--max-old-space-size=99" }).NODE_OPTIONS,
     "--max-old-space-size=99",
   );
+  // A suite that is red on purpose and forever. This used to run
+  // `requirements/push-v1/acceptance.test.mjs`, which was red only because
+  // nobody had delivered that task, so the day somebody did this unit went
+  // green and proved nothing about nesting at all.
+  const RED = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "fixtures",
+    "a-suite-that-fails.test.mjs",
+  );
   const r = runGates(join(F, "clean"), {
-    gates: [
-      {
-        name: "nested",
-        command:
-          "node --test " +
-          join(
-            F,
-            "..",
-            "..",
-            "..",
-            "requirements",
-            "push-v1",
-            "acceptance.test.mjs",
-          ),
-        fix: "none",
-      },
-    ],
+    gates: [{ name: "nested", command: `node --test ${RED}`, fix: "none" }],
   });
   assert.equal(r.ok, false, "a red nested test suite was reported green");
 });
