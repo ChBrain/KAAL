@@ -102,6 +102,17 @@ export function runGates(root, config = null) {
     results.push({
       name: g.name,
       ok: r.status === 0,
+      // The third answer. This engine publishes three exit codes as the whole
+      // vocabulary and 2 is `the question is not this tree's`: a wall that
+      // said it is a wall that declined to judge, which is the opposite act
+      // from one that could not start. Read from the code alone, because the
+      // code is the only language the board and its walls share, and a field
+      // beside the gate would put the pairing back in the governance lane.
+      //
+      // Everything that is not 0 and not 2 is a failure without being asked
+      // about, so a command that cannot run lands there on its own: silence
+      // and success must not look alike, which is `gates-v1`'s claim.
+      declined: r.status === 2,
       count: count === undefined ? null : Number(count),
       fix: g.fix ?? null,
       // A wall whose output is the answer says so, and the board carries its
@@ -116,7 +127,12 @@ export function runGates(root, config = null) {
   for (const x of results) {
     const { waiver, reason } = readWaiver(root, x.name);
     if (!waiver && !reason) continue;
-    if (x.ok) {
+    // A waiver is a human's act over a red, and a wall that declined has no
+    // red to waive any more than one that passed does. Spending it here would
+    // consume a person's licence on nothing and make the count of waived
+    // walls wrong in the direction that flatters, which is the number a
+    // reader uses to judge how much is being let through.
+    if (x.ok || x.declined) {
       x.unused = true;
       continue;
     }
@@ -125,7 +141,9 @@ export function runGates(root, config = null) {
       waived++;
     } else x.waiverNote = reason;
   }
-  const failed = results.filter((x) => !x.ok && !x.waived).length;
+  const failed = results.filter(
+    (x) => !x.ok && !x.waived && !x.declined,
+  ).length;
   const ok = gates.length > 0 && failed === 0;
   // A failing wall's own lines follow its FAIL line, indented: a reader of
   // the board elsewhere (a log, a pull request) must see what the wall saw,
@@ -138,9 +156,16 @@ export function runGates(root, config = null) {
             `waived ${x.name} by ${x.waived.who}: ${x.waived.why} (until ${x.waived.until})`,
           ]
         : [
-            `${x.ok ? "ok  " : "FAIL"} ${x.name}${x.count !== null ? ` (${x.count} passing)` : ""}${x.ok || !x.fix ? "" : `  fix: ${x.fix}`}${x.waiverNote ? `  [${x.waiverNote}]` : ""}`,
+            // Its own word, and no fix hint: there is nothing to fix, and a
+            // hint here would read as work somebody owes.
+            x.declined
+              ? `n/a  ${x.name}`
+              : `${x.ok ? "ok  " : "FAIL"} ${x.name}${x.count !== null ? ` (${x.count} passing)` : ""}${x.ok || !x.fix ? "" : `  fix: ${x.fix}`}${x.waiverNote ? `  [${x.waiverNote}]` : ""}`,
             ...(x.show && x.ok ? x.output.map((l) => `  ${l}`) : []),
-            ...(x.ok ? [] : x.output.map((l) => `  ${l}`)),
+            // What the wall said follows it, as a failing wall's does. A word
+            // with no reason is a state a reader has to guess at, and the
+            // reason a wall declines is the only thing that makes it readable.
+            ...(x.ok && !x.declined ? [] : x.output.map((l) => `  ${l}`)),
           ],
   );
   // A standing bug is never a licence. Read here and not as a wall of its
@@ -151,12 +176,16 @@ export function runGates(root, config = null) {
   // The count is printed in the summary rather than left implicit, because
   // the sentence a reader has trusted since the board was built now has a
   // fourth term and a silent one would be worse than a longer line.
+  // Counted for the sentence below, because the summary a reader has trusted
+  // since this board was built now has a term it did not have, and a silent
+  // one would be worse than a longer line.
+  const declined = results.filter((x) => x.declined).length;
   const bugs = standing(root);
   lines.push(...bugs);
   const clear = ok && bugs.length === 0;
   const summary =
     gates.length === 0
       ? "red: no walls declared in kaal.config.json"
-      : `${clear ? "green" : "red"}: ${gates.length} wall(s), ${failed} failing, ${waived} waived${bugs.length ? `, ${bugs.length} blocked` : ""}`;
+      : `${clear ? "green" : "red"}: ${gates.length} wall(s), ${failed} failing, ${waived} waived${declined ? `, ${declined} not applicable` : ""}${bugs.length ? `, ${bugs.length} blocked` : ""}`;
   return { ok: clear, results, lines, summary };
 }

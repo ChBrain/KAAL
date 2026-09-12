@@ -104,7 +104,12 @@ export function refusedHead(into, from, lanes) {
  * @param {string} root
  */
 export function redWalls(root) {
-  const red = (runGates(root).results ?? []).filter((w) => !w.ok && !w.waived);
+  // The board's own classification and not a second one made here. A wall
+  // that declined never judged, so there is nothing for the promotion to
+  // refuse; two readers of one thing drift, and this pair is where it did.
+  const red = (runGates(root).results ?? []).filter(
+    (w) => !w.ok && !w.waived && !w.declined,
+  );
   return {
     count: red.length,
     findings: red.map((w) => ({
