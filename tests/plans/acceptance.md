@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: c0966d3bb64fecc9102df6f7d387524b9615c2d6de9857607e53459a40d6b4fa
+  acceptance: 784aa2c43b56804b4e53691b5b9b0d30a6519e2a9aee3bfd890e18fec666ef5c
 reviews:
-  suites/acceptance: reviewed-no-impact@c0966d3bb64fecc9102df6f7d387524b9615c2d6de9857607e53459a40d6b4fa by analyst: the suite gained the case for the task that gives every seat a backlog in its own lane; which suites this plan uses is unchanged and no case was taken out of it
+  suites/acceptance: reviewed-no-impact@784aa2c43b56804b4e53691b5b9b0d30a6519e2a9aee3bfd890e18fec666ef5c by tester: the suite gained the case for the task that makes the skill list a floor, and the pin on `skills-v1` advanced because that task superseded its first criterion; which suites this plan uses is unchanged and no case was taken out of it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

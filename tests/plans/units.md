@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: 01d9b6a3a8f5713b07656d8214d3b9570f43e66899bd93870216c2f318722aac
+  units: 6c3237642cb454124acb5c1fb8d857b2016680497b1678870fff2dcaf165c391
 reviews:
-  suites/units: reviewed-no-impact@01d9b6a3a8f5713b07656d8214d3b9570f43e66899bd93870216c2f318722aac by developer: the case gained the unit that holds a blocked case on both platforms, where a path from a glob is compared to one a bug page wrote; the case is the same case and this suite still covers it
+  suites/units: reviewed-no-impact@6c3237642cb454124acb5c1fb8d857b2016680497b1678870fff2dcaf165c391 by tester: the suite gained the case for the manager's traversal, which was in the tree with no suite naming it; which suites this plan uses is unchanged and no case was taken out of it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

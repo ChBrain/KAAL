@@ -56,7 +56,7 @@ cases:
   requirements/read-before-drawing/acceptance.test.mjs: 532f144db7778851451191203d390fcdfd81c5004f3121753c396a5240539955
   requirements/red-for-the-right-reason/acceptance.test.mjs: 5b1643cab9eb1a55af8ce9786d9182a920a080374dba35c63b0d8b37e77ebbf8
   requirements/security-v1/acceptance.test.mjs: 52b8e0a552bf37fed7dc3e06bc9233d2984b4e8a11c5bedcfdb476c6963a4615
-  requirements/skills-v1/acceptance.test.mjs: f28ed33346b28f2212ec87c7551dea0494bfc908c41aa253a4bbb8d5267b3d86
+  requirements/skills-v1/acceptance.test.mjs: 54b06f36d4d5884358aeaf7d476ab36d1d1b027f13368a7fe7a9ee5e9930588f
   requirements/standard-v1/acceptance.test.mjs: acc888757fa26ff42c95fb721728ed9c8d5052682e2b7975e292bb045de91e7c
   requirements/standard-v2/acceptance.test.mjs: 110cf793f4690b3c737dc591b0cdc5357ea45d20fd3e12dbece527c25abffc65
   requirements/status-v1/acceptance.test.mjs: 0cf49af1968edadee4db9a8876cc00017771390d82884d90f9c5057af5f4454f
@@ -75,7 +75,9 @@ cases:
   requirements/what-proves-a-build/acceptance.test.mjs: 15081a7475621ea7cd53d53501fe8a26b173c4a5df8f66a137c738d54db757d1
   requirements/where-a-skill-acts/acceptance.test.mjs: 60832efd3c54d369a4f9062e02f51542250d5f93bb1f940a8d24b5f213eda555
   requirements/witness-a-tree/acceptance.test.mjs: 853bec795ceb60eb98fb6a91658f3d8def4a92ddfc74d532fe24cf6b602ef51d
+  requirements/a-skill-list-is-a-floor/acceptance.test.mjs: cc5a8497f59e7e1bc7a7058870601400b3f1ec34da9ae7e098f7b8bb242ba76e
 reviews:
+  cases/requirements/skills-v1/acceptance.test.mjs: reviewed-no-impact@54b06f36d4d5884358aeaf7d476ab36d1d1b027f13368a7fe7a9ee5e9930588f by tester: its first case stopped asserting the tree holds exactly six named skills and asserts a floor instead, which `a-skill-list-is-a-floor` supersedes; the case is the same case and this suite still covers it
   cases/requirements/push-v1/acceptance.test.mjs: reviewed-no-impact@6bf2ce06a489bf8df6d253887a698c4f54021ecaa2de06b0c597e522c8a404f1 by analyst: its fifth case stopped reading a test file as a script and stopped fixing where a script's test lives; the case is the same case and this suite still covers it
   cases/requirements/status-v1/acceptance.test.mjs: reviewed-no-impact@0cf49af1968edadee4db9a8876cc00017771390d82884d90f9c5057af5f4454f by analyst: its fourth case stopped reading `push-v1` out of the league's own tree and reads the `open-red` fixture instead; the case is the same case and this suite still covers it
   cases/requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: reviewed-no-impact@369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273 by analyst: the case gained its ninth, the one about the board judging by the target it opens into; it is the same case and this suite still covers it
