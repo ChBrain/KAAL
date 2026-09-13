@@ -117,15 +117,16 @@ flowchart LR
 - Because: these are two different facts. What a seat may say is vocabulary
   and belongs where the seats and the lanes are already declared; where a
   drawing lives is resolution and belongs where `traces.mjs` already answers
-  the same question for the same four artefacts. The split is the one this
-  tree already made once, and the wall that checks they agree is what keeps
-  it from being two sources of one truth.
+  the same question for the same four artefacts. What a seat may write is its
+  own lens and where an artefact lives is the method, which is why the first
+  belongs in the declaration and the second in the engine. The split is the
+  one this tree already made once, and the wall that checks they agree is
+  what keeps it from being two sources of one truth.
 - Bought: keeping choices open, because a kind can be added to the vocabulary
   and the engine says plainly that it cannot resolve it, and it spent one
   more agreement for somebody to keep: the config, the engine and `AGENTS.md`
   now say the same list in three places and two walls hold them together.
-- Weighed against: the-seat-owns-the-lens. What a seat may write is its own
-  lens; where an artefact lives is the method, and the method is the engine's.
+- Weighed against: the-seat-owns-the-lens.
 - Reopens if: a kind needs a resolution the tree cannot express as a path,
   such as a state of a provider, at which point the row is not a path and the
   split moves.
