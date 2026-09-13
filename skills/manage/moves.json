@@ -1,0 +1,34 @@
+{
+  "skill": "manage",
+  "note": "Written in this league. Every move sits at the NLP rung except the traversal, which is a script because a cycle across six pages is not a thing a reader finds by reading.",
+  "moves": [
+    {
+      "name": "read every backlog and count them",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "find the roots and name the cycles",
+      "rung": "script",
+      "candidate": "script",
+      "script": "scripts/order.mjs",
+      "test": "scripts/order.test.mjs"
+    },
+    {
+      "name": "order the roots by what the release needs",
+      "rung": "nlp",
+      "candidate": "nlp",
+      "script": null,
+      "test": null
+    },
+    {
+      "name": "hand back the order and write in no seat's tree",
+      "rung": "nlp",
+      "candidate": "skill",
+      "script": null,
+      "test": null
+    }
+  ]
+}
