@@ -221,6 +221,10 @@ if (cmd === "ledger") {
         : `lane none: ${where.branch} carries no change to place`,
     );
     for (const line of crossed.lines) console.log(line);
+    // Said once where there is somebody to ask, and never where the question
+    // was not put: a branch no lane holds takes the other arm above, so there
+    // is no lane to record a block in and nothing computes one.
+    if (crossed.block) console.log(crossed.block);
     findings = [
       ...declaration.findings,
       ...crossed.findings,
