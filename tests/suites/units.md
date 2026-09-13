@@ -5,7 +5,7 @@ cases:
   bin/kaal.test.mjs: 193e2fe7c66f3b40568ee4f1949a5474712db68be8ae454c9763c16fce95d7ed
   bin/lib/assess.test.mjs: 070942b1d71b1c48da3396b750ec633c739b4e08b3ed297241dc7032d3f10c80
   bin/lib/witness.test.mjs: a97933f824563a295a6f8c117c2667ba122316e2c86e0da63a03b638a0ef1495
-  bin/lib/acceptance.test.mjs: dad6cb7a571aa219ca2bc5d1ecbfaed81fd8cac23e99573e7213e04bc6c5dfae
+  bin/lib/acceptance.test.mjs: 5867a7902b9bdc9b3299fa92e067a97aa327fd67c5d50205e344184aac889710
   bin/lib/agents.test.mjs: e44a7e5ae36f023e4f72fceea82c514279c6d5185f74e34b3155eaf13acddc4c
   bin/lib/bugs.test.mjs: ac4c988953642691f0338e855ec1c905b869c559913c180d16e3edd90e4e2344
   bin/lib/boundary.test.mjs: 21805bb1235da8291a6d7b90202d9521a962c648ee5d3729bd540ce577bd303b
