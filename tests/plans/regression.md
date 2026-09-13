@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: caadedac6896d8503a99e80d49643edaede8323f0c3ca7c4da8008b2a6a62a31
+  acceptance: 070f566aa064c861713e0869da6b922cca55c09a278dbf2f169a80271cf21868
 reviews:
-  suites/acceptance: reviewed-no-impact@caadedac6896d8503a99e80d49643edaede8323f0c3ca7c4da8008b2a6a62a31 by analyst: the suite gained two cases, for the task that lets a wall decline to judge and the one that gives a dependency update a road into this tree; which suites this plan uses is unchanged and no case was taken out of it
+  suites/acceptance: reviewed-no-impact@070f566aa064c861713e0869da6b922cca55c09a278dbf2f169a80271cf21868 by analyst: the suite gained the case for the task that says what makes a red case a regression, and re-pinned the parent task's case, whose fixture gained the run records that tell a regression from a task nobody has delivered; which suites this plan uses is unchanged and no case was taken out of it
 ---
 
 # Test plan: regression

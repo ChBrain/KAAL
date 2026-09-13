@@ -10,6 +10,7 @@ import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const kaal = (root, ...args) =>
@@ -110,10 +111,24 @@ const task = (name, body) => ({
 });
 const ALPHA = "requirements/alpha/acceptance.test.mjs";
 const BETA = "requirements/beta/acceptance.test.mjs";
+/**
+ * A run on record for a task, carrying the sha of what it says it ran. The
+ * regression wall reads one to tell a promise that stopped being kept from a
+ * task nobody has delivered, so a fixture about a red case inside the
+ * selection needs the record that makes that red a regression.
+ */
+const ran = (name, body) => ({
+  [`tests/runs/${name}.md`]:
+    `# Run: ${name}\n\n- Task: ${name}\n- Suite: requirements/${name}/acceptance.test.mjs\n` +
+    `- Ran: 2026-09-13\n- Suite sha: ${createHash("sha256").update(body).digest("hex")}\n` +
+    `- Passing: 1\n- Failing: 0\n`,
+});
 /** A tree with two tasks, two suites, an acceptance plan and a regression one. */
 const whole = (picks, { beta = PASSES } = {}) => ({
   ...task("alpha", PASSES),
   ...task("beta", beta),
+  ...ran("alpha", PASSES),
+  ...ran("beta", beta),
   "tests/suites/alpha.md": suite("alpha", [ALPHA]),
   "tests/suites/beta.md": suite("beta", [BETA]),
   "tests/plans/acceptance.md": plan("acceptance", ["alpha", "beta"]),
