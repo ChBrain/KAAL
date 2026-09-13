@@ -187,9 +187,16 @@ seat's, and `shared` as the paths any lane may change.
 
 It prints the lane it matched and one line beginning `seat ` for every seat
 the diff touches, and it finds three things. A path the lane's seat does not
-own, the lane does not allow and `shared` does not list, naming the path and
-the lane: deny by default, so a path nobody declared is refused rather than
-free. A branch that carries a change and matches no lane, naming the branch
+own, the lane does not allow and `shared` does not list, naming the path, the
+lane and the seat that owns the path, or saying that no seat owns it: deny by
+default, so a path nobody declared is refused rather than free, and a reader
+who has the path has the name in the same breath. Where a refused path has an
+owner it also prints one line beginning `block: `, naming every seat to ask
+and the lane the block is recorded in, which is where the blocked seat stands
+and never the owner's tree. One such line however many paths were refused,
+because a block is one message about one diff, and none where nobody was
+crossed or where no lane holds the branch, because there is then nobody to
+ask and nowhere to write it. A branch that carries a change and matches no lane, naming the branch
 and every pattern; a branch carrying no change is an answer, because there is
 nothing to place. And a changed acceptance test, requirement fixture or
 drawing contract test, naming the file, unless a requirement in the same diff
@@ -208,7 +215,8 @@ work at once by design, and both say which one it is and exit 2. A target
 opening into itself is neither, because that is where the board runs after a
 merge. Takes a root, which may be a flag, and `--against <ref>`, defaulting to
 the same base the class wall reads. Exits 0, 1 or 2
-(`a-diff-carries-one-seat`, `a-dependency-update-lands-on-main`).
+(`a-diff-carries-one-seat`, `a-dependency-update-lands-on-main`,
+`a-crossing-names-its-owner`).
 
 ## coverage
 

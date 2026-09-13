@@ -154,9 +154,16 @@ export function paths(root, base) {
 }
 
 /**
- * Which seats a diff touches, and which of its paths its lane does not allow.
- * The seat lines are about the diff and the findings are about the lane, so a
- * diff that reaches two seats says so even while it is being refused.
+ * Which seats a diff touches, which of its paths its lane does not allow, and
+ * who to ask about them. The seat lines are about the diff and the findings
+ * are about the lane, so a diff that reaches two seats says so even while it
+ * is being refused.
+ *
+ * The owner was always computed here and never said. A reader who sees a path
+ * refused asks whose it is in the same breath, so the name is in the finding
+ * and not on a line of its own: an answer somewhere else is a join the reader
+ * performs. A path no seat owns says that, in words, because silence reads
+ * the same as a wall that forgot to look.
  * @param {string[]} list @param {object|null} lane
  * @param {{seats: object[], shared: string[]}} declaration
  */
@@ -164,6 +171,7 @@ export function crossings(list, lane, declaration) {
   const { seats, shared } = declaration;
   const seat = seats.find((s) => s.name === lane?.seat) ?? null;
   const touched = [];
+  const owed = [];
   const findings = [];
   for (const p of list) {
     const owner = seats.find((s) => any(p, s.owns));
@@ -171,16 +179,28 @@ export function crossings(list, lane, declaration) {
     if (any(p, shared)) continue;
     if (any(p, lane?.allows)) continue;
     if (seat && any(p, seat.owns)) continue;
-    findings.push(`${p}: outside the lane ${lane?.pattern}`);
+    findings.push(
+      owner
+        ? `${p}: outside the lane ${lane?.pattern}, and it is the ${owner.name}'s`
+        : `${p}: outside the lane ${lane?.pattern}, and no seat owns it`,
+    );
+    if (owner && !owed.includes(owner.name)) owed.push(owner.name);
   }
   // In the order the seats are declared, which is the chain: what was asked,
   // what was designed, what was proved, what is green.
   const order = seats.map((s) => s.name);
+  const byChain = (a, b) => order.indexOf(a) - order.indexOf(b);
   return {
-    lines: touched
-      .sort((a, b) => order.indexOf(a) - order.indexOf(b))
-      .map((n) => `seat ${n}`),
+    lines: touched.sort(byChain).map((n) => `seat ${n}`),
     findings,
+    // One sentence for the diff, because the block is one message about one
+    // diff and the seat that writes it writes one. Nothing where nobody was
+    // crossed: a path no seat owns is refused all the same and there is no
+    // one to ask about it. The lane is where the block is written, which is
+    // where the blocked seat stands and never the owner's tree.
+    block: owed.length
+      ? `block: ask the ${owed.sort(byChain).join(" and the ")}, and record it in ${lane?.pattern}`
+      : null,
   };
 }
 
