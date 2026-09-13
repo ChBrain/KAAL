@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  contracts: 235d2660b44671994f7b843aed4b80200fc0a6bb780692c39b7582d9fc4db7e4
+  contracts: 44ddda7edaf991deee77a1da797f021644af2d22f8004fb883233d04bc28f73f
 reviews:
-  suites/contracts: reviewed-no-impact@235d2660b44671994f7b843aed4b80200fc0a6bb780692c39b7582d9fc4db7e4 by architect: the suite gained the case for the drawing of the road a dependency update takes; which suites this plan uses is unchanged and no case was taken out of it
+  suites/contracts: reviewed-no-impact@44ddda7edaf991deee77a1da797f021644af2d22f8004fb883233d04bc28f73f by architect: the suite gained the case for the task that makes a refusal name whose path it reached; which suites this plan uses is unchanged and no case was taken out of it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
