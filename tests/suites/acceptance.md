@@ -3,7 +3,7 @@ traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
   requirements/a-bug-names-where-it-can-be-fixed/acceptance.test.mjs: df8f6eb1b8cba9586f31a138242f49826fd02464affbd5fdc84e9d6c40c319b0
-  requirements/a-plan-picks-its-suites/acceptance.test.mjs: 907f180b481e77dfc96826d75828fa2a6cd73736295d783644c7185266269d93
+  requirements/a-plan-picks-its-suites/acceptance.test.mjs: 1cab8222962d3bfdffa5f957e7e573fa6d041146e00aaad71dfd14393ad63eb7
   requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: 369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273
   requirements/a-build-says-what-it-proved/acceptance.test.mjs: 54383c21e9d8f662016d28a06514c3302955b3f7eba9c1f16b62d8f0bdd9af89
   requirements/a-change-declares-its-class/acceptance.test.mjs: df9e4a66b61cf110f1696f748c08f7ffbd1b0b5fe14c0a9502eb94efdf9d6280
@@ -15,6 +15,7 @@ cases:
   requirements/a-green-contract-is-declared/acceptance.test.mjs: 95b6fa82368f5a6724a0dc3b97222685724c0aaa5b639853ee16db4934ccab0e
   requirements/a-guest-takes-no-orders/acceptance.test.mjs: d3fc951ce1525de94cf40c01177919eeb24fdd906d8e2e2b455de153794d944e
   requirements/a-pin-says-who-cleared-it/acceptance.test.mjs: 1e97cee26dde73931b8715d5d745627bb3191aad0e840665f5420d944f793204
+  requirements/a-regression-is-a-promise-that-was-kept/acceptance.test.mjs: 3c8818b0a53cd486319111c3797e99725bda5f7c3d716fd688a9434b15c49402
   requirements/a-requirement-shows-its-work/acceptance.test.mjs: 5f3b1db5516cae5c57695b1969e670d52792ea7d27d67a5e608968befe1e28ea
   requirements/a-retro-names-what-it-read/acceptance.test.mjs: 7dbb6bbe5ca2100e78a9813a342c67226f58f1be8326bc5923eb586096d07ad1
   requirements/a-seat-claims-what-it-covers/acceptance.test.mjs: cbed094d511194c31011f670f9bdea524bea6b28b53486d95162c20a2fa41726
