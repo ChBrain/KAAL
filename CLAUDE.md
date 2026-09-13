@@ -8,9 +8,10 @@ Claude offers a `claude/<something>` branch by default. The league reads the
 lane off the branch, so the name is the declaration and it is made before the
 work. Six lanes carry a seat: `plan/` the manager, `requirement/` the
 analyst, `architecture/` the architect, `build/` the developer, `test/` the
-tester, `operate/` the operator. Four carry none:
-`governance/`, `skill/`, `agent/`, `eval/`. Pick the lane first, then the
-name, and split rather than widen when the diff does not fit.
+tester, `operate/` the operator. Four carry none and are yours to pick:
+`governance/`, `skill/`, `agent/`, `eval/`. A fifth, `dependabot/`, is a
+machine's and never yours. Pick the lane first, then the name, and split
+rather than widen when the diff does not fit.
 
 ## Where a branch comes from
 

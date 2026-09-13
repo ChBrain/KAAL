@@ -20,6 +20,25 @@ jobs:
   promote:
     runs-on: ubuntu-latest
     steps:
+      # The half the engine cannot hold. `kaal` reads a tree and a branch and
+      # cannot know who opened a pull request without being told by a
+      # provider, so the paths are its evidence and the author is this
+      # workflow's. `main` takes one lane beside the promotion; a head
+      # claiming that lane and opened by anybody but the bot is refused here
+      # and nowhere else, because a tree checked out anywhere else admits a
+      # branch by name.
+      #
+      # Both values reach the shell as environment variables and never as
+      # interpolation inside the script: a branch name is attacker chosen and
+      # a workflow that pastes one into a command has handed it the runner.
+      - name: only the bot rides the bot's lane
+        if: startsWith(github.head_ref, 'dependabot/') && github.event.pull_request.user.login != 'dependabot[bot]'
+        env:
+          HEAD: ${{ github.head_ref }}
+          WHO: ${{ github.event.pull_request.user.login }}
+        run: |
+          echo "$HEAD: head: a dependency update lane, opened by $WHO and not dependabot[bot]" >&2
+          exit 1
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # the targets, for the walls that read a base
