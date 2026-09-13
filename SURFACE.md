@@ -118,7 +118,8 @@ and both mean the same: a line inside `traces:` whose value is a comma list,
 or a block of its own beside `traces:`, one entry to a line, keyed by the name
 and valued by its sha. A kind picks the writing its length needs, an empty
 block names nothing the way `nothing` on a line does, and a page carrying both
-is read by its block. A value is
+is read by its block. A bare entry without its colon is a finding naming the
+kind and the entry the writer could not read. A value is
 `<name>` or `<name>@<sha>`: a pin that no longer matches the region it names
 is reported as having moved, which is different wording from a name that
 resolves to nothing, because one wants a rename and the other a reread. Only
