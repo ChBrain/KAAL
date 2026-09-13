@@ -208,5 +208,6 @@
       "command": "node bin/kaal.mjs seats",
       "fix": "split the diff or rename the branch to the lane it belongs to; never widen the declaration to let a diff through"
     }
-  ]
+  ],
+  "blocks": ["no requirement", "no drawing", "no proof", "no record"]
 }
