@@ -9,7 +9,19 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const SKILLS = join(ROOT, "skills");
-const EXPECTED = [
+const dirs = () =>
+  existsSync(SKILLS)
+    ? readdirSync(SKILLS)
+        .filter((n) => statSync(join(SKILLS, n)).isDirectory())
+        .sort()
+    : [];
+// The floor: every skill the league had named when `a-skill-list-is-a-floor`
+// superseded criterion 1. A skill going missing is a real loss and nothing
+// else in this tree would notice it, so the names stay. A skill arriving is
+// ordinary growth, so the check is a floor and no longer an equality: this
+// list went red the afternoon a seventh skill landed, which is what a list
+// of what the tree already holds does wherever it is written.
+const FLOOR = [
   "analyse",
   "architect",
   "code",
@@ -17,6 +29,8 @@ const EXPECTED = [
   "operate",
   "retro-4ls",
 ].sort();
+/** Every skill the tree holds, which is what the other criteria read. */
+const EXPECTED = dirs();
 const DELIVERY = EXPECTED.filter((n) => n !== "retro-4ls");
 const VENDORS = [
   /claude\.ai/i,
@@ -28,12 +42,6 @@ const VENDORS = [
   /\bperplexity\b/i,
 ];
 
-const dirs = () =>
-  existsSync(SKILLS)
-    ? readdirSync(SKILLS)
-        .filter((n) => statSync(join(SKILLS, n)).isDirectory())
-        .sort()
-    : [];
 const skillMd = (n) => readFileSync(join(SKILLS, n, "SKILL.md"), "utf8");
 const frontmatter = (text) => {
   const m = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
@@ -59,8 +67,13 @@ const walkMd = (dir) =>
         : [],
   );
 
-test("1. skills/ holds exactly the six skills", () => {
-  assert.deepEqual(dirs(), EXPECTED);
+test("1. skills/ holds every skill the league has named, and may hold more", () => {
+  const here = dirs();
+  // Counted first: an empty tree would make the subset check below true for
+  // the wrong reason.
+  assert.ok(here.length >= FLOOR.length, `skills/ holds ${here.length}`);
+  for (const name of FLOOR)
+    assert.ok(here.includes(name), `skills/ no longer holds ${name}`);
 });
 
 test("2. frontmatter: name matches directory, description bounded, license MIT", () => {
