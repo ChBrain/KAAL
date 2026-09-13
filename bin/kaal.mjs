@@ -67,6 +67,7 @@ import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
 import { readSeats, laneOf, paths, crossings, proofs } from "./lib/seats.mjs";
+import { read as readBacklog } from "./lib/backlog.mjs";
 import { skillsIn, landingAt, copyInto } from "./lib/assemble.mjs";
 import { renderTarget } from "./lib/assess/target.mjs";
 import { refuseOutput } from "./lib/assess/paths.mjs";
@@ -85,7 +86,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | bugs [root] | promote [root] [--into <target>] [--from <head>] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | bugs [root] | backlog [root] | promote [root] [--into <target>] [--from <head>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -102,7 +103,31 @@ if (notApplicable) {
   process.exit(2);
 }
 
-if (cmd === "ledger") {
+if (cmd === "backlog") {
+  // What cleared before what stands, because a seat opening this wants to
+  // know what it may take off its page before it reads what it still cannot
+  // do. It reads six pages and writes none: taking a spent block off is the
+  // act of the seat that wrote it, the same rule the bug and the run record
+  // already keep.
+  const broot = arg && !arg.startsWith("-") ? arg : cwd;
+  const backlog = readBacklog(broot);
+  for (const page of backlog.pages) console.log(`backlog: read ${page.path}`);
+  for (const e of backlog.cleared)
+    console.log(
+      `clear: ${e.task}: ${e.kind} by the ${e.seat}, and ${e.page} still carries it`,
+    );
+  if (!backlog.cleared.length) console.log("backlog: nothing is clear yet");
+  // Grouped by the seat that owes, which is the cross seat fact and the only
+  // one this answer holds: the order inside a seat's page is that seat's.
+  const owed = [...new Set(backlog.standing.map((e) => e.seat))];
+  for (const seat of owed) {
+    console.log(`blocked on the ${seat}:`);
+    for (const e of backlog.standing.filter((x) => x.seat === seat))
+      console.log(`  ${e.task}: ${e.kind}, from ${e.page}`);
+  }
+  if (!owed.length) console.log("backlog: nothing is blocked");
+  findings = backlog.findings;
+} else if (cmd === "ledger") {
   for (const s of standings(arg ?? cwd)) {
     console.log(
       `${s.skill}: ${s.move}: candidate skill, ${s.fresh} of ${s.need} fresh models`,

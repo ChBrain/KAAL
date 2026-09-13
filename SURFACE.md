@@ -378,6 +378,36 @@ because recording is the act of the seat that proves. Takes a root. Exits 0
 where nothing is blocked and 1 while a bug stands
 (`a-bug-names-where-it-can-be-fixed`).
 
+## backlog
+
+Answers what each seat cannot do and what it no longer cannot do, from one
+page per declared seat at the tree that seat owns: `plan/backlog.md` for the
+manager, `requirements/backlog.md` for the analyst, and so on, read off the
+declaration rather than written down a second time. A page is a `blocks:`
+block in frontmatter keyed `<seat>/<task>` with the kind as its value, the
+shape `reviews:` already proved under the same parser; the key is compound
+because one task may be blocked on two seats at once and a key that was only
+the task would hold one and drop the other.
+
+It prints what cleared before what stands, because a seat wants to know what
+it may take off its page before it reads what it still cannot do, and the
+standing set is grouped by the seat that owes it, which is the fact that
+crosses seats. The order inside a seat's page is that seat's own and nothing
+here reads or imposes one. A block clears when the tree holds the thing it
+waits for, and never because anybody decided: the kinds are declared in
+`kaal.config.json` and this engine keeps a row per kind saying where that
+thing lives, so a kind the declaration holds and no row resolves is a finding
+about the declaration and not about the page that used it. A key with no
+slash, a seat the declaration does not hold and a kind it does not hold are
+findings naming the page and the key.
+
+It writes nothing at all. Taking a spent block off a page is the act of the
+seat that wrote it, which is the rule the bug and the run record already
+keep, and a collector that tidied up after six seats would be a seventh hand
+in six trees. Takes a root, which may be a flag. Exits 0 where every page is
+well formed and 1 while a finding stands
+(`a-seat-carries-its-own-backlog`).
+
 ## promote
 
 Answers whether this tree may reach the target it is asked about, and names
