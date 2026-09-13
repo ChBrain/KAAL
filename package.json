@@ -14,8 +14,7 @@
     "bin",
     "skills",
     "agents",
-    "!**/*.test.mjs",
-    "!**/backlog.md"
+    "!**/*.test.mjs"
   ],
   "engines": {
     "node": ">=22"
