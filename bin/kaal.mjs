@@ -20,6 +20,7 @@
 //   node bin/kaal.mjs gates [root]    every wall in kaal.config.json, one exit code
 //   node bin/kaal.mjs acceptance <files or globs...>   judged by each requirement's status
 //   node bin/kaal.mjs contracts  <files or globs...>   judged by each drawing's task
+//   node bin/kaal.mjs backlog [root] | --init <seat>   read every page, or make one empty page
 import { join, relative, sep, resolve, dirname } from "node:path";
 import {
   readFileSync,
@@ -67,7 +68,7 @@ import { listFixtures } from "./lib/fixtures.mjs";
 import { compareSpec } from "./lib/standard.mjs";
 import { appliesHere } from "./lib/applies.mjs";
 import { readSeats, laneOf, paths, crossings, proofs } from "./lib/seats.mjs";
-import { read as readBacklog } from "./lib/backlog.mjs";
+import { read as readBacklog, init as initBacklog } from "./lib/backlog.mjs";
 import { skillsIn, landingAt, copyInto } from "./lib/assemble.mjs";
 import { renderTarget } from "./lib/assess/target.mjs";
 import { refuseOutput } from "./lib/assess/paths.mjs";
@@ -86,7 +87,7 @@ import {
 } from "./lib/class.mjs";
 
 const USAGE =
-  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | bugs [root] | backlog [root] | promote [root] [--into <target>] [--from <head>] | release <version>";
+  "usage: kaal ledger [root] | check [dir] | drawings [root] | fixtures [root] | standard [file] | runner <skill> <fixture> [--write | --check] | assess <target> [--output <path>] | boundary [root] | witness <dir> [--against <manifest>] | retros [root] [--check] | gates [root] | acceptance <files or globs...> | contracts <files or globs...> | agents [root] | class [root] [--against <ref>] | traces [root] [--write] | runs [root] [--write] | coverage [root] | seats [root] [--against <ref>] | assemble <directory> [skill...] | regression [root] | bugs [root] | backlog [root | --init <seat>] | promote [root] [--into <target>] [--from <head>] | release <version>";
 const [cmd, arg] = process.argv.slice(2);
 const league = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cwd = process.cwd();
@@ -104,6 +105,20 @@ if (notApplicable) {
 }
 
 if (cmd === "backlog") {
+  if (arg === "--init") {
+    const initArgs = process.argv.slice(3);
+    if (initArgs.length !== 2 || !initArgs[1]) {
+      console.error(USAGE);
+      process.exit(1);
+    }
+    const made = initBacklog(cwd, initArgs[1]);
+    if (made.finding) {
+      console.error(made.finding);
+      process.exit(1);
+    }
+    console.log(`backlog: wrote ${made.path}`);
+    process.exit(0);
+  }
   // What cleared before what stands, because a seat opening this wants to
   // know what it may take off its page before it reads what it still cannot
   // do. It checks six declared pages and writes none: taking a spent block
