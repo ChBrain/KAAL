@@ -144,11 +144,13 @@ gates` runs with no network and reads only the tree, so a gate reading the
    matches no lane, and it says the promotion is the operator's. Every other
    branch is judged as it is today.
 9. `kaal gates` judges by the target the tree opens into, so the rule holds at
-   the desk as well as at the gate. Where that target is `release`, a red wall
-   is reported and the command exits 0, and how many walls are red is on the
-   answer; where it is `main`, a red wall fails as it does today. This is the
-   command the pre-push hook runs, so a seat can put a red wall where the seat
-   that can fix it sees it, which is the whole of what `release` is for.
+   the desk as well as at the gate. Where that target is `release`, an
+   ordinary red wall is reported and the command exits 0, and how many walls
+   are red is on the answer. A wall whose own requirement says it binds
+   `release` fails there; where the target is `main`, every red wall fails as
+   it does today. This is the command the pre-push hook runs, so a seat can put
+   an ordinary red wall where the seat that can fix it sees it, which is the
+   whole of what `release` is for.
 
 ## Open questions
 
@@ -204,4 +206,6 @@ moved-alone-says-so`.
   has no order that is not red on one target; and the release itself, which is
   the first promotion this rule judges
 - Supersedes: nothing
+- Amended by: `an-open-finding-blocks-every-target` criterion 1, which makes
+  the all-target wall the stated exception to criterion 9's ordinary red wall
 - People: none
