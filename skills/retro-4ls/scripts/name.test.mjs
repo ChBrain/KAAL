@@ -58,6 +58,10 @@ test("a filename is read for the skill it names and not another", () => {
   assert.equal(claimed("code-first-use.md", "code"), null);
 });
 
+test("a skill name is matched as text, never as regular expression syntax", () => {
+  assert.equal(claimed("2026-09-12-code-any-first-use.md", "code.*"), null);
+});
+
 test("a use is counted wherever it was filed", () => {
   // A consumed retro moves to `retros/archive/` and it is still a use that
   // happened: the archive says what a requirement has read, never what was
