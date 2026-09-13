@@ -407,11 +407,16 @@ It names every declared page as `read` or `absent`, then ends with
 part answer: the declaration names the seat even when the seat has recorded
 no backlog.
 
-It writes nothing at all. Taking a spent block off a page is the act of the
-seat that wrote it, which is the rule the bug and the run record already
+Reading writes nothing at all. Taking a spent block off a page is the act of
+the seat that wrote it, which is the rule the bug and the run record already
 keep, and a collector that tidied up after six seats would be a seventh hand
-in six trees. Takes a root, which may be a flag. Exits 0 where every page is
-well formed and 1 while a finding stands
+in six trees. `backlog --init <seat>` is the one write: it creates that seat's
+page at the root of its first owned glob with an empty `blocks:` block. It
+refuses a name the declaration does not hold and refuses to overwrite a page
+that exists, because only that seat may replace what its page carries. Reading
+takes a root, which may be a flag; initialization uses the working directory.
+Exits 0 where every page is well formed or initialization writes its page, and
+1 while a finding or refusal stands
 (`a-seat-carries-its-own-backlog`).
 
 ## promote

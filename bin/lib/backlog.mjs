@@ -10,10 +10,10 @@
 // waiting on cannot be computed from the tree alone, because the tree shows
 // an absence and not who is owed it. That is the whole division.
 //
-// It reads the declaration and each declared page that exists. No network, no
-// provider, no clock.
-import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+// It reads the declaration and each declared page that exists. Initialization
+// writes one absent page and nothing else. No network, no provider, no clock.
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { parseFrontmatter } from "./frontmatter.mjs";
 
 /**
@@ -33,6 +33,28 @@ const WHERE = {
   "no record": (task) => join("tests", "runs", `${task}.md`),
 };
 
+// Derived from bin/backlog.md, the developer's page and the copy every seat
+// carries today. It lives as command data too because backlog pages are seat
+// records and package.json deliberately keeps every one out of the tarball.
+const EMPTY_PAGE = `---
+blocks:
+---
+
+# Backlog: developer
+
+What this seat cannot do, and who owes what it is waiting on. One entry per
+line under \`blocks:\`, keyed \`<seat>/<task>\` with the kind as its value, read
+by \`kaal backlog\` and by nobody else.
+
+What this seat _can_ do is not here and never will be: that is a fact about
+the tree, so it is derived rather than written. A requirement with a drawing
+and a red test is this seat's work whether or not anybody typed it.
+
+Nothing is blocked. The four kinds a block may name are \`no requirement\`,
+\`no drawing\`, \`no proof\` and \`no record\`, and this seat is waiting on none of
+them today.
+`;
+
 /** Whether this engine can say what a block of that kind is waiting for. */
 export const resolves = (kind) => Object.hasOwn(WHERE, kind);
 
@@ -50,6 +72,32 @@ export function pages(root) {
     seat: seat.name,
     path: `${String((seat.owns ?? [])[0]).split("/")[0]}/backlog.md`,
   }));
+}
+
+/**
+ * Give one declared seat its empty page. The developer's page is the page all
+ * six seats carry, so its text is the template rather than newly invented
+ * wording here. Exclusive creation keeps a page that acquired blocks between
+ * the existence check and the write intact.
+ * @param {string} root @param {string} seat
+ */
+export function init(root, seat) {
+  const page = pages(root).find((candidate) => candidate.seat === seat);
+  if (!page) return { finding: `backlog: no seat named ${seat}` };
+  const full = join(root, ...page.path.split("/"));
+  const text = EMPTY_PAGE.replace(
+    "# Backlog: developer",
+    `# Backlog: ${page.seat}`,
+  );
+  mkdirSync(dirname(full), { recursive: true });
+  try {
+    writeFileSync(full, text, { flag: "wx" });
+  } catch (error) {
+    if (error?.code === "EEXIST")
+      return { finding: `backlog: ${page.path} already exists` };
+    throw error;
+  }
+  return { path: page.path };
 }
 
 /**

@@ -123,3 +123,66 @@ test("backlog names present and absent declared pages, then counts reads", () =>
   for (const read of [2, 3, JSON.parse(config).seats.length])
     scratch(read, invariant);
 });
+
+test("backlog --init writes one declared seat's page and refuses every overwrite", () => {
+  const root = mkdtempSync(join(tmpdir(), "kaal-backlog-init-"));
+  try {
+    const config = readFileSync(join(ROOT, "kaal.config.json"), "utf8");
+    writeFileSync(join(root, "kaal.config.json"), config);
+
+    const made = spawnSync(
+      "node",
+      [join(HERE, "kaal.mjs"), "backlog", "--init", "manager"],
+      { cwd: root, encoding: "utf8" },
+    );
+    assert.equal(made.status, 0, made.stderr);
+    assert.equal(made.stderr, "");
+    assert.equal(made.stdout, "backlog: wrote plan/backlog.md\n");
+    const template = readFileSync(join(ROOT, "bin", "backlog.md"), "utf8");
+    assert.equal(
+      readFileSync(join(root, "plan", "backlog.md"), "utf8"),
+      template.replace("# Backlog: developer", "# Backlog: manager"),
+    );
+    assert.deepEqual(
+      JSON.parse(config)
+        .seats.map((seat) =>
+          join(root, String(seat.owns[0]).split("/")[0], "backlog.md"),
+        )
+        .filter(existsSync),
+      [join(root, "plan", "backlog.md")],
+    );
+
+    const existing = [
+      "---",
+      "blocks:",
+      "  architect/kept: no drawing",
+      "---",
+      "",
+      "# Backlog: developer",
+      "",
+    ].join("\n");
+    mkdirSync(join(root, "bin"), { recursive: true });
+    writeFileSync(join(root, "bin", "backlog.md"), existing);
+    const overwrite = spawnSync(
+      "node",
+      [join(HERE, "kaal.mjs"), "backlog", "--init", "developer"],
+      { cwd: root, encoding: "utf8" },
+    );
+    assert.equal(overwrite.status, 1);
+    assert.match(overwrite.stderr, /bin\/backlog\.md already exists/);
+    assert.equal(
+      readFileSync(join(root, "bin", "backlog.md"), "utf8"),
+      existing,
+    );
+
+    const unknown = spawnSync(
+      "node",
+      [join(HERE, "kaal.mjs"), "backlog", "--init", "guest"],
+      { cwd: root, encoding: "utf8" },
+    );
+    assert.equal(unknown.status, 1);
+    assert.match(unknown.stderr, /no seat named guest/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
