@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 070f566aa064c861713e0869da6b922cca55c09a278dbf2f169a80271cf21868
+  acceptance: 99d9708f1ac76cc76257f6195b4a21f5384a99ab63be0a9f382dcb2eaa6a9e79
 reviews:
-  suites/acceptance: reviewed-no-impact@070f566aa064c861713e0869da6b922cca55c09a278dbf2f169a80271cf21868 by analyst: the suite gained the case for the task that says what makes a red case a regression, and re-pinned the parent task's case, whose fixture gained the run records that tell a regression from a task nobody has delivered; which suites this plan uses is unchanged and no case was taken out of it
+  suites/acceptance: reviewed-no-impact@99d9708f1ac76cc76257f6195b4a21f5384a99ab63be0a9f382dcb2eaa6a9e79 by analyst: the suite gained the case for the task that makes a refusal name whose path it reached; which suites this plan uses is unchanged and no case was taken out of it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
