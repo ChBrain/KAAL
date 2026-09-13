@@ -10,6 +10,7 @@ cases:
   architecture/a-dependency-update-lands-on-main/contracts.test.mjs: 0d9880d28c685a757267b7eabc4b4854637b5c67e832bc41c6a0db5b1fac488e
   architecture/a-diff-carries-one-seat/contracts.test.mjs: 7fc793642d094b050196eee4b94ee271e103cf21a29199091d634ff9d83e30f5
   architecture/a-crossing-names-its-owner/contracts.test.mjs: ad6e8715ddfdf4818edee846738127767c70451cfb7f4be457eaab301a7446dd
+  architecture/a-seat-carries-its-own-backlog/contracts.test.mjs: 99a02a3e78366c27effc19b789d5672d2a37d2812fd23d9b5648ca671c4b614a
   architecture/a-drawing-fixes-more-than-structure/contracts.test.mjs: 9c637ed3845daa6abad6549de58375b509a3bcbe5bb081a1e92c898ca3fcc6ae
   architecture/a-green-contract-is-declared/contracts.test.mjs: 28e810886896c5eb27ce404f29300cba166daeff8df8d96d64ffe47c33582941
   architecture/a-guest-takes-no-orders/contracts.test.mjs: e0f3ce722f7b02d80bb3379cd245388fd7038d24f3412ac4bdc76dc738a25f59
