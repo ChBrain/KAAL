@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "scanner": "fixture-scanner",
+  "findings": [
+    {
+      "id": "unsafe-guard",
+      "summary": "the guard permits the unsafe path",
+      "bindings": {
+        "src/guard.mjs": "c6b3e0ed964e1a5590db6e19bfe7a1811e0f0a285455868c5250c49551890001"
+      }
+    }
+  ]
+}
