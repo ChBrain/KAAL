@@ -177,18 +177,41 @@ export function readTrace(text) {
 
 /** Bare names under a trace kind block, which the frontmatter reader skips. */
 const unreadBlockEntries = (text) => {
-  const block = text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1];
-  if (block === undefined) return [];
+  let block;
+  try {
+    block = parseFrontmatter(text).frontmatter;
+  } catch {
+    return [];
+  }
   const out = [];
   let kind = null;
+  let kindIndent = null;
+  let tracesIndent = null;
   for (const line of block.split(/\r?\n/)) {
-    if (!/^\s/.test(line)) {
-      const key = line.match(/^([A-Za-z_][\w-]*):\s*$/)?.[1];
-      kind = key && KINDS[key] ? key : null;
+    if (!line.trim()) continue;
+    const indent = line.match(/^\s*/)[0].length;
+    if (kindIndent !== null && indent <= kindIndent) {
+      kind = null;
+      kindIndent = null;
+    }
+    if (kind && !line.includes(":")) {
+      out.push({ kind, name: line.trim() });
       continue;
     }
-    if (kind && line.trim() && !line.includes(":"))
-      out.push({ kind, name: line.trim() });
+    if (tracesIndent !== null && indent <= tracesIndent) tracesIndent = null;
+    const key = line.trim().match(/^([A-Za-z_][\w-]*):\s*$/)?.[1];
+    if (!key) continue;
+    if (indent === 0 && key === "traces") {
+      tracesIndent = indent;
+      continue;
+    }
+    if (
+      KINDS[key] &&
+      (indent === 0 || (tracesIndent !== null && indent > tracesIndent))
+    ) {
+      kind = key;
+      kindIndent = indent;
+    }
   }
   return out;
 };

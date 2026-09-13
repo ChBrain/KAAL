@@ -20,7 +20,7 @@ const value = (raw) =>
 
 /**
  * @param {string} text
- * @returns {{ data: Record<string, string | Record<string, string>>, body: string }}
+ * @returns {{ data: Record<string, string | Record<string, string>>, body: string, frontmatter: string }}
  */
 export function parseFrontmatter(text) {
   const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
@@ -40,5 +40,5 @@ export function parseFrontmatter(text) {
     data[kv[1]] = value(kv[2].trim());
     open = data[kv[1]] === "" ? kv[1] : null;
   }
-  return { data, body: m[2] };
+  return { data, body: m[2], frontmatter: m[1] };
 }

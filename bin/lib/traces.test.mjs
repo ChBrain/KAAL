@@ -121,3 +121,75 @@ test("writePins names a bare block entry it cannot read", () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("writePins names a bare block entry nested under traces", () => {
+  const root = mkdtempSync(join(tmpdir(), "kaal-traces-nested-entry-"));
+  const strategy = join(root, "tests", "strategy.md");
+  try {
+    mkdirSync(join(root, "tests", "suites"), { recursive: true });
+    writeFileSync(
+      strategy,
+      "---\ntraces:\n  parent: none\n  suites:\n    alpha\n---\n# Strategy\n",
+    );
+    writeFileSync(
+      join(root, "tests", "suites", "alpha.md"),
+      "---\ntraces:\n  parent: strategy\ncases:\n---\n# Alpha\n",
+    );
+
+    writePins(root);
+
+    assert.match(readFileSync(strategy, "utf8"), /^    alpha$/m);
+    assert.deepEqual(
+      checkTraces(root).filter((finding) => finding.artefact === "strategy"),
+      [
+        {
+          artefact: "strategy",
+          kind: "suites",
+          message: "alpha cannot be read without a colon",
+        },
+      ],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("writePins names a bare case entry it cannot read", () => {
+  const root = mkdtempSync(join(tmpdir(), "kaal-traces-bare-case-"));
+  const suite = join(root, "tests", "suites", "alpha.md");
+  const casePath = "requirements/alpha/acceptance.test.mjs";
+  try {
+    mkdirSync(join(root, "tests", "suites"), { recursive: true });
+    mkdirSync(join(root, "requirements", "alpha"), { recursive: true });
+    writeFileSync(
+      join(root, "tests", "strategy.md"),
+      "---\ntraces:\n  parent: none\n---\n# Strategy\n",
+    );
+    writeFileSync(
+      suite,
+      `---\ntraces:\n  parent: strategy\ncases:\n  ${casePath}\n---\n# Alpha\n`,
+    );
+    writeFileSync(join(root, casePath), 'import { test } from "node:test";\n');
+
+    writePins(root);
+
+    assert.match(
+      readFileSync(suite, "utf8"),
+      new RegExp(`^  ${casePath}$`, "m"),
+    );
+    assert.deepEqual(
+      checkTraces(root).filter(
+        (finding) => finding.artefact === "suites/alpha",
+      ),
+      [
+        {
+          artefact: "suites/alpha",
+          kind: "cases",
+          message: `${casePath} cannot be read without a colon`,
+        },
+      ],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
