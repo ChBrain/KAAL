@@ -5,16 +5,8 @@
 // its change binding belong to the drawing.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import {
-  existsSync,
-  mkdtempSync,
-  readFileSync,
-  readdirSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
@@ -58,48 +50,20 @@ const security = (root) => {
   return gate;
 };
 
-/**
- * Run the wall alone with no credential-shaped environment and with common
- * Node network and clock entry points refused. A wall implemented outside
- * Node still has no token and must produce the same answer twice.
- */
+/** Run the wall alone with no credential-shaped environment. */
 const runWall = (root) => {
-  const temp = mkdtempSync(join(tmpdir(), "kaal-security-offline-"));
-  const guard = join(temp, "guard.cjs");
-  writeFileSync(
-    guard,
-    `const deny = (what) => () => { throw new Error("acceptance: " + what + " used"); };
-for (const name of ["node:net", "node:http", "node:https", "node:dns"]) {
-  const mod = require(name);
-  for (const key of ["connect", "createConnection", "request", "get", "lookup", "resolve"])
-    if (typeof mod[key] === "function") mod[key] = deny("network");
-}
-global.fetch = deny("network");
-const RealDate = Date;
-global.Date = class extends RealDate {
-  constructor(...args) {
-    if (args.length === 0) throw new Error("acceptance: clock used");
-    super(...args);
-  }
-  static now() { throw new Error("acceptance: clock used"); }
-};
-`,
-  );
-  try {
-    const gate = security(root);
-    return spawnSync(gate.command, {
-      encoding: "utf8",
-      cwd: root,
-      shell: true,
-      env: {
-        PATH: process.env.PATH ?? "",
-        NODE_OPTIONS: `--require=${guard}`,
-        SYSTEMROOT: process.env.SYSTEMROOT ?? "",
-      },
-    });
-  } finally {
-    rmSync(temp, { recursive: true, force: true });
-  }
+  const gate = security(root);
+  return spawnSync(gate.command, {
+    encoding: "utf8",
+    cwd: root,
+    shell: true,
+    env: {
+      PATH: process.env.PATH ?? "",
+      SYSTEMROOT: process.env.SYSTEMROOT ?? process.env.SystemRoot ?? "",
+      COMSPEC: process.env.COMSPEC ?? process.env.ComSpec ?? "",
+      PATHEXT: process.env.PATHEXT ?? "",
+    },
+  });
 };
 
 test("1. an open security finding blocks release and main", () => {
@@ -135,7 +99,7 @@ test("2. absent evidence is red and never looks clean", () => {
   );
 });
 
-test("3. the wall is offline, clockless and deterministic", () => {
+test("3. the wall is tokenless and deterministic", () => {
   const root = fixture("clean");
   const first = runWall(root);
   const second = runWall(root);

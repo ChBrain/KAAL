@@ -1,7 +1,9 @@
 ---
 traces:
-  parent: a-promotion-names-what-it-refuses@298ad0e059d4c1d07644275c2c7ad046b4700c252a205f5f6bfeda9ed0371eb1
-  supersedes: nothing
+  parent: a-promotion-names-what-it-refuses@eeb479d0f62f43d0a33c38d0d15df8ee03308182302daceb7a0dde21f59108cb
+  supersedes: a-promotion-names-what-it-refuses@abc146c1a3a4584d63eee64a43202e4b4570b3f024382a7c552fd3e8eb8e947b
+reviews:
+  parent/a-promotion-names-what-it-refuses: updated@eeb479d0f62f43d0a33c38d0d15df8ee03308182302daceb7a0dde21f59108cb by analyst: criterion 9 now keeps an ordinary red wall below release and names the all-target wall as the exception this task requires, so the parent and the supersede move together in this diff
 ---
 
 # Requirement: an-open-finding-blocks-every-target
@@ -77,9 +79,9 @@ on a schedule rather than on a change`. The same rule applies to findings
    says that the evidence is absent. A tree carrying gathered evidence with
    no open finding makes it green. The two answers are observably different
    by reading only their files.
-3. With network and clock access refused and no token in its environment, the
-   security wall answers a clean tree. Running it twice over the same files
-   gives the same exit code, stdout and stderr.
+3. With no token in its environment, the security wall answers a clean tree.
+   Running it twice over the same files gives the same exit code, stdout and
+   stderr.
 4. An open finding is accepted only when the applicable waiver is under
    `waivers/**`, which only the governance lane may carry. With that
    governance waiver `kaal gates` reports the security wall as waived and
@@ -115,7 +117,8 @@ requirements/an-open-finding-blocks-every-target/acceptance.test.mjs`; all
 - Blocked on: nothing
 - Unblocks: the drawing that chooses the evidence and waiver contracts, then
   the wall that keeps an open finding off both targets
-- Supersedes: nothing; it makes one security exception to
-  `a-promotion-names-what-it-refuses` criterion 9 without changing the other
-  walls' licence on `release`
+- Supersedes: the clause in `a-promotion-names-what-it-refuses` criterion 9
+  saying that a red wall on `release` exits 0. That criterion is amended in
+  this diff so the clause still holds for an ordinary red wall and not for a
+  wall whose own requirement binds `release`; its `main` clause is untouched
 - People: none

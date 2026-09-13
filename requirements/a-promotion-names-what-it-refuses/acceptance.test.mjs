@@ -373,8 +373,10 @@ test("8. a promotion is not a lane's diff, and the seat rule says so", () => {
 });
 
 test("9. the board judges by the target the tree opens into", () => {
-  // The same tree, the same red wall, asked twice. This is the command the
-  // pre-push hook runs, so it is where the rule reaches a desk.
+  // The same tree, the same ordinary red wall, asked twice. This is the
+  // command the pre-push hook runs, so it is where the rule reaches a desk.
+  // The all-target wall is the case in
+  // an-open-finding-blocks-every-target criterion 1.
   const board = (root, base) =>
     spawnSync(process.execPath, [join(ROOT, "bin", "kaal.mjs"), "gates"], {
       encoding: "utf8",
