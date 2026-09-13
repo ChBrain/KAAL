@@ -339,8 +339,16 @@ suites it names, so what is re-run to protect a target changes with a diff in
 selection that runs nothing is not a selection that passed. A red run is asked
 again once per case, because the runner flattens several files into one stream
 of test names and never says which file a name came from, so the answer can
-name the case that broke. Takes a root. Exits 0 or 1
-(`a-plan-picks-its-suites`).
+name the case that broke.
+
+A red case is named only where a run on record still speaks for the task it
+belongs to, because a regression is a promise that used to hold and stopped
+and a case for a task nobody has delivered never held. A case whose task has
+no record, whose record no longer matches the suite it names, or which answers
+to no task at all, is run and set aside; its red is the acceptance wall's to
+report. The answer says how many cases the plan reaches and how many of them
+went unjudged, so a reader has nothing to subtract. Takes a root. Exits 0 or 1
+(`a-plan-picks-its-suites`, `a-regression-is-a-promise-that-was-kept`).
 
 ## bugs
 
