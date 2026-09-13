@@ -3,7 +3,16 @@
 // holding here rather than in each wall that calls it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { splitTrace, readTrace } from "./traces.mjs";
+import {
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { checkTraces, readTrace, splitTrace, writePins } from "./traces.mjs";
 
 const names = (v) => splitTrace(v).map((e) => e.name);
 
@@ -79,4 +88,36 @@ test("a key that is no kind is left alone, block or not", () => {
     "---\ntraces:\n  parent: none\nreviews:\n  requirement/alpha: current\n---\n",
   );
   assert.equal(t.reviews, undefined, "a reviews block was read as a trace");
+});
+
+test("writePins names a bare block entry it cannot read", () => {
+  const root = mkdtempSync(join(tmpdir(), "kaal-traces-bare-entry-"));
+  const strategy = join(root, "tests", "strategy.md");
+  try {
+    mkdirSync(join(root, "tests", "suites"), { recursive: true });
+    writeFileSync(
+      strategy,
+      "---\ntraces:\n  parent: none\nsuites:\n  alpha\n---\n# Strategy\n",
+    );
+    writeFileSync(
+      join(root, "tests", "suites", "alpha.md"),
+      "---\ntraces:\n  parent: strategy\ncases:\n---\n# Alpha\n",
+    );
+
+    writePins(root);
+
+    assert.match(readFileSync(strategy, "utf8"), /^  alpha$/m);
+    assert.deepEqual(
+      checkTraces(root).filter((finding) => finding.artefact === "strategy"),
+      [
+        {
+          artefact: "strategy",
+          kind: "suites",
+          message: "alpha cannot be read without a colon",
+        },
+      ],
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });

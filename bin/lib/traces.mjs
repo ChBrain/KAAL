@@ -175,6 +175,24 @@ export function readTrace(text) {
   return out;
 }
 
+/** Bare names under a trace kind block, which the frontmatter reader skips. */
+const unreadBlockEntries = (text) => {
+  const block = text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1];
+  if (block === undefined) return [];
+  const out = [];
+  let kind = null;
+  for (const line of block.split(/\r?\n/)) {
+    if (!/^\s/.test(line)) {
+      const key = line.match(/^([A-Za-z_][\w-]*):\s*$/)?.[1];
+      kind = key && KINDS[key] ? key : null;
+      continue;
+    }
+    if (kind && line.trim() && !line.includes(":"))
+      out.push({ kind, name: line.trim() });
+  }
+  return out;
+};
+
 /** A value that is a sha rather than a word: `nothing` is not a pin. */
 const PIN = /^[0-9a-f]{8,}$/;
 
@@ -252,6 +270,8 @@ export function checkTraces(root) {
       find(artefact, "traces", `no traces map in ${dir}/${artefact}`);
       continue;
     }
+    for (const { kind, name } of unreadBlockEntries(text))
+      find(artefact, kind, `${name} cannot be read without a colon`);
     // A review is recorded beside the traces and read by `reviews.mjs`. What
     // it says about a pin is a state and never a finding; what is wrong with
     // how it is written is a finding like any other, and it belongs on the
