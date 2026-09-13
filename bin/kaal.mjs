@@ -187,11 +187,21 @@ if (cmd === "ledger") {
     console.error(`seats: not applicable here: ${away}`);
     process.exit(2);
   }
-  // And the third: a promotion carries every seat's work by design, so the
-  // question this rule asks has no true answer about it. The exit is 2 and
-  // not 0, because a clean answer would read as a diff that is one lane's.
-  if (where.promotion) {
-    console.error(`seats: not applicable here: ${where.promotion}`);
+  // And the third: a promotion carries every seat's work by design and the
+  // sync carries it back, so the question this rule asks has no true answer
+  // about either. The exit is 2 and not 0, because a clean answer would read
+  // as a diff that is one lane's.
+  //
+  // The sync takes the base as well as the branch, and this is the only place
+  // that holds both: `laneOf` reads a branch, and `main` is also where the
+  // board runs after a merge, where the base is `main` too and the diff is
+  // empty. A target opening into itself is not a road, and
+  // `a-diff-carries-one-seat` fixed that the board answers clean there.
+  const target = String(base ?? "").replace(/^origin\//, "");
+  const aside =
+    where.promotion ?? (target === where.branch ? null : where.sync);
+  if (aside) {
+    console.error(`seats: not applicable here: ${aside}`);
     process.exit(2);
   }
   // A branch nobody declared, carrying a change nobody can place. Silent

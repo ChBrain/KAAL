@@ -4,7 +4,8 @@
 // board is one function already, and this is a sort over what they answer.
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { TARGETS, PROMOTION_FROM } from "./targets.mjs";
+import { TARGETS, PROMOTION_FROM, BUMP_FROM } from "./targets.mjs";
+import { matches } from "./seats.mjs";
 import { runAcceptance } from "./acceptance.mjs";
 import { runGates } from "./gates.mjs";
 
@@ -76,26 +77,26 @@ export function refusedVerdicts(list, into) {
     .map((v) => ({ artefact: v.task, kind: "verdict", message: v.word }));
 }
 
-const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const matches = (branch, pattern) =>
-  new RegExp(`^${pattern.split("*").map(esc).join("[^/]*")}$`).test(branch);
-
 /**
- * A head the target will not take. `main` takes the promotion and nothing
- * else; `release` takes a lane the config holds, and never another target.
+ * A head the target will not take. `main` takes the promotion and a
+ * dependency update the config holds a lane for, and nothing else; `release`
+ * takes a lane the config holds, and never another target.
+ *
+ * Both targets ask the same question of the declaration, which is why the
+ * answer is read once: a head rides on a lane somebody wrote down, and a road
+ * this tree has not declared is not a road.
  * @param {string} into @param {string} from @param {string[]} lanes
  */
 export function refusedHead(into, from, lanes) {
   const say = (message) => ({ artefact: from, kind: "head", message });
+  const held = (lanes ?? []).some((p) => matches(from, p));
   if (into === "main")
-    return from === PROMOTION_FROM
+    return from === PROMOTION_FROM || (matches(from, BUMP_FROM) && held)
       ? null
-      : say(`main takes only ${PROMOTION_FROM}`);
+      : say(`main takes only ${PROMOTION_FROM} and a dependency update`);
   if (TARGETS.includes(from))
     return say(`${into} takes a lane and not a target`);
-  return (lanes ?? []).some((p) => matches(from, p))
-    ? null
-    : say("no lane holds it");
+  return held ? null : say("no lane holds it");
 }
 
 /**

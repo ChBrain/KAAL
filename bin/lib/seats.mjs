@@ -14,7 +14,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolves } from "./class.mjs";
-import { PROMOTION_FROM } from "./targets.mjs";
+import { PROMOTION_FROM, TARGETS } from "./targets.mjs";
 
 const git = (root, ...args) =>
   spawnSync("git", ["-C", root, ...args], { encoding: "utf8" });
@@ -112,6 +112,16 @@ export function laneOf(root, env = process.env) {
       branch,
       lane: null,
       promotion: "this is the promotion, and it is the operator's",
+    };
+  // And the other direction. A target opening into a target carries whatever
+  // the one has that the other lacks, which is as little one seat's diff as
+  // the promotion is. Two near identical answers, and a reader must read
+  // which one it got: that is what naming the sync separately buys.
+  if (!lane && TARGETS.includes(branch))
+    return {
+      branch,
+      lane: null,
+      sync: "this is the sync, and it carries back what the promotion took",
     };
   return { branch, lane };
 }
