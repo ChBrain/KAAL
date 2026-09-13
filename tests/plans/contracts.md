@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  contracts: 688dd0f8e19b087fd49657b5308b0fe32b35918e22290a246f821ca4723ece59
+  contracts: 09adb1bab0945b648dda419bc4e8b465a89497b6c838c88889f44626e7665e17
 reviews:
-  suites/contracts: reviewed-no-impact@688dd0f8e19b087fd49657b5308b0fe32b35918e22290a246f821ca4723ece59 by architect: the suite gained the case for the drawing that gives the board a third answer; which suites this plan uses is unchanged and no case was taken out of it
+  suites/contracts: reviewed-no-impact@09adb1bab0945b648dda419bc4e8b465a89497b6c838c88889f44626e7665e17 by architect: the suite gained the case for the drawing that says what makes a red case a regression; which suites this plan uses is unchanged and no case was taken out of it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
