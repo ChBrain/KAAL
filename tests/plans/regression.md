@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 99d9708f1ac76cc76257f6195b4a21f5384a99ab63be0a9f382dcb2eaa6a9e79
+  acceptance: c0966d3bb64fecc9102df6f7d387524b9615c2d6de9857607e53459a40d6b4fa
 reviews:
-  suites/acceptance: reviewed-no-impact@99d9708f1ac76cc76257f6195b4a21f5384a99ab63be0a9f382dcb2eaa6a9e79 by analyst: the suite gained the case for the task that makes a refusal name whose path it reached; which suites this plan uses is unchanged and no case was taken out of it
+  suites/acceptance: reviewed-no-impact@c0966d3bb64fecc9102df6f7d387524b9615c2d6de9857607e53459a40d6b4fa by analyst: the suite gained the case for the task that gives every seat a backlog in its own lane; which suites this plan uses is unchanged and no case was taken out of it
 ---
 
 # Test plan: regression

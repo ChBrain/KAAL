@@ -10,6 +10,7 @@ cases:
   requirements/a-decision-balances-two-goods/acceptance.test.mjs: 8e1ea235299090f8117c5882aa5d250cf4b3bac49d88e8103437066429020d8e
   requirements/a-dependency-update-lands-on-main/acceptance.test.mjs: 8070ba12edbd23ed8432ee769fa0ef9af1a285fd93f063a7b73a3e3a17292ca5
   requirements/a-crossing-names-its-owner/acceptance.test.mjs: 2a467026bfd67703fb8895dcdfbd116ece515d83553f5ae75c162827df085fc8
+  requirements/a-seat-carries-its-own-backlog/acceptance.test.mjs: 6f17f11f9a17906bdfcee2c9929e5a2ba5c5590a09e4f10235f890192c5e1226
   requirements/a-diff-carries-one-seat/acceptance.test.mjs: d461c0e538a9315216faabe685a3962299cb8f0642cf3ba7d5c9036d967c8d38
   requirements/a-drawing-fixes-more-than-structure/acceptance.test.mjs: e9af3a318b21cf4940f3d2b2e2838362f41ba277e322c37f7bb2ae12887c2a5b
   requirements/a-drawing-shows-its-ground/acceptance.test.mjs: a3e9bbdba779b5aa48d9ccf85d59f3a0870b6565b175be174fe76dfb44a3ab47
