@@ -70,6 +70,49 @@ it is. Neither reaches into another seat's tree, and a plan that
 says what somebody else must do is still a plan and never their diff. Every test is seen red before it is trusted
 green. A closed task's red is a failure; an open task's red is reported.
 
+## What a seat needs from a seat
+
+Each seat's work exists only when a specific upstream artefact is in a
+specific state, and is blocked by a state it cannot change itself. The table
+is the same on every task; what changes per task is which of these edges is
+live, and that is what a seat's own backlog records.
+
+| seat      | work exists when                                                 | blocked when                                             |
+| --------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| analyst   | an ask has no requirement, or a closed criterion is contradicted | only a person can answer                                 |
+| architect | a requirement has no drawing                                     | the criterion cannot be drawn as written                 |
+| developer | a test is red                                                    | the red test needs a seam nobody drew                    |
+| tester    | a criterion has no proof, or a task has no record                | a verify or validate fails for a reason outside `tests/` |
+| operator  | something is proved and unshipped                                | a control outside the tree                               |
+| manager   | two seats are clear and the order is not obvious                 | never on its own account                                 |
+
+The manager cannot be blocked by a seat, only by proxy, carrying somebody
+else's block. That is why it is the seat that picks blocks up, and it is the
+argument against seats handing work to each other directly.
+
+A block names one kind and never a fix. The kinds are declared in
+`kaal.config.json` beside the seats and the lanes, and today they are
+`no requirement`, `no drawing`, `no proof` and `no record`: each names a
+thing the tree either holds or does not, so a block clears when the tree
+holds it and never because anybody decided. A seat writes its own block in
+its own lane, at `backlog.md` in the tree that seat owns, keyed
+`<seat>/<task>` under a `blocks:` block in frontmatter. `kaal backlog` reads
+all six and writes none.
+
+Three rules hold the whole of it:
+
+- **A seat names the block and never the fix.** The blocked seat says where,
+  the manager says when, the owning seat says what. None of the three may
+  decide for another, which is why neither a block nor the manager's pick-up
+  carries a field for a remedy.
+- **A refusal is a block.** Every time a seat tries to write outside its lane
+  that is the moment to record one, and the wall that refuses it already
+  names the seat that owns the path.
+- **A bug blocks its retest.** A failing verify or validate is recorded as a
+  bug naming the earliest of requirements, architecture, code or operations
+  where it can be fixed, and the case it blocks is not retested until it
+  clears.
+
 ## How a change lands
 
 Branch from `release`, never from a branch that already carries something
