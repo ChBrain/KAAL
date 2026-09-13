@@ -201,9 +201,14 @@ beside its code is not two lanes. A file git has never seen is in the diff
 too, because a person is about to land it. Where HEAD names no branch, which
 is what a checkout on a pull request leaves, the branch is read from
 `KAAL_BRANCH`; where neither answers, the question is not this tree's, because
-a wall that does not run beats a wall that lies. Takes a root, which may be a
-flag, and `--against <ref>`, defaulting to the same base the class wall reads.
-Exits 0, 1 or 2 (`a-diff-carries-one-seat`).
+a wall that does not run beats a wall that lies. A target opening into another
+target is not this tree's question either: `release` into `main` is the
+promotion and `main` into `release` is the sync, each carries every seat's
+work at once by design, and both say which one it is and exit 2. A target
+opening into itself is neither, because that is where the board runs after a
+merge. Takes a root, which may be a flag, and `--against <ref>`, defaulting to
+the same base the class wall reads. Exits 0, 1 or 2
+(`a-diff-carries-one-seat`, `a-dependency-update-lands-on-main`).
 
 ## coverage
 
@@ -372,15 +377,19 @@ everything that refuses it. Two targets and two gates: reaching `release`
 refuses a task whose verdict is `regressed` or `nothing ran`, a claim that was
 true and is not; reaching `main` refuses those and `not delivered` as well,
 which is the one a tester is allowed to leave standing. `main` takes a head of
-`release` and nothing else; `release` takes a head that is a lane the config
-holds, and never another target. A red wall refuses `main` and is counted
+`release`, and a dependency update on a branch the config holds a lane for,
+and nothing else; `release` takes a head that is a lane the config holds, and
+never another target. Both targets ask the declaration the same question, so a
+road this tree has not written down is not a road, and who opened the pull
+request is never asked here: the paths are the evidence an engine has and the
+author is the evidence a workflow has. A red wall refuses `main` and is counted
 without refusing `release`. Every refusal is said before it exits, because a
 gate that stopped at the first would turn one merge into four, and the last
 line counts them. A finding is `<artefact>: <kind>: <message>` with the kinds
 `verdict`, `head` and `wall`. Takes a root, `--into <target>` and
 `--from <head>`, and reads `KAAL_BASE` and `KAAL_BRANCH` where it is given
 neither; a target it does not know is usage. Exits 0, 1 or 2
-(`a-promotion-names-what-it-refuses`).
+(`a-promotion-names-what-it-refuses`, `a-dependency-update-lands-on-main`).
 
 ## fixtures
 

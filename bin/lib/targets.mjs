@@ -12,6 +12,14 @@ export const BASES = TARGETS.map((t) => `origin/${t}`);
 export const PROMOTION_FROM = "release";
 
 /**
+ * The one lane `main` takes beside the promotion. A dependency update is
+ * opened against `main` by a bot and reaches `release` on the sync, so it is
+ * the only head that lands on the promotion's target without being one. The
+ * pattern crosses a slash because the branches do: four segments deep.
+ */
+export const BUMP_FROM = "dependabot/**";
+
+/**
  * Whether a red wall stops this target. A wall's colour is a fact about the
  * tree and the same fact at both targets; this says whether the fact stops a
  * merge. A target this does not know is bound, because the safe answer to a
