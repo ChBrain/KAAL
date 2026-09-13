@@ -10,7 +10,8 @@
 // waiting on cannot be computed from the tree alone, because the tree shows
 // an absence and not who is owed it. That is the whole division.
 //
-// It reads the declaration and six files. No network, no provider, no clock.
+// It reads the declaration and each declared page that exists. No network, no
+// provider, no clock.
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { parseFrontmatter } from "./frontmatter.mjs";
@@ -108,6 +109,10 @@ export function read(root) {
   const config = declared(root);
   const seats = (config.seats ?? []).map((s) => s.name);
   const kinds = config.blocks ?? [];
+  const declaredPages = pages(root).map((page) => ({
+    ...page,
+    read: existsSync(join(root, ...page.path.split("/"))),
+  }));
   const findings = [];
   const standing = [];
   const cleared = [];
@@ -118,9 +123,9 @@ export function read(root) {
       findings.push(
         `kaal.config.json: ${kind}: nothing resolves it, so a block naming it could never clear`,
       );
-  for (const { path } of pages(root)) {
+  for (const { path, read } of declaredPages) {
+    if (!read) continue;
     const full = join(root, ...path.split("/"));
-    if (!existsSync(full)) continue;
     const page = entries(readFileSync(full, "utf8"));
     for (const finding of page.findings) findings.push(`${path}: ${finding}`);
     for (const entry of page.entries) {
@@ -135,5 +140,5 @@ export function read(root) {
       (stands(root, entry) ? standing : cleared).push({ ...entry, page: path });
     }
   }
-  return { pages: pages(root), findings, standing, cleared };
+  return { pages: declaredPages, findings, standing, cleared };
 }

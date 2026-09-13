@@ -60,3 +60,21 @@ test("runner --check on a root whose runner moved exits 1 and names it on stderr
   const named = r.stderr.match(/^runner: .* is stale$/gm) ?? [];
   assert.deepEqual(named, ["runner: skills/x/fixtures/f/RUNNER.md is stale"]);
 });
+
+test("backlog names present and absent declared pages, then counts reads", () => {
+  const r = kaal("backlog");
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(
+    r.stdout.match(/^backlog: (?:read|absent) .*\/backlog\.md$/gm),
+    [
+      "backlog: absent plan/backlog.md",
+      "backlog: absent requirements/backlog.md",
+      "backlog: absent architecture/backlog.md",
+      "backlog: absent tests/backlog.md",
+      "backlog: read bin/backlog.md",
+      "backlog: read deploy/backlog.md",
+    ],
+  );
+  assert.match(r.stdout, /^backlog: read 2 of 6 declared pages$/m);
+  assert.equal(r.stderr.trim(), "");
+});
