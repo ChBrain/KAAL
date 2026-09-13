@@ -123,6 +123,11 @@
       "pattern": "eval/*",
       "seat": null,
       "allows": ["evals/**"]
+    },
+    {
+      "pattern": "dependabot/**",
+      "seat": null,
+      "allows": [".github/**", "package.json", "package-lock.json"]
     }
   ],
   "shared": ["retros/**", "tests/plans/*.md", "tests/suites/*.md"],

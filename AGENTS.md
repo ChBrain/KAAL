@@ -37,9 +37,12 @@ paths, and the shared paths may travel in it.
 Six lanes carry a seat, one each, and they are declared in the order of
 the chain: `plan/<topic>` the manager, `requirement/<task>` the analyst,
 `architecture/<task>` the architect, `build/<task>` the developer,
-`test/<task>` the tester, `operate/<topic>` the operator. Four carry none:
+`test/<task>` the tester, `operate/<topic>` the operator. Five carry none:
 `governance/<topic>` for the league's own contract, `skill/<name>`,
-`agent/<name>`, `eval/<skill>-<fixture>`. A diff that does not fit its lane
+`agent/<name>`, `eval/<skill>-<fixture>`, and `dependabot/<ecosystem>/<name>`,
+which no person writes: it is the one lane a machine files into, it is the one
+head `main` takes beside the promotion, and who may open it is the workflow's
+question and never the engine's. A diff that does not fit its lane
 is two pull requests, and the split is yours to make: nothing here widens a
 declaration to let a diff through.
 
