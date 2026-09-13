@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: 187395a4fb9f2779a131a1f6faa131998f3136eaf485652f77dfea04fd2372a5
+  units: c8fcaf051638f5d28394890473c32b78120bd8bbc108dbdfc7f343b949add40f
 reviews:
-  suites/units: reviewed-no-impact@187395a4fb9f2779a131a1f6faa131998f3136eaf485652f77dfea04fd2372a5 by developer: the suite gained two cases, the units for the fifth kind and the ones beside the retro skill's naming script, which the units gate's second and third globs already reach; which suites this plan uses is unchanged and no case was taken out of it
+  suites/units: reviewed-no-impact@c8fcaf051638f5d28394890473c32b78120bd8bbc108dbdfc7f343b949add40f by developer: the suite gained the case beside `runs.mjs`, which had none; which suites this plan uses is unchanged and no case was taken out of it
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

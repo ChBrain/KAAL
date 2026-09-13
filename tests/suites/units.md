@@ -18,6 +18,7 @@ cases:
   bin/lib/release.test.mjs: ae645e5d014b94a0f11bab63bea7c9800b12f8afdd38ec7e9a13ee935713d50d
   bin/lib/retros.test.mjs: 0006a3a14d03a31ea1c3cb2fe0085c145149aecff99128d5d4485ce814a0fafe
   bin/lib/rules.test.mjs: 552bf7dec00fa183bc720cfbfcdc4adda4edbfcb294ce2973866160e11bed194
+  bin/lib/runs.test.mjs: 65ca4bb1cf4136483a1b26f7c01d9cb4601a1141f91dfa2956ca000a31295419
   bin/lib/runner.test.mjs: 85f0c6809846e36b0c75600d8c5e2cdfd6b5896f9f53066152f3e67f5d408288
   bin/lib/sha.test.mjs: 1ecd45936c4654c00f5c273faa881eb1059cf13f8f0f499d3ae44ed3073afc6a
   bin/lib/standard.test.mjs: 0f337bd94fe96a951fbec100634045830c4aa6e3ebf412b251d96a85d3bbeb1a

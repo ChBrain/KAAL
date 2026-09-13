@@ -13,7 +13,7 @@ import {
   mkdirSync,
   globSync,
 } from "node:fs";
-import { join, dirname, posix } from "node:path";
+import { join, dirname, basename, posix } from "node:path";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { caseEnv } from "./gates.mjs";
@@ -71,6 +71,46 @@ export const isFresh = (root, run) =>
     run.sha &&
     shaOf(join(root, run.suite)) === run.sha,
   );
+
+/**
+ * The task a case answers to, or null where it answers to none. An acceptance
+ * case sits beside its requirement and a contract case under the drawing whose
+ * task the requirement names, and both read as `<tree>/<task>/<file>`; a unit
+ * sits beside its code and answers to no task at all.
+ *
+ * Here rather than borrowed from `acceptance.mjs`, which resolves the same
+ * two shapes and already imports this module. Importing it back is a cycle,
+ * and the cycle does not fail to load: the name is undefined at call time and
+ * every case reads as one no record speaks for, which is an answer this wall
+ * gives on purpose sometimes. The failure would wear the shape of the feature.
+ * @param {string} path @returns {string|null}
+ */
+export function taskOf(path) {
+  const parts = String(path).replaceAll("\\", "/").split("/");
+  if (parts.length !== 3) return null;
+  const [tree, task] = parts;
+  if (tree !== "requirements" && tree !== "architecture") return null;
+  return task && task !== "." && task !== ".." ? task : null;
+}
+
+/**
+ * Does a run on record still speak for this case? A record is what says a
+ * promise was made, so a case whose task has none was never promised and its
+ * red is news about work in progress rather than about something that
+ * stopped working.
+ *
+ * Read through the same `readRun` and the same `isFresh` the verdict table
+ * reads, which is what keeps this wall and the judged walls from disagreeing
+ * about one case. It answers the term the table calls `fresh` and never asks
+ * the table for a word: that would want a pass and a fail count per case, and
+ * the regression wall is handed paths.
+ * @param {string} root @param {string} path
+ */
+export function promised(root, path) {
+  const task = taskOf(path);
+  if (!task) return false;
+  return isFresh(root, readRun(root, task));
+}
 
 /**
  * How old the evidence is, in whole days, read from the date the record

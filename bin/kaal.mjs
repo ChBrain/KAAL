@@ -52,7 +52,13 @@ import {
   casesOf,
   runCases,
 } from "./lib/plans.mjs";
-import { readRun, isFresh, staleWhy, writeRuns } from "./lib/runs.mjs";
+import {
+  readRun,
+  isFresh,
+  staleWhy,
+  writeRuns,
+  promised,
+} from "./lib/runs.mjs";
 import { binding } from "./lib/targets.mjs";
 import { asked, promote } from "./lib/promote.mjs";
 import { checkBugs, standing } from "./lib/bugs.mjs";
@@ -536,13 +542,22 @@ if (cmd === "ledger") {
   const rroot2 = arg && !arg.startsWith("-") ? arg : cwd;
   const cases = casesOf(rroot2, "regression");
   const r = runCases(rroot2, cases);
-  for (const f of r.red) console.log(`regression: case: ${f} is red`);
+  // A regression is a promise that used to hold and stopped, so a red case
+  // is one only where a run on record still speaks for it. A case belonging
+  // to a task nobody has delivered has never held, and reporting its red here
+  // is how a wall teaches a reader to read past it.
+  const regressed = r.red.filter((c) => promised(rroot2, c));
+  const unjudged = cases.filter((c) => !promised(rroot2, c));
+  for (const f of regressed) console.log(`regression: case: ${f} is red`);
+  // Both numbers, because a reader asking what is protected must not have to
+  // subtract one from the other. The run stays whole: a case this wall sets
+  // aside is still run, and its red is the acceptance wall's to report.
   console.log(
     r.cases
-      ? `regression: ran ${r.cases} case(s) the plan reaches`
+      ? `regression: ran ${r.cases} case(s) the plan reaches, ${unjudged.length} not judged for want of a record`
       : "regression: the plan reaches no case, so nothing ran",
   );
-  process.exit(r.ok ? 0 : 1);
+  process.exit(r.cases && !regressed.length ? 0 : 1);
 } else if (cmd === "gates") {
   const groot = arg && !arg.startsWith("-") ? arg : cwd;
   const g = runGates(groot);
