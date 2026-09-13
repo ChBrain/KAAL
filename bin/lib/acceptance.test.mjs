@@ -58,7 +58,8 @@ const config = JSON.stringify(
 );
 
 const suite = `---\ntraces:\n  parent: strategy\ncases:\n  requirements/alpha/acceptance.test.mjs: nothing\n  requirements/beta/acceptance.test.mjs: nothing\n---\n\n# Test suite: acceptance\n`;
-const passes = "import { test } from 'node:test';\ntest('1. it holds', () => {});\n";
+const passes =
+  "import { test } from 'node:test';\ntest('1. it holds', () => {});\n";
 const fails =
   "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\n" +
   "test('1. it does not hold', () => assert.equal(1, 2));\n";
@@ -162,7 +163,12 @@ test("runJudged keeps a blocked case blocked on Windows-style paths", () => {
     (root) => {
       const out = runJudged(["requirements/*/acceptance.test.mjs"], root);
       assert.equal(out.results.length, 2, JSON.stringify(out.results));
-      assert.ok(out.results.some((x) => x.blocked === "requirements/beta/acceptance.test.mjs"), JSON.stringify(out.results));
+      assert.ok(
+        out.results.some(
+          (x) => x.blocked === "requirements/beta/acceptance.test.mjs",
+        ),
+        JSON.stringify(out.results),
+      );
       assert.ok(
         out.lines.some(
           (line) =>
