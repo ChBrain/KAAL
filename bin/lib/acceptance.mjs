@@ -98,11 +98,12 @@ export function runJudged(files, at = process.cwd()) {
   // the tree a requirement's own path resolves to.
   const held = blocked(at);
   for (const file of expand(files, at)) {
+    const rel = String(file).replaceAll("\\", "/");
     // A case a standing bug is about is not run here. That is not a skip: the
     // red is recorded, owned and named on the board, and this is the tree
     // declining to ask a question whose answer is already written down.
-    if (held.has(file)) {
-      results.push({ blocked: file });
+    if (held.has(rel)) {
+      results.push({ blocked: rel });
       continue;
     }
     // The reporter is named and not inherited: node 22 prints TAP when this
@@ -133,14 +134,14 @@ export function runJudged(files, at = process.cwd()) {
     const named = [...r.stdout.matchAll(/^ok \d+ - (.+)$/gm)].map((m) =>
       m[1].trim(),
     );
-    const empty = named.length === 1 && tail(named[0]) === tail(file);
+    const empty = named.length === 1 && tail(named[0]) === tail(rel);
     const pass = empty ? 0 : Number(r.stdout.match(/^# pass (\d+)/m)?.[1] ?? 0);
     const fail = Number(
       r.stdout.match(/^# fail (\d+)/m)?.[1] ?? (r.status === 0 ? 0 : 1),
     );
     // The task this suite answers to, and the root it lives in. A drawing's
     // suite resolves to its requirement, which is where its record is.
-    const req = requirementFor(file);
+    const req = requirementFor(rel);
     const task = basename(dirname(req));
     const root = join(dirname(req), "..", "..");
     const reported = verdict(root, readRun(root, task), pass, fail, task);
