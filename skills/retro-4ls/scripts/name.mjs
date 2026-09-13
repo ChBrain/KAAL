@@ -73,10 +73,14 @@ export const ordinal = (n) => {
   return o === 0 ? TENS_ALONE[t] : `${TENS[t]}-${ONES[o]}`;
 };
 
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 /** The number a filename claims, or null where it claims none. */
 export const claimed = (file, skill) => {
   const m = file.match(
-    new RegExp(`^\\d{4}-\\d{2}-\\d{2}-${skill}-([a-z-]+)-use\\.md$`),
+    new RegExp(
+      `^\\d{4}-\\d{2}-\\d{2}-${escapeRegExp(skill)}-([a-z-]+)-use\\.md$`,
+    ),
   );
   if (!m) return null;
   for (let n = 1; n <= 99; n += 1) if (ordinal(n) === m[1]) return n;
