@@ -401,6 +401,11 @@ about the declaration and not about the page that used it. A key with no
 slash, a seat the declaration does not hold and a kind it does not hold are
 findings naming the page and the key.
 
+It names every declared page as `read` or `absent`, then ends with
+`backlog: read <read> of <declared> declared pages`. An absent page is still
+part answer: the declaration names the seat even when the seat has recorded
+no backlog.
+
 It writes nothing at all. Taking a spent block off a page is the act of the
 seat that wrote it, which is the rule the bug and the run record already
 keep, and a collector that tidied up after six seats would be a seventh hand

@@ -106,12 +106,14 @@ if (notApplicable) {
 if (cmd === "backlog") {
   // What cleared before what stands, because a seat opening this wants to
   // know what it may take off its page before it reads what it still cannot
-  // do. It reads six pages and writes none: taking a spent block off is the
-  // act of the seat that wrote it, the same rule the bug and the run record
-  // already keep.
+  // do. It checks six declared pages and writes none: taking a spent block
+  // off is the act of the seat that wrote it, the same rule the bug and the
+  // run record already keep. Every declared page is named as read or absent,
+  // and the final count says how many were actually read.
   const broot = arg && !arg.startsWith("-") ? arg : cwd;
   const backlog = readBacklog(broot);
-  for (const page of backlog.pages) console.log(`backlog: read ${page.path}`);
+  for (const page of backlog.pages)
+    console.log(`backlog: ${page.read ? "read" : "absent"} ${page.path}`);
   for (const e of backlog.cleared)
     console.log(
       `clear: ${e.task}: ${e.kind} by the ${e.seat}, and ${e.page} still carries it`,
@@ -126,6 +128,9 @@ if (cmd === "backlog") {
       console.log(`  ${e.task}: ${e.kind}, from ${e.page}`);
   }
   if (!owed.length) console.log("backlog: nothing is blocked");
+  console.log(
+    `backlog: read ${backlog.pages.filter((page) => page.read).length} of ${backlog.pages.length} declared pages`,
+  );
   findings = backlog.findings;
 } else if (cmd === "ledger") {
   for (const s of standings(arg ?? cwd)) {
