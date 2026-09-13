@@ -1,8 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..");
@@ -62,19 +71,55 @@ test("runner --check on a root whose runner moved exits 1 and names it on stderr
 });
 
 test("backlog names present and absent declared pages, then counts reads", () => {
-  const r = kaal("backlog");
-  assert.equal(r.status, 0, r.stderr);
-  assert.deepEqual(
-    r.stdout.match(/^backlog: (?:read|absent) .*\/backlog\.md$/gm),
-    [
-      "backlog: absent plan/backlog.md",
-      "backlog: absent requirements/backlog.md",
-      "backlog: absent architecture/backlog.md",
-      "backlog: absent tests/backlog.md",
-      "backlog: read bin/backlog.md",
-      "backlog: read deploy/backlog.md",
-    ],
-  );
-  assert.match(r.stdout, /^backlog: read 2 of 6 declared pages$/m);
-  assert.equal(r.stderr.trim(), "");
+  const config = readFileSync(join(ROOT, "kaal.config.json"), "utf8");
+  const scratch = (read, fn) => {
+    const root = mkdtempSync(join(tmpdir(), "kaal-backlog-pages-"));
+    try {
+      writeFileSync(join(root, "kaal.config.json"), config);
+      const declared = JSON.parse(config).seats.map(
+        (seat) => `${String(seat.owns[0]).split("/")[0]}/backlog.md`,
+      );
+      for (const page of declared.slice(0, read)) {
+        const path = join(root, ...page.split("/"));
+        mkdirSync(dirname(path), { recursive: true });
+        writeFileSync(path, "# Backlog\n");
+      }
+      fn(root, declared);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  };
+
+  const invariant = (root, declared) => {
+    const r = kaal("backlog", root);
+    assert.equal(r.status, 0, r.stderr);
+    const rows = [
+      ...r.stdout.matchAll(/^backlog: (read|absent) (.*\/backlog\.md)$/gm),
+    ].map((m) => ({ label: m[1], page: m[2] }));
+    assert.equal(
+      rows.length,
+      declared.length,
+      `the output did not name each of ${declared.length} declared pages once`,
+    );
+    for (const page of declared) {
+      const named = rows.filter((row) => row.page === page);
+      assert.equal(named.length, 1, `${page} appeared ${named.length} times`);
+      assert.equal(
+        named[0].label,
+        existsSync(join(root, ...page.split("/"))) ? "read" : "absent",
+        `${page} has the wrong label`,
+      );
+    }
+    const read = rows.filter((row) => row.label === "read").length;
+    assert.deepEqual(
+      r.stdout.match(/^backlog: read \d+ of \d+ declared pages$/gm),
+      [`backlog: read ${read} of ${declared.length} declared pages`],
+    );
+    assert.equal(r.stderr.trim(), "");
+  };
+
+  // Two, three and every declared page: six today, without making six the
+  // next census this unit has to maintain.
+  for (const read of [2, 3, JSON.parse(config).seats.length])
+    scratch(read, invariant);
 });
