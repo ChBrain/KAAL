@@ -117,22 +117,46 @@ why.
 `scripts/order.mjs [root]` computes both, so the traversal is a run rather
 than a reading. Derived is better than written, because it is deterministic.
 
-## 3. Order what is left, and say why
+## 3. State the want
 
-For each root, say what clearing it releases. Then order the roots, and that
-ordering is the only judgement in this page: everything above it is
+For each root, say what clearing it releases. Then rank the roots, and that
+ranking is the only judgement in this page: everything above it is
 computation and everything below it is writing down what you decided.
 
-Order by what the release needs, not by what is easiest. A root that releases
-one seat's afternoon ranks below one that releases three seats' week, and a
-root nobody is waiting behind at all is not a root, it is somebody's own
-next item and theirs to sequence.
+The want is the root that ranks first, said in one sentence: this block
+cleared first releases the most work. Rank by what the release needs, not by
+what is easiest. A root that releases one seat's afternoon ranks below one
+that releases three seats' week, and a root nobody is waiting behind at all
+is not a root, it is somebody's own next item and theirs to sequence.
 
 Where two roots are equal, say so rather than inventing a reason. An order
 with an arbitrary tie in it is honest; an order with a made up reason in it
 teaches the next reader something false.
 
-## 4. Hand it back
+## 4. Derive the proof
+
+The proof is the order itself, and it is derived from the blocks rather than
+remembered. Run the traversal over the backlogs as they stand and read the
+order off it. A manager who typed out yesterday's order from memory has
+handed back a claim, and a claim is what the seats already had.
+
+Every cycle the run found is named in the proof beside the order. An order
+that quietly dropped the seats it could not sequence reads as complete and
+is not.
+
+## 5. Scope
+
+Allowed: read every seat's backlog; run `scripts/order.mjs`; rank the roots
+across seats; name the cycles; say what each root releases; write the order
+where the manager writes.
+
+Not allowed: order the work inside one seat's lane, which is the seat's; say
+what a block's fix is, which is the owning seat's; edit a seat's backlog, to
+clear a spent block or for any other reason, which is the writing seat's;
+break a cycle by choosing for the seats in it, because a cycle is handed
+back named.
+
+## 6. Hand off
 
 Your output is the order and nothing else. Name, for each entry: the block,
 the seat that owes it, the seat waiting, and what it releases. Then the
@@ -141,15 +165,6 @@ cycles, then the count of backlogs you read.
 You write it where the manager writes, and you write in no seat's tree. A
 seat learns what you decided by reading it, not by finding it in their own
 files.
-
-## What this skill never does
-
-- It never orders the work inside one seat's lane. That is the seat's.
-- It never says what a block's fix is. That is the owning seat's.
-- It never edits a seat's backlog, to clear a spent block or for any other
-  reason. That is the writing seat's.
-- It never breaks a cycle by choosing for the seats in it. A cycle is handed
-  back named.
 
 ==========
 
@@ -227,7 +242,7 @@ date: <YYYY-MM-DD>
 fixture: two-seats-waiting
 ask_sha: 535325f403d2c1a2e002dc4f03c456bd2d9887bf89544a2efd53425c1f37aeea
 expect_sha: e85bf35180be95e361b6278a1d0646e065c67f583773db1374b216f09bb8368d
-skill_sha: a8f23f7f70533f6d81eee89e009323b60824af191ecf7e985c275d05184d5f85
+skill_sha: 78af1b73a10ebe08585d2aba0ed76161e7569facdeabc388e5659916e5379beb
 setup: <chat, system, workspace or workflow>
 verdict: <pass or flag, the reading's first word>
 ---
