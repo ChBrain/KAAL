@@ -4,6 +4,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { edgesOf, roots, cycles } from "./order.mjs";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
 
 const page = (entries) =>
   `---\nblocks:\n${entries.map((e) => `  ${e}\n`).join("")}---\n\n# Backlog\n`;
@@ -91,4 +98,22 @@ test("a chain with no ring has no cycle", () => {
     },
   ];
   assert.deepEqual(cycles(edges), []);
+});
+
+test("the script refuses a tree with no board and says which tree", () => {
+  // The one thing it cannot derive is which seats there are. A directory
+  // holding no board is not an empty league, it is the wrong directory, and
+  // answering an empty order there would read as nobody being blocked.
+  const empty = mkdtempSync(join(tmpdir(), "kaal-order-"));
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, "order.mjs"), empty], {
+      encoding: "utf8",
+    });
+    assert.equal(r.status, 1, `${r.stdout}${r.stderr}`);
+    assert.match(r.stderr, /no kaal\.config\.json/);
+    assert.ok(r.stderr.includes(empty), `the tree is not named: ${r.stderr}`);
+    assert.equal(r.stdout, "", `an order was printed anyway: ${r.stdout}`);
+  } finally {
+    rmSync(empty, { recursive: true, force: true });
+  }
 });
