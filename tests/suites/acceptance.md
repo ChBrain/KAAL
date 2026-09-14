@@ -14,6 +14,7 @@ cases:
   requirements/a-requirement-shows-its-work/acceptance.test.mjs: 5f3b1db5516cae5c57695b1969e670d52792ea7d27d67a5e608968befe1e28ea
   requirements/a-retro-names-what-it-read/acceptance.test.mjs: 7dbb6bbe5ca2100e78a9813a342c67226f58f1be8326bc5923eb586096d07ad1
   requirements/a-seat-claims-what-it-covers/acceptance.test.mjs: cbed094d511194c31011f670f9bdea524bea6b28b53486d95162c20a2fa41726
+  requirements/a-seat-names-what-may-block-it/acceptance.test.mjs: 6e2cd527e5dcc55bdd97036f0b2914cbd8c808c7c3cf4b1bb2cd41aaadec8351
   requirements/a-suite-names-its-cases/acceptance.test.mjs: 5a31cada2e3aac7cc19410a2318cf7ebc42347b9d15e787b41fa827bed087101
   requirements/a-task-is-delivered-by-its-run/acceptance.test.mjs: 2f714df65160c77fa1b4bf3ee09bd68e7a77453b6c3a7670ae14f0d81d541eb5
   requirements/a-task-names-its-people/acceptance.test.mjs: 48cab58695a03de78ddbaa22113e8af314e90fdbc420ceb4be9aa0ea64192230
