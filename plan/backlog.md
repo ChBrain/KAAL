@@ -28,7 +28,10 @@ bootstraps the same fact without changing the `blocks:` grammar.
 - Claim: refresh the lifecycle placement and cross-seat order after #314
   changed release truth, using the exact release board, all six backlogs,
   accepted work, live pull requests, asks and human gates.
-- State: in flight
-- Reconciliation: pending the refreshed plan, board, retro and ready-state
-  decision on exact release head
-  `de94ab8f2dea71944b064288adffaf2eccf996cf`.
+- State: completed
+- Reconciliation: #313 is rebased on exact release head
+  `de94ab8f2dea71944b064288adffaf2eccf996cf`; its byte-identical #314 CI
+  tree reports fifteen walls, five failing and none waived; the six backlogs,
+  seven open pull requests, refreshed order and fourth Manager retro are
+  recorded; targeted Manager checks pass; no `pdca` capability was
+  implemented.
