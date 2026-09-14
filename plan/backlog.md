@@ -33,3 +33,21 @@ bootstraps the same fact without changing the `blocks:` grammar.
   ready and CI-green in that cross-seat order; all six backlogs were read;
   the fifth Manager retro and refreshed local-backlog boundary are recorded;
   targeted Manager checks pass; no `pdca` capability was implemented.
+
+- Pull request: #318
+- Lane: `plan/a-working-team-is-the-release-objective`
+- Claim: re-evaluate 0.0.2 against the human objective of a working KAAL team
+  rather than against the three promises this plan opened with, and place
+  every remaining want explicitly, in the release or out of it by name.
+- State: completed, after changes requested
+- Reconciliation: based on exact release head
+  `bbd89e1` with #312 merged in, and re-measured there rather than on the head
+  the first revision read. Six findings were taken: cold-start orientation
+  now names four facts rather than a page route; the regression is the
+  tester's until a bug names the lane; items 15 and 16 say when and no longer
+  say what; the wall count is taken from the board quoted beside it;
+  `an-open-finding-blocks-every-target` is kept in 0.0.2 as item 18 on the
+  asker's decision, with #319 carrying the architecture; and this entry and
+  `retros/2026-09-14-manage-sixth-use.md` are the evidence that was missing.
+  All six backlogs were read. `kaal backlog` reports nothing blocked and this
+  seat records no block: the manager is not blocked on its own account.
