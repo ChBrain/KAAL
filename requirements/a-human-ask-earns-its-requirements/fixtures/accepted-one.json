@@ -1,0 +1,12 @@
+{
+  "originalAsk": "Preserve a submitted idea after the analyst decides what it becomes.",
+  "interpretation": "One independently testable need is present: durable decision evidence.",
+  "authorities": ["AGENTS.md", "skills/analyse/SKILL.md"],
+  "disposition": "accepted",
+  "requirements": [
+    {
+      "path": "requirements/a-submitted-idea-remains-inspectable/requirement.md",
+      "carries": "Preserve a submitted idea after the analyst decides what it becomes."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "originalAsk": "Replace every repository artifact with a single generated file.",
+  "interpretation": "The proposed replacement would erase the repository's distinct authorities.",
+  "authorities": ["AGENTS.md", "kaal.config.json"],
+  "disposition": "discarded",
+  "reason": "It contradicts the existing authority chain.",
+  "requirements": []
+}
