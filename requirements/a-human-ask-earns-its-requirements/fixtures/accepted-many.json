@@ -1,0 +1,19 @@
+{
+  "originalAsk": "Preserve each submitted idea and notify its author when analysis finishes.",
+  "interpretation": "Persistence and notification can fail independently and become two requirements.",
+  "authorities": [
+    "AGENTS.md",
+    "requirements/a-task-names-its-people/requirement.md"
+  ],
+  "disposition": "accepted",
+  "requirements": [
+    {
+      "path": "requirements/a-submitted-idea-remains-inspectable/requirement.md",
+      "carries": "Preserve each submitted idea"
+    },
+    {
+      "path": "requirements/an-asker-learns-the-analysis-finished/requirement.md",
+      "carries": "notify its author when analysis finishes"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "originalAsk": "Give every seat a repository-owned page for its blocks.",
+  "interpretation": "The requested outcome is already governed and delivered.",
+  "authorities": [
+    "requirements/a-seat-carries-its-own-backlog/requirement.md",
+    "bin/lib/backlog.mjs"
+  ],
+  "disposition": "already satisfied",
+  "reason": "The existing backlog authority covers the ask.",
+  "requirements": []
+}

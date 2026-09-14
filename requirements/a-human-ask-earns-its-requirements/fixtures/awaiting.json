@@ -1,0 +1,9 @@
+{
+  "originalAsk": "Make the release better for the people using it.",
+  "interpretation": "The outcome cannot be tested until the human identifies what better means.",
+  "authorities": ["AGENTS.md", "skills/analyse/SKILL.md"],
+  "disposition": "awaiting a human answer",
+  "question": "Which observable user outcome should change?",
+  "block": "analyst/make-the-release-better",
+  "requirements": []
+}

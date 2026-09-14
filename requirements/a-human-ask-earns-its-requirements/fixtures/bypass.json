@@ -1,0 +1,9 @@
+{
+  "originalAsk": "Add my proposed command directly to the next release plan.",
+  "interpretation": "A proposed command is part of the ask and has not earned a requirement.",
+  "authorities": ["AGENTS.md", "skills/manage/SKILL.md"],
+  "disposition": "discarded",
+  "reason": "Raw asks do not reach manager planning.",
+  "requirements": [],
+  "adoption": "A repository-state boundary distinguishes earlier requirements."
+}
