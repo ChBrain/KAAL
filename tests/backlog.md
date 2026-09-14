@@ -2,6 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 blocks:
+  architect/a-seat-claims-its-work-before-doing-it: no drawing
 ---
 
 # Backlog: tester
@@ -14,9 +15,10 @@ What this seat _can_ do is not here and never will be: that is a fact about
 the tree, so it is derived rather than written. A requirement with a drawing
 and a red test is this seat's work whether or not anybody typed it.
 
-Nothing is blocked. The four kinds a block may name are `no requirement`,
-`no drawing`, `no proof` and `no record`, and this seat is waiting on none of
-them today.
+One item is blocked. The four kinds a block may name are `no requirement`,
+`no drawing`, `no proof` and `no record`. The lifecycle requirement has seven
+red acceptance cases and no drawing, so its verification waits on the
+Architect-owned artifact rather than inventing a Tester fix or run record.
 
 ## Provisional lifecycle claim
 
@@ -30,6 +32,8 @@ bootstraps the same fact without changing the `blocks:` grammar.
   `release`; write a run record only for a green suite, otherwise record a
   truthful upstream block; run the target board; file the Tester retro; and
   reconcile the claim before deciding whether the draft is ready.
-- State: in flight
-- Reconciliation: pending focused verification, target board evidence and the
-  retro owed by this Tester use.
+- State: blocked
+- Reconciliation: the focused suite ran 0 passing and 7 failing; no run record
+  was written; the matching Architect-owned `no drawing` block is recorded;
+  the nineteenth Tester retro is filed; and the exact target-board evidence is
+  carried in pull request #320 after its required pre-push gate completes.
