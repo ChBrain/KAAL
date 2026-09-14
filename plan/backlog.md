@@ -39,8 +39,19 @@ bootstraps the same fact without changing the `blocks:` grammar.
 - Claim: re-evaluate 0.0.2 against the human objective of a working KAAL team
   rather than against the three promises this plan opened with, and place
   every remaining want explicitly, in the release or out of it by name.
-- State: completed, after changes requested
-- Reconciliation: based on exact release head
+- State: completed, after two rounds of changes requested
+- Reconciliation, second round: reconciled against live pull request state on
+  release head `bbd89e1`, which #318 already sits on. #319 is a draft, behind
+  its base, and blocked by a supervisor review requiring changes: schema 2
+  provenance is self-asserted, so criterion 13 is unsatisfied and criterion 9
+  has the same hole. Item 18 no longer calls that architecture cost paid and
+  names no seat after the architect; item 17 no longer treats the five bug
+  pages as ready to remove; the possible architect to analyst return is
+  recorded against item 18 as one of the two ways the block clears; the
+  superseded lifecycle section is marked where it sits, naming #315 and #312 as
+  merged rather than open. `retros/2026-09-14-manage-seventh-use.md` records
+  the use. The board was re-run on this tree and is quoted in the pull request.
+- Reconciliation, first round: based on exact release head
   `bbd89e1` with #312 merged in, and re-measured there rather than on the head
   the first revision read. Six findings were taken: cold-start orientation
   now names four facts rather than a page route; the regression is the
