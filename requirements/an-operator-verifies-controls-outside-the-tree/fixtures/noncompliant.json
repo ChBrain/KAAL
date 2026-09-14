@@ -1,0 +1,17 @@
+{
+  "procedure": {
+    "revision": "procedure-4",
+    "controls": ["release-required-check-walls"]
+  },
+  "release": {
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "target": "git-tag:v0.0.2"
+  },
+  "observations": [
+    {
+      "control": "release-required-check-walls",
+      "state": "noncompliant",
+      "observedAt": "2026-09-14T10:05:00Z"
+    }
+  ]
+}

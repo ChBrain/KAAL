@@ -1,0 +1,22 @@
+{
+  "procedure": {
+    "revision": "procedure-4",
+    "controls": ["release-pull-request-required"]
+  },
+  "release": {
+    "repository": "repo:ChBrain/KAAL",
+    "package": "package:@chbrain/kaal",
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "target": "git-tag:v0.0.2"
+  },
+  "observations": [
+    {
+      "control": "release-pull-request-required",
+      "state": "compliant",
+      "candidate": "candidate:1111111111111111111111111111111111111111",
+      "target": "git-tag:v0.0.2",
+      "observedAt": "2026-09-14T10:05:00Z"
+    }
+  ]
+}

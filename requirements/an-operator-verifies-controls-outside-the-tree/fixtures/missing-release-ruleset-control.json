@@ -1,0 +1,5 @@
+{
+  "kind": "procedure-mutation",
+  "base": "complete-procedure.json",
+  "removeControl": "release-deletion-blocked"
+}

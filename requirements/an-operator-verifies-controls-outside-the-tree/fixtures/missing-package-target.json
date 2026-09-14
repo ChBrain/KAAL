@@ -1,0 +1,5 @@
+{
+  "kind": "verification-mutation",
+  "base": "complete-current.json",
+  "removeTarget": "github-packages:@chbrain/kaal@0.0.2"
+}

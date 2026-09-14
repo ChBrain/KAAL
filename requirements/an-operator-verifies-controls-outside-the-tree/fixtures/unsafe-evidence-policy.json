@@ -1,0 +1,14 @@
+{
+  "kind": "procedure",
+  "scenario": "unsafe-evidence-policy",
+  "evidencePolicy": {
+    "safeMetadata": [
+      "control",
+      "location",
+      "state",
+      "observedAt",
+      "token fingerprint"
+    ],
+    "forbidden": ["secret", "token value", "recovery code"]
+  }
+}

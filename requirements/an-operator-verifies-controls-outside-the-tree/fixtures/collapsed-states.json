@@ -1,0 +1,10 @@
+{
+  "kind": "procedure",
+  "scenario": "collapsed-states",
+  "states": {
+    "compliant": "clean",
+    "noncompliant": "not-clean",
+    "inaccessible": "clean",
+    "unknown": "clean"
+  }
+}

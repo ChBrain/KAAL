@@ -1,0 +1,11 @@
+{
+  "kind": "procedure-mutation",
+  "base": "complete-procedure.json",
+  "replaceAuthority": {
+    "id": "public",
+    "path": "requirements/public-v1/requirement.md",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "section": "Handoff",
+    "claim": "Blocked on"
+  }
+}
