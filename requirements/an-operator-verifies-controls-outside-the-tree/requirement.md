@@ -56,14 +56,20 @@ when the examination must be repeated.
   manually dispatched release.
 - `jq` counts 22 controls in the complete procedure and 39 distinct
   applicable control and target relations in `complete-current.json`.
-- On post-#315 rebased head `5ec2d0c200bcf4921537b02099d022fb35d35921`,
-  the focused current-tree run fails all 13 cases on the absent
-  `verify-controls` surface; selecting criteria 1 through 13 one at a time
-  yields 13 runs with exactly one test and one failure each. The disposable
-  semantic stand-in passes all 13 together.
-- The reconciled acceptance suite retains PR #315's current inventory and
-  reviewed pins, adds this open requirement's case, and hashes to
-  `d7fc6a4d306a99b97abeba00fc0977ed04b5b85e04e8d48e3cba6a955f74cc96`.
+- On correction head `505b33e01f64dd693ec6a15f82d6306541635835`, the
+  focused current-tree run fails all 13 cases on the absent `verify-controls`
+  surface; selecting criteria 1 through 13 one at a time yields 13 runs with
+  exactly one test and one failure each. A complete disposable semantic answer
+  passes all 13, while thirteen isolated semantic corruptions each make only
+  their selected criterion fail.
+- Parsing the normalized fixtures finds 22 procedure controls mapped only to
+  `git-tag` and `github-packages` kinds, no exact 0.0.2 identity in the
+  procedure, and 39 relations derived in the 0.0.2 release input. Separate
+  fixtures make a candidate-only change stale, accept truthful pre-dispatch
+  incompleteness, and reject prospective package-visibility compliance.
+- The reconciled acceptance suite retains PR #315's inventory and review
+  evidence, updates this open requirement's case, and hashes to
+  `5aec59d0e510ead493335c6291e983ef42c6a1284f0b686b27106dbc434a26f2`.
   Both acceptance and regression plans point to that exact composite page.
 
 ## Assumptions
@@ -239,8 +245,8 @@ when the examination must be repeated.
 - Criteria: 13; tests: 13 (equal)
 - Red run: `node --test --test-timeout=60000
 requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`,
-  14 September 2026 at post-#315 rebased head
-  `5ec2d0c200bcf4921537b02099d022fb35d35921`;
+  14 September 2026 at correction head
+  `505b33e01f64dd693ec6a15f82d6306541635835`;
   all 13 fail on the absent `verify-controls` decision, the intended missing
   behavior rather than a provider or network
 - Tests: `requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`
@@ -250,9 +256,10 @@ requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`
 - Stand-in green: all thirteen pass together on a disposable semantic judge;
   the stand-in remains outside the pull request
 - Individual red: criteria 1 through 13 were each selected alone against the
-  current tree; every run had exactly one test, zero passes and one failure.
-  The earlier isolated-fault proof also remains unchanged because the test and
-  fixtures are unchanged by the rebase
+  current tree; every run had exactly one test, zero passes and one failure
+- Isolated semantic red: each criterion was selected alone against the green
+  stand-in with only its own decisive answer corrupted; all thirteen runs had
+  exactly one test, zero passes and one failure
 - Open questions: 2, listed above
 - Blocked on: nothing
 - Unblocks: `a-release-records-its-external-control-verification`, the second
