@@ -1,0 +1,25 @@
+{
+  "gates": [
+    {
+      "name": "counted",
+      "command": "node wall.mjs counted",
+      "fix": "nothing"
+    },
+    {
+      "name": "refuses",
+      "command": "node wall.mjs refuses",
+      "fix": "read the refusal"
+    },
+    {
+      "name": "after",
+      "command": "node wall.mjs after",
+      "fix": "nothing",
+      "show": true
+    },
+    {
+      "name": "declines",
+      "command": "node wall.mjs declines",
+      "fix": "nothing"
+    }
+  ]
+}
