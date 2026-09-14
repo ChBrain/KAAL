@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: e3eff03c0503712bf40cc9d4ff4e4d7da9d318a42b5d377e4a2d788c07036b14
+  acceptance: ed3e650d40d420cb46868c6c26b5be265fe2e9d692fe362c097deab92614031c
 reviews:
-  suites/acceptance: reviewed-no-impact@ed3e650d40d420cb46868c6c26b5be265fe2e9d692fe362c097deab92614031c by analyst: criterion 6 now proves modified, deleted, and renamed candidate content is rejected as stale or changed; this plan still selects the same acceptance suite and no case was removed
+  suites/acceptance: reviewed-no-impact@2ebf9fa3200e79929d7731a82ae1c83e577989cbce6aa313cff3d4f2166924f7 by analyst: the suite gained the open retro-4ls counting case; this plan still selects the same acceptance suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
