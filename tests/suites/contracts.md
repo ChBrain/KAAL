@@ -29,6 +29,7 @@ cases:
   architecture/an-architect-names-its-principles/contracts.test.mjs: 5141da3c75655f1d34dbd05b8edda3a22778ef8a82eebf0acd023d688e7916f1
   architecture/an-artefact-traces-what-it-came-from/contracts.test.mjs: 641bfceff5c2dfc3472ee2317b21ff52dd08e7ef8b8ae2603053484385837373
   architecture/an-install-carries-the-method/contracts.test.mjs: 1d22a5add09ee938e1e9232018002bd273744f2f2fe80149e901ccf18da40c8f
+  architecture/an-open-finding-blocks-every-target/contracts.test.mjs: 767ba0dc41f0f821d2c0ec84e7efe57d51edfc67a0f297052c3db87d0c751bc7
   architecture/analyse-v2/contracts.test.mjs: 25abf2bca27e7655ba401e058e7c3499e46617818b360b35966c8df6b38711f2
   architecture/analyse-v3/contracts.test.mjs: 3620b29e795007b3316beaddfed87d3349c1aac96f0cdfa6a9242720db3e9130
   architecture/applies-here/contracts.test.mjs: f54f578bdf7cf0b11bc21e6dcffb505a87fb19da6cf5020326f22151dee4af31
