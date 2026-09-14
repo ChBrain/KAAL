@@ -1,0 +1,12 @@
+{
+  "pullRequest": { "id": "310", "seat": "analyst", "state": "draft" },
+  "claims": [
+    {
+      "pullRequest": "310",
+      "backlogSeat": "analyst",
+      "items": ["R-1", "R-2"]
+    }
+  ],
+  "outcomes": [],
+  "durableOrder": []
+}
