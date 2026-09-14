@@ -7,6 +7,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { parseFrontmatter } from "./frontmatter.mjs";
 import { standing } from "./bugs.mjs";
+import { securityWaiver } from "./security.mjs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
@@ -101,6 +102,7 @@ export function runGates(root, config = null) {
     const count = (r.stdout ?? "").match(/^(?:#|\u2139) pass (\d+)/m)?.[1];
     results.push({
       name: g.name,
+      gate: g,
       ok: r.status === 0,
       // The third answer. This engine publishes three exit codes as the whole
       // vocabulary and 2 is `the question is not this tree's`: a wall that
@@ -125,7 +127,10 @@ export function runGates(root, config = null) {
   }
   let waived = 0;
   for (const x of results) {
-    const { waiver, reason } = readWaiver(root, x.name);
+    const { waiver, reason } =
+      x.gate.waiver === "security"
+        ? securityWaiver(root)
+        : readWaiver(root, x.name);
     if (!waiver && !reason) continue;
     // A waiver is a human's act over a red, and a wall that declined has no
     // red to waive any more than one that passed does. Spending it here would
@@ -152,9 +157,11 @@ export function runGates(root, config = null) {
     x.unused
       ? [`unused waiver ${x.name}: the wall is green`]
       : x.waived
-        ? [
-            `waived ${x.name} by ${x.waived.who}: ${x.waived.why} (until ${x.waived.until})`,
-          ]
+        ? x.waived.kind === "security"
+          ? [`waived ${x.name} by ${x.waived.who}: ${x.waived.why}`]
+          : [
+              `waived ${x.name} by ${x.waived.who}: ${x.waived.why} (until ${x.waived.until})`,
+            ]
         : [
             // Its own word, and no fix hint: there is nothing to fix, and a
             // hint here would read as work somebody owes.
