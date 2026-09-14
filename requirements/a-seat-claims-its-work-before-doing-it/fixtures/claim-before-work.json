@@ -1,0 +1,12 @@
+{
+  "pullRequest": { "id": "310", "seat": "analyst", "state": "draft" },
+  "claims": [
+    { "pullRequest": "310", "backlogSeat": "analyst", "items": ["R-1"] }
+  ],
+  "outcomes": [],
+  "durableOrder": [
+    { "id": "base", "parents": [], "kind": "base" },
+    { "id": "claim-1", "parents": ["base"], "kind": "exact-claim" },
+    { "id": "work-1", "parents": ["claim-1"], "kind": "substantive-work" }
+  ]
+}
