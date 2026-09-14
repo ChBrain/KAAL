@@ -1,0 +1,19 @@
+{
+  "procedure": {
+    "id": "release-external-controls",
+    "revision": "procedure-3",
+    "controls": ["release-pull-request-required"]
+  },
+  "release": {
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "target": "git-tag:v0.0.2"
+  },
+  "observations": [
+    {
+      "control": "release-pull-request-required",
+      "state": "compliant",
+      "procedureRevision": "procedure-2",
+      "observedAt": "2026-09-14T10:05:00Z"
+    }
+  ]
+}

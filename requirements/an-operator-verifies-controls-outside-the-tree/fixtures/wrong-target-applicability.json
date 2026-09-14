@@ -1,0 +1,8 @@
+{
+  "kind": "procedure-mutation",
+  "base": "complete-procedure.json",
+  "addApplicability": {
+    "control": "github-packages-registry",
+    "target": "git-tag:v0.0.2"
+  }
+}

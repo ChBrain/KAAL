@@ -1,0 +1,5 @@
+{
+  "kind": "procedure-mutation",
+  "base": "complete-procedure.json",
+  "removeControl": "dependabot-security-updates"
+}

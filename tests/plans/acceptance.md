@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 8b2f173e5c9baaed9dfbba5772867af675116e8ddb014018fe49628bab3e0f9d
+  acceptance: d7fc6a4d306a99b97abeba00fc0977ed04b5b85e04e8d48e3cba6a955f74cc96
 reviews:
-  suites/acceptance: reviewed-no-impact@8b2f173e5c9baaed9dfbba5772867af675116e8ddb014018fe49628bab3e0f9d by tester: the suite gained the two previously unnamed acceptance cases and refreshed one reviewed pin; this plan still selects the same suite and no case was removed
+  suites/acceptance: updated@d7fc6a4d306a99b97abeba00fc0977ed04b5b85e04e8d48e3cba6a955f74cc96 by analyst: atop PR #315's current inventory and reviewed pins, the suite gained the open external-control procedure case; this plan still selects the whole acceptance suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

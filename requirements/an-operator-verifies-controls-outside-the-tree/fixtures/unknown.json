@@ -1,0 +1,18 @@
+{
+  "procedure": {
+    "revision": "procedure-3",
+    "controls": ["secret-scanning"]
+  },
+  "release": {
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "target": "github-packages:@chbrain/kaal@0.0.2"
+  },
+  "observations": [
+    {
+      "control": "secret-scanning",
+      "state": "unknown",
+      "authority": "operator",
+      "observedAt": "2026-09-14T10:05:00Z"
+    }
+  ]
+}

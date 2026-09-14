@@ -1,0 +1,8 @@
+{
+  "kind": "verification-mutation",
+  "base": "complete-current.json",
+  "removeAccountedRelation": {
+    "control": "secret-scanning",
+    "target": "git-tag:v0.0.2"
+  }
+}

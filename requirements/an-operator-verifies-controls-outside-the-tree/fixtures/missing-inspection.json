@@ -1,0 +1,17 @@
+{
+  "kind": "procedure",
+  "scenario": "missing-inspection",
+  "control": {
+    "id": "release-required-check-walls",
+    "class": "release required checks"
+  },
+  "missing": [
+    "location",
+    "method",
+    "expected",
+    "observe",
+    "confirm",
+    "authorize",
+    "change"
+  ]
+}

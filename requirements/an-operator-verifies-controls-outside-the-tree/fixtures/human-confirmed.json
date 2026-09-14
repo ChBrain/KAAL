@@ -1,0 +1,28 @@
+{
+  "procedure": {
+    "revision": "procedure-3",
+    "controls": ["package-workflow-authentication"]
+  },
+  "release": {
+    "repository": "repo:ChBrain/KAAL",
+    "package": "package:@chbrain/kaal",
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "target": "github-packages:@chbrain/kaal@0.0.2"
+  },
+  "observations": [
+    {
+      "control": "package-workflow-authentication",
+      "state": "compliant",
+      "authority": "human attestation",
+      "operatorObserved": false,
+      "observedAt": "2026-09-14T10:05:00Z",
+      "sourceRevision": "unavailable: source exposes none"
+    }
+  ],
+  "authorization": {
+    "authority": "human",
+    "decision": "authorize",
+    "at": "2026-09-14T10:06:00Z"
+  }
+}

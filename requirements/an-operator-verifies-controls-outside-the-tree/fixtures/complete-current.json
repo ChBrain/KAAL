@@ -1,0 +1,72 @@
+{
+  "kind": "normalized-release-verification",
+  "procedure": {
+    "id": "release-external-controls",
+    "revision": "procedure-3",
+    "authorityRevisionsCurrent": true
+  },
+  "release": {
+    "repository": "repo:ChBrain/KAAL",
+    "package": "package:@chbrain/kaal",
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "targets": ["git-tag:v0.0.2", "github-packages:@chbrain/kaal@0.0.2"],
+    "candidateAt": "2026-09-14T10:00:00Z"
+  },
+  "observedAt": "2026-09-14T10:05:00Z",
+  "authorization": {
+    "authority": "human",
+    "decision": "authorize",
+    "at": "2026-09-14T10:10:00Z"
+  },
+  "coverage": {
+    "requiredRelations": 39,
+    "accountedRelations": [
+      "release-pull-request-required@git-tag:v0.0.2",
+      "release-pull-request-required@github-packages:@chbrain/kaal@0.0.2",
+      "release-direct-push-blocked@git-tag:v0.0.2",
+      "release-direct-push-blocked@github-packages:@chbrain/kaal@0.0.2",
+      "release-force-push-blocked@git-tag:v0.0.2",
+      "release-force-push-blocked@github-packages:@chbrain/kaal@0.0.2",
+      "release-deletion-blocked@git-tag:v0.0.2",
+      "release-deletion-blocked@github-packages:@chbrain/kaal@0.0.2",
+      "release-required-check-walls@git-tag:v0.0.2",
+      "release-required-check-walls@github-packages:@chbrain/kaal@0.0.2",
+      "main-pull-request-required@git-tag:v0.0.2",
+      "main-pull-request-required@github-packages:@chbrain/kaal@0.0.2",
+      "main-direct-push-blocked@git-tag:v0.0.2",
+      "main-direct-push-blocked@github-packages:@chbrain/kaal@0.0.2",
+      "main-force-push-blocked@git-tag:v0.0.2",
+      "main-force-push-blocked@github-packages:@chbrain/kaal@0.0.2",
+      "main-deletion-blocked@git-tag:v0.0.2",
+      "main-deletion-blocked@github-packages:@chbrain/kaal@0.0.2",
+      "main-required-check-walls@git-tag:v0.0.2",
+      "main-required-check-walls@github-packages:@chbrain/kaal@0.0.2",
+      "codeql-advanced-setup@git-tag:v0.0.2",
+      "codeql-advanced-setup@github-packages:@chbrain/kaal@0.0.2",
+      "secret-scanning@git-tag:v0.0.2",
+      "secret-scanning@github-packages:@chbrain/kaal@0.0.2",
+      "push-protection@git-tag:v0.0.2",
+      "push-protection@github-packages:@chbrain/kaal@0.0.2",
+      "dependabot-alerts@git-tag:v0.0.2",
+      "dependabot-alerts@github-packages:@chbrain/kaal@0.0.2",
+      "dependabot-security-updates@git-tag:v0.0.2",
+      "dependabot-security-updates@github-packages:@chbrain/kaal@0.0.2",
+      "code-review-bot-decision@git-tag:v0.0.2",
+      "code-review-bot-decision@github-packages:@chbrain/kaal@0.0.2",
+      "manual-release-dispatch@git-tag:v0.0.2",
+      "manual-release-dispatch@github-packages:@chbrain/kaal@0.0.2",
+      "tag-workflow-authentication@git-tag:v0.0.2",
+      "github-packages-registry@github-packages:@chbrain/kaal@0.0.2",
+      "package-scope@github-packages:@chbrain/kaal@0.0.2",
+      "package-visibility@github-packages:@chbrain/kaal@0.0.2",
+      "package-workflow-authentication@github-packages:@chbrain/kaal@0.0.2"
+    ],
+    "states": {
+      "compliant": 39,
+      "noncompliant": 0,
+      "inaccessible": 0,
+      "unknown": 0
+    }
+  }
+}

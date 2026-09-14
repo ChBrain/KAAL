@@ -1,0 +1,15 @@
+{
+  "kind": "release-verification",
+  "claimedProcedure": {
+    "id": "release-external-controls",
+    "revision": "procedure-3"
+  },
+  "release": {
+    "repository": "repo:ChBrain/KAAL",
+    "package": "package:@chbrain/kaal",
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "targets": ["git-tag:v0.0.2", "github-packages:@chbrain/kaal@0.0.2"]
+  },
+  "observations": []
+}
