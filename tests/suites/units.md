@@ -2,7 +2,7 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 cases:
-  bin/kaal.test.mjs: 193e2fe7c66f3b40568ee4f1949a5474712db68be8ae454c9763c16fce95d7ed
+  bin/kaal.test.mjs: 7d618d0a1fc1cb7d8ef9b6d5b2ec9f7b5148ff11dbbd22a1de6051d06d53cb34
   bin/lib/assess.test.mjs: 070942b1d71b1c48da3396b750ec633c739b4e08b3ed297241dc7032d3f10c80
   bin/lib/witness.test.mjs: a97933f824563a295a6f8c117c2667ba122316e2c86e0da63a03b638a0ef1495
   bin/lib/acceptance.test.mjs: 5867a7902b9bdc9b3299fa92e067a97aa327fd67c5d50205e344184aac889710
@@ -17,6 +17,7 @@ cases:
   bin/lib/record.test.mjs: 94c65431a35229599623306a9a8f969c46c49b32a73e8e6cd742ccabb7c03d8d
   bin/lib/release.test.mjs: ae645e5d014b94a0f11bab63bea7c9800b12f8afdd38ec7e9a13ee935713d50d
   bin/lib/retros.test.mjs: 0006a3a14d03a31ea1c3cb2fe0085c145149aecff99128d5d4485ce814a0fafe
+  bin/lib/security.test.mjs: b2585c8ca341cac14b661ee2e92a62636e4b01037f3524162df11eb0116ad739
   bin/lib/rules.test.mjs: 552bf7dec00fa183bc720cfbfcdc4adda4edbfcb294ce2973866160e11bed194
   bin/lib/runs.test.mjs: 65ca4bb1cf4136483a1b26f7c01d9cb4601a1141f91dfa2956ca000a31295419
   bin/lib/runner.test.mjs: 85f0c6809846e36b0c75600d8c5e2cdfd6b5896f9f53066152f3e67f5d408288
@@ -28,15 +29,17 @@ cases:
   bin/lib/frontmatter.test.mjs: a07fbaa3c06ef21461d7d54bd2589246bdeb92f50dc55ffb84216a0459036db2
   bin/lib/plans.test.mjs: 472302669bc52102929e2e344dd731fd83cfda7e93d544f9b3ee7b26c24b4e49
   bin/lib/seats.test.mjs: e772a35dafa54dbc9e1851c8d5247074393239dbbbb9308d2d018023b2510871
-  bin/lib/traces.test.mjs: d4ac671061589837bdb523380a618ffb57e6afda593c36a52a499f688d9a2b60
+  bin/lib/traces.test.mjs: 43c3208cef1412604219d5dd2da48a373f6ee5e79d82db0e222d07f67701e894
   skills/analyse/scripts/count.test.mjs: 94d67a0b353f913eeeb965147cb104528985fd431edcb6c4daba014ef917d774
   skills/retro-4ls/scripts/name.test.mjs: ebad80b57a98f0187a6d0613c6c818e9838caccc973408aac5971ef282648e5c
   skills/manage/scripts/order.test.mjs: da0f9956f62f252058b5a728a18cc60730291e76c906806a7967886b157d4c00
 reviews:
+  cases/bin/kaal.test.mjs: reviewed-no-impact@7d618d0a1fc1cb7d8ef9b6d5b2ec9f7b5148ff11dbbd22a1de6051d06d53cb34 by tester: the file gained the units for creating one empty seat backlog and refusing overwrites; it remains the CLI unit case this suite covers
   cases/bin/lib/gates.test.mjs: reviewed-no-impact@5bdbac99ccf61d96c6e565ba3c6823079b6d162962da484511fc21467dbb9922 by developer: it gained the unit that keeps the target this tree is judged by out of a case while leaving it in a wall; the case is the same case and this suite still covers it
   cases/bin/lib/promote.test.mjs: reviewed-no-impact@554a18dbf817385ea43d23af1a298c7e1b2f28eba3767d92a4e554d3ff291c4c by developer: the line naming this case was written before its last unit, the one about reading a ref where a person types one; it is the same case and this suite still covers it
   cases/bin/lib/plans.test.mjs: reviewed-no-impact@472302669bc52102929e2e344dd731fd83cfda7e93d544f9b3ee7b26c24b4e49 by developer: it gained the two units for a count read out of a pin, one on the reader and one on the writer that corrupted a page; the case is the same case and this suite still covers it
   cases/skills/retro-4ls/scripts/name.test.mjs: updated@ebad80b57a98f0187a6d0613c6c818e9838caccc973408aac5971ef282648e5c by retro-4ls maintainer: the case gained the hundredth-use boundary and the ordinal range assertions that prove the repaired naming script; it remains the skill-owned unit case this suite covers
+  cases/bin/lib/traces.test.mjs: reviewed-no-impact@43c3208cef1412604219d5dd2da48a373f6ee5e79d82db0e222d07f67701e894 by tester: the file gained three units for unreadable bare trace entries; it remains the trace-reader unit case this suite covers
 ---
 
 # Test suite: units

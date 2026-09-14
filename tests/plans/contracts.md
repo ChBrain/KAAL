@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  contracts: 270a56547010dfb8f167fe020962e1533882ff7a7627a7b9d1cc11b3baad80a2
+  contracts: 0e35b6eaf58067bed57cdb9ef3bdac5d6e1a9160fa2fada81c7a445983ca96db
 reviews:
-  suites/contracts: reviewed-no-impact@270a56547010dfb8f167fe020962e1533882ff7a7627a7b9d1cc11b3baad80a2 by architect: the suite gained the case for the task that gives every seat a backlog in its own lane; which suites this plan uses is unchanged and no case was taken out of it
+  suites/contracts: reviewed-no-impact@0e35b6eaf58067bed57cdb9ef3bdac5d6e1a9160fa2fada81c7a445983ca96db by tester: the suite gained the previously unnamed security contract case; this plan still selects the same suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

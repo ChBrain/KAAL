@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: c91114e98f21a67a68d74ebb03eb93342bbb7d3f0f20b7e0d953065327770a8b
+  units: 03cd966dace461fc9e4056309e13b880b9e4af17254348d2b16b06e6eb676835
 reviews:
-  suites/units: reviewed-no-impact@c91114e98f21a67a68d74ebb03eb93342bbb7d3f0f20b7e0d953065327770a8b by retro-4ls maintainer: the suite advanced its existing retro-4ls naming case after that case gained the hundredth-use proof; this plan still selects the same units suite and no case was removed
+  suites/units: reviewed-no-impact@03cd966dace461fc9e4056309e13b880b9e4af17254348d2b16b06e6eb676835 by tester: atop the current retro naming case, the suite gained the previously unnamed security unit and refreshed two other reviewed pins; this plan still selects the same suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: ed3e650d40d420cb46868c6c26b5be265fe2e9d692fe362c097deab92614031c
+  acceptance: 8b2f173e5c9baaed9dfbba5772867af675116e8ddb014018fe49628bab3e0f9d
 reviews:
-  suites/acceptance: reviewed-no-impact@2ebf9fa3200e79929d7731a82ae1c83e577989cbce6aa313cff3d4f2166924f7 by analyst: the suite gained the open retro-4ls counting case, which has no delivered run; this plan's promise selection is unchanged and no case was removed
+  suites/acceptance: reviewed-no-impact@8b2f173e5c9baaed9dfbba5772867af675116e8ddb014018fe49628bab3e0f9d by tester: the suite gained two open cases without delivered runs and refreshed one reviewed pin; this plan's promise selection is unchanged and no case was removed
 ---
 
 # Test plan: regression

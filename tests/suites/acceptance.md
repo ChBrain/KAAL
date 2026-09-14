@@ -4,18 +4,20 @@ traces:
 cases:
   requirements/a-bug-names-where-it-can-be-fixed/acceptance.test.mjs: df8f6eb1b8cba9586f31a138242f49826fd02464affbd5fdc84e9d6c40c319b0
   requirements/a-plan-picks-its-suites/acceptance.test.mjs: 1cab8222962d3bfdffa5f957e7e573fa6d041146e00aaad71dfd14393ad63eb7
-  requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: 369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273
+  requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: d3cd6aaba8d58dcd3c2b2a845b68c1ac6a875f0f749e7f250465a1e791ea6731
   requirements/a-build-says-what-it-proved/acceptance.test.mjs: 54383c21e9d8f662016d28a06514c3302955b3f7eba9c1f16b62d8f0bdd9af89
   requirements/a-change-declares-its-class/acceptance.test.mjs: df9e4a66b61cf110f1696f748c08f7ffbd1b0b5fe14c0a9502eb94efdf9d6280
   requirements/a-decision-balances-two-goods/acceptance.test.mjs: 8e1ea235299090f8117c5882aa5d250cf4b3bac49d88e8103437066429020d8e
   requirements/a-dependency-update-lands-on-main/acceptance.test.mjs: 8070ba12edbd23ed8432ee769fa0ef9af1a285fd93f063a7b73a3e3a17292ca5
   requirements/a-crossing-names-its-owner/acceptance.test.mjs: 2a467026bfd67703fb8895dcdfbd116ece515d83553f5ae75c162827df085fc8
   requirements/a-seat-carries-its-own-backlog/acceptance.test.mjs: 6f17f11f9a17906bdfcee2c9929e5a2ba5c5590a09e4f10235f890192c5e1226
+  requirements/a-seat-claims-its-work-before-doing-it/acceptance.test.mjs: 3c670e62169c4a718a51a147e3889c2933fb752c0b44b7b1b20da04a204d230f
   requirements/a-diff-carries-one-seat/acceptance.test.mjs: d461c0e538a9315216faabe685a3962299cb8f0642cf3ba7d5c9036d967c8d38
   requirements/a-drawing-fixes-more-than-structure/acceptance.test.mjs: e9af3a318b21cf4940f3d2b2e2838362f41ba277e322c37f7bb2ae12887c2a5b
   requirements/a-drawing-shows-its-ground/acceptance.test.mjs: a3e9bbdba779b5aa48d9ccf85d59f3a0870b6565b175be174fe76dfb44a3ab47
   requirements/a-green-contract-is-declared/acceptance.test.mjs: 95b6fa82368f5a6724a0dc3b97222685724c0aaa5b639853ee16db4934ccab0e
   requirements/a-guest-takes-no-orders/acceptance.test.mjs: d3fc951ce1525de94cf40c01177919eeb24fdd906d8e2e2b455de153794d944e
+  requirements/a-maintainer-can-see-where-board-time-is-spent/acceptance.test.mjs: 6ddb9c6f97b1fc58a3acfa7812848ab702b0f5faa846035c512f532616d73ded
   requirements/a-pin-says-who-cleared-it/acceptance.test.mjs: 1e97cee26dde73931b8715d5d745627bb3191aad0e840665f5420d944f793204
   requirements/a-regression-is-a-promise-that-was-kept/acceptance.test.mjs: 3c8818b0a53cd486319111c3797e99725bda5f7c3d716fd688a9434b15c49402
   requirements/a-requirement-shows-its-work/acceptance.test.mjs: 5f3b1db5516cae5c57695b1969e670d52792ea7d27d67a5e608968befe1e28ea
@@ -82,7 +84,7 @@ reviews:
   cases/requirements/skills-v1/acceptance.test.mjs: reviewed-no-impact@54b06f36d4d5884358aeaf7d476ab36d1d1b027f13368a7fe7a9ee5e9930588f by tester: its first case stopped asserting the tree holds exactly six named skills and asserts a floor instead, which `a-skill-list-is-a-floor` supersedes; the case is the same case and this suite still covers it
   cases/requirements/push-v1/acceptance.test.mjs: reviewed-no-impact@6bf2ce06a489bf8df6d253887a698c4f54021ecaa2de06b0c597e522c8a404f1 by analyst: its fifth case stopped reading a test file as a script and stopped fixing where a script's test lives; the case is the same case and this suite still covers it
   cases/requirements/status-v1/acceptance.test.mjs: reviewed-no-impact@0cf49af1968edadee4db9a8876cc00017771390d82884d90f9c5057af5f4454f by analyst: its fourth case stopped reading `push-v1` out of the league's own tree and reads the `open-red` fixture instead; the case is the same case and this suite still covers it
-  cases/requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: reviewed-no-impact@369fc51ce2d5bd687f250698a6a0aca9d8ca5e3352302f02609d32bced42d273 by analyst: the case gained its ninth, the one about the board judging by the target it opens into; it is the same case and this suite still covers it
+  cases/requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: reviewed-no-impact@d3cd6aaba8d58dcd3c2b2a845b68c1ac6a875f0f749e7f250465a1e791ea6731 by tester: its ninth case now distinguishes the ordinary red wall it proves from the all-target security wall; its behaviour and this suite's coverage are unchanged
   cases/requirements/a-suite-names-its-cases/acceptance.test.mjs: reviewed-no-impact@5a31cada2e3aac7cc19410a2318cf7ebc42347b9d15e787b41fa827bed087101 by tester: criterion 5's fixture gave its two plans one wall as well as one suite, which proved a cardinality the criterion does not claim; the fixture now gives each plan a wall of its own and the case is the same case this suite covers
   cases/requirements/the-test-tree-is-written-down/acceptance.test.mjs: reviewed-no-impact@79963dd650ca5dcfc030ca7404b7b56b1c615983961ba15cd978178d81c679d5 by tester: two of its cases stopped asserting a plan's glob and its count, which a-suite-names-its-cases supersedes; the case is the same case and this suite still covers it
 ---
