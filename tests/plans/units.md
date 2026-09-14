@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  units: 6c3237642cb454124acb5c1fb8d857b2016680497b1678870fff2dcaf165c391
+  units: c91114e98f21a67a68d74ebb03eb93342bbb7d3f0f20b7e0d953065327770a8b
 reviews:
-  suites/units: reviewed-no-impact@6c3237642cb454124acb5c1fb8d857b2016680497b1678870fff2dcaf165c391 by tester: the suite gained the case for the manager's traversal, which was in the tree with no suite naming it; which suites this plan uses is unchanged and no case was taken out of it
+  suites/units: reviewed-no-impact@c91114e98f21a67a68d74ebb03eb93342bbb7d3f0f20b7e0d953065327770a8b by retro-4ls maintainer: the suite advanced its existing retro-4ls naming case after that case gained the hundredth-use proof; this plan still selects the same units suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

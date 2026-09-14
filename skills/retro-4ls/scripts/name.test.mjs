@@ -35,8 +35,11 @@ test("the ordinals are the words the tree already uses", () => {
   assert.equal(ordinal(50), "fiftieth");
   assert.equal(ordinal(77), "seventy-seventh");
   assert.equal(ordinal(99), "ninety-ninth");
+  assert.equal(ordinal(100), "one-hundredth");
+  assert.equal(ordinal(101), "one-hundred-first");
+  assert.equal(ordinal(999), "nine-hundred-ninety-ninth");
   // And what it cannot name it does not guess at.
-  for (const n of [0, 100, -1, 1.5, NaN]) assert.equal(ordinal(n), null);
+  for (const n of [0, 1000, -1, 1.5, NaN]) assert.equal(ordinal(n), null);
 });
 
 test("a filename is read for the skill it names and not another", () => {
@@ -99,6 +102,30 @@ test("the next name is past the highest and never the count", () => {
       const [file, word] = r.stdout.trim().split("\n");
       assert.equal(word, "fifth");
       assert.match(file, /-code-fifth-use\.md$/);
+    },
+  );
+});
+
+test("the hundredth use and the use after it keep advancing", () => {
+  tree(
+    {
+      [retro("2026-09-14", "analyse", "ninety-ninth")]: "",
+    },
+    (root) => {
+      const hundred = run("analyse", root);
+      assert.equal(hundred.status, 0, hundred.stderr);
+      assert.equal(hundred.stdout.trim().split("\n")[1], "one-hundredth");
+    },
+  );
+  tree(
+    {
+      [retro("2026-09-14", "analyse", "one-hundredth")]: "",
+    },
+    (root) => {
+      assert.deepEqual(filed(root, "analyse"), [100]);
+      const next = run("analyse", root);
+      assert.equal(next.status, 0, next.stderr);
+      assert.equal(next.stdout.trim().split("\n")[1], "one-hundred-first");
     },
   );
 });
