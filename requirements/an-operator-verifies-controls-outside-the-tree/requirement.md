@@ -56,11 +56,15 @@ when the examination must be repeated.
   manually dispatched release.
 - `jq` counts 22 controls in the complete procedure and 39 distinct
   applicable control and target relations in `complete-current.json`.
-- On rebased head `a73ad8c176bc632837900db29bbc92575e8a7df5`, the
-  focused current-tree run fails all 13 cases on the absent `verify-controls`
-  surface; selecting criteria 1 through 13 one at a time yields 13 runs with
-  exactly one test and one failure each. The disposable semantic stand-in
-  passes all 13 together.
+- On post-#315 rebased head `5ec2d0c200bcf4921537b02099d022fb35d35921`,
+  the focused current-tree run fails all 13 cases on the absent
+  `verify-controls` surface; selecting criteria 1 through 13 one at a time
+  yields 13 runs with exactly one test and one failure each. The disposable
+  semantic stand-in passes all 13 together.
+- The reconciled acceptance suite retains PR #315's current inventory and
+  reviewed pins, adds this open requirement's case, and hashes to
+  `d7fc6a4d306a99b97abeba00fc0977ed04b5b85e04e8d48e3cba6a955f74cc96`.
+  Both acceptance and regression plans point to that exact composite page.
 
 ## Assumptions
 
@@ -222,7 +226,8 @@ when the examination must be repeated.
 - Criteria: 13; tests: 13 (equal)
 - Red run: `node --test --test-timeout=60000
 requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`,
-  14 September 2026 at rebased head `a73ad8c176bc632837900db29bbc92575e8a7df5`;
+  14 September 2026 at post-#315 rebased head
+  `5ec2d0c200bcf4921537b02099d022fb35d35921`;
   all 13 fail on the absent `verify-controls` decision, the intended missing
   behavior rather than a provider or network
 - Tests: `requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`
