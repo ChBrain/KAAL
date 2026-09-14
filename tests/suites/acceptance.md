@@ -77,6 +77,7 @@ cases:
   requirements/where-a-skill-acts/acceptance.test.mjs: 60832efd3c54d369a4f9062e02f51542250d5f93bb1f940a8d24b5f213eda555
   requirements/witness-a-tree/acceptance.test.mjs: 853bec795ceb60eb98fb6a91658f3d8def4a92ddfc74d532fe24cf6b602ef51d
   requirements/a-skill-list-is-a-floor/acceptance.test.mjs: cc5a8497f59e7e1bc7a7058870601400b3f1ec34da9ae7e098f7b8bb242ba76e
+  requirements/retro-4ls-counts-what-it-feeds/acceptance.test.mjs: a6712a789c2eef1b8d79fe5f6c929021660192b855b868731433ae74a234aef2
 reviews:
   cases/requirements/skills-v1/acceptance.test.mjs: reviewed-no-impact@54b06f36d4d5884358aeaf7d476ab36d1d1b027f13368a7fe7a9ee5e9930588f by tester: its first case stopped asserting the tree holds exactly six named skills and asserts a floor instead, which `a-skill-list-is-a-floor` supersedes; the case is the same case and this suite still covers it
   cases/requirements/push-v1/acceptance.test.mjs: reviewed-no-impact@6bf2ce06a489bf8df6d253887a698c4f54021ecaa2de06b0c597e522c8a404f1 by analyst: its fifth case stopped reading a test file as a script and stopped fixing where a script's test lives; the case is the same case and this suite still covers it
