@@ -64,10 +64,29 @@ const TENS = [
   "ninety",
 ];
 
-/** The ordinal word for a whole number from 1 to 99. */
+const CARDINAL_ONES = [
+  "",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+];
+
+/** The ordinal word for a whole number from 1 to 999. */
 export const ordinal = (n) => {
-  if (!Number.isInteger(n) || n < 1 || n > 99) return null;
+  if (!Number.isInteger(n) || n < 1 || n > 999) return null;
   if (n < 20) return ONES[n];
+  if (n >= 100) {
+    const hundreds = Math.floor(n / 100);
+    const rest = n % 100;
+    const prefix = `${CARDINAL_ONES[hundreds]}-hundred`;
+    return rest === 0 ? `${prefix}th` : `${prefix}-${ordinal(rest)}`;
+  }
   const t = Math.floor(n / 10);
   const o = n % 10;
   return o === 0 ? TENS_ALONE[t] : `${TENS[t]}-${ONES[o]}`;
@@ -83,7 +102,7 @@ export const claimed = (file, skill) => {
     ),
   );
   if (!m) return null;
-  for (let n = 1; n <= 99; n += 1) if (ordinal(n) === m[1]) return n;
+  for (let n = 1; n <= 999; n += 1) if (ordinal(n) === m[1]) return n;
   return null;
 };
 
