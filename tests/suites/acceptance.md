@@ -5,6 +5,7 @@ cases:
   requirements/a-bug-names-where-it-can-be-fixed/acceptance.test.mjs: df8f6eb1b8cba9586f31a138242f49826fd02464affbd5fdc84e9d6c40c319b0
   requirements/a-plan-picks-its-suites/acceptance.test.mjs: 1cab8222962d3bfdffa5f957e7e573fa6d041146e00aaad71dfd14393ad63eb7
   requirements/a-promotion-names-what-it-refuses/acceptance.test.mjs: d3cd6aaba8d58dcd3c2b2a845b68c1ac6a875f0f749e7f250465a1e791ea6731
+  requirements/a-block-follows-a-declared-edge/acceptance.test.mjs: dd13d70d1b2b95fea3d52e15e542c1deefcc334985c6375b62057dcc307bd20c
   requirements/a-build-says-what-it-proved/acceptance.test.mjs: 54383c21e9d8f662016d28a06514c3302955b3f7eba9c1f16b62d8f0bdd9af89
   requirements/a-change-declares-its-class/acceptance.test.mjs: df9e4a66b61cf110f1696f748c08f7ffbd1b0b5fe14c0a9502eb94efdf9d6280
   requirements/a-decision-balances-two-goods/acceptance.test.mjs: 8e1ea235299090f8117c5882aa5d250cf4b3bac49d88e8103437066429020d8e

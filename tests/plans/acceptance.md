@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976
+  acceptance: dc02ec65c62655b7c1541af31f8197357ad284b0d28513052e54387b5e856213
 reviews:
-  suites/acceptance: updated@f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976 by analyst: atop PR #315's current inventory, this requirement's case changed to restore the durable-procedure boundary and add phase proof; this plan still selects the whole acceptance suite and no case was removed
+  suites/acceptance: updated@dc02ec65c62655b7c1541af31f8197357ad284b0d28513052e54387b5e856213 by analyst: atop PR #312's current inventory, this lane added one case, `a-block-follows-a-declared-edge`, and then restated it after the asker answered its open questions; this plan still selects the whole acceptance suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 
