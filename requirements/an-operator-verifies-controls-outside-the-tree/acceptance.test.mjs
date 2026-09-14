@@ -272,4 +272,3 @@ test("13. release input derives every applicable control and target relation", (
   assert.match(missing, /git-tag:v0\.0\.2/i);
   assert.match(missing, /missing|unaccounted/i);
 });
-

@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 5aec59d0e510ead493335c6291e983ef42c6a1284f0b686b27106dbc434a26f2
+  acceptance: f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976
 reviews:
-  suites/acceptance: updated@5aec59d0e510ead493335c6291e983ef42c6a1284f0b686b27106dbc434a26f2 by analyst: atop PR #315's current inventory, this open requirement's case changed to restore the durable-procedure boundary and add phase proof; regression still selects the suite, and this open task is not a past promise
+  suites/acceptance: updated@f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976 by analyst: atop PR #315's current inventory, this open requirement's case changed to restore the durable-procedure boundary and add phase proof; regression still selects the suite, and this open task is not a past promise
 ---
 
 # Test plan: regression

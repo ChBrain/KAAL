@@ -10,10 +10,7 @@
     "package": "package:@chbrain/kaal",
     "version": "0.0.2",
     "candidate": "candidate:2222222222222222222222222222222222222222",
-    "targets": [
-      "git-tag:v0.0.2",
-      "github-packages:@chbrain/kaal@0.0.2"
-    ],
+    "targets": ["git-tag:v0.0.2", "github-packages:@chbrain/kaal@0.0.2"],
     "candidateAt": "2026-09-14T10:00:00Z",
     "phase": "post-publish",
     "publishedAt": "2026-09-14T10:03:00Z"
@@ -75,10 +72,7 @@
     },
     "derivedFrom": {
       "procedureRevision": "procedure-4",
-      "targetKinds": [
-        "git-tag",
-        "github-packages"
-      ],
+      "targetKinds": ["git-tag", "github-packages"],
       "releaseTargets": [
         "git-tag:v0.0.2",
         "github-packages:@chbrain/kaal@0.0.2"

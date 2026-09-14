@@ -50,10 +50,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "release-direct-push-blocked",
@@ -70,10 +67,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "release-force-push-blocked",
@@ -90,10 +84,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "release-deletion-blocked",
@@ -110,10 +101,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "release-required-check-walls",
@@ -123,20 +111,14 @@
         "method": "read the effective required check names"
       },
       "expected": "walls is required on release",
-      "authority": [
-        "promotion",
-        "public"
-      ],
+      "authority": ["promotion", "public"],
       "roles": {
         "observe": "operator",
         "confirm": "human",
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "main-pull-request-required",
@@ -153,10 +135,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "main-direct-push-blocked",
@@ -173,10 +152,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "main-force-push-blocked",
@@ -193,10 +169,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "main-deletion-blocked",
@@ -213,10 +186,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "main-required-check-walls",
@@ -226,20 +196,14 @@
         "method": "read the effective required check names"
       },
       "expected": "walls is required on main",
-      "authority": [
-        "promotion",
-        "public"
-      ],
+      "authority": ["promotion", "public"],
       "roles": {
         "observe": "operator",
         "confirm": "human",
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "codeql-advanced-setup",
@@ -256,10 +220,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "secret-scanning",
@@ -276,10 +237,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "push-protection",
@@ -296,10 +254,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "dependabot-alerts",
@@ -316,10 +271,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "dependabot-security-updates",
@@ -336,10 +288,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "code-review-bot-decision",
@@ -356,10 +305,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "manual-release-dispatch",
@@ -376,10 +322,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag",
-        "github-packages"
-      ]
+      "appliesToKinds": ["git-tag", "github-packages"]
     },
     {
       "id": "tag-workflow-authentication",
@@ -389,19 +332,14 @@
         "method": "confirm the dispatched workflow token has contents write for the tag"
       },
       "expected": "the workflow-scoped built-in token writes the tag with no long-lived release PAT",
-      "authority": [
-        "release",
-        "publish"
-      ],
+      "authority": ["release", "publish"],
       "roles": {
         "observe": "human",
         "confirm": "human",
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "git-tag"
-      ]
+      "appliesToKinds": ["git-tag"]
     },
     {
       "id": "github-packages-registry",
@@ -418,9 +356,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "github-packages"
-      ]
+      "appliesToKinds": ["github-packages"]
     },
     {
       "id": "package-scope",
@@ -437,9 +373,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "github-packages"
-      ]
+      "appliesToKinds": ["github-packages"]
     },
     {
       "id": "package-visibility",
@@ -456,9 +390,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "github-packages"
-      ]
+      "appliesToKinds": ["github-packages"]
     },
     {
       "id": "package-workflow-authentication",
@@ -475,9 +407,7 @@
         "authorize": "human",
         "change": "human"
       },
-      "appliesToKinds": [
-        "github-packages"
-      ]
+      "appliesToKinds": ["github-packages"]
     }
   ],
   "states": {

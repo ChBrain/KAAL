@@ -69,7 +69,7 @@ when the examination must be repeated.
   incompleteness, and reject prospective package-visibility compliance.
 - The reconciled acceptance suite retains PR #315's inventory and review
   evidence, updates this open requirement's case, and hashes to
-  `5aec59d0e510ead493335c6291e983ef42c6a1284f0b686b27106dbc434a26f2`.
+  `f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976`.
   Both acceptance and regression plans point to that exact composite page.
 
 ## Assumptions

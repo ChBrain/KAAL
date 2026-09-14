@@ -9,10 +9,7 @@
     "package": "package:@chbrain/kaal",
     "version": "0.0.2",
     "candidate": "candidate:2222222222222222222222222222222222222222",
-    "targets": [
-      "git-tag:v0.0.2",
-      "github-packages:@chbrain/kaal@0.0.2"
-    ],
+    "targets": ["git-tag:v0.0.2", "github-packages:@chbrain/kaal@0.0.2"],
     "phase": "pre-dispatch"
   },
   "observations": [
