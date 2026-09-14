@@ -2,7 +2,7 @@
   "kind": "release-verification",
   "claimedProcedure": {
     "id": "release-external-controls",
-    "revision": "procedure-3"
+    "revision": "procedure-4"
   },
   "release": {
     "repository": "repo:ChBrain/KAAL",

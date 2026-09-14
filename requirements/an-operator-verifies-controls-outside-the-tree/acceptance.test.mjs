@@ -156,19 +156,24 @@ test("5. observations bind their subject without inventing a source revision", (
   assert.match(red("wrong-candidate.json"), /candidate.*mismatch/i);
 });
 
-test("6. the procedure says when current evidence must be repeated", () => {
+test("6. candidate changes stale observations without changing the procedure", () => {
   const ok = green("complete-procedure.json");
   for (const changed of ["candidate", "target", "procedure", "authority"])
     assert.match(ok, new RegExp(changed, "i"));
   assert.match(ok, /authorization/i);
-  const out = red("missing-repeat-rule.json");
-  assert.match(out, /target/i);
-  assert.match(out, /repeat|stale|current/i);
-  assert.match(green("complete-current.json"), /current/i);
-  const stale = red("stale-procedure.json");
-  assert.match(stale, /stale/i);
-  assert.match(stale, /procedure-2/i);
-  assert.match(stale, /procedure-3/i);
+  const missing = red("missing-repeat-rule.json");
+  assert.match(missing, /target/i);
+  assert.match(missing, /repeat|stale|current/i);
+  const candidate = red("candidate-changed.json");
+  assert.match(candidate, /procedure-4/i);
+  assert.match(candidate, /procedure.*unchanged|same procedure/i);
+  assert.match(candidate, /0\.0\.2/i);
+  assert.match(candidate, /0\.0\.3/i);
+  assert.match(candidate, /prior observation.*stale|stale.*observation/i);
+  const procedure = red("stale-procedure.json");
+  assert.match(procedure, /stale/i);
+  assert.match(procedure, /procedure-3/i);
+  assert.match(procedure, /procedure-4/i);
 });
 
 test("7. safe metadata is separated from secret material and long-lived credentials", () => {
@@ -198,10 +203,22 @@ test("8. a reusable procedure and an orphaned release result are different state
   assert.notEqual(procedure.trim(), orphaned.trim());
 });
 
-test("9. complete current verification differs from an incomplete result", () => {
-  const complete = green("complete-current.json");
+test("9. pre-dispatch and post-publish evidence cannot impersonate each other", () => {
+  const pre = green("pre-dispatch.json");
+  assert.match(pre, /pre-dispatch/i);
+  assert.match(pre, /package visibility/i);
+  assert.match(pre, /not-yet-observable|not yet observable/i);
+  assert.match(pre, /incomplete/i);
+  assert.match(pre, /no observed compliant package visibility/i);
+  const prospective = red("prospective-package-visibility.json");
+  assert.match(prospective, /prospective|future/i);
+  assert.match(prospective, /not observed|first publish has not happened/i);
+  assert.match(prospective, /cannot.*compliant|not.*compliant/i);
+  const post = green("complete-current.json");
+  assert.match(post, /post-publish/i);
+  assert.match(post, /package visibility.*observed after first publish/i);
   for (const state of [/complete/i, /current/i, /compliant/i])
-    assert.match(complete, state);
+    assert.match(post, state);
   const incomplete = red("incomplete-verification.json");
   assert.match(incomplete, /incomplete/i);
   assert.match(incomplete, /publishing authentication/i);
@@ -217,10 +234,16 @@ test("10. human confirmation is recordable without becoming operator authorizati
   assert.match(overreach, /human authority/i);
 });
 
-test("11. completeness requires both exact 0.0.2 release targets", () => {
-  const ok = green("complete-procedure.json");
-  assert.match(ok, /git-tag:v0\.0\.2/i);
-  assert.match(ok, /github-packages:@chbrain\/kaal@0\.0\.2/i);
+test("11. the procedure names target kinds and the release input names targets", () => {
+  const procedure = green("complete-procedure.json");
+  assert.match(procedure, /target kinds?.*git-tag/i);
+  assert.match(procedure, /target kinds?.*github-packages/i);
+  assert.match(procedure, /identit(y|ies).*release verification input/i);
+  assert.doesNotMatch(procedure, /git-tag:v0\.0\.2/i);
+  assert.doesNotMatch(procedure, /github-packages:@chbrain\/kaal@0\.0\.2/i);
+  const release = green("complete-current.json");
+  assert.match(release, /git-tag:v0\.0\.2/i);
+  assert.match(release, /github-packages:@chbrain\/kaal@0\.0\.2/i);
   const noTag = red("missing-tag-target.json");
   assert.match(noTag, /git-tag:v0\.0\.2/i);
   assert.match(noTag, /missing|incomplete/i);
@@ -229,15 +252,19 @@ test("11. completeness requires both exact 0.0.2 release targets", () => {
   assert.match(noPackage, /missing|incomplete/i);
 });
 
-test("12. a control applies only to the release targets its authority supports", () => {
+test("12. control applicability is defined by target kind", () => {
+  const procedure = green("complete-procedure.json");
+  assert.match(procedure, /github-packages-registry.*github-packages/i);
+  assert.match(procedure, /tag-workflow-authentication.*git-tag/i);
   const out = red("wrong-target-applicability.json");
   assert.match(out, /github-packages-registry/i);
   assert.match(out, /git-tag:v0\.0\.2/i);
-  assert.match(out, /not applicable|wrong target/i);
+  assert.match(out, /not applicable|wrong target kind/i);
 });
 
-test("13. every applicable control and target relation is accounted for", () => {
+test("13. release input derives every applicable control and target relation", () => {
   const complete = green("complete-current.json");
+  assert.match(complete, /release input.*derived|derived.*release input/i);
   assert.match(complete, /39 of 39|39\/39/i);
   assert.match(complete, /applicable relations.*accounted|complete coverage/i);
   const missing = red("missing-applicable-relation.json");
@@ -245,3 +272,4 @@ test("13. every applicable control and target relation is accounted for", () => 
   assert.match(missing, /git-tag:v0\.0\.2/i);
   assert.match(missing, /missing|unaccounted/i);
 });
+

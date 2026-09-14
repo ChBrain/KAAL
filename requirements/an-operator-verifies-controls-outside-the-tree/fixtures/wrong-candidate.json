@@ -1,6 +1,6 @@
 {
   "procedure": {
-    "revision": "procedure-3",
+    "revision": "procedure-4",
     "controls": ["release-pull-request-required"]
   },
   "release": {

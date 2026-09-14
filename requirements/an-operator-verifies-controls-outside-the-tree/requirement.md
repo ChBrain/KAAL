@@ -111,10 +111,17 @@ when the examination must be repeated.
   source revision when one exists. Secrets, token values, recovery codes,
   credentials and values derived from them never enter the procedure,
   fixtures or release evidence.
-- For 0.0.2 the complete target set is the git tag `v0.0.2` and npm package
-  `@chbrain/kaal` version `0.0.2` on GitHub Packages. Every applicable control
-  and target pair is accounted for; a control attached to a target its
-  authority does not support is an error rather than extra assurance.
+- The durable procedure declares only the `git-tag` and `github-packages`
+  target kinds and maps every control to the kinds its authority supports. It
+  carries no release version, candidate or exact target identity. A release
+  verification input supplies those identities and derives every applicable
+  control and target relation; an inapplicable relation is an error rather
+  than extra assurance.
+- Verification has two explicit phases. Before dispatch, package visibility is
+  not yet observable because the first publish has not happened; the phase is
+  truthfully incomplete and cannot claim compliance from prospective evidence.
+  After first publish, the operator inspects visibility and may complete the
+  record only from an observation made after that boundary.
 - The current manually dispatched release workflow remains the operating
   model. One human `workflow_dispatch` authorizes the workflow-scoped built-in
   token for the tag and package permissions it needs. Nothing here introduces
@@ -165,11 +172,11 @@ when the examination must be repeated.
 6. The complete procedure states when evidence is current and when the
    operator repeats it: a changed candidate, target, procedure or repository
    authority makes the old observation stale, and authorization cannot precede
-   the observation. On
-   `fixtures/missing-repeat-rule.json` the command exits 1 and names the
-   missing repeat condition. `complete-current.json` is current under those
-   rules, while `stale-procedure.json` exits 1 and names both the observed and
-   current procedure revisions.
+   the observation. `missing-repeat-rule.json` exits 1 naming the missing
+   condition. In `candidate-changed.json`, only the release version and
+   candidate change: the procedure remains `procedure-4`, while the prior
+   observation is stale. `stale-procedure.json` separately exits 1 naming an
+   actual move from `procedure-3` to `procedure-4`.
 7. The complete procedure distinguishes the safe metadata an observation may
    retain from secret material it must never retain. On
    `fixtures/unsafe-evidence-policy.json`, which permits a token fingerprint,
@@ -187,35 +194,41 @@ when the examination must be repeated.
    procedure the fixture does not carry exits 1 and says the procedure is
    absent. A reusable procedure without one release's result and an orphaned
    release result are observably different states.
-9. `complete-current.json` exits 0 and says the verification is complete,
-   current and compliant. `incomplete-verification.json`, with no publishing
-   authentication result, exits 1 and names both the incomplete state and the
-   omitted control.
+9. `pre-dispatch.json` exits 0 saying the phase is pre-dispatch, package
+   visibility is not yet observable, the verification is incomplete, and no
+   observed compliant visibility exists. `prospective-package-visibility.json`
+   exits 1 because an expected future public state cannot impersonate an
+   observation before first publish. `complete-current.json` exits 0 only in
+   the post-publish phase, with package visibility observed after first publish
+   and the verification complete, current and compliant.
+   `incomplete-verification.json`, with no publishing authentication result,
+   exits 1 naming the incomplete state and omitted control.
 10. `human-confirmed.json` exits 0 and says the inaccessible-to-operator fact
     is a human attestation, was not independently observed by the operator,
     and remains separate from the human's authorization decision.
     `operator-authorized.json` exits 1 because an operator observation cannot
     supply human authorization.
-11. The complete procedure exits 0 naming exactly `git-tag:v0.0.2` and
-    `github-packages:@chbrain/kaal@0.0.2` as the intended targets.
-    In release-verification inputs, `missing-tag-target.json` and
-    `missing-package-target.json` each exit 1, name the absent target, and say
-    the result is incomplete.
-12. `wrong-target-applicability.json` exits 1 because it assigns the GitHub
-    Packages registry control to the git tag, and names the control, tag and
-    unsupported relation. Additional inapplicable checks do not count toward
-    completeness.
-13. The complete current verification exits 0 saying all 39 applicable
-    control and target relations are accounted for.
-    `missing-applicable-relation.json` exits 1 naming the unaccounted secret
-    scanning relation for `git-tag:v0.0.2`.
+11. `complete-procedure.json` exits 0 naming the `git-tag` and
+    `github-packages` target kinds and saying exact identities come from a
+    release-verification input; it names neither 0.0.2 target.
+    `complete-current.json` supplies exactly `git-tag:v0.0.2` and
+    `github-packages:@chbrain/kaal@0.0.2`. `missing-tag-target.json` and
+    `missing-package-target.json` each exit 1 naming the absent release target
+    and incomplete result.
+12. The complete procedure maps the registry control to the
+    `github-packages` kind and tag authentication to the `git-tag` kind.
+    `wrong-target-applicability.json` exits 1 because release input assigns the
+    registry control to `git-tag:v0.0.2`, naming the control, target and wrong
+    target kind. Extra inapplicable relations do not count toward completeness.
+13. `complete-current.json` exits 0 saying the release input derived and
+    accounted for all 39 applicable relations from the procedure's kind map
+    and its two exact targets. `missing-applicable-relation.json` exits 1
+    naming the unaccounted secret-scanning relation for `git-tag:v0.0.2`.
 
 ## Open questions
 
 - Does the durable procedure extend the portable `operate` skill, or does the
   operator tree hold a repository-specific companion that the skill invokes?
-- At what named release moment is an observation current: before the release
-  record merges, immediately before dispatch, or both?
 - Which external surfaces expose stable revisions today? The requirement
   permits them but refuses to pretend every settings page has one.
 
@@ -231,7 +244,7 @@ requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`
   all 13 fail on the absent `verify-controls` decision, the intended missing
   behavior rather than a provider or network
 - Tests: `requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`
-- Fixtures: the twenty-seven normalized provider-neutral semantic documents under
+- Fixtures: the thirty normalized provider-neutral semantic documents under
   `requirements/an-operator-verifies-controls-outside-the-tree/fixtures/`;
   they choose no provider payload, production serialization or final path
 - Stand-in green: all thirteen pass together on a disposable semantic judge;
@@ -240,7 +253,7 @@ requirements/an-operator-verifies-controls-outside-the-tree/acceptance.test.mjs`
   current tree; every run had exactly one test, zero passes and one failure.
   The earlier isolated-fault proof also remains unchanged because the test and
   fixtures are unchanged by the rebase
-- Open questions: 3, listed above
+- Open questions: 2, listed above
 - Blocked on: nothing
 - Unblocks: `a-release-records-its-external-control-verification`, the second
   independently testable need counted from the ask. Its proof is not carried

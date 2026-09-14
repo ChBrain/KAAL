@@ -1,7 +1,7 @@
 {
   "procedure": {
     "id": "release-external-controls",
-    "revision": "procedure-3",
+    "revision": "procedure-4",
     "controls": ["release-pull-request-required"]
   },
   "release": {
@@ -12,7 +12,7 @@
     {
       "control": "release-pull-request-required",
       "state": "compliant",
-      "procedureRevision": "procedure-2",
+      "procedureRevision": "procedure-3",
       "observedAt": "2026-09-14T10:05:00Z"
     }
   ]

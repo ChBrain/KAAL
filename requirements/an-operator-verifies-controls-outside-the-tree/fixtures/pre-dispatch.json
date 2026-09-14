@@ -1,0 +1,33 @@
+{
+  "kind": "normalized-release-verification",
+  "procedure": {
+    "id": "release-external-controls",
+    "revision": "procedure-4"
+  },
+  "release": {
+    "repository": "repo:ChBrain/KAAL",
+    "package": "package:@chbrain/kaal",
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "targets": [
+      "git-tag:v0.0.2",
+      "github-packages:@chbrain/kaal@0.0.2"
+    ],
+    "phase": "pre-dispatch"
+  },
+  "observations": [
+    {
+      "control": "package-visibility",
+      "target": "github-packages:@chbrain/kaal@0.0.2",
+      "state": "not-yet-observable",
+      "evidence": "none",
+      "reason": "first publish has not happened"
+    }
+  ],
+  "result": {
+    "phaseCurrent": true,
+    "complete": false,
+    "compliant": false,
+    "prospectiveEvidenceAccepted": false
+  }
+}

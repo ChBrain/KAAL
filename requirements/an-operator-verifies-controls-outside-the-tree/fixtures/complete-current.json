@@ -2,7 +2,7 @@
   "kind": "normalized-release-verification",
   "procedure": {
     "id": "release-external-controls",
-    "revision": "procedure-3",
+    "revision": "procedure-4",
     "authorityRevisionsCurrent": true
   },
   "release": {
@@ -10,8 +10,13 @@
     "package": "package:@chbrain/kaal",
     "version": "0.0.2",
     "candidate": "candidate:2222222222222222222222222222222222222222",
-    "targets": ["git-tag:v0.0.2", "github-packages:@chbrain/kaal@0.0.2"],
-    "candidateAt": "2026-09-14T10:00:00Z"
+    "targets": [
+      "git-tag:v0.0.2",
+      "github-packages:@chbrain/kaal@0.0.2"
+    ],
+    "candidateAt": "2026-09-14T10:00:00Z",
+    "phase": "post-publish",
+    "publishedAt": "2026-09-14T10:03:00Z"
   },
   "observedAt": "2026-09-14T10:05:00Z",
   "authorization": {
@@ -67,6 +72,26 @@
       "noncompliant": 0,
       "inaccessible": 0,
       "unknown": 0
+    },
+    "derivedFrom": {
+      "procedureRevision": "procedure-4",
+      "targetKinds": [
+        "git-tag",
+        "github-packages"
+      ],
+      "releaseTargets": [
+        "git-tag:v0.0.2",
+        "github-packages:@chbrain/kaal@0.0.2"
+      ]
     }
-  }
+  },
+  "observations": [
+    {
+      "control": "package-visibility",
+      "target": "github-packages:@chbrain/kaal@0.0.2",
+      "state": "compliant",
+      "observedAt": "2026-09-14T10:05:00Z",
+      "basis": "observed after first publish"
+    }
+  ]
 }
