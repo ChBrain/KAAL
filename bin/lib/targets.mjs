@@ -25,5 +25,7 @@ export const BUMP_FROM = "dependabot/**";
  * merge. A target this does not know is bound, because the safe answer to a
  * question about an unknown place is the strict one.
  * @param {string} [into]
+ * @param {{ binds?: string[] }} [gate]
  */
-export const binding = (into) => into !== PROMOTION_FROM;
+export const binding = (into, gate = {}) =>
+  into !== PROMOTION_FROM || gate.binds?.includes(into) === true;
