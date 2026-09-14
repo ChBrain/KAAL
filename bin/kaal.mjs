@@ -632,7 +632,11 @@ if (cmd === "backlog") {
   // leniently for having a parent, and it made `waiver-v1` green on a red
   // board the first time this was written. No answer is the strict answer.
   const into = (process.env.KAAL_BASE ?? "").replace(/^origin\//, "").trim();
-  if (!g.ok && !binding(into)) {
+  const boundRed = (g.results ?? []).some(
+    (x) => !x.ok && !x.waived && !x.declined && binding(into, x.gate),
+  );
+  const stops = !g.ok && (binding(into) || boundRed);
+  if (!g.ok && !stops) {
     // The count in its own words, because the summary's numbers are the walls
     // there are and the walls that failed, and a reader of this line wants
     // the second said as what it is.
@@ -641,7 +645,7 @@ if (cmd === "backlog") {
       `gates: ${into} takes this: ${red} red wall(s), each a block with an owner`,
     );
   }
-  process.exit(g.ok || !binding(into) ? 0 : 1);
+  process.exit(stops ? 1 : 0);
 } else if (cmd === "promote") {
   // Whether this tree may reach the target it is asked about, and everything
   // that refuses it. Nothing stops at the first: a gate that did would turn
