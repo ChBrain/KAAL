@@ -1,0 +1,10 @@
+{
+  "kind": "procedure",
+  "scenario": "missing-repeat-rule",
+  "repeatWhen": [
+    "candidate changes",
+    "procedure changes",
+    "before authorization"
+  ],
+  "missing": "target changes"
+}

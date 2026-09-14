@@ -1,0 +1,9 @@
+{
+  "kind": "procedure",
+  "scenario": "invented-revision",
+  "source": {
+    "location": "provider://repository/rules",
+    "revisionExposed": false,
+    "recordedRevision": "made-up-revision-7"
+  }
+}

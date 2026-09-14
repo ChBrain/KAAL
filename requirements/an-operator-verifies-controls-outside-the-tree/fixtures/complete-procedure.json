@@ -1,0 +1,486 @@
+{
+  "kind": "procedure",
+  "id": "release-external-controls",
+  "revision": "procedure-4",
+  "authorities": {
+    "promotion": {
+      "path": "requirements/a-promotion-names-what-it-refuses/requirement.md",
+      "sha256": "eeb479d0f62f43d0a33c38d0d15df8ee03308182302daceb7a0dde21f59108cb",
+      "section": "Handoff",
+      "claim": "Blocked on"
+    },
+    "public": {
+      "path": "requirements/public-v1/requirement.md",
+      "sha256": "cb937d83ee8e6b3341a7f447c4a5dea4e36c26ba144d192a01fc6e1ba830a269",
+      "section": "Handoff",
+      "claim": "Blocked on"
+    },
+    "package": {
+      "path": "requirements/the-engine-installs-by-name/requirement.md",
+      "sha256": "bb12f2ae6ad4d36d393d9bdbdddc5858520ee590959deb2186c642d0fd1fbf46",
+      "section": "Acceptance criteria",
+      "claim": "1 and 6"
+    },
+    "publish": {
+      "path": "requirements/the-publish-carries-a-token/requirement.md",
+      "sha256": "5cae3d2bcbdab9e43c666584ab4e9d1ad1cc08d32b9fd4d38f3dc42cc58c8e1e",
+      "section": "Acceptance criteria",
+      "claim": "1 through 3"
+    },
+    "release": {
+      "path": "requirements/the-release-runs-on-a-key/requirement.md",
+      "sha256": "ef50a3b3408a77d172a1d3f268826a85f132f5d86a00ca2d76811376d8d7b416",
+      "section": "Acceptance criteria",
+      "claim": "5"
+    }
+  },
+  "controls": [
+    {
+      "id": "release-pull-request-required",
+      "class": "release ruleset",
+      "inspect": {
+        "location": "repository settings / rules / release",
+        "method": "read the effective pull request rule"
+      },
+      "expected": "a pull request is required into release",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "release-direct-push-blocked",
+      "class": "release ruleset",
+      "inspect": {
+        "location": "repository settings / rules / release",
+        "method": "read the effective bypass and update rules"
+      },
+      "expected": "direct push to release is blocked",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "release-force-push-blocked",
+      "class": "release ruleset",
+      "inspect": {
+        "location": "repository settings / rules / release",
+        "method": "read the effective force-push rule"
+      },
+      "expected": "force push to release is blocked",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "release-deletion-blocked",
+      "class": "release ruleset",
+      "inspect": {
+        "location": "repository settings / rules / release",
+        "method": "read the effective deletion rule"
+      },
+      "expected": "deletion of release is blocked",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "release-required-check-walls",
+      "class": "release required checks",
+      "inspect": {
+        "location": "repository settings / rules / release / required checks",
+        "method": "read the effective required check names"
+      },
+      "expected": "walls is required on release",
+      "authority": ["promotion", "public"],
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "main-pull-request-required",
+      "class": "main ruleset",
+      "inspect": {
+        "location": "repository settings / rules / main",
+        "method": "read the effective pull request rule"
+      },
+      "expected": "a pull request is required into main",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "main-direct-push-blocked",
+      "class": "main ruleset",
+      "inspect": {
+        "location": "repository settings / rules / main",
+        "method": "read the effective bypass and update rules"
+      },
+      "expected": "direct push to main is blocked",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "main-force-push-blocked",
+      "class": "main ruleset",
+      "inspect": {
+        "location": "repository settings / rules / main",
+        "method": "read the effective force-push rule"
+      },
+      "expected": "force push to main is blocked",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "main-deletion-blocked",
+      "class": "main ruleset",
+      "inspect": {
+        "location": "repository settings / rules / main",
+        "method": "read the effective deletion rule"
+      },
+      "expected": "deletion of main is blocked",
+      "authority": "promotion",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "main-required-check-walls",
+      "class": "main required checks",
+      "inspect": {
+        "location": "repository settings / rules / main / required checks",
+        "method": "read the effective required check names"
+      },
+      "expected": "walls is required on main",
+      "authority": ["promotion", "public"],
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "codeql-advanced-setup",
+      "class": "security configuration",
+      "inspect": {
+        "location": "repository settings / code security / code scanning",
+        "method": "read the active CodeQL setup mode"
+      },
+      "expected": "advanced setup is active and default setup is off",
+      "authority": "public",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "secret-scanning",
+      "class": "security configuration",
+      "inspect": {
+        "location": "repository settings / code security",
+        "method": "read the secret scanning state"
+      },
+      "expected": "secret scanning is enabled",
+      "authority": "public",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "push-protection",
+      "class": "security configuration",
+      "inspect": {
+        "location": "repository settings / code security",
+        "method": "read the push protection state"
+      },
+      "expected": "push protection is enabled",
+      "authority": "public",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "dependabot-alerts",
+      "class": "security configuration",
+      "inspect": {
+        "location": "repository settings / code security",
+        "method": "read the Dependabot alerts state"
+      },
+      "expected": "Dependabot alerts are enabled",
+      "authority": "public",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "dependabot-security-updates",
+      "class": "security configuration",
+      "inspect": {
+        "location": "repository settings / code security",
+        "method": "read the Dependabot security updates state"
+      },
+      "expected": "Dependabot security updates are enabled",
+      "authority": "public",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "code-review-bot-decision",
+      "class": "security configuration",
+      "inspect": {
+        "location": "repository settings / code review",
+        "method": "read whether optional bot review was enabled or declined"
+      },
+      "expected": "the human decision to enable or decline optional bot review is explicit",
+      "authority": "public",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "manual-release-dispatch",
+      "class": "release initiation",
+      "inspect": {
+        "location": "repository actions / release workflow",
+        "method": "read the permitted trigger and dispatch authority"
+      },
+      "expected": "one human workflow_dispatch starts both release targets",
+      "authority": "release",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag", "github-packages"]
+    },
+    {
+      "id": "tag-workflow-authentication",
+      "class": "publishing authentication",
+      "inspect": {
+        "location": "repository actions / release workflow / token permissions",
+        "method": "confirm the dispatched workflow token has contents write for the tag"
+      },
+      "expected": "the workflow-scoped built-in token writes the tag with no long-lived release PAT",
+      "authority": ["release", "publish"],
+      "roles": {
+        "observe": "human",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["git-tag"]
+    },
+    {
+      "id": "github-packages-registry",
+      "class": "registry scope and visibility",
+      "inspect": {
+        "location": "package registry settings",
+        "method": "read the registry attached to the package"
+      },
+      "expected": "the package is published to GitHub Packages",
+      "authority": "package",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["github-packages"]
+    },
+    {
+      "id": "package-scope",
+      "class": "registry scope and visibility",
+      "inspect": {
+        "location": "package registry settings",
+        "method": "read the published owner, scope and package name"
+      },
+      "expected": "the package identity is @chbrain/kaal",
+      "authority": "package",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["github-packages"]
+    },
+    {
+      "id": "package-visibility",
+      "class": "registry scope and visibility",
+      "inspect": {
+        "location": "package registry settings / visibility",
+        "method": "read the visibility after the first publish"
+      },
+      "expected": "the package visibility is public",
+      "authority": "package",
+      "roles": {
+        "observe": "operator",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["github-packages"]
+    },
+    {
+      "id": "package-workflow-authentication",
+      "class": "publishing authentication",
+      "inspect": {
+        "location": "repository actions / release workflow / token permissions",
+        "method": "confirm the dispatched workflow token has packages write for the named registry and scope"
+      },
+      "expected": "the workflow-scoped GITHUB_TOKEN publishes the package with no long-lived release PAT",
+      "authority": "publish",
+      "roles": {
+        "observe": "human",
+        "confirm": "human",
+        "authorize": "human",
+        "change": "human"
+      },
+      "appliesToKinds": ["github-packages"]
+    }
+  ],
+  "states": {
+    "compliant": "clean",
+    "noncompliant": "not-clean",
+    "inaccessible": "not-clean",
+    "unknown": "not-clean"
+  },
+  "bindings": [
+    "repository",
+    "package",
+    "version",
+    "candidate",
+    "target",
+    "control",
+    "procedureRevision",
+    "authorityRevision",
+    "observedAt"
+  ],
+  "sourceRevision": {
+    "whenExposed": "record",
+    "whenNotExposed": "record unavailable and why"
+  },
+  "repeatWhen": [
+    "candidate changes",
+    "target changes",
+    "procedure changes",
+    "authority changes",
+    "before authorization when the last observation is not current"
+  ],
+  "evidencePolicy": {
+    "safeMetadata": [
+      "control",
+      "location",
+      "state",
+      "authority",
+      "observedAt",
+      "sourceRevision",
+      "authentication mode",
+      "secret reference name"
+    ],
+    "forbidden": [
+      "secret",
+      "token value",
+      "token fingerprint",
+      "credential",
+      "recovery code",
+      "secret-derived value",
+      "long-lived release PAT"
+    ]
+  },
+  "targetKinds": [
+    {
+      "kind": "git-tag",
+      "identitySuppliedBy": "release verification input"
+    },
+    {
+      "kind": "github-packages",
+      "identitySuppliedBy": "release verification input"
+    }
+  ],
+  "phases": {
+    "pre-dispatch": {
+      "boundary": "before workflow_dispatch",
+      "packageVisibility": "not-yet-observable until first publish",
+      "prospectiveEvidence": "forbidden",
+      "completion": "incomplete until post-publish observations exist"
+    },
+    "post-publish": {
+      "boundary": "after first package publish",
+      "packageVisibility": "inspect and record the observed state",
+      "prospectiveEvidence": "forbidden",
+      "completion": "requires current observations for every derived relation"
+    }
+  }
+}

@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 8b2f173e5c9baaed9dfbba5772867af675116e8ddb014018fe49628bab3e0f9d
+  acceptance: f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976
 reviews:
-  suites/acceptance: reviewed-no-impact@8b2f173e5c9baaed9dfbba5772867af675116e8ddb014018fe49628bab3e0f9d by tester: the suite gained the two previously unnamed acceptance cases and refreshed one reviewed pin; this plan still selects the same suite and no case was removed
+  suites/acceptance: updated@f237b93c3da325e2eae6294df8e4de239b5881417d34dad137c9de8738ff7976 by analyst: atop PR #315's current inventory, this requirement's case changed to restore the durable-procedure boundary and add phase proof; this plan still selects the whole acceptance suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

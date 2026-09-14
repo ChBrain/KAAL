@@ -1,0 +1,9 @@
+{
+  "kind": "verification-mutation",
+  "base": "complete-current.json",
+  "addAccountedRelation": {
+    "control": "github-packages-registry",
+    "target": "git-tag:v0.0.2",
+    "targetKind": "git-tag"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "kind": "procedure-mutation",
+  "base": "complete-procedure.json",
+  "replaceAuthority": {
+    "control": "secret-scanning",
+    "with": {
+      "kind": "remembered conversation",
+      "statement": "a human reported that it looked correct"
+    }
+  }
+}

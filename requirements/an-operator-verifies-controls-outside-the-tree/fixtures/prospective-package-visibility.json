@@ -1,0 +1,22 @@
+{
+  "kind": "normalized-release-verification",
+  "procedure": {
+    "id": "release-external-controls",
+    "revision": "procedure-4"
+  },
+  "release": {
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "target": "github-packages:@chbrain/kaal@0.0.2",
+    "phase": "pre-dispatch"
+  },
+  "observations": [
+    {
+      "control": "package-visibility",
+      "state": "compliant",
+      "observedAt": "2026-09-14T09:55:00Z",
+      "basis": "expected future public visibility",
+      "prospective": true
+    }
+  ]
+}

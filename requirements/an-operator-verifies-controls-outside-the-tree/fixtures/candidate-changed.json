@@ -1,0 +1,22 @@
+{
+  "kind": "candidate-change",
+  "procedure": {
+    "id": "release-external-controls",
+    "observedRevision": "procedure-4",
+    "currentRevision": "procedure-4",
+    "changed": false
+  },
+  "priorRelease": {
+    "version": "0.0.2",
+    "candidate": "candidate:2222222222222222222222222222222222222222",
+    "observedAt": "2026-09-14T10:05:00Z"
+  },
+  "currentRelease": {
+    "version": "0.0.3",
+    "candidate": "candidate:3333333333333333333333333333333333333333"
+  },
+  "expected": {
+    "procedureRevision": "unchanged",
+    "priorObservation": "stale"
+  }
+}

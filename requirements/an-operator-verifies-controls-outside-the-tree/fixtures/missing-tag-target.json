@@ -1,0 +1,5 @@
+{
+  "kind": "verification-mutation",
+  "base": "complete-current.json",
+  "removeTarget": "git-tag:v0.0.2"
+}

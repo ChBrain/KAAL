@@ -1,0 +1,8 @@
+{
+  "kind": "verification-mutation",
+  "base": "complete-current.json",
+  "removeAccountedRelation": {
+    "control": "package-workflow-authentication",
+    "target": "github-packages:@chbrain/kaal@0.0.2"
+  }
+}
