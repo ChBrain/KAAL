@@ -2,9 +2,9 @@
 traces:
   parent: strategy@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1
 suites:
-  acceptance: 784aa2c43b56804b4e53691b5b9b0d30a6519e2a9aee3bfd890e18fec666ef5c
+  acceptance: e3eff03c0503712bf40cc9d4ff4e4d7da9d318a42b5d377e4a2d788c07036b14
 reviews:
-  suites/acceptance: reviewed-no-impact@784aa2c43b56804b4e53691b5b9b0d30a6519e2a9aee3bfd890e18fec666ef5c by tester: the suite gained the case for the task that makes the skill list a floor, and the pin on `skills-v1` advanced because that task superseded its first criterion; which suites this plan uses is unchanged and no case was taken out of it
+  suites/acceptance: reviewed-no-impact@e3eff03c0503712bf40cc9d4ff4e4d7da9d318a42b5d377e4a2d788c07036b14 by analyst: the suite gained the amended current-evidence cases for an-open-finding-blocks-every-target; this plan still selects the same acceptance suite and no case was removed
   parent/strategy: updated@dd629223ed7ee3c94796be1079303dc17a42d0093b334566b15bfa4c5d1dabc1 by tester: the strategy gained the section naming the five kinds `tests/` holds, and a plan is one of them
 ---
 

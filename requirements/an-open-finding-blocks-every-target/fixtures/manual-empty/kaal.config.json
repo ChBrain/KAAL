@@ -1,0 +1,10 @@
+{
+  "gates": [
+    {
+      "name": "security",
+      "command": "node ../../../../bin/lib/security.mjs",
+      "fix": "gather complete current scanner evidence",
+      "binds": ["release"]
+    }
+  ]
+}
