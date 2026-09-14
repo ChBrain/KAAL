@@ -1,6 +1,8 @@
 {
   "schema": 2,
   "scanner": "fixture-scanner",
+  "repository": "chbrain/kaal-fixture",
+  "workflow": ".github/workflows/security.yml",
   "retrieval": {
     "state": "ok"
   },
@@ -17,9 +19,10 @@
   },
   "candidate": {
     "kind": "checkout",
-    "digest": "f119a54c219cc8bc0586aa72487f577f353a7041219981c9982ab033bd3177f0",
+    "digest": "a4b74bb89b481edd220bc67481ca0572a678f09f448c044043c3d839646aa41a",
     "files": {
-      "kaal.config.json": "2e36e8398e43c2452052153e042598971e86b3f5c75a25ee27e5c9e9995f402a",
+      "kaal/security/trust.json": "a88cf7a5f136b1379893beab74b55783db70504514fe0086b4c0b710c49bcea3",
+      "kaal.config.json": "7d4270e38ad99347f6eac07e9c4cd6cd3c5ed42f0b311535e9111a061ecdc719",
       "src/guard.mjs": "f2f4e1d6a3c6521262e7b8fa84d2ead164e0d2594f0f47d2801c619ebe68539c"
     }
   },
@@ -31,5 +34,10 @@
         "src/guard.mjs": "f2f4e1d6a3c6521262e7b8fa84d2ead164e0d2594f0f47d2801c619ebe68539c"
       }
     }
-  ]
+  ],
+  "attestation": {
+    "keyId": "fixture-attestor",
+    "alg": "ed25519",
+    "signature": "pHc5NbHiDIDZwd0UIBdT6WiEzXtEoW/RmZmcKr1ybZdr2nSsNRpSDqLqNhUFQ+SCHDZcOf1FbJrtQupPBiyiCw=="
+  }
 }

@@ -3,7 +3,7 @@
     {
       "name": "security",
       "command": "node ../../../../../bin/lib/security.mjs",
-      "fix": "gather complete current scanner evidence for this candidate",
+      "fix": "gather attested, complete, current scanner evidence for this candidate",
       "waiver": "security",
       "binds": ["release"]
     }
