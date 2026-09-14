@@ -32,6 +32,7 @@ cases:
   requirements/an-architect-names-its-principles/acceptance.test.mjs: afda6f768fb7c10d2a1112c657479743614843252d1d485b538e4cbcb1868373
   requirements/an-artefact-traces-what-it-came-from/acceptance.test.mjs: ce92dd310fb7b11f25d0f9cd988eae2c2d7182ec3daae99cf72091732e740e97
   requirements/an-install-carries-the-method/acceptance.test.mjs: 90807ce424b30622bd897dc4941dedafd0ad63a4f7f8b3e2bf1fa75226dd8e75
+  requirements/an-open-finding-blocks-every-target/acceptance.test.mjs: 91477126d3830511f303a0425952af3c8f4735339277578afc6a5c84aa002288
   requirements/analyse-v2/acceptance.test.mjs: 3ba471f3467e6641aa6b5edd618db3b0062bca8ce53646c94fb17fd41b362e47
   requirements/analyse-v3/acceptance.test.mjs: 1b74301b196d1e0861a7bc725d0668720c6f3c412f1b41004bc96964a7526301
   requirements/applies-here/acceptance.test.mjs: ec95885349fcbed361cc444ebe28ff480f6ea900180901d15cbe7a94b16a2f86

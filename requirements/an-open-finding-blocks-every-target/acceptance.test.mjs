@@ -5,10 +5,22 @@
 // its change binding belong to the drawing.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import {
+  copyFileSync,
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const FIXTURES = join(
@@ -17,6 +29,7 @@ const FIXTURES = join(
   "an-open-finding-blocks-every-target",
   "fixtures",
 );
+const OWN_FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
 const fixture = (name) => {
   const root = join(FIXTURES, name);
   assert.ok(
@@ -64,6 +77,61 @@ const runWall = (root) => {
       PATHEXT: process.env.PATHEXT ?? "",
     },
   });
+};
+
+const currentFixture = (name) => join(FIXTURES, "current-evidence", name);
+
+const requireCurrentFixtures = (names) => {
+  const missing = names.filter((name) => !existsSync(currentFixture(name)));
+  assert.deepEqual(
+    missing,
+    [],
+    `no amended drawing for semantic tree(s): ${missing.join(", ")}`,
+  );
+  return names.map((name) => currentFixture(name));
+};
+
+const scratchClean = () => {
+  // Keep the semantic tree at the same depth as the drawing's fixtures. Its
+  // gate command is intentionally the drawing's choice and may be relative.
+  const root = mkdtempSync(join(FIXTURES, ".current-security-"));
+  cpSync(fixture("clean"), root, { recursive: true });
+  return root;
+};
+
+const changedCandidate = (kind) => {
+  const root = scratchClean();
+  const source = join(root, "src", "guard.mjs");
+  if (kind === "modified")
+    copyFileSync(
+      join(OWN_FIXTURES, "candidate", "modified", "guard.mjs"),
+      source,
+    );
+  if (kind === "deleted") rmSync(source);
+  if (kind === "renamed") {
+    const renamed = join(root, "src", "guard-renamed.mjs");
+    renameSync(source, renamed);
+  }
+  if (kind === "added") {
+    mkdirSync(join(root, "new"), { recursive: true });
+    copyFileSync(
+      join(OWN_FIXTURES, "candidate", "added", "unseen.mjs"),
+      join(root, "new", "unseen.mjs"),
+    );
+  }
+  return root;
+};
+
+const acceptanceCriteriaSha = () => {
+  const requirement = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "requirement.md"),
+    "utf8",
+  );
+  const criteria = requirement.match(
+    /^## Acceptance criteria\n([\s\S]*?)(?=^## |(?![\s\S]))/m,
+  )?.[1];
+  assert.ok(criteria, "the requirement has no acceptance criteria");
+  return createHash("sha256").update(criteria).digest("hex");
 };
 
 test("1. an open security finding blocks release and main", () => {
@@ -163,4 +231,190 @@ test("5. a waiver stops applying when the code it names changes", () => {
     said(changed),
     "the code change did not change the wall's answer",
   );
+});
+
+test("6. clean evidence goes stale when candidate content changes", () => {
+  for (const kind of ["modified", "deleted", "renamed"]) {
+    const root = changedCandidate(kind);
+    try {
+      const r = runWall(root);
+      const answer = said(r).trim();
+      assert.equal(
+        r.status,
+        1,
+        `${kind} candidate content did not make the wall red: ${answer}`,
+      );
+      assert.match(
+        answer,
+        /stale|candidate|changed/i,
+        `${kind} candidate content was rejected for the wrong reason: ${answer}`,
+      );
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("7. added candidate content makes clean evidence stale", () => {
+  const root = changedCandidate("added");
+  try {
+    const r = runWall(root);
+    assert.equal(
+      r.status,
+      1,
+      `added content kept old clean evidence green: ${said(r)}`,
+    );
+    assert.match(said(r), /stale|candidate|changed/i, said(r));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("8. only a completed clean analysis of the exact candidate is green", () => {
+  const red = [
+    "no-analysis",
+    "wrong-candidate",
+    "incomplete-analysis",
+    "errored-analysis",
+    "retrieval-unavailable",
+    "retrieval-unauthorized",
+    "incomplete-collection",
+    "stale",
+    "open",
+  ];
+  requireCurrentFixtures([...red, "current-clean"]);
+  const answers = red.map((name) => {
+    const r = runWall(currentFixture(name));
+    assert.equal(r.status, 1, `${name} passed: ${said(r)}`);
+    assert.notEqual(said(r).trim(), "", `${name} answered nothing`);
+    return said(r).trim();
+  });
+  assert.equal(
+    new Set(answers).size,
+    answers.length,
+    `red states are not distinguishable: ${answers.join(" | ")}`,
+  );
+  const clean = runWall(currentFixture("current-clean"));
+  assert.equal(
+    clean.status,
+    0,
+    `current clean analysis is red: ${said(clean)}`,
+  );
+});
+
+test("9. partial finding collection never impersonates the complete set", () => {
+  const names = [
+    "incomplete-collection",
+    "primary-location-only",
+    "complete-multiple-open",
+  ];
+  requireCurrentFixtures(names);
+  for (const name of names.slice(0, 2)) {
+    const r = runWall(currentFixture(name));
+    assert.equal(r.status, 1, `${name} passed: ${said(r)}`);
+    assert.match(
+      said(r),
+      /incomplete|partial|truncat|location|collection/i,
+      `${name} did not explain its incompleteness: ${said(r)}`,
+    );
+  }
+  const complete = runWall(currentFixture("complete-multiple-open"));
+  assert.equal(complete.status, 1, `open findings passed: ${said(complete)}`);
+  for (const finding of ["fixture-first-open", "fixture-second-open"])
+    assert.match(
+      said(complete),
+      new RegExp(finding),
+      `the complete result omitted ${finding}: ${said(complete)}`,
+    );
+});
+
+test("10. the board cannot judge before current gathering completes", () => {
+  requireCurrentFixtures(["gathering-in-progress", "current-clean"]);
+  const early = kaal(currentFixture("gathering-in-progress"), "release");
+  assert.equal(early.status, 1, `the board raced gathering: ${said(early)}`);
+  assert.match(said(early), /security/i, said(early));
+  const complete = kaal(currentFixture("current-clean"), "release");
+  assert.equal(
+    complete.status,
+    0,
+    `the board refused current completed evidence: ${said(complete)}`,
+  );
+});
+
+test("11. a release pull request finding blocks that candidate before merge", () => {
+  requireCurrentFixtures(["release-pr-open"]);
+  const r = kaal(currentFixture("release-pr-open"), "release");
+  assert.equal(r.status, 1, `the release candidate could merge: ${said(r)}`);
+  assert.match(said(r), /security/i, said(r));
+  assert.match(said(r), /fixture-release-pr-open/i, said(r));
+});
+
+test("12. head, merge ref and merge result are not silently conflated", () => {
+  const names = [
+    "head-evidence-merge-candidate",
+    "merge-evidence-head-candidate",
+    "premerge-evidence-postmerge-candidate",
+  ];
+  requireCurrentFixtures(names);
+  for (const name of names) {
+    const r = runWall(currentFixture(name));
+    assert.equal(r.status, 1, `${name} passed: ${said(r)}`);
+    assert.match(said(r), /candidate|mismatch|wrong|stale/i, said(r));
+  }
+});
+
+test("13. a manually authored legacy empty snapshot is not clean evidence", () => {
+  const root = mkdtempSync(join(OWN_FIXTURES, ".manual-empty-"));
+  try {
+    cpSync(join(OWN_FIXTURES, "manual-empty"), root, { recursive: true });
+    mkdirSync(join(root, "kaal", "security"), { recursive: true });
+    writeFileSync(
+      join(root, "kaal", "security", "findings.json"),
+      JSON.stringify({ schema: 1, scanner: "github-codeql", findings: [] }),
+    );
+    const r = runWall(root);
+    assert.equal(
+      r.status,
+      1,
+      `a legacy empty file impersonated a clean scan: ${said(r)}`,
+    );
+    assert.match(
+      said(r),
+      /analysis|candidate|complete|provenance|legacy/i,
+      said(r),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("14. activation waits for current architecture and recorded proof", () => {
+  const config = JSON.parse(
+    readFileSync(join(ROOT, "kaal.config.json"), "utf8"),
+  );
+  const active = config.gates?.some((gate) => gate.name === "security");
+  if (!active) return;
+
+  const task = "an-open-finding-blocks-every-target";
+  const pin = acceptanceCriteriaSha();
+  const drawing = readFileSync(
+    join(ROOT, "architecture", task, "drawing.md"),
+    "utf8",
+  );
+  assert.match(
+    drawing,
+    new RegExp(`requirement: ${task}@${pin}`),
+    "the active gate's drawing is review-needed",
+  );
+
+  const suite = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "acceptance.test.mjs"),
+  );
+  const suiteSha = createHash("sha256").update(suite).digest("hex");
+  const recordPath = join(ROOT, "tests", "runs", `${task}.md`);
+  assert.ok(existsSync(recordPath), "the active gate has no run on record");
+  const record = readFileSync(recordPath, "utf8");
+  assert.match(record, new RegExp(`^- Suite sha: ${suiteSha}$`, "m"));
+  assert.match(record, /^- Passing: 14$/m);
+  assert.match(record, /^- Failing: 0$/m);
 });
