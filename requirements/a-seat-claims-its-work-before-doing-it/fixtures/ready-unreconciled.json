@@ -1,0 +1,14 @@
+{
+  "pullRequest": { "id": "310", "seat": "analyst", "state": "ready" },
+  "claims": [
+    {
+      "pullRequest": "310",
+      "backlogSeat": "analyst",
+      "items": ["R-1", "R-2"]
+    }
+  ],
+  "outcomes": [
+    { "item": "R-1", "state": "completed", "evidence": "commit-result" }
+  ],
+  "durableOrder": []
+}
