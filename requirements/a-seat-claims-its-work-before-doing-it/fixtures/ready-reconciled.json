@@ -1,0 +1,17 @@
+{
+  "pullRequest": { "id": "310", "seat": "analyst", "state": "ready" },
+  "claims": [
+    {
+      "pullRequest": "310",
+      "backlogSeat": "analyst",
+      "items": ["R-1", "R-2", "R-3"]
+    }
+  ],
+  "outcomes": [
+    { "item": "R-1", "state": "completed", "evidence": "commit-result" },
+    { "item": "R-2", "state": "removed", "evidence": "scope-record" },
+    { "item": "R-3", "state": "blocked", "evidence": "block-R-3" }
+  ],
+  "blocks": [{ "id": "block-R-3", "item": "R-3", "active": true }],
+  "durableOrder": []
+}
