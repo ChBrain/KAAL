@@ -16,7 +16,6 @@ Nothing is blocked. The four kinds a block may name are `no requirement`,
 `no drawing`, `no proof` and `no record`, and this seat is waiting on none of
 them today.
 
-
 ## Provisional lifecycle claim
 
 The persistent claim representation is intentionally left to the architecture
@@ -28,7 +27,9 @@ bootstraps the same fact without changing the `blocks:` grammar.
 - Claim: refresh the lifecycle placement and cross-seat order after #314
   changed release truth, using the exact release board, all six backlogs,
   accepted work, live pull requests, asks and human gates.
-- State: in flight after #312 became ready
-- Reconciliation: pending the refreshed live-PR order, fifth Manager retro,
-  targeted checks and ready-state decision on exact release head
-  `de94ab8f2dea71944b064288adffaf2eccf996cf`.
+- State: completed
+- Reconciliation: #313 remains based on exact release head
+  `de94ab8f2dea71944b064288adffaf2eccf996cf`; #315 and #312 are current-base,
+  ready and CI-green in that cross-seat order; all six backlogs were read;
+  the fifth Manager retro and refreshed local-backlog boundary are recorded;
+  targeted Manager checks pass; no `pdca` capability was implemented.
