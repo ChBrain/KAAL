@@ -1,0 +1,42 @@
+{
+  "schema": 2,
+  "scanner": "fixture-scanner",
+  "retrieval": {
+    "state": "ok"
+  },
+  "analysis": {
+    "state": "completed",
+    "id": "fixture-analysis-1",
+    "tools": ["fixture-tool"],
+    "categories": ["/language:javascript"]
+  },
+  "collection": {
+    "state": "complete",
+    "locations": "all",
+    "expected": 2
+  },
+  "candidate": {
+    "kind": "checkout",
+    "digest": "87fa7424655a07a8c7de4f022e7812423860a3993cc12c319a0fd401ae93e1a8",
+    "files": {
+      "kaal.config.json": "ffc692e3b26050089dae88f1c25b94a6afa3aceaaf9a8daa9ba572055f4faa7b",
+      "src/guard.mjs": "c6b3e0ed964e1a5590db6e19bfe7a1811e0f0a285455868c5250c49551890001"
+    }
+  },
+  "findings": [
+    {
+      "id": "fixture-first-open",
+      "summary": "the guard permits the unsafe path",
+      "bindings": {
+        "src/guard.mjs": "c6b3e0ed964e1a5590db6e19bfe7a1811e0f0a285455868c5250c49551890001"
+      }
+    },
+    {
+      "id": "fixture-second-open",
+      "summary": "the guard is reachable without the check",
+      "bindings": {
+        "src/guard.mjs": "c6b3e0ed964e1a5590db6e19bfe7a1811e0f0a285455868c5250c49551890001"
+      }
+    }
+  ]
+}

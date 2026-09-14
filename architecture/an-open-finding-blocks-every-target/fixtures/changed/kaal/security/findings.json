@@ -1,12 +1,34 @@
 {
-  "schema": 1,
+  "schema": 2,
   "scanner": "fixture-scanner",
+  "retrieval": {
+    "state": "ok"
+  },
+  "analysis": {
+    "state": "completed",
+    "id": "fixture-analysis-1",
+    "tools": ["fixture-tool"],
+    "categories": ["/language:javascript"]
+  },
+  "collection": {
+    "state": "complete",
+    "locations": "all",
+    "expected": 1
+  },
+  "candidate": {
+    "kind": "checkout",
+    "digest": "f119a54c219cc8bc0586aa72487f577f353a7041219981c9982ab033bd3177f0",
+    "files": {
+      "kaal.config.json": "2e36e8398e43c2452052153e042598971e86b3f5c75a25ee27e5c9e9995f402a",
+      "src/guard.mjs": "f2f4e1d6a3c6521262e7b8fa84d2ead164e0d2594f0f47d2801c619ebe68539c"
+    }
+  },
   "findings": [
     {
       "id": "unsafe-guard",
       "summary": "the guard permits the unsafe path",
       "bindings": {
-        "src/guard.mjs": "c6b3e0ed964e1a5590db6e19bfe7a1811e0f0a285455868c5250c49551890001"
+        "src/guard.mjs": "f2f4e1d6a3c6521262e7b8fa84d2ead164e0d2594f0f47d2801c619ebe68539c"
       }
     }
   ]

@@ -1,0 +1,27 @@
+{
+  "schema": 2,
+  "scanner": "fixture-scanner",
+  "retrieval": {
+    "state": "ok"
+  },
+  "analysis": {
+    "state": "completed",
+    "id": "fixture-analysis-1",
+    "tools": ["fixture-tool"],
+    "categories": ["/language:javascript"]
+  },
+  "collection": {
+    "state": "complete",
+    "locations": "all",
+    "expected": 0
+  },
+  "candidate": {
+    "kind": "merge-result",
+    "digest": "354530f176aed9f651ee9803db65301023b46030389b846bfb9e6274dbe3cc03",
+    "files": {
+      "kaal.config.json": "ffc692e3b26050089dae88f1c25b94a6afa3aceaaf9a8daa9ba572055f4faa7b",
+      "src/guard.mjs": "56d2f2d8c13daa044a002fb83d5ae8353337c4fdbe3de46820fe396b9986702f"
+    }
+  },
+  "findings": []
+}

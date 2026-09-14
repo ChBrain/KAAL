@@ -29,7 +29,7 @@ cases:
   architecture/an-architect-names-its-principles/contracts.test.mjs: 5141da3c75655f1d34dbd05b8edda3a22778ef8a82eebf0acd023d688e7916f1
   architecture/an-artefact-traces-what-it-came-from/contracts.test.mjs: 641bfceff5c2dfc3472ee2317b21ff52dd08e7ef8b8ae2603053484385837373
   architecture/an-install-carries-the-method/contracts.test.mjs: 1d22a5add09ee938e1e9232018002bd273744f2f2fe80149e901ccf18da40c8f
-  architecture/an-open-finding-blocks-every-target/contracts.test.mjs: 767ba0dc41f0f821d2c0ec84e7efe57d51edfc67a0f297052c3db87d0c751bc7
+  architecture/an-open-finding-blocks-every-target/contracts.test.mjs: 9a334f8869b4e193eb82f6408d979a17d7d54a67d05a085e15a976d5c6427601
   architecture/analyse-v2/contracts.test.mjs: 25abf2bca27e7655ba401e058e7c3499e46617818b360b35966c8df6b38711f2
   architecture/analyse-v3/contracts.test.mjs: 3620b29e795007b3316beaddfed87d3349c1aac96f0cdfa6a9242720db3e9130
   architecture/applies-here/contracts.test.mjs: f54f578bdf7cf0b11bc21e6dcffb505a87fb19da6cf5020326f22151dee4af31
@@ -71,6 +71,7 @@ cases:
   architecture/where-a-skill-acts/contracts.test.mjs: 9c8d9e60462e5cac1cbac55d335fbb2ef4f2e6b774738fe2937f7774ea6f1482
   architecture/witness-a-tree/contracts.test.mjs: bd06703601ea869ff4c94923504726b6cada93f41426c6e46829ca86926003f0
 reviews:
+  cases/architecture/an-open-finding-blocks-every-target/contracts.test.mjs: reviewed-no-impact@9a334f8869b4e193eb82f6408d979a17d7d54a67d05a085e15a976d5c6427601 by architect: the drawing was amended from five seams to eight and the case gained a contract for each of the three new ones; it is the same case and this suite still covers it
   cases/architecture/a-promotion-names-what-it-refuses/contracts.test.mjs: reviewed-no-impact@fc050ed4efe2c13f6f2b4ee27a45ec655dfa62d787089da98d7a6fbf4f1bd807 by architect: the drawing gained a ninth seam and the case gained the contract for it; it is the same case and this suite still covers it
   cases/architecture/a-suite-names-its-cases/contracts.test.mjs: reviewed-no-impact@9a697e30ccc8206c1399cf2b1dc10bbc6d8f8c89d0157c6a512f3e953d3e5815 by tester: the drawing grew from seven seams to ten and two of them changed again after that, so the file moved four times today; every one was this task's own work and none of it changes which cases this suite names
   cases/architecture/the-test-tree-is-written-down/contracts.test.mjs: reviewed-no-impact@4945f50f2a65f140f5a46a800b6daf519a123b6cf884af5cf2571934e4afa505 by tester: its helper stopped reading a whole line and now reads the finding's artefact, because the counts line names every plan it reached; the four seams are the same four and this suite still covers them

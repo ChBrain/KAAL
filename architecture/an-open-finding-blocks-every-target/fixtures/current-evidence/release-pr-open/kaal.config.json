@@ -1,0 +1,75 @@
+{
+  "gates": [
+    {
+      "name": "security",
+      "command": "node ../../../../../bin/lib/security.mjs",
+      "fix": "gather complete current scanner evidence for this candidate",
+      "waiver": "security",
+      "binds": ["release"]
+    }
+  ],
+  "seats": [
+    {
+      "name": "manager",
+      "owns": ["plan/**"]
+    },
+    {
+      "name": "analyst",
+      "owns": ["requirements/**"]
+    },
+    {
+      "name": "architect",
+      "owns": ["architecture/**"]
+    },
+    {
+      "name": "tester",
+      "owns": ["tests/**"]
+    },
+    {
+      "name": "developer",
+      "owns": ["bin/**"]
+    },
+    {
+      "name": "operator",
+      "owns": ["deploy/**"]
+    }
+  ],
+  "lanes": [
+    {
+      "pattern": "plan/*",
+      "seat": "manager",
+      "allows": []
+    },
+    {
+      "pattern": "requirement/*",
+      "seat": "analyst",
+      "allows": []
+    },
+    {
+      "pattern": "architecture/*",
+      "seat": "architect",
+      "allows": []
+    },
+    {
+      "pattern": "test/*",
+      "seat": "tester",
+      "allows": []
+    },
+    {
+      "pattern": "build/*",
+      "seat": "developer",
+      "allows": []
+    },
+    {
+      "pattern": "operate/*",
+      "seat": "operator",
+      "allows": []
+    },
+    {
+      "pattern": "governance/*",
+      "seat": null,
+      "allows": ["kaal/**", "kaal.config.json", "waivers/**"]
+    }
+  ],
+  "shared": []
+}
