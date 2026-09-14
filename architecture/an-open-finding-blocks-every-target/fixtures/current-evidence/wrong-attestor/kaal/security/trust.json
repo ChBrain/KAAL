@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "keys": [
+    {
+      "keyId": "fixture-attestor",
+      "alg": "ed25519",
+      "publicKey": "MCowBQYDK2VwAyEATjvhyUO9PtKdwEEONdb1ZSQwIPFh/xY3CCJ7NdU088I=",
+      "subject": "chbrain/kaal-fixture",
+      "workflow": ".github/workflows/another.yml",
+      "scanner": "fixture-scanner"
+    }
+  ]
+}
