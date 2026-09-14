@@ -234,24 +234,25 @@ test("5. a waiver stops applying when the code it names changes", () => {
 });
 
 test("6. clean evidence goes stale when candidate content changes", () => {
-  const results = ["modified", "deleted", "renamed"].map((kind) => {
+  for (const kind of ["modified", "deleted", "renamed"]) {
     const root = changedCandidate(kind);
     try {
       const r = runWall(root);
-      return { kind, status: r.status, answer: said(r).trim() };
+      const answer = said(r).trim();
+      assert.equal(
+        r.status,
+        1,
+        `${kind} candidate content did not make the wall red: ${answer}`,
+      );
+      assert.match(
+        answer,
+        /stale|candidate|changed/i,
+        `${kind} candidate content was rejected for the wrong reason: ${answer}`,
+      );
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
-  });
-  assert.deepEqual(
-    results.map(({ kind, status }) => ({ kind, status })),
-    [
-      { kind: "modified", status: 1 },
-      { kind: "deleted", status: 1 },
-      { kind: "renamed", status: 1 },
-    ],
-    `candidate-wide changes did not stale clean evidence: ${JSON.stringify(results)}`,
-  );
+  }
 });
 
 test("7. added candidate content makes clean evidence stale", () => {
